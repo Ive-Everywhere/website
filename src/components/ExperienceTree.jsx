@@ -1,5 +1,6 @@
 import React from 'react';
 import SectionLabel from './SectionLabel';
+import Reveal from './Reveal';
 
 const ExperienceTree = () => {
     // Mapping ecosystem
@@ -57,40 +58,43 @@ const ExperienceTree = () => {
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
 
                 {/* Visual Tree */}
-                <div>
-                    <SectionLabel text="Device_Topology" />
-                    <div className="bg-[#0c0c0c] border border-neutral-800 p-8 rounded-lg shadow-2xl relative overflow-hidden h-[500px] overflow-y-auto custom-scrollbar">
-                        <div className="absolute top-0 right-0 p-4 opacity-20 text-6xl font-mono font-bold text-neutral-700 pointer-events-none">
-                            ./sys
+                <Reveal>
+                    <div>
+                        <SectionLabel text="Device_Topology" />
+                        <div className="bg-[#0c0c0c] border border-neutral-800 p-8 rounded-lg shadow-2xl relative overflow-hidden h-[500px] overflow-y-auto custom-scrollbar">
+                            <div className="absolute top-0 right-0 p-4 opacity-20 text-6xl font-mono font-bold text-neutral-700 pointer-events-none">
+                                ./sys
+                            </div>
+                            {ecosystem.map((f, i) => <TreeItem key={i} item={f} />)}
                         </div>
-                        {ecosystem.map((f, i) => <TreeItem key={i} item={f} />)}
+                        <div className="mt-4 flex gap-4 text-xs font-mono text-neutral-500">
+                            <span>[ SYNC ] ACTIVE</span>
+                            <span>E2E_ENCRYPTED</span>
+                            <span>100%</span>
+                        </div>
                     </div>
-                    <div className="mt-4 flex gap-4 text-xs font-mono text-neutral-500">
-                        <span>[ SYNC ] ACTIVE</span>
-                        <span>E2E_ENCRYPTED</span>
-                        <span>100%</span>
-                    </div>
-                </div>
+                </Reveal>
 
                 {/* Text Context */}
                 <div className="flex flex-col justify-center">
-                    <h2 className="text-4xl font-mono text-white mb-6">Native Integration</h2>
-                    <p className="text-neutral-400 font-mono mb-8 text-lg leading-relaxed">
-                        Ive lives across your entire Apple ecosystem. From quirky animations in the Dynamic Island to seamless background recording on your Watch. It's not just an app; it's a layer of intelligence over your device.
-                    </p>
+                    <Reveal delay={0.2}>
+                        <h2 className="text-4xl font-mono text-white mb-6">Native Integration</h2>
+                        <p className="text-neutral-400 font-mono mb-8 text-lg leading-relaxed">
+                            Ive lives across your entire Apple ecosystem. From quirky animations in the Dynamic Island to seamless background recording on your Watch. It's not just an app; it's a layer of intelligence over your device.
+                        </p>
 
-                    <div className="p-6 border border-dashed border-neutral-700 bg-neutral-900/30">
-                        <div className="text-green-400 font-mono text-sm mb-2">$ status --verbose</div>
-                        <div className="text-neutral-300 font-mono text-sm">
-                            &gt; Watch: Recording [ON]<br />
-                            &gt; iPhone: Processing Context...<br />
-                            &gt; iCloud: Upload Complete
+                        <div className="p-6 border border-dashed border-neutral-700 bg-neutral-900/30">
+                            <div className="text-green-400 font-mono text-sm mb-2 animate-[textGlitch_4s_ease-in-out_infinite]">$ status --verbose</div>
+                            <div className="text-neutral-300 font-mono text-sm">
+                                &gt; Watch: Recording [ON]<br />
+                                &gt; iPhone: Processing Context...<br />
+                                &gt; iCloud: Upload Complete
+                            </div>
                         </div>
-                    </div>
+                    </Reveal>
                 </div>
             </div>
         </section>
     );
 }
-
 export default ExperienceTree;
