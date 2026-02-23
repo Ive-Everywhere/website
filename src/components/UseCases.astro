@@ -1,0 +1,200 @@
+---
+---
+<section class="py-20 md:py-28">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Department tabs -->
+    <div class="flex flex-wrap items-center gap-2 mb-10 border-b border-black/10 pb-4">
+      <button data-dept="sales" class="dept-tab active px-5 py-2 rounded-full text-sm font-medium bg-[#1A1A1A] text-white transition-all">Sales</button>
+      <button data-dept="marketing" class="dept-tab px-5 py-2 rounded-full text-sm font-medium bg-transparent text-[#1A1A1A] hover:bg-black/5 transition-all">Marketing</button>
+      <button data-dept="product" class="dept-tab px-5 py-2 rounded-full text-sm font-medium bg-transparent text-[#1A1A1A] hover:bg-black/5 transition-all">Product Management</button>
+      <button data-dept="productivity" class="dept-tab px-5 py-2 rounded-full text-sm font-medium bg-transparent text-[#1A1A1A] hover:bg-black/5 transition-all">Productivity</button>
+      <button data-dept="engineering" class="dept-tab px-5 py-2 rounded-full text-sm font-medium bg-transparent text-[#1A1A1A] hover:bg-black/5 transition-all">Engineering Management</button>
+    </div>
+
+    <!-- Sales content (shown by default) -->
+    <div id="dept-sales" class="dept-content">
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        From first call to forecast. Covered.
+      </h2>
+      <p class="text-[#6B6B6B] max-w-3xl mb-12 leading-relaxed">
+        A sales colleague works across Salesforce, Gong, email, and meeting notes — handling the prep, follow-up, and analysis that eats into selling time. For every role on the team.
+      </p>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Leadership card -->
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Leadership</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6 leading-relaxed">
+            Pipeline reviewed daily. Rep performance patterns surfaced. Forecast gaps and at-risk deals flagged before they escalate.
+          </p>
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded bg-blue-100 flex items-center justify-center"><span class="text-xs">SF</span></div>
+            <div class="w-7 h-7 rounded bg-purple-100 flex items-center justify-center"><span class="text-xs font-bold text-purple-600">S</span></div>
+            <div class="w-7 h-7 rounded bg-teal-100 flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24"><path d="M6.527 14.514A1.636 1.636 0 014.89 16.15a1.636 1.636 0 01-1.636-1.636A1.636 1.636 0 014.89 12.88h1.637v1.634z" fill="#E01E5A"/></svg>
+            </div>
+            <div class="w-7 h-7 rounded bg-red-100 flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24"><path d="M2 6l10 7 10-7" fill="none" stroke="#EA4335" stroke-width="2.5"/></svg>
+            </div>
+          </div>
+        </div>
+        <!-- Account Executives card -->
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Account Executives</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6 leading-relaxed">
+            Pre-call research pulled automatically. Follow-up emails drafted after meetings. CRM updated without you touching it.
+          </p>
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded bg-blue-100 flex items-center justify-center"><span class="text-xs">SF</span></div>
+            <div class="w-7 h-7 rounded bg-orange-100 flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="#FF7A59"/></svg>
+            </div>
+            <div class="w-7 h-7 rounded bg-red-100 flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24"><path d="M2 6l10 7 10-7" fill="none" stroke="#EA4335" stroke-width="2.5"/></svg>
+            </div>
+            <div class="w-7 h-7 rounded bg-purple-100 flex items-center justify-center"><span class="text-xs font-bold text-purple-600">S</span></div>
+          </div>
+        </div>
+        <!-- Account Managers card -->
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Account Managers</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6 leading-relaxed">
+            Account health tracked across usage, communication, and sentiment. Renewal prep and QBR decks assembled from live data.
+          </p>
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded bg-blue-100 flex items-center justify-center"><span class="text-xs">SF</span></div>
+            <div class="w-7 h-7 rounded bg-green-100 flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="none" stroke="#0F9D58" stroke-width="2"/></svg>
+            </div>
+            <div class="w-7 h-7 rounded bg-teal-100 flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24"><path d="M6.527 14.514A1.636 1.636 0 014.89 16.15a1.636 1.636 0 01-1.636-1.636A1.636 1.636 0 014.89 12.88h1.637v1.634z" fill="#E01E5A"/></svg>
+            </div>
+            <div class="w-7 h-7 rounded bg-red-100 flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24"><path d="M2 6l10 7 10-7" fill="none" stroke="#EA4335" stroke-width="2.5"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marketing content (hidden) -->
+    <div id="dept-marketing" class="dept-content hidden">
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        From strategy to execution. Automated.
+      </h2>
+      <p class="text-[#6B6B6B] max-w-3xl mb-12 leading-relaxed">
+        A marketing colleague manages campaigns, tracks engagement, and optimizes outreach — handling the repetitive tasks that slow down creative work.
+      </p>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Campaign Managers</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6">Campaign performance tracked daily. A/B test results surfaced. Budget pacing monitored automatically.</p>
+        </div>
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Content Teams</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6">Briefs assembled from data. Competitor content monitored. Distribution schedules managed across channels.</p>
+        </div>
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Growth & Ops</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6">Lead scoring updated in real-time. Attribution data compiled. Funnel drop-offs flagged and analyzed.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Management content (hidden) -->
+    <div id="dept-product" class="dept-content hidden">
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        From insight to release. Streamlined.
+      </h2>
+      <p class="text-[#6B6B6B] max-w-3xl mb-12 leading-relaxed">
+        A product colleague tracks customer feedback, monitors metrics, and prepares reports — so you focus on building what matters.
+      </p>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Product Leads</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6">Daily reports prepared automatically. Feature requests triaged. Sprint velocity tracked and visualized.</p>
+        </div>
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Designers</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6">User feedback compiled and categorized. Competitive UI audits assembled. Design system updates tracked.</p>
+        </div>
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Analysts</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6">Metrics dashboards refreshed daily. Anomalies detected and flagged. Custom reports generated on schedule.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Productivity content (hidden) -->
+    <div id="dept-productivity" class="dept-content hidden">
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        From inbox to action. Effortless.
+      </h2>
+      <p class="text-[#6B6B6B] max-w-3xl mb-12 leading-relaxed">
+        A productivity colleague handles scheduling, follow-ups, and information gathering — keeping you focused on high-impact work.
+      </p>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Executives</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6">Daily briefings prepared. Meeting prep automated. Action items tracked across conversations.</p>
+        </div>
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Operations</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6">Recurring reports automated. Cross-team updates compiled. Process documentation maintained.</p>
+        </div>
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Team Leads</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6">Stand-up summaries generated. Blockers surfaced. Resource allocation tracked and optimized.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Engineering Management content (hidden) -->
+    <div id="dept-engineering" class="dept-content hidden">
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        From sprint to ship. Managed.
+      </h2>
+      <p class="text-[#6B6B6B] max-w-3xl mb-12 leading-relaxed">
+        An engineering colleague tracks PR velocity, sprint health, and team metrics — so engineering leaders focus on building, not reporting.
+      </p>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Engineering Managers</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6">Sprint health monitored. PR velocity tracked. Team capacity and blockers surfaced daily.</p>
+        </div>
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">Tech Leads</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6">Code review queue managed. Technical debt tracked. Architecture decision records maintained.</p>
+        </div>
+        <div class="bg-[#E8E3DA] rounded-2xl p-6">
+          <h3 class="text-lg font-bold mb-3">DevOps</h3>
+          <p class="text-sm text-[#6B6B6B] mb-6">Deployment status tracked. Incident reports compiled. Infrastructure costs monitored and optimized.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.dept-tab');
+    const contents = document.querySelectorAll('.dept-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.getAttribute('data-dept');
+
+        tabs.forEach(t => {
+          t.classList.remove('bg-[#1A1A1A]', 'text-white', 'active');
+          t.classList.add('bg-transparent', 'text-[#1A1A1A]');
+        });
+        tab.classList.add('bg-[#1A1A1A]', 'text-white', 'active');
+        tab.classList.remove('bg-transparent', 'text-[#1A1A1A]');
+
+        contents.forEach(c => c.classList.add('hidden'));
+        const targetContent = document.getElementById(`dept-${target}`);
+        if (targetContent) targetContent.classList.remove('hidden');
+      });
+    });
+  });
+</script>

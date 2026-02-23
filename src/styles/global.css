@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer base {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ── Custom theme tokens ─────────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --color-bg:        #EDE8E0; /* warm beige / page background */
+  --color-card-bg:   #E8E3DA; /* card surfaces */
+  --color-dark:      #2A2A2A; /* dark section backgrounds */
+
+  /* Text */
+  --color-text:      #1A1A1A; /* primary text */
+  --color-muted:     #6B6B6B; /* secondary / muted text */
+
+  /* Hero tab accent fills */
+  --color-tab-sales:    #FFF3D4; /* warm yellow  – Sales */
+  --color-tab-support:  #D4F5ED; /* mint          – Customer Support */
+  --color-tab-product:  #F5D4E8; /* pink/lavender – Product */
+
+  /* Typography */
+  --font-sans: 'Inter', sans-serif;
+}
+
+/* ── Custom utilities ────────────────────────────────────────────── */
+
+/* Gradient bar that decorates the top edge of hero cards */
+.gradient-bar {
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--color-tab-sales)   0%,
+    var(--color-tab-support) 50%,
+    var(--color-tab-product) 100%
+  );
+  border-radius: 9999px;
+}
+
+/* Per-tab gradient bar variants */
+.gradient-bar-sales {
+  height: 3px;
+  background: linear-gradient(90deg, #F5C842 0%, var(--color-tab-sales) 100%);
+  border-radius: 9999px;
+}
+
+.gradient-bar-support {
+  height: 3px;
+  background: linear-gradient(90deg, #42C9A8 0%, var(--color-tab-support) 100%);
+  border-radius: 9999px;
+}
+
+.gradient-bar-product {
+  height: 3px;
+  background: linear-gradient(90deg, #C942A8 0%, var(--color-tab-product) 100%);
+  border-radius: 9999px;
+}
