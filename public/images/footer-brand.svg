@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Branding">
+<g id="shape-03">
+<path d="M16 11.3333L11.9167 9V4.33333L16 2L20.0833 4.33333V9L16 11.3333Z" fill="var(--fill-0, #335CFF)"/>
+<path d="M24.1667 16L20.0833 13.6667V9L24.1667 6.66667L28.25 9V13.6667L24.1667 16Z" fill="var(--fill-0, #335CFF)"/>
+<path d="M20.0833 23V18.3333L24.1667 16L28.25 18.3333V23L24.1667 25.3333L20.0833 23Z" fill="var(--fill-0, #335CFF)"/>
+<path d="M11.9167 23L16 20.6667L20.0833 23V27.6667L16 30L11.9167 27.6667V23Z" fill="var(--fill-0, #335CFF)"/>
+<path d="M7.83333 16L11.9167 18.3333V23L7.83333 25.3333L3.75 23V18.3333L7.83333 16Z" fill="var(--fill-0, #335CFF)"/>
+<path d="M7.83333 16L11.9167 13.6667V9L7.83333 6.66667L3.75 9V13.6667L7.83333 16Z" fill="var(--fill-0, #335CFF)"/>
+</g>
+</g>
+</svg>
