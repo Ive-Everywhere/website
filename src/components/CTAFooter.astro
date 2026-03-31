@@ -1,0 +1,87 @@
+---
+---
+
+<section style="background: #f4f3ec;">
+  <div class="cta-container">
+    <img src="/images/cta-bg.jpg" alt="" aria-hidden="true" class="cta-bg" />
+    <div class="cta-overlay"></div>
+    <div class="cta-content">
+      <h2 class="cta-heading">The future of work is here.</h2>
+      <p class="cta-sub">Work with your first AI colleague today</p>
+      <div class="cta-buttons">
+        <a href="https://app.eluu.ai" class="cta-btn cta-btn-dark">Get started</a>
+        <a href="https://app.eluu.ai" class="cta-btn cta-btn-light">Sign in</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-container {
+    position: relative;
+    overflow: hidden;
+    min-height: 360px;
+  }
+  @media (min-width: 640px) { .cta-container { min-height: 420px; } }
+  @media (min-width: 1024px) { .cta-container { min-height: 500px; } }
+
+  .cta-bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .cta-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+  }
+  .cta-content {
+    position: relative;
+    z-index: 2;
+    padding: 64px 24px;
+    text-align: center;
+  }
+  @media (min-width: 640px) { .cta-content { padding: 80px 40px; } }
+  @media (min-width: 1024px) { .cta-content { padding: 120px 60px; } }
+
+  .cta-heading {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 5vw, 48px);
+    letter-spacing: -1px;
+    color: #ffffff;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .cta-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(16px, 3vw, 30px);
+    color: #ffffff;
+    line-height: 1.3;
+    margin: 12px 0 0;
+    opacity: 0.9;
+  }
+  .cta-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .cta-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 32px;
+    border-radius: 10px;
+    text-decoration: none;
+    line-height: 1;
+  }
+  @media (min-width: 640px) {
+    .cta-btn { font-size: 15px; padding: 10px 48px; }
+  }
+  .cta-btn-dark { color: #ffffff; background: #343636; }
+  .cta-btn-light { color: #000000; background: #ffffff; }
+</style>

@@ -1,0 +1,272 @@
+---
+// Creative 2: "Complex workflows, one recipe"
+// Shows a slash command expanding into a multi-step workflow
+---
+
+<div class="cw-card">
+  <!-- Command input -->
+  <div class="cw-input">
+    <span class="cw-slash">/</span>
+    <span class="cw-cmd">competitor-intel</span>
+    <span class="cw-cursor"></span>
+  </div>
+
+  <!-- Recipe expansion -->
+  <div class="cw-recipe">
+    <div class="cw-recipe-head">
+      <span class="cw-recipe-name">competitor-intel</span>
+      <span class="cw-recipe-tag">Recipe</span>
+    </div>
+    <div class="cw-recipe-desc">5 steps across 4 integrations</div>
+
+    <!-- Steps -->
+    <div class="cw-steps">
+      <div class="cw-step cw-s1">
+        <div class="cw-step-line"></div>
+        <div class="cw-step-icon cw-done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></div>
+        <div class="cw-step-body">
+          <div class="cw-step-title">Pull company data</div>
+          <div class="cw-step-meta">
+            <img src="/logos/integrations/apollographql.svg" alt="" width="12" height="12" />
+            <span>Apollo</span>
+          </div>
+        </div>
+        <span class="cw-step-status cw-check">Done</span>
+      </div>
+
+      <div class="cw-step cw-s2">
+        <div class="cw-step-line"></div>
+        <div class="cw-step-icon cw-done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></div>
+        <div class="cw-step-body">
+          <div class="cw-step-title">Cross-reference HubSpot contacts</div>
+          <div class="cw-step-meta">
+            <img src="/logos/integrations/hubspot.svg" alt="" width="12" height="12" />
+            <span>HubSpot</span>
+          </div>
+        </div>
+        <span class="cw-step-status cw-check">Done</span>
+      </div>
+
+      <div class="cw-step cw-s3">
+        <div class="cw-step-line"></div>
+        <div class="cw-step-icon cw-running"><div class="cw-spin"></div></div>
+        <div class="cw-step-body">
+          <div class="cw-step-title">Analyze pricing from website</div>
+          <div class="cw-step-meta">
+            <img src="/logos/integrations/notion.svg" alt="" width="12" height="12" style="filter: invert(1);" />
+            <span>Notion</span>
+          </div>
+        </div>
+        <span class="cw-step-status cw-active">Running</span>
+      </div>
+
+      <div class="cw-step cw-s4">
+        <div class="cw-step-line"></div>
+        <div class="cw-step-icon cw-queued"></div>
+        <div class="cw-step-body">
+          <div class="cw-step-title">Draft comparison report</div>
+          <div class="cw-step-meta">
+            <img src="/logos/integrations/googlesheets.svg" alt="" width="12" height="12" />
+            <span>Sheets</span>
+          </div>
+        </div>
+        <span class="cw-step-status">Queued</span>
+      </div>
+
+      <div class="cw-step cw-s5">
+        <div class="cw-step-icon cw-queued"></div>
+        <div class="cw-step-body">
+          <div class="cw-step-title">Push summary to #sales</div>
+          <div class="cw-step-meta">
+            <img src="/logos/integrations/slack.svg" alt="" width="12" height="12" />
+            <span>Slack</span>
+          </div>
+        </div>
+        <span class="cw-step-status">Queued</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cw-card {
+    background: #17100e;
+    border-radius: 16px;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    color: #f4f3ec;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+  }
+
+  /* Command input */
+  .cw-input {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 10px 14px;
+    background: rgba(244,243,236,0.04);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(244,243,236,0.08);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 13px;
+    overflow: hidden;
+  }
+  .cw-slash {
+    color: rgba(244,243,236,0.3);
+  }
+  .cw-cmd {
+    color: #f4f3ec;
+    animation: cw-type 8s steps(15) infinite;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+  }
+  .cw-cursor {
+    width: 1px;
+    height: 16px;
+    background: #f4f3ec;
+    animation: cw-blink 0.8s step-end infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes cw-type {
+    0%, 5% { width: 0; }
+    15%, 100% { width: 120px; }
+  }
+  @keyframes cw-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  /* Recipe card */
+  .cw-recipe {
+    animation: cw-expand 8s ease infinite;
+    transform-origin: top;
+  }
+  @keyframes cw-expand {
+    0%, 12% { opacity: 0; transform: scaleY(0.95) translateY(-4px); }
+    18%, 100% { opacity: 1; transform: scaleY(1) translateY(0); }
+  }
+
+  .cw-recipe-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .cw-recipe-name {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Roboto Mono', monospace;
+  }
+  .cw-recipe-tag {
+    font-size: 10px;
+    font-weight: 500;
+    color: rgba(244,243,236,0.4);
+    background: rgba(244,243,236,0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .cw-recipe-desc {
+    font-size: 11px;
+    color: rgba(244,243,236,0.3);
+    margin-bottom: 16px;
+  }
+
+  /* Steps */
+  .cw-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .cw-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    position: relative;
+  }
+
+  .cw-step-line {
+    position: absolute;
+    left: 8px;
+    top: 28px;
+    bottom: -2px;
+    width: 1px;
+    background: rgba(244,243,236,0.08);
+  }
+
+  .cw-step-icon {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .cw-step-icon.cw-done {
+    background: #4ade80;
+  }
+  .cw-step-icon.cw-running {
+    background: transparent;
+    border: 2px solid rgba(244,243,236,0.2);
+  }
+  .cw-step-icon.cw-queued {
+    background: transparent;
+    border: 2px solid rgba(244,243,236,0.08);
+  }
+
+  .cw-spin {
+    width: 9px;
+    height: 9px;
+    border: 2px solid transparent;
+    border-top-color: #f4f3ec;
+    border-radius: 50%;
+    animation: cw-spinner 0.8s linear infinite;
+  }
+  @keyframes cw-spinner {
+    to { transform: rotate(360deg); }
+  }
+
+  .cw-step-body { flex: 1; min-width: 0; }
+  .cw-step-title {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .cw-step-meta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: rgba(244,243,236,0.3);
+  }
+
+  .cw-step-status {
+    font-size: 10px;
+    color: rgba(244,243,236,0.25);
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+  .cw-step-status.cw-check { color: #4ade80; }
+  .cw-step-status.cw-active { color: #f4f3ec; }
+
+  /* Stagger step reveals */
+  .cw-s1 { animation: cw-step-in 8s ease infinite; animation-delay: 0s; }
+  .cw-s2 { animation: cw-step-in 8s ease infinite; animation-delay: 0.4s; }
+  .cw-s3 { animation: cw-step-in 8s ease infinite; animation-delay: 0.8s; }
+  .cw-s4 { animation: cw-step-in 8s ease infinite; animation-delay: 1.2s; }
+  .cw-s5 { animation: cw-step-in 8s ease infinite; animation-delay: 1.6s; }
+
+  @keyframes cw-step-in {
+    0%, 18% { opacity: 0; transform: translateY(6px); }
+    25%, 100% { opacity: 1; transform: translateY(0); }
+  }
+</style>

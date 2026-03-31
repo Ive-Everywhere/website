@@ -1,0 +1,180 @@
+---
+const roles = [
+  {
+    id: 'sales',
+    label: 'Sales',
+    heading: 'From first call to forecast. Covered.',
+    description: 'A sales colleague works across Salesforce, Gong, email, and meeting notes — handling the prep, follow-up, and analysis that eats into selling time.',
+    image: '/images/role-sales.png',
+  },
+  {
+    id: 'marketing',
+    label: 'Marketing',
+    heading: 'From brief to launch. On autopilot.',
+    description: 'A marketing colleague monitors competitors, drafts content, tracks campaigns, and surfaces insights — so your team stays ahead without the manual grind.',
+    image: '/images/role-marketing.png',
+  },
+  {
+    id: 'product',
+    label: 'Product Management',
+    heading: 'From roadmap to release. Streamlined.',
+    description: 'A product colleague pulls user feedback, tracks feature requests, monitors usage data, and keeps your roadmap grounded in what customers actually need.',
+    image: '/images/role-product.png',
+  },
+  {
+    id: 'customer-success',
+    label: 'Customer Success',
+    heading: 'From onboarding to renewal. Proactive.',
+    description: 'A customer success colleague tracks account health, flags churn risks, compiles QBR decks, and keeps every customer relationship moving forward.',
+    image: '/images/role-cs.png',
+  },
+  {
+    id: 'engineering',
+    label: 'Engineering',
+    heading: 'Ship faster. Stay aligned.',
+    description: 'An engineering colleague tracks sprint health, surfaces blockers, reviews PRs for patterns, and keeps your team shipping without the overhead.',
+    image: '/images/role-engineering.png',
+  },
+];
+---
+
+<!-- Roles -->
+<section style="background: #ffffff; padding: 96px 120px;">
+  <div style="max-width: 1440px; margin: 0 auto;">
+
+    <!-- Badge -->
+    <div class="reveal" style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px;">
+      <span style="width: 8px; height: 8px; border-radius: 50%; background: #17100e; display: inline-block;"></span>
+      <span style="font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #17100e;">Featured Roles</span>
+    </div>
+
+    <!-- Heading -->
+    <h2 class="reveal" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 48px; letter-spacing: -1.5px; color: #000000; line-height: 1.1; margin: 0 0 16px 0;">
+      Any role, any workflow.
+    </h2>
+
+    <!-- Subtitle -->
+    <p class="reveal" style="font-family: 'Inter', sans-serif; font-size: 16px; color: #5c5c5c; line-height: 1.6; margin: 0; max-width: 680px;">
+      Built around your stack: a modular system for the AI colleague lifecycle. The platform works across industries and workflows.
+    </p>
+
+    <!-- Two-column: sidebar + content -->
+    <div style="display: flex; gap: 0; margin-top: 64px;">
+
+      <!-- Left sidebar -->
+      <div id="roles-sidebar" style="width: 260px; flex-shrink: 0; display: flex; flex-direction: column; gap: 0; border-right: 1px solid #e5e4dc; padding-right: 40px;">
+        {roles.map((role, i) => (
+          <button
+            class={`role-item ${i === 0 ? 'active' : ''}`}
+            data-role={role.id}
+          >
+            <span class="role-item-label">{role.label}</span>
+            <svg class="role-item-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        ))}
+      </div>
+
+      <!-- Right content -->
+      <div id="roles-content" style="flex: 1; padding-left: 64px;">
+        {roles.map((role, i) => (
+          <div class={`role-panel ${i === 0 ? 'active' : ''}`} data-panel={role.id}>
+            <h3 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 36px; letter-spacing: -0.8px; color: #000000; line-height: 1.15; margin: 0;">
+              {role.heading}
+            </h3>
+            <p style="font-family: 'Inter', sans-serif; font-size: 16px; color: #5c5c5c; line-height: 1.6; margin: 16px 0 0 0; max-width: 600px;">
+              {role.description}
+            </p>
+
+            <div style="margin-top: 32px; border-radius: 12px; overflow: hidden; background: #141214;">
+              <img
+                src={role.image}
+                alt={role.heading}
+                style="width: 100%; height: auto; display: block;"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .role-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 1px solid #e5e4dc;
+    transition: all 0.2s ease;
+  }
+  .role-item:first-child {
+    border-top: 1px solid #e5e4dc;
+  }
+
+  .role-item-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #999;
+    transition: color 0.2s ease, font-weight 0.2s ease;
+  }
+
+  .role-item-arrow {
+    opacity: 0;
+    color: #17100e;
+    transition: opacity 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .role-item.active .role-item-label {
+    font-weight: 600;
+    color: #17100e;
+  }
+  .role-item.active .role-item-arrow {
+    opacity: 1;
+  }
+
+  .role-item:not(.active):hover .role-item-label {
+    color: #555;
+  }
+
+  .role-panel {
+    display: none;
+  }
+  .role-panel.active {
+    display: block;
+    animation: rolesFadeIn 0.35s ease;
+  }
+
+  @keyframes rolesFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  const items = document.querySelectorAll('.role-item');
+  const panels = document.querySelectorAll('#roles-content .role-panel');
+
+  items.forEach((item) => {
+    item.addEventListener('click', () => {
+      const target = item.getAttribute('data-role');
+      if (!target) return;
+
+      items.forEach((i) => i.classList.remove('active'));
+      item.classList.add('active');
+
+      panels.forEach((p) => p.classList.remove('active'));
+      const panel = document.querySelector(`.role-panel[data-panel="${target}"]`);
+      if (panel) panel.classList.add('active');
+
+    });
+  });
+</script>

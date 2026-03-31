@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: "Inter", sans-serif;
+  --font-heading: "Bricolage Grotesque", sans-serif;
+  --font-serif: "Crimson Text", serif;
+  --font-mono: "Roboto Mono", monospace;
+
+  --color-bg: #ffffff;
+  --color-bg-warm: #f4f3ec;
+  --color-bg-dark: #17100e;
+  --color-tx: #171717;
+  --color-tx-2: #5c5c5c;
+  --color-tx-3: #7d7d7d;
+  --color-tx-4: #a3a3a3;
+  --color-border: #ebebeb;
+  --color-dark: #343636;
+  --color-dark-2: #262626;
+  --color-dark-3: #313130;
+}
+
+html { scroll-behavior: auto; }
+
+body {
+  background: #ffffff;
+  color: #171717;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "Inter", sans-serif;
+}
+
+::selection { background: rgba(23, 16, 14, 0.15); }
+
+/* --- Scroll reveal animations --- */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* Premium button hover */
+a[href], button {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+/* Subtle scale on card hover */
+.card-hover {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}

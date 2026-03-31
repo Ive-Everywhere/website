@@ -1,0 +1,229 @@
+---
+const icons = [
+  'salesforce', 'notion', 'slack', 'hubspot', 'gmail',
+  'googlesheets', 'github', 'jira', 'linear', 'stripe',
+  'figma', 'asana', 'intercom', 'zendesk', 'zoom',
+  'airtable', 'dropbox', 'mailchimp', 'twilio', 'apollographql',
+];
+---
+
+<section style="background: #f4f3ec; padding: 64px 16px;">
+  <div style="max-width: 1440px; margin: 0 auto;">
+    <div style="padding: 0 0 48px;">
+      <h2 class="reveal" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(32px, 5vw, 56px); letter-spacing: -1.5px; color: #000; line-height: 1.1; margin: 0;">
+        Unlock hundreds of prebuilt actions with native integrations.
+      </h2>
+    </div>
+
+    <div class="ig-container">
+      <div class="ig-mask-l"></div>
+      <div class="ig-mask-r"></div>
+
+      <div class="ig-center">
+        <img src="/images/eluu-logo.svg" alt="Eluu" />
+      </div>
+
+      <!-- 3x copies for seamless circular loop — track never runs empty -->
+      <div class="ig-track">
+        {[...icons, ...icons, ...icons].map((name) => (
+          <div class="ig-icon">
+            <img src={`/logos/integrations/${name}.svg`} alt={name} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ig-container {
+    position: relative;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(255, 210, 80, 0.35) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 30%, rgba(255, 180, 50, 0.25) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 80%, rgba(240, 200, 100, 0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 65% 20%, rgba(255, 220, 120, 0.18) 0%, transparent 40%),
+      linear-gradient(135deg, #f5e6c8 0%, #f0ddb5 30%, #edd5a0 60%, #f2dfb8 100%);
+    border-radius: 36px;
+    height: 160px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+  .ig-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/images/products-bg.webp') center / cover no-repeat;
+    opacity: 0.08;
+    border-radius: 36px;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+
+  .ig-mask-l,
+  .ig-mask-r {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .ig-mask-l {
+    left: 0;
+    background: linear-gradient(to right, #f0ddb5, transparent);
+  }
+  .ig-mask-r {
+    right: 0;
+    background: linear-gradient(to left, #f2dfb8, transparent);
+  }
+
+  .ig-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 32px;
+    background: #f4f3ec;
+    box-shadow:
+      0 0 0 5px rgba(210, 140, 100, 0.25),
+      0 0 30px rgba(210, 140, 100, 0.15);
+    animation: ig-glow 3s ease-in-out infinite;
+  }
+  .ig-center img {
+    width: 90px;
+    height: 90px;
+    border-radius: 20px;
+  }
+
+  .ig-track {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 20px;
+    will-change: transform;
+  }
+
+  .ig-icon {
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f3ec;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+  .ig-icon img {
+    width: 36px;
+    height: 36px;
+    display: block;
+  }
+
+  @keyframes ig-glow {
+    0%, 100% {
+      box-shadow:
+        0 0 0 5px rgba(210, 140, 100, 0.2),
+        0 0 24px rgba(210, 140, 100, 0.1);
+    }
+    50% {
+      box-shadow:
+        0 0 0 8px rgba(210, 140, 100, 0.35),
+        0 0 40px rgba(210, 140, 100, 0.2);
+    }
+  }
+
+  @media (min-width: 640px) {
+    .ig-container { height: 200px; }
+    .ig-center { width: 110px; height: 110px; border-radius: 28px; }
+    .ig-center img { width: 70px; height: 70px; }
+    .ig-icon { width: 90px; height: 90px; border-radius: 20px; }
+    .ig-icon img { width: 45px; height: 45px; }
+    .ig-track { gap: 28px; padding: 0 28px; }
+    .ig-mask-l, .ig-mask-r { width: 160px; }
+  }
+
+  @media (min-width: 1024px) {
+    .ig-container { height: 260px; border-radius: 42px; }
+    .ig-center { width: 135px; height: 135px; border-radius: 32px; }
+    .ig-center img { width: 90px; height: 90px; border-radius: 20px; }
+    .ig-icon { width: 110px; height: 110px; border-radius: 24px; }
+    .ig-icon img { width: 55px; height: 55px; }
+    .ig-track { gap: 36px; padding: 0 36px; }
+    .ig-mask-l, .ig-mask-r { width: 220px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ig-center { animation: none; }
+  }
+</style>
+
+<script>
+  (function () {
+    const container = document.querySelector('.ig-container') as HTMLElement;
+    const track = document.querySelector('.ig-track') as HTMLElement;
+    if (!track || !container) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const iconEl = track.querySelector('.ig-icon') as HTMLElement;
+    if (!iconEl) return;
+
+    const totalIcons = track.children.length;
+    const setSize = totalIcons / 3; // 20 unique icons, 3 copies
+
+    let step = 0;
+    let centerAdj = 0;
+
+    function measure() {
+      const gap = parseFloat(getComputedStyle(track).gap) || 54;
+      const iconW = iconEl.offsetWidth;
+      step = iconW + gap;
+      const padding = parseFloat(getComputedStyle(track).paddingLeft) || 54;
+      centerAdj = (container.offsetWidth / 2) - padding - (iconW / 2);
+    }
+
+    function setPos(i: number, animate: boolean) {
+      track.style.transition = animate
+        ? 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)'
+        : 'none';
+      track.style.transform = `translateX(${centerAdj - i * step}px)`;
+      if (!animate) void track.offsetHeight;
+    }
+
+    // Start in the middle set (index setSize..2*setSize) so there are
+    // always icons extending past both edges of the container
+    let idx = 2 * setSize;
+    measure();
+    setPos(idx, false);
+
+    function advance() {
+      idx--;
+      // When we leave the middle set, jump back — visually identical
+      if (idx < setSize) {
+        idx += setSize;
+        setPos(idx, false);
+        idx--;
+      }
+      setPos(idx, true);
+    }
+
+    setInterval(advance, 1800);
+
+    let resizeTimer: number;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { measure(); setPos(idx, false); }, 200);
+    }, { passive: true });
+  })();
+</script>

@@ -1,0 +1,325 @@
+---
+// Parallel execution animation — 4 colleagues processing tasks simultaneously
+---
+
+<div class="pa-wrap">
+  <img src="/images/cookbook-bg.png" alt="" class="pa-bg" />
+
+  <div class="pa-window">
+    <div class="pa-chrome">
+      <div class="pa-dots">
+        <span style="background:#e8655a;"></span>
+        <span style="background:#e8c15a;"></span>
+        <span style="background:#67c96c;"></span>
+      </div>
+      <div class="pa-chrome-right">
+        <span>Colleagues</span>
+      </div>
+    </div>
+
+    <div class="pa-body" id="pa-body">
+      <!-- Row 1: Lewis -->
+      <div class="pa-row pa-r1">
+        <img src="/images/avatar-lewis.png" alt="" class="pa-avatar" />
+        <div class="pa-info">
+          <div class="pa-top">
+            <span class="pa-name">Lewis</span>
+            <span class="pa-role">Marketing</span>
+          </div>
+          <div class="pa-task">Enriching 47 contacts from HubSpot</div>
+          <div class="pa-bar-row">
+            <div class="pa-bar"><div class="pa-fill pa-f1"></div></div>
+            <div class="pa-icons">
+              <img src="/logos/integrations/hubspot.svg" alt="" />
+              <img src="/logos/integrations/salesforce.svg" alt="" />
+            </div>
+            <div class="pa-done pa-d1">&#10003;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Iris -->
+      <div class="pa-row pa-r2">
+        <img src="/images/avatar-iris.png" alt="" class="pa-avatar" />
+        <div class="pa-info">
+          <div class="pa-top">
+            <span class="pa-name">Iris</span>
+            <span class="pa-role">Product</span>
+          </div>
+          <div class="pa-task">Analyzing feature requests from feedback</div>
+          <div class="pa-bar-row">
+            <div class="pa-bar"><div class="pa-fill pa-f2"></div></div>
+            <div class="pa-icons">
+              <img src="/logos/integrations/notion.svg" alt="" style="filter:invert(0.5);" />
+              <img src="/logos/integrations/intercom.svg" alt="" />
+            </div>
+            <div class="pa-done pa-d2">&#10003;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3: Priya -->
+      <div class="pa-row pa-r3">
+        <img src="/images/avatar-priya.png" alt="" class="pa-avatar" />
+        <div class="pa-info">
+          <div class="pa-top">
+            <span class="pa-name">Priya</span>
+            <span class="pa-role">Sales</span>
+          </div>
+          <div class="pa-task">Generating Q3 pipeline forecast</div>
+          <div class="pa-bar-row">
+            <div class="pa-bar"><div class="pa-fill pa-f3"></div></div>
+            <div class="pa-icons">
+              <img src="/logos/integrations/googlesheets.svg" alt="" />
+              <img src="/logos/integrations/slack.svg" alt="" />
+            </div>
+            <div class="pa-done pa-d3">&#10003;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 4: James -->
+      <div class="pa-row pa-r4">
+        <img src="/images/avatar-james.png" alt="" class="pa-avatar" />
+        <div class="pa-info">
+          <div class="pa-top">
+            <span class="pa-name">James</span>
+            <span class="pa-role">Engineering</span>
+          </div>
+          <div class="pa-task">Running PR review on sprint backlog</div>
+          <div class="pa-bar-row">
+            <div class="pa-bar"><div class="pa-fill pa-f4"></div></div>
+            <div class="pa-icons">
+              <img src="/logos/integrations/github.svg" alt="" style="filter:invert(0.5);" />
+              <img src="/logos/integrations/jira.svg" alt="" />
+            </div>
+            <div class="pa-done pa-d4">&#10003;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .pa-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px 128px;
+    box-sizing: border-box;
+  }
+
+  .pa-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+
+  .pa-window {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 380px;
+    background: rgba(250, 249, 244, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.1);
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .pa-chrome {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .pa-dots { display: flex; gap: 6px; }
+  .pa-dots span { width: 8px; height: 8px; border-radius: 50%; }
+  .pa-chrome-right { font-size: 12px; color: #7d7d7d; font-weight: 500; }
+
+  .pa-body { padding: 4px 0; }
+
+  .pa-row {
+    display: flex;
+    gap: 10px;
+    padding: 8px 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .pa-row:last-child { border-bottom: none; }
+
+  .pa-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    object-fit: cover;
+  }
+
+  .pa-info { flex: 1; min-width: 0; }
+
+  .pa-top {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    margin-bottom: 2px;
+  }
+  .pa-name { font-size: 12px; font-weight: 600; color: #17100e; }
+  .pa-role { font-size: 10px; color: #a3a3a3; }
+
+  .pa-task {
+    font-size: 10px;
+    color: #7d7d7d;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pa-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pa-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .pa-fill {
+    height: 100%;
+    background: #17100e;
+    border-radius: 2px;
+    width: 0%;
+  }
+
+  .pa-icons {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .pa-icons img {
+    width: 14px;
+    height: 14px;
+    opacity: 0.45;
+  }
+
+  .pa-done {
+    font-size: 12px;
+    color: #17100e;
+    opacity: 0;
+    transform: scale(0);
+    flex-shrink: 0;
+    width: 16px;
+    text-align: center;
+  }
+</style>
+
+<script>
+(function() {
+  const body = document.getElementById('pa-body');
+  if (!body) return;
+
+  const rows = body.querySelectorAll('.pa-row') as NodeListOf<HTMLElement>;
+  const fills = body.querySelectorAll('.pa-fill') as NodeListOf<HTMLElement>;
+  const dones = body.querySelectorAll('.pa-done') as NodeListOf<HTMLElement>;
+
+  // Different durations for organic feel — all start together
+  const durations = [3200, 3800, 3500, 4100];
+  const STAGGER_IN = 100;
+  const HOLD = 1500;
+  const FADE_IN = 400;
+  const FADE_OUT = 500;
+
+  function reset() {
+    rows.forEach(r => {
+      r.style.transition = 'none';
+      r.style.opacity = '0';
+      r.style.transform = 'translateY(8px)';
+    });
+    fills.forEach(f => {
+      f.style.transition = 'none';
+      f.style.width = '0%';
+    });
+    dones.forEach(d => {
+      d.style.transition = 'none';
+      d.style.opacity = '0';
+      d.style.transform = 'scale(0)';
+    });
+    void body.offsetHeight;
+  }
+
+  function sleep(ms: number) {
+    return new Promise(r => setTimeout(r, ms));
+  }
+
+  async function run() {
+    while (true) {
+      reset();
+      await sleep(300);
+
+      // Stagger rows in
+      for (let i = 0; i < rows.length; i++) {
+        setTimeout(() => {
+          rows[i].style.transition = `all ${FADE_IN}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+          rows[i].style.opacity = '1';
+          rows[i].style.transform = 'translateY(0)';
+        }, i * STAGGER_IN);
+      }
+      await sleep(FADE_IN + rows.length * STAGGER_IN);
+
+      // Start ALL progress bars simultaneously
+      fills.forEach((f, i) => {
+        f.style.transition = `width ${durations[i]}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+        f.style.width = '100%';
+      });
+
+      // Show checkmarks as each finishes
+      for (let i = 0; i < fills.length; i++) {
+        const sorted = durations.map((d, idx) => ({ d, idx })).sort((a, b) => a.d - b.d);
+        // Wait for each to finish in order of speed
+        setTimeout(() => {
+          const idx = sorted[i].idx;
+          dones[idx].style.transition = 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)';
+          dones[idx].style.opacity = '1';
+          dones[idx].style.transform = 'scale(1)';
+        }, sorted[i].d);
+      }
+
+      // Wait for slowest + hold
+      await sleep(Math.max(...durations) + HOLD);
+
+      // Fade out all rows
+      rows.forEach(r => {
+        r.style.transition = `all ${FADE_OUT}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+        r.style.opacity = '0';
+        r.style.transform = 'translateY(-6px)';
+      });
+      await sleep(FADE_OUT + 400);
+    }
+  }
+
+  // Start when visible
+  const io = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      io.disconnect();
+      run();
+    }
+  }, { threshold: 0.3 });
+  io.observe(body);
+})();
+</script>

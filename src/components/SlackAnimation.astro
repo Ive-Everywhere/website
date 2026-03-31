@@ -1,0 +1,434 @@
+---
+// Slack conversation animation — shows a colleague responding in Slack
+---
+
+<div class="sl-wrap">
+  <img src="/images/cookbook-bg.png" alt="" class="sl-bg" />
+
+  <div class="sl-window">
+    <div class="sl-chrome">
+      <div class="sl-dots">
+        <span style="background:#e8655a;"></span>
+        <span style="background:#e8c15a;"></span>
+        <span style="background:#67c96c;"></span>
+      </div>
+      <div class="sl-chrome-right">
+        <span class="sl-hash">#</span>
+        <span>sales</span>
+      </div>
+    </div>
+
+    <div class="sl-body" id="sl-body">
+      <div class="sl-body-inner" id="sl-inner">
+      <!-- User message -->
+      <div class="sl-msg sl-m1">
+        <div class="sl-avatar sl-av-user">LK</div>
+        <div class="sl-content">
+          <div class="sl-meta">
+            <span class="sl-sender">Likith Kumar</span>
+            <span class="sl-time">2:34 PM</span>
+          </div>
+          <div class="sl-text"><span class="sl-mention">@Lewis</span> enrich all new leads from this week and push to the pipeline tracker</div>
+          <!-- Reactions -->
+          <div class="sl-reactions sl-rx1">
+            <span class="sl-reaction sl-rx-eyes">👀 <em>1</em></span>
+            <span class="sl-reaction sl-rx-check">✅ <em>1</em></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="sl-msg sl-typing">
+        <div class="sl-avatar sl-av-bot">
+          <img src="/images/eluu-logo.svg" alt="" width="22" height="22" style="border-radius:5px;" />
+        </div>
+        <div class="sl-content">
+          <div class="sl-typing-bar">
+            <span class="sl-typing-name">Lewis</span>
+            <span class="sl-typing-label">is typing</span>
+            <span class="sl-typing-dots"><i></i><i></i><i></i></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bot reply -->
+      <div class="sl-msg sl-m2">
+        <div class="sl-avatar sl-av-bot">
+          <img src="/images/eluu-logo.svg" alt="" width="22" height="22" style="border-radius:5px;" />
+        </div>
+        <div class="sl-content">
+          <div class="sl-meta">
+            <span class="sl-sender">Lewis</span>
+            <span class="sl-app">APP</span>
+            <span class="sl-time">2:34 PM</span>
+          </div>
+          <div class="sl-text">On it. Pulling from HubSpot, enriching with Apollo, updating the Pipeline Tracker.</div>
+          <div class="sl-tools">
+            <img src="/logos/integrations/hubspot.svg" alt="" />
+            <img src="/logos/integrations/apollographql.svg" alt="" style="filter:invert(0.5);" />
+            <img src="/logos/integrations/googlesheets.svg" alt="" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion -->
+      <div class="sl-msg sl-m3">
+        <div class="sl-avatar sl-av-bot">
+          <img src="/images/eluu-logo.svg" alt="" width="22" height="22" style="border-radius:5px;" />
+        </div>
+        <div class="sl-content">
+          <div class="sl-meta">
+            <span class="sl-sender">Lewis</span>
+            <span class="sl-time">2:36 PM</span>
+          </div>
+          <div class="sl-result">
+            <span class="sl-check">&#10003;</span>
+            <span>Done — 42 contacts enriched, 3 duplicates flagged, sheet updated.</span>
+          </div>
+          <div class="sl-reactions sl-rx2">
+            <span class="sl-reaction sl-rx-fire">🔥 <em>3</em></span>
+            <span class="sl-reaction sl-rx-tada">🎉 <em>2</em></span>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sl-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+
+  .sl-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+
+  .sl-window {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 400px;
+    background: rgba(250, 249, 244, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.1);
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .sl-chrome {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .sl-dots { display: flex; gap: 6px; }
+  .sl-dots > span { width: 10px; height: 10px; border-radius: 50%; }
+  .sl-chrome-right {
+    display: flex; align-items: center; gap: 3px;
+    font-size: 13px; font-weight: 600; color: #17100e;
+  }
+  .sl-hash { color: #a3a3a3; font-weight: 500; }
+
+  .sl-body {
+    padding: 16px 18px;
+    max-height: 340px;
+    overflow: hidden;
+    position: relative;
+  }
+  .sl-body-inner {
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    padding-bottom: 32px;
+  }
+
+  .sl-msg {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .sl-msg:last-child { margin-bottom: 0; }
+
+  .sl-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sl-av-user {
+    background: #343636;
+    color: #f4f3ec;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .sl-av-bot { background: transparent; }
+
+  .sl-content { flex: 1; min-width: 0; }
+
+  .sl-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .sl-sender { font-size: 13px; font-weight: 600; color: #17100e; }
+  .sl-app {
+    font-size: 9px;
+    font-weight: 700;
+    color: #7d7d7d;
+    background: rgba(0,0,0,0.05);
+    padding: 1px 5px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+  }
+  .sl-time { font-size: 11px; color: #a3a3a3; }
+
+  .sl-text {
+    font-size: 13px;
+    color: #343636;
+    line-height: 1.55;
+  }
+  .sl-mention { color: #5e6ad2; font-weight: 500; }
+
+  .sl-tools {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  .sl-tools img { width: 16px; height: 16px; opacity: 0.5; }
+
+  .sl-result {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 13px;
+    color: #17100e;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .sl-check { color: #34a853; font-size: 14px; flex-shrink: 0; }
+
+  /* Typing indicator — Slack style */
+  .sl-typing { display: none; }
+  .sl-typing-bar {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    padding: 4px 0;
+  }
+  .sl-typing-name { font-weight: 600; color: #17100e; }
+  .sl-typing-label { color: #a3a3a3; }
+  .sl-typing-dots {
+    display: inline-flex;
+    gap: 3px;
+    margin-left: 2px;
+  }
+  .sl-typing-dots i {
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #a3a3a3;
+    font-style: normal;
+  }
+
+  /* Reactions */
+  .sl-reactions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  .sl-reaction {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    background: rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 12px;
+    padding: 2px 8px 2px 6px;
+    cursor: default;
+  }
+  .sl-reaction em {
+    font-style: normal;
+    font-size: 11px;
+    color: #7d7d7d;
+    font-weight: 500;
+  }
+</style>
+
+<script>
+(function() {
+  const body = document.getElementById('sl-body');
+  const inner = document.getElementById('sl-inner') as HTMLElement;
+  if (!body || !inner) return;
+
+  const m1 = body.querySelector('.sl-m1') as HTMLElement;
+  const typing = body.querySelector('.sl-typing') as HTMLElement;
+  const m2 = body.querySelector('.sl-m2') as HTMLElement;
+  const m3 = body.querySelector('.sl-m3') as HTMLElement;
+  const tools = body.querySelector('.sl-tools') as HTMLElement;
+  const rx1 = body.querySelector('.sl-rx1') as HTMLElement;
+  const rx2 = body.querySelector('.sl-rx2') as HTMLElement;
+  const typingDots = body.querySelectorAll('.sl-typing-dots i') as NodeListOf<HTMLElement>;
+  const msgs = [m1, m2, m3];
+
+  function scrollUp() {
+    const overflow = inner.scrollHeight - body.clientHeight;
+    if (overflow > 0) {
+      inner.style.transform = `translateY(-${overflow}px)`;
+    }
+  }
+
+  const EASE_IN = 'all 400ms cubic-bezier(0.16, 1, 0.3, 1)';
+  const EASE_OUT = 'all 500ms cubic-bezier(0.4, 0, 0.2, 1)';
+
+  function show(el: HTMLElement) {
+    el.style.transition = EASE_IN;
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  }
+
+  function showSoft(el: HTMLElement, delay = 0) {
+    setTimeout(() => {
+      el.style.transition = 'all 350ms cubic-bezier(0.16, 1, 0.3, 1)';
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0) scale(1)';
+    }, delay);
+  }
+
+  function hide(el: HTMLElement) {
+    el.style.transition = EASE_OUT;
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(-4px)';
+  }
+
+  function reset() {
+    msgs.forEach(el => {
+      el.style.transition = 'none';
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(8px)';
+    });
+    typing.style.transition = 'none';
+    typing.style.opacity = '0';
+    typing.style.display = 'none';
+    [tools, rx1, rx2].forEach(el => {
+      el.style.transition = 'none';
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(4px) scale(0.95)';
+    });
+    inner.style.transition = 'none';
+    inner.style.transform = 'translateY(0)';
+    void body.offsetHeight;
+  }
+
+  function sleep(ms: number) {
+    return new Promise(r => setTimeout(r, ms));
+  }
+
+  function startTyping() {
+    typingDots.forEach((dot, i) => {
+      dot.style.animation = `sl-bounce 0.6s ease ${i * 0.15}s infinite`;
+    });
+  }
+  function stopTyping() {
+    typingDots.forEach(dot => { dot.style.animation = 'none'; });
+  }
+
+  const style = document.createElement('style');
+  style.textContent = `@keyframes sl-bounce { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-3px); opacity: 1; } }`;
+  document.head.appendChild(style);
+
+  async function run() {
+    while (true) {
+      reset();
+      await sleep(400);
+
+      // User message
+      show(m1);
+      await sleep(600);
+
+      // Reactions on user message — 👀 first, then ✅
+      showSoft(rx1, 0);
+      await sleep(400);
+
+      // Typing indicator
+      typing.style.display = 'flex';
+      void typing.offsetHeight;
+      show(typing);
+      startTyping();
+      inner.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+      scrollUp();
+      await sleep(1400);
+
+      // Hide typing, show bot reply
+      hide(typing);
+      await sleep(250);
+      typing.style.display = 'none';
+      stopTyping();
+
+      show(m2);
+      await sleep(200);
+      inner.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+      scrollUp();
+      await sleep(400);
+
+      // Integration icons
+      showSoft(tools);
+      await sleep(1800);
+
+      // Completion message
+      show(m3);
+      await sleep(200);
+      inner.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+      scrollUp();
+      await sleep(600);
+
+      // Reactions on completion — 🔥 then 🎉
+      showSoft(rx2, 0);
+      await sleep(2000);
+
+      // Fade everything out
+      msgs.forEach(el => hide(el));
+      [tools, rx1, rx2].forEach(el => {
+        el.style.transition = EASE_OUT;
+        el.style.opacity = '0';
+      });
+      await sleep(800);
+    }
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      io.disconnect();
+      run();
+    }
+  }, { threshold: 0.3 });
+  io.observe(body);
+})();
+</script>

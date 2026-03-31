@@ -1,0 +1,385 @@
+---
+import ParallelAnimation from './ParallelAnimation.astro';
+import CookbookAnimation from './CookbookAnimation.astro';
+import SlackAnimation from './SlackAnimation.astro';
+---
+
+<!-- Why Eluu — sticky card stacking section -->
+<section class="we">
+  <div class="we-wrap">
+    <div class="we-grid">
+
+      <!-- Sidebar -->
+      <nav class="we-side" aria-label="Why Eluu sections">
+        <div class="we-side-inner">
+          <button type="button" class="we-nav active" data-i="0" aria-current="true">
+            <div class="we-pie"></div>
+            <span>Multitasking</span>
+          </button>
+          <div class="we-divider"></div>
+          <button type="button" class="we-nav" data-i="1">
+            <div class="we-pie"></div>
+            <span>Cookbook</span>
+          </button>
+          <div class="we-divider"></div>
+          <button type="button" class="we-nav" data-i="2">
+            <div class="we-pie"></div>
+            <span>Slack</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Header -->
+      <div class="we-head">
+        <h2 class="we-title reveal">AI colleagues that actually get work done.</h2>
+      </div>
+
+      <!-- Cards -->
+      <div class="we-cards">
+
+        <!-- Card 1 — Multitasking -->
+        <section class="we-card" data-card="0"
+          style="--ct:128px; --ch:640px; --cm:0px; --cz:1;">
+          <div class="we-text">
+            <h3>Deploy colleagues that truly multitask</h3>
+            <p>Create AI colleagues purpose-built for your team — then watch them work in parallel. While one analyses competitors, another drafts your report, and a third updates your CRM. Real parallel execution, not just queuing tasks.</p>
+          </div>
+          <div class="we-media we-anim">
+            <ParallelAnimation />
+          </div>
+        </section>
+
+        <!-- Card 2 — Cookbook -->
+        <section class="we-card" data-card="1"
+          style="--ct:228px; --ch:540px; --cm:-100px; --cz:2;">
+          <div class="we-text">
+            <h3>Complex workflows, one recipe</h3>
+            <p>Build multi-step workflows that span your entire tool stack. Pull data from CRMs, run analyses, format reports, and deliver results — all orchestrated from a single recipe with the integrations you already use.</p>
+          </div>
+          <div class="we-media we-anim">
+            <CookbookAnimation />
+          </div>
+        </section>
+
+        <!-- Card 3 — Slack -->
+        <section class="we-card" data-card="2"
+          style="--ct:296px; --ch:472px; --cm:-80px; --cz:3;">
+          <div class="we-text">
+            <h3>Message them like a teammate</h3>
+            <p>Your AI colleagues live in Slack — right where your team works. Assign tasks, get progress updates, and receive deliverables in your channels. Just like a highly efficient remote teammate who never drops the ball.</p>
+          </div>
+          <div class="we-media we-anim">
+            <SlackAnimation />
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Section ── */
+  .we { background: #f4f3ec; }
+
+  .we-wrap {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 96px 24px;
+  }
+  @media (min-width: 640px)  { .we-wrap { padding: 96px 40px; } }
+  @media (min-width: 1024px) { .we-wrap { padding: 96px 120px; } }
+
+  /* ── Grid ── */
+  .we-grid { display: grid; grid-template-columns: 1fr; }
+
+  @media (min-width: 1024px) {
+    .we-grid {
+      grid-template-columns: 200px 1fr;
+      column-gap: 48px;
+    }
+  }
+
+  /* ── Sidebar ── */
+  .we-side {
+    display: none;
+    grid-row: 2;
+    grid-column: 1;
+  }
+  @media (min-width: 1024px) { .we-side { display: block; } }
+
+  .we-side-inner {
+    position: sticky;
+    top: 128px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .we-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+  }
+
+  .we-pie {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: rgba(23, 16, 14, 0.12);
+  }
+
+  .we-divider {
+    height: 1px;
+    background: #d4d3cb;
+  }
+
+  .we-nav span:last-child {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    line-height: 1;
+    color: rgba(23, 16, 14, 0.2);
+    transition: color 0.3s ease;
+  }
+
+  .we-nav.active span:last-child { color: #17100e; }
+
+  /* ── Header ── */
+  .we-head {
+    grid-column: 1;
+    grid-row: 1;
+    padding-bottom: 40px;
+  }
+  @media (min-width: 1024px) {
+    .we-head { grid-column: 2; grid-row: 1; padding-bottom: 0; }
+  }
+
+  .we-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    color: #000000;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin: 0;
+    padding-bottom: 40px;
+  }
+  @media (min-width: 640px)  { .we-title { font-size: 48px; letter-spacing: -2px; } }
+  @media (min-width: 1024px) { .we-title { font-size: 56px; letter-spacing: -2px; } }
+
+  /* ── Cards container ── */
+  .we-cards { grid-column: 1; grid-row: 2; }
+  @media (min-width: 1024px) {
+    .we-cards { grid-column: 2; grid-row: 2; min-width: 0; }
+  }
+
+  /* ── Card ── */
+  .we-card {
+    border-top: 1px solid #d4d3cb;
+    background: #f4f3ec;
+    width: 100%;
+    margin-bottom: 48px;
+  }
+  .we-card:last-child { margin-bottom: 0; }
+
+  @media (min-width: 1024px) {
+    .we-card {
+      position: sticky;
+      top: var(--ct);
+      height: var(--ch);
+      margin-top: var(--cm);
+      margin-bottom: 0;
+      display: flex;
+      overflow: hidden;
+      z-index: var(--cz);
+    }
+  }
+
+  /* ── Card text ── */
+  .we-text {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 32px 0;
+  }
+  @media (min-width: 1024px) {
+    .we-text {
+      width: 38%;
+      padding: 32px 40px 32px 0;
+      flex-shrink: 0;
+    }
+  }
+
+  .we-text h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #17100e;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+  @media (min-width: 1024px) {
+    .we-text h3 { font-size: 28px; letter-spacing: -0.8px; }
+  }
+
+  .we-text p {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #5c5c5c;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── Card media ── */
+  .we-media {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    border: 1px solid #d4d3cb;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  @media (min-width: 1024px) {
+    .we-media {
+      flex: 1;
+      min-width: 0;
+      border-radius: 0;
+      border-top: none;
+    }
+  }
+
+  /* ── Animation media ── */
+  .we-anim {
+    border: none;
+    background: none;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── Video media ── */
+  .we-vid {
+    border: none;
+    background: none;
+    padding: 0;
+    overflow: hidden;
+  }
+  .we-vid video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 16px;
+  }
+  @media (min-width: 1024px) {
+    .we-vid video { border-radius: 0; }
+  }
+
+
+</style>
+
+<script>
+  (function () {
+    const cards = document.querySelectorAll('.we-card') as NodeListOf<HTMLElement>;
+    const navs = document.querySelectorAll('.we-nav');
+    const pies = document.querySelectorAll('.we-pie') as NodeListOf<HTMLElement>;
+    if (!cards.length || !navs.length) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let ticking = false;
+
+    function getStick(card: HTMLElement) {
+      return parseInt(getComputedStyle(card).getPropertyValue('--ct')) || 128;
+    }
+
+    function update() {
+      let active = 0;
+      const cardTops: number[] = [];
+
+      cards.forEach((card, i) => {
+        const top = card.getBoundingClientRect().top;
+        const stick = getStick(card);
+        cardTops.push(top);
+        if (top <= stick + 20) active = i;
+      });
+
+      navs.forEach((n, i) => {
+        const isActive = i === active;
+        n.classList.toggle('active', isActive);
+        n.setAttribute('aria-current', isActive ? 'true' : 'false');
+      });
+
+      // Pie progress: each card fills its dot while it's the active sticky card.
+      // We detect "active" by which card's top is at or above its sticky position.
+      // Progress = how far past sticky / distance until next card takes over.
+      pies.forEach((pie, i) => {
+        const stick = getStick(cards[i]);
+        const top = cardTops[i];
+        const isStuck = top <= stick + 20;
+
+        // Next card's sticky position (or a fallback for the last card)
+        const nextTop = i < cards.length - 1 ? cardTops[i + 1] : null;
+        const nextStick = i < cards.length - 1 ? getStick(cards[i + 1]) : stick + 300;
+
+        // Is the NEXT card also stuck? Then this card is fully scrolled past.
+        const nextIsStuck = nextTop !== null && nextTop <= nextStick + 20;
+
+        let pct = 0;
+        if (nextIsStuck) {
+          // This card has been fully scrolled past
+          pct = 100;
+        } else if (isStuck && i === active) {
+          // This card is currently active and stuck
+          // Progress = how far the next card is from reaching its sticky position
+          if (nextTop !== null) {
+            // Distance the next card still needs to travel to reach its sticky pos
+            const remaining = nextTop - nextStick;
+            // Total distance it started from (card height approximation)
+            const totalTravel = 400;
+            pct = Math.round(Math.max(0, Math.min(1, 1 - (remaining / totalTravel))) * 100);
+          } else {
+            // Last card — use own scroll distance
+            const scrolled = stick - top;
+            pct = Math.round(Math.max(0, Math.min(1, scrolled / 300)) * 100);
+          }
+        }
+
+        if (pct > 0) {
+          pie.style.background = `conic-gradient(from 0deg, #17100e ${pct}%, rgba(23,16,14,0.12) ${pct}%)`;
+        } else {
+          pie.style.background = 'rgba(23,16,14,0.12)';
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => { update(); ticking = false; });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    navs.forEach((nav) => {
+      nav.addEventListener('click', () => {
+        const card = cards[parseInt((nav as HTMLElement).dataset.i || '0')];
+        if (!card) return;
+        const y = window.scrollY + card.getBoundingClientRect().top - getStick(card) + 1;
+        const safeFn = (window as any).__safeScrollTo || window.scrollTo.bind(window);
+        safeFn({ top: y, behavior: reducedMotion ? 'instant' : 'smooth' });
+      });
+    });
+
+    update();
+  })();
+</script>
