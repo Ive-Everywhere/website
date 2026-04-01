@@ -157,13 +157,13 @@ const platform = [
   .ft-heading {
     font-family: 'Bricolage Grotesque', sans-serif;
     font-weight: 700;
-    font-size: 40px;
+    font-size: clamp(28px, 5vw, 48px);
     letter-spacing: -1.5px;
     color: #000;
     line-height: 1.1;
     margin: 0;
   }
-  @media (min-width: 640px) { .ft-heading { font-size: 48px; letter-spacing: -2px; } }
+  @media (min-width: 640px) { .ft-heading { letter-spacing: -2px; } }
 
   .ft-header { margin-bottom: 40px; }
 

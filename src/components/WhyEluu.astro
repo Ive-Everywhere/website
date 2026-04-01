@@ -106,7 +106,7 @@ import ParallelAnimation from './ParallelAnimation.astro';
     padding: 96px 24px;
   }
   @media (min-width: 640px)  { .we-wrap { padding: 96px 40px; } }
-  @media (min-width: 1024px) { .we-wrap { padding: 96px 120px; } }
+  @media (min-width: 1024px) { .we-wrap { padding: 96px 24px; } }
 
   /* ── Grid ── */
   .we-grid { display: grid; grid-template-columns: 1fr; }
@@ -183,15 +183,14 @@ import ParallelAnimation from './ParallelAnimation.astro';
   .we-title {
     font-family: 'Bricolage Grotesque', sans-serif;
     font-weight: 700;
-    font-size: 40px;
+    font-size: clamp(32px, 6vw, 56px);
     color: #000000;
     line-height: 1.1;
     letter-spacing: -1.5px;
     margin: 0;
-    padding-bottom: 40px;
+    padding-bottom: 32px;
   }
-  @media (min-width: 640px)  { .we-title { font-size: 48px; letter-spacing: -2px; } }
-  @media (min-width: 1024px) { .we-title { font-size: 56px; letter-spacing: -2px; } }
+  @media (min-width: 640px) { .we-title { padding-bottom: 40px; letter-spacing: -2px; } }
 
   /* ── Cards container ── */
   .we-cards { grid-column: 1; grid-row: 2; }
@@ -225,13 +224,14 @@ import ParallelAnimation from './ParallelAnimation.astro';
   .we-text {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 32px 0;
+    gap: 12px;
+    padding: 20px 0;
   }
+  @media (min-width: 640px) { .we-text { gap: 16px; padding: 32px 0; } }
   @media (min-width: 1024px) {
     .we-text {
-      width: 38%;
-      padding: 32px 40px 32px 0;
+      width: 32%;
+      padding: 32px 48px 32px 0;
       flex-shrink: 0;
     }
   }
@@ -246,7 +246,7 @@ import ParallelAnimation from './ParallelAnimation.astro';
     margin: 0;
   }
   @media (min-width: 1024px) {
-    .we-text h3 { font-size: 28px; letter-spacing: -0.8px; }
+    .we-text h3 { font-size: 32px; letter-spacing: -1px; }
   }
 
   .we-text p {
@@ -263,11 +263,12 @@ import ParallelAnimation from './ParallelAnimation.astro';
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 300px;
+    min-height: 260px;
     border: 1px solid #d4d3cb;
     border-radius: 0;
     overflow: hidden;
   }
+  @media (min-width: 640px) { .we-media { min-height: 300px; } }
   @media (min-width: 1024px) {
     .we-media {
       flex: 1;
