@@ -7,11 +7,11 @@
     src="/images/2683d4a4805b7192bd38dc39f0c5321f8c2b5696.png"
     alt=""
     aria-hidden="true"
-    style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; min-width: 2400px; height: auto; pointer-events: none; z-index: 0;"
+    class="hero-bg-img"
   />
 
   <!-- Content area — all in normal flow so section height is correct -->
-  <div style="position: relative; z-index: 1; padding: 80px 0 40px;">
+  <div class="hero-content">
     <div style="max-width: 1320px; margin: 0 auto; padding: 0 16px; display: flex; flex-direction: column; align-items: center; gap: 24px;">
       <!-- Text block -->
       <div class="reveal" style="display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center;">
@@ -48,6 +48,28 @@
 </section>
 
 <style>
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 56px 0 24px;
+  }
+  @media (min-width: 640px) { .hero-content { padding: 80px 0 40px; } }
+
+  .hero-bg-img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 2400px;
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @media (max-width: 640px) {
+    .hero-bg-img { min-width: 1200px; }
+  }
+
   .iframe-border {
     border-radius: 18px;
     border: 1px solid rgba(0, 0, 0, 0.08);
