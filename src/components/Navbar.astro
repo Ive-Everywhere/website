@@ -1,0 +1,89 @@
+---
+---
+
+<nav id="main-nav" class="site-nav">
+  <div style="max-width: 1800px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
+    <!-- Left: Logo + Name -->
+    <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+      <img src="/images/logo.svg" alt="Eluu" style="width: 48px; height: 48px;" />
+      <span style="font-family: 'Radio Canada Big', sans-serif; font-weight: 500; font-size: clamp(24px, 3vw, 40px); color: #000000; line-height: 1;">Eluu</span>
+    </a>
+
+    <!-- Right: Log in button -->
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a
+        href="https://app.eluu.ai"
+        class="nav-link"
+        class="nav-btn"
+        style="font-family: 'Inter', sans-serif; font-size: 14px; color: #ffffff; background: #343636; border-radius: 10px; padding: 10px 24px; text-decoration: none; line-height: 1;"
+      >Log in</a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    padding: 12px 16px;
+    background: transparent;
+    transform: translateY(0);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.3s ease,
+                backdrop-filter 0.3s ease;
+  }
+  .site-nav.hidden {
+    transform: translateY(-100%);
+  }
+  .site-nav.scrolled {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .nav-link:hover {
+    transform: translateY(-1px);
+  }
+  @media (min-width: 640px) {
+    .site-nav { padding: 16px 24px; }
+  }
+  @media (min-width: 1024px) {
+    .site-nav { padding: 20px 36px; }
+  }
+</style>
+
+<script>
+  let lastScrollY = 0;
+  let ticking = false;
+  const nav = document.getElementById('main-nav');
+
+  function updateNav() {
+    const currentY = window.scrollY;
+
+    // Show/hide based on scroll direction
+    if (currentY > lastScrollY && currentY > 100) {
+      nav?.classList.add('hidden');
+    } else {
+      nav?.classList.remove('hidden');
+    }
+
+    // Add background blur when scrolled
+    if (currentY > 50) {
+      nav?.classList.add('scrolled');
+    } else {
+      nav?.classList.remove('scrolled');
+    }
+
+    lastScrollY = currentY;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(updateNav);
+      ticking = true;
+    }
+  }, { passive: true });
+</script>

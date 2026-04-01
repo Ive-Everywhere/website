@@ -1,0 +1,117 @@
+---
+const integrations = [
+  { name: 'Salesforce', icon: 'salesforce', color: '#00A1E0' },
+  { name: 'HubSpot', icon: 'hubspot', color: '#FF7A59' },
+  { name: 'Slack', icon: 'slack', color: '#4A154B' },
+  { name: 'Gmail', icon: 'gmail', color: '#EA4335' },
+  { name: 'Google Sheets', icon: 'googlesheets', color: '#34A853' },
+  { name: 'Notion', icon: 'notion', color: '#000000' },
+  { name: 'Jira', icon: 'jira', color: '#0052CC' },
+  { name: 'Linear', icon: 'linear', color: '#5E6AD2' },
+  { name: 'Stripe', icon: 'stripe', color: '#635BFF' },
+  { name: 'GitHub', icon: 'github', color: '#181717' },
+  { name: 'Zendesk', icon: 'zendesk', color: '#03363D' },
+  { name: 'Intercom', icon: 'intercom', color: '#6AFDEF' },
+  { name: 'Figma', icon: 'figma', color: '#F24E1E' },
+  { name: 'Asana', icon: 'asana', color: '#F06A6A' },
+  { name: 'Dropbox', icon: 'dropbox', color: '#0061FF' },
+  { name: 'Zoom', icon: 'zoom', color: '#0B5CFF' },
+  { name: 'Mailchimp', icon: 'mailchimp', color: '#FFE01B' },
+  { name: 'Airtable', icon: 'airtable', color: '#18BFFF' },
+  { name: 'Twilio', icon: 'twilio', color: '#F22F46' },
+  { name: 'Apollo', icon: 'apollographql', color: '#311C87' },
+];
+---
+
+<!-- ConnectApps: full bleed image + scrolling logo strip -->
+<section style="background: #f4f3ec;">
+  <!-- Full bleed image section -->
+  <div style="position: relative; overflow: hidden;">
+    <!-- Background image — full width -->
+    <img
+      src="/images/connect-apps-bg.jpg"
+      alt=""
+      aria-hidden="true"
+      style="display: block; width: 100%; height: 420px; object-fit: cover; object-position: center;"
+    />
+
+    <!-- Dark overlay for text readability -->
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.05) 60%, rgba(0,0,0,0.15) 100%); z-index: 1;"></div>
+
+    <!-- Text + logos overlay -->
+    <div style="position: absolute; inset: 0; z-index: 2;">
+      <!-- Text — centered upper area -->
+      <div style="padding: 64px 72px 0; max-width: 1440px; margin: 0 auto;">
+        <h2 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(36px, 5.5vw, 73px); letter-spacing: -3px; color: #ffffff; line-height: 1.05; margin: 0; text-align: center;">
+          Connect to all your apps
+        </h2>
+        <h2 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(36px, 5.5vw, 73px); letter-spacing: -3px; color: #ffffff; line-height: 1.05; margin: 0; text-align: center;">
+          Start working from day 0
+        </h2>
+        <p style="font-family: 'Inter', sans-serif; font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.6; margin: 20px auto 0; max-width: 620px; text-align: center;">
+          Any tool, internal or external. Colleagues learn how to use them and improve over time. You set exactly what each colleague can access and do. Credentials stay securely stored — never exposed to the AI.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scrolling integration logo strip -->
+  <div class="logo-strip" style="overflow: hidden; padding: 28px 0; position: relative; background: #f4f3ec;">
+    <!-- Fade edges -->
+    <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 120px; background: linear-gradient(to right, #f4f3ec, transparent); z-index: 2;"></div>
+    <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 120px; background: linear-gradient(to left, #f4f3ec, transparent); z-index: 2;"></div>
+
+    <div class="logo-track">
+      {[...integrations, ...integrations].map((item, i) => (
+        <>
+          {i > 0 && <div class="logo-divider"></div>}
+          <div class="logo-item">
+            <div style={`width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:${item.color};`}>
+              <img src={`/logos/integrations/${item.icon}.svg`} alt="" width="18" height="18" style={`display:block;filter:none;`} />
+            </div>
+            <span>{item.name}</span>
+          </div>
+        </>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .logo-track {
+    display: flex;
+    gap: 12px;
+    animation: scrollLogos 40s linear infinite;
+    width: max-content;
+  }
+
+  .logo-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .logo-item span {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #17100e;
+  }
+
+  .logo-divider {
+    width: 1px;
+    height: 20px;
+    background: #d4d3cb;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  @keyframes scrollLogos {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+</style>

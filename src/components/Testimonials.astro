@@ -1,0 +1,213 @@
+---
+const testimonials = [
+  {
+    quote: 'Eluu colleagues run daily briefings, track pipelines, and log in our deals — all from Slack. What used to take 3 hours every morning is just done.',
+    name: 'Sarah Chen',
+    role: 'Head of Revenue',
+    company: 'TestMu AI',
+  },
+  {
+    quote: "With Eluu colleagues, our team completes projects which took a week to completion in a couple of hours. We couldn't go back to the old way.",
+    name: 'Raj Patel',
+    role: 'Co-founder',
+    company: 'Loom',
+  },
+  {
+    quote: 'We connected 4 tools and had an engineering colleague running PR reviews in our sprint health. Setup took less than a day and we were seeing results immediately.',
+    name: 'James Liu',
+    role: 'Engineering Lead',
+    company: 'RIPPLING',
+  },
+];
+---
+
+<section style="background: #f4f3ec; padding: 64px 24px 80px;">
+  <div style="max-width: 1440px; margin: 0 auto; padding: 0 0;">
+    <!-- Company tabs -->
+    <div class="ts-tabs reveal">
+      {testimonials.map((t, i) => (
+        <button
+          type="button"
+          class={`ts-tab ${i === 0 ? 'active' : ''}`}
+          data-ts={i}
+        >
+          {t.company}
+        </button>
+      ))}
+    </div>
+
+    <!-- Quotes container -->
+    <div class="ts-quotes">
+      {testimonials.map((t, i) => (
+        <div class={`ts-quote ${i === 0 ? 'active' : ''}`} data-tq={i}>
+          <blockquote>
+            &ldquo;{t.quote}&rdquo;
+          </blockquote>
+          <div class="ts-attr">
+            <p>
+              <span class="ts-name">{t.name}</span>, {t.role}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Tabs ── */
+  .ts-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 56px;
+  }
+  @media (min-width: 640px) { .ts-tabs { gap: 48px; } }
+
+  .ts-tab {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: rgba(23, 16, 14, 0.2);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.3s ease, opacity 0.3s ease;
+    opacity: 0.6;
+  }
+  @media (min-width: 640px) { .ts-tab { font-size: 22px; } }
+  @media (min-width: 1024px) { .ts-tab { font-size: 26px; } }
+
+  .ts-tab:hover { color: rgba(23, 16, 14, 0.5); opacity: 0.8; }
+  .ts-tab.active { color: #17100e; opacity: 1; }
+
+  /* Distinct wordmark styles per company */
+  .ts-tab:nth-child(1) {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    text-transform: none;
+  }
+  .ts-tab:nth-child(2) {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .ts-tab:nth-child(3) {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 16px;
+  }
+  @media (min-width: 640px) { .ts-tab:nth-child(3) { font-size: 19px; } }
+  @media (min-width: 1024px) { .ts-tab:nth-child(3) { font-size: 22px; } }
+
+  /* ── Quotes container ── */
+  .ts-quotes {
+    position: relative;
+    min-height: 300px;
+    text-align: center;
+    max-width: 1060px;
+    margin: 0 auto;
+  }
+  @media (min-width: 640px) { .ts-quotes { min-height: 420px; } }
+  @media (min-width: 1024px) { .ts-quotes { min-height: 460px; } }
+
+  /* ── Single quote ── */
+  .ts-quote {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+  }
+  .ts-quote.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  blockquote {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 36px;
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+    color: #000000;
+    margin: 0;
+    padding-bottom: 48px;
+    text-indent: -0.4em;
+  }
+  @media (min-width: 640px) {
+    blockquote { font-size: 52px; letter-spacing: -0.8px; }
+  }
+  @media (min-width: 1024px) {
+    blockquote { font-size: 68px; letter-spacing: -1.5px; }
+  }
+
+  /* ── Attribution ── */
+  .ts-attr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .ts-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #4ade80;
+    flex-shrink: 0;
+  }
+
+  .ts-attr p {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #17100e;
+    margin: 0;
+  }
+
+  .ts-name {
+    font-weight: 600;
+  }
+</style>
+
+<script>
+  (function () {
+    const tabs = document.querySelectorAll('.ts-tab');
+    const quotes = document.querySelectorAll('.ts-quote');
+    if (!tabs.length) return;
+
+    function show(idx) {
+      tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+      quotes.forEach((q, i) => q.classList.toggle('active', i === idx));
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => show(parseInt(tab.dataset.ts)));
+    });
+
+    // Auto-rotate every 6 seconds
+    let current = 0;
+    let timer = setInterval(() => {
+      current = (current + 1) % tabs.length;
+      show(current);
+    }, 6000);
+
+    // Reset timer on manual click
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        current = parseInt(tab.dataset.ts);
+        clearInterval(timer);
+        timer = setInterval(() => {
+          current = (current + 1) % tabs.length;
+          show(current);
+        }, 6000);
+      });
+    });
+  })();
+</script>

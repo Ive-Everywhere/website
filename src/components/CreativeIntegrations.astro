@@ -1,0 +1,259 @@
+---
+// Creative 3: "Message them like a teammate"
+// Shows a live Slack-style conversation with data flowing between integrations
+---
+
+<div class="ci-card">
+  <!-- Channel header -->
+  <div class="ci-header">
+    <img src="/logos/integrations/slack.svg" alt="" width="16" height="16" />
+    <span class="ci-channel">#sales</span>
+    <span class="ci-members">Lewis, Iris + 4</span>
+  </div>
+
+  <!-- Messages -->
+  <div class="ci-messages">
+    <!-- User message -->
+    <div class="ci-msg ci-msg-user ci-fade-1">
+      <div class="ci-msg-avatar ci-av-user">LK</div>
+      <div class="ci-msg-body">
+        <div class="ci-msg-head">
+          <span class="ci-msg-name">Likith Kumar</span>
+          <span class="ci-msg-time">2:34 PM</span>
+        </div>
+        <div class="ci-msg-text">
+          <span class="ci-mention">@Lewis</span> enrich all new leads from this week and push them to the pipeline tracker
+        </div>
+      </div>
+    </div>
+
+    <!-- Bot typing indicator -->
+    <div class="ci-msg ci-msg-bot ci-fade-2">
+      <div class="ci-msg-avatar ci-av-bot">
+        <img src="/images/eluu-logo.svg" alt="" width="20" height="20" style="border-radius: 4px;" />
+      </div>
+      <div class="ci-msg-body">
+        <div class="ci-msg-head">
+          <span class="ci-msg-name">Lewis</span>
+          <span class="ci-msg-app">APP</span>
+          <span class="ci-msg-time">2:34 PM</span>
+        </div>
+        <div class="ci-msg-text">
+          On it. I'll pull new leads from HubSpot, enrich with Apollo, and update the Pipeline Tracker in Sheets.
+        </div>
+
+        <!-- Data flow card -->
+        <div class="ci-flow ci-fade-3">
+          <div class="ci-flow-row">
+            <div class="ci-flow-node">
+              <img src="/logos/integrations/hubspot.svg" alt="" width="16" height="16" />
+              <span>HubSpot</span>
+            </div>
+            <div class="ci-flow-arrow">
+              <svg width="20" height="8" viewBox="0 0 20 8"><path d="M0 4h16M13 1l4 3-4 3" stroke="rgba(244,243,236,0.3)" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+            </div>
+            <div class="ci-flow-node ci-flow-center">
+              <img src="/images/eluu-logo.svg" alt="" width="16" height="16" style="border-radius: 3px;" />
+              <span>Lewis</span>
+            </div>
+            <div class="ci-flow-arrow">
+              <svg width="20" height="8" viewBox="0 0 20 8"><path d="M0 4h16M13 1l4 3-4 3" stroke="rgba(244,243,236,0.3)" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+            </div>
+            <div class="ci-flow-node">
+              <img src="/logos/integrations/googlesheets.svg" alt="" width="16" height="16" />
+              <span>Sheets</span>
+            </div>
+          </div>
+          <div class="ci-flow-data">
+            <span class="ci-flow-count">42</span> new leads enriched → Pipeline Tracker updated
+          </div>
+          <div class="ci-flow-progress">
+            <div class="ci-flow-bar"></div>
+          </div>
+        </div>
+
+        <!-- Completion message -->
+        <div class="ci-result ci-fade-4">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>
+          <span>Done — 42 contacts enriched, 3 duplicates flagged, sheet updated.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ci-card {
+    background: #17100e;
+    border-radius: 16px;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: #f4f3ec;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+
+  .ci-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(244,243,236,0.06);
+  }
+  .ci-channel {
+    font-size: 14px;
+    font-weight: 600;
+    flex: 1;
+  }
+  .ci-members {
+    font-size: 11px;
+    color: rgba(244,243,236,0.3);
+  }
+
+  .ci-messages {
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ci-msg {
+    display: flex;
+    gap: 10px;
+  }
+
+  .ci-msg-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .ci-av-user { background: #343636; color: #f4f3ec; }
+  .ci-av-bot { background: transparent; }
+
+  .ci-msg-body { flex: 1; min-width: 0; }
+  .ci-msg-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .ci-msg-name {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .ci-msg-app {
+    font-size: 9px;
+    font-weight: 600;
+    color: rgba(244,243,236,0.4);
+    background: rgba(244,243,236,0.06);
+    padding: 1px 4px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+  }
+  .ci-msg-time {
+    font-size: 11px;
+    color: rgba(244,243,236,0.2);
+  }
+  .ci-msg-text {
+    font-size: 13px;
+    color: rgba(244,243,236,0.7);
+    line-height: 1.5;
+  }
+  .ci-mention {
+    color: #5e6ad2;
+    font-weight: 500;
+  }
+
+  /* Data flow card */
+  .ci-flow {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(244,243,236,0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(244,243,236,0.06);
+  }
+  .ci-flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .ci-flow-node {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: rgba(244,243,236,0.5);
+    font-weight: 500;
+  }
+  .ci-flow-center {
+    color: #f4f3ec;
+    background: rgba(244,243,236,0.06);
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .ci-flow-arrow {
+    opacity: 0.5;
+  }
+  .ci-flow-data {
+    font-size: 11px;
+    color: rgba(244,243,236,0.4);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .ci-flow-count {
+    color: #4ade80;
+    font-weight: 600;
+    font-family: 'Roboto Mono', monospace;
+  }
+  .ci-flow-progress {
+    height: 2px;
+    background: rgba(244,243,236,0.06);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+  .ci-flow-bar {
+    height: 100%;
+    background: #4ade80;
+    border-radius: 1px;
+    animation: ci-bar-fill 8s ease infinite;
+  }
+  @keyframes ci-bar-fill {
+    0%, 30% { width: 0; }
+    65% { width: 100%; }
+    75%, 100% { width: 100%; }
+  }
+
+  /* Result */
+  .ci-result {
+    margin-top: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 12px;
+    color: rgba(244,243,236,0.6);
+    line-height: 1.4;
+  }
+  .ci-result svg { flex-shrink: 0; margin-top: 1px; }
+
+  /* Stagger fade-ins */
+  .ci-fade-1 { animation: ci-in 8s ease infinite; }
+  .ci-fade-2 { animation: ci-in 8s ease infinite; animation-delay: 0.8s; }
+  .ci-fade-3 { animation: ci-in 8s ease infinite; animation-delay: 1.6s; }
+  .ci-fade-4 { animation: ci-in 8s ease infinite; animation-delay: 4.5s; }
+
+  @keyframes ci-in {
+    0%, 8% { opacity: 0; transform: translateY(6px); }
+    14%, 88% { opacity: 1; transform: translateY(0); }
+    95%, 100% { opacity: 0; transform: translateY(0); }
+  }
+</style>

@@ -1,0 +1,264 @@
+---
+// Creative 1: "Deploy colleagues that truly multitask"
+// Shows 3 colleagues executing tasks in parallel with live progress
+---
+
+<div class="cp-card">
+  <div class="cp-header">
+    <img src="/images/eluu-logo.svg" alt="" width="20" height="20" style="border-radius: 5px;" />
+    <span class="cp-title">Active Sessions</span>
+    <span class="cp-badge">3 running</span>
+  </div>
+
+  <!-- Colleague 1 -->
+  <div class="cp-row cp-row-1">
+    <div class="cp-avatar cp-av-1">L</div>
+    <div class="cp-info">
+      <div class="cp-name">Lewis <span>Marketing</span></div>
+      <div class="cp-task">Enriching 47 contacts from HubSpot</div>
+      <div class="cp-meta">
+        <div class="cp-progress"><div class="cp-bar cp-bar-1"></div></div>
+        <span class="cp-time cp-time-1">0:00</span>
+        <div class="cp-status cp-status-1">
+          <span class="cp-dot"></span>
+          <span class="cp-label">Running</span>
+        </div>
+      </div>
+      <div class="cp-tools">
+        <img src="/logos/integrations/hubspot.svg" alt="HubSpot" width="14" height="14" />
+        <img src="/logos/integrations/salesforce.svg" alt="Salesforce" width="14" height="14" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Colleague 2 -->
+  <div class="cp-row cp-row-2">
+    <div class="cp-avatar cp-av-2">I</div>
+    <div class="cp-info">
+      <div class="cp-name">Iris <span>Research</span></div>
+      <div class="cp-task">Pulling competitor pricing data</div>
+      <div class="cp-meta">
+        <div class="cp-progress"><div class="cp-bar cp-bar-2"></div></div>
+        <span class="cp-time cp-time-2">0:00</span>
+        <div class="cp-status cp-status-2">
+          <span class="cp-dot"></span>
+          <span class="cp-label">Running</span>
+        </div>
+      </div>
+      <div class="cp-tools">
+        <img src="/logos/integrations/notion.svg" alt="Notion" width="14" height="14" style="filter: invert(1);" />
+        <img src="/logos/integrations/googlesheets.svg" alt="Sheets" width="14" height="14" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Colleague 3 -->
+  <div class="cp-row cp-row-3">
+    <div class="cp-avatar cp-av-3">T</div>
+    <div class="cp-info">
+      <div class="cp-name">Timbwaktou <span>Revenue</span></div>
+      <div class="cp-task">Drafting Q3 campaign brief</div>
+      <div class="cp-meta">
+        <div class="cp-progress"><div class="cp-bar cp-bar-3"></div></div>
+        <span class="cp-time cp-time-3">0:00</span>
+        <div class="cp-status cp-status-3">
+          <span class="cp-dot"></span>
+          <span class="cp-label">Running</span>
+        </div>
+      </div>
+      <div class="cp-tools">
+        <img src="/logos/integrations/gmail.svg" alt="Gmail" width="14" height="14" />
+        <img src="/logos/integrations/slack.svg" alt="Slack" width="14" height="14" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cp-card {
+    background: #17100e;
+    border-radius: 16px;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    color: #f4f3ec;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+  }
+
+  .cp-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(244,243,236,0.06);
+  }
+  .cp-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(244,243,236,0.5);
+    flex: 1;
+  }
+  .cp-badge {
+    font-size: 11px;
+    font-weight: 500;
+    color: #4ade80;
+    background: rgba(74,222,128,0.1);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  .cp-row {
+    display: flex;
+    gap: 12px;
+    padding: 14px;
+    margin-bottom: 8px;
+    background: rgba(244,243,236,0.03);
+    border-radius: 10px;
+    border-left: 3px solid #4ade80;
+  }
+  .cp-row:last-child { margin-bottom: 0; }
+
+  .cp-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .cp-av-1 { background: #ff7a59; color: #fff; }
+  .cp-av-2 { background: #5e6ad2; color: #fff; }
+  .cp-av-3 { background: #00a1e0; color: #fff; }
+
+  .cp-info { flex: 1; min-width: 0; }
+
+  .cp-name {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .cp-name span {
+    font-weight: 400;
+    color: rgba(244,243,236,0.3);
+    margin-left: 6px;
+    font-size: 11px;
+  }
+
+  .cp-task {
+    font-size: 12px;
+    color: rgba(244,243,236,0.5);
+    margin-bottom: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cp-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .cp-progress {
+    flex: 1;
+    height: 3px;
+    background: rgba(244,243,236,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .cp-bar {
+    height: 100%;
+    background: #4ade80;
+    border-radius: 2px;
+    width: 0%;
+  }
+
+  .cp-bar-1 { animation: cp-fill 6s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+  .cp-bar-2 { animation: cp-fill 6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s infinite; }
+  .cp-bar-3 { animation: cp-fill 6s cubic-bezier(0.4, 0, 0.2, 1) 0.6s infinite; }
+
+  @keyframes cp-fill {
+    0%, 5% { width: 0%; }
+    60% { width: 100%; }
+    70%, 100% { width: 100%; }
+  }
+
+  .cp-time {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 10px;
+    color: rgba(244,243,236,0.3);
+    min-width: 28px;
+  }
+
+  .cp-status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .cp-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: cp-pulse 2s ease-in-out infinite;
+  }
+  .cp-row-2 .cp-dot { animation-delay: 0.6s; }
+  .cp-row-3 .cp-dot { animation-delay: 1.2s; }
+
+  .cp-label {
+    font-size: 10px;
+    color: #4ade80;
+    font-weight: 500;
+  }
+
+  .cp-tools {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .cp-tools img {
+    opacity: 0.6;
+  }
+
+  @keyframes cp-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+</style>
+
+<script>
+  // Animate elapsed time counters
+  (function() {
+    const times = document.querySelectorAll('.cp-time');
+    if (!times.length) return;
+
+    const offsets = [0, 300, 600]; // ms stagger
+    const startTime = Date.now();
+    const cycleDuration = 6000;
+
+    function format(ms: number) {
+      const s = Math.floor(ms / 1000) % 60;
+      const m = Math.floor(ms / 60000);
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function tick() {
+      const now = Date.now();
+      times.forEach((el, i) => {
+        const elapsed = (now - startTime - offsets[i]) % cycleDuration;
+        const clamped = Math.max(0, elapsed);
+        if (clamped < cycleDuration * 0.7) {
+          el.textContent = format(clamped);
+        }
+      });
+      requestAnimationFrame(tick);
+    }
+    tick();
+  })();
+</script>

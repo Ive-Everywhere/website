@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" height="26.25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 31.5 26.25" width="31.5">
+<g id="dropbox">
+<path clip-rule="evenodd" d="M7.875 0L0 4.63235L7.875 9.26471L0 13.8971L7.875 18.5294L15.75 13.8971L23.625 18.5294L31.5 13.8971L23.625 9.26471L31.5 4.63235L23.625 0L15.75 4.63235L7.875 0ZM15.75 4.63235L23.625 9.26471L15.75 13.8971L7.875 9.26471L15.75 4.63235Z" fill="var(--fill-0, white)" fill-rule="evenodd"/>
+<path d="M7.875 21.6176L15.75 16.9853L23.625 21.6176L15.75 26.25L7.875 21.6176Z" fill="var(--fill-0, white)"/>
+</g>
+</svg>
