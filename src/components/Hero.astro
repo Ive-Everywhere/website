@@ -24,10 +24,10 @@
       </div>
 
       <!-- Iframe — in normal flow, large -->
-      <div class="reveal" style="width: 100%; max-width: 1800px; margin-top: 16px;">
+      <div class="reveal" style="width: 100%; max-width: 1800px; margin-top: 16px;" data-iframe-wrapper>
         <div class="iframe-glow">
           <div class="iframe-border">
-            <div style="aspect-ratio: 16 / 9.5; border-radius: 14px; overflow: hidden; position: relative; background: #ffffff;">
+            <div style="aspect-ratio: 16 / 9.5; border-radius: 14px; overflow: hidden; position: relative; background: #ffffff; contain: layout style;">
               <iframe
                 id="hero-iframe"
                 src="about:blank"
@@ -37,7 +37,7 @@
                 sandbox="allow-scripts allow-same-origin"
                 tabindex="-1"
                 loading="lazy"
-                style="position: absolute; top: 0; left: 0; width: 133.33%; height: 133.33%; transform: scale(0.75); transform-origin: 0 0; border: none; border-radius: 14px; background: #ffffff;"
+                style="position: absolute; top: 0; left: 0; width: 133.33%; height: 133.33%; transform: scale(0.75); transform-origin: 0 0; border: none; border-radius: 14px; background: #ffffff; contain: strict;"
               ></iframe>
             </div>
           </div>
@@ -57,6 +57,8 @@
       0 0 0 1px rgba(0, 0, 0, 0.03),
       0 4px 16px rgba(0, 0, 0, 0.06),
       0 12px 40px rgba(0, 0, 0, 0.08);
+    overflow-anchor: none;
+    contain: layout style;
   }
 
   .iframe-glow {
@@ -73,19 +75,112 @@
     box-shadow:
       0 0 60px rgba(0, 0, 0, 0.04),
       0 0 120px rgba(0, 0, 0, 0.02);
-  }
-
-  .iframe-border {
-    overflow-anchor: none;
+    contain: layout style;
   }
 </style>
 
 <script>
-  const iframe = document.getElementById('hero-iframe') as HTMLIFrameElement;
-  if (iframe) {
+  (function () {
+    const iframe = document.getElementById('hero-iframe') as HTMLIFrameElement;
+    if (!iframe) return;
+
+    // ── Saved scroll state ──
+    let savedY = 0;
+    let savedX = 0;
+
+    function saveScroll() {
+      savedY = window.scrollY;
+      savedX = window.scrollX;
+    }
+
+    function restoreScroll() {
+      if (window.scrollY !== savedY) {
+        window.scrollTo(savedX, savedY);
+      }
+    }
+
+    // ── Layer 1: Load iframe source, blur on load ──
     iframe.src = iframe.getAttribute('data-src') || '';
+
     iframe.addEventListener('load', () => {
-      if (document.activeElement === iframe) iframe.blur();
+      if (document.activeElement === iframe) {
+        iframe.blur();
+        document.body.focus({ preventScroll: true });
+      }
     });
-  }
+
+    // ── Layer 2: Intercept any focus on the iframe element itself ──
+    document.addEventListener('focusin', (e) => {
+      if (e.target === iframe) {
+        saveScroll();
+        requestAnimationFrame(restoreScroll);
+      }
+    }, true);
+
+    // ── Layer 3: Save scroll before any interaction with iframe ──
+    let iframeHovered = false;
+
+    iframe.addEventListener('mouseenter', () => {
+      iframeHovered = true;
+      saveScroll();
+    });
+    iframe.addEventListener('mouseleave', () => {
+      iframeHovered = false;
+    });
+    iframe.addEventListener('mousedown', saveScroll);
+    iframe.addEventListener('touchstart', saveScroll, { passive: true });
+
+    // ── Layer 4: Detect and revert scroll theft ──
+    // When the iframe is hovered/active and a sudden scroll jump happens,
+    // revert it. Legitimate user scrolls are continuous small deltas;
+    // iframe focus-scroll is a single large jump.
+    let lastScrollY = window.scrollY;
+    let scrollTick = false;
+
+    window.addEventListener('scroll', () => {
+      if (scrollTick) return;
+      scrollTick = true;
+
+      requestAnimationFrame(() => {
+        const currentY = window.scrollY;
+        const delta = Math.abs(currentY - lastScrollY);
+
+        // If iframe was just active and we got a big jump toward the iframe
+        // (which is near the top of the page), revert it
+        if (iframeHovered && delta > 100 && currentY < lastScrollY) {
+          window.scrollTo(savedX, savedY);
+        }
+
+        lastScrollY = window.scrollY;
+        scrollTick = false;
+      });
+    }, { passive: true });
+
+    // ── Layer 5: Override window.scrollTo to block iframe-triggered scrolls ──
+    const nativeScrollTo = window.scrollTo.bind(window);
+    (window as any).__safeScrollTo = nativeScrollTo;
+
+    window.scrollTo = function (...args: any[]) {
+      // If the iframe is the active element and something is trying to scroll,
+      // block it — this catches iframe internal .focus() → scrollIntoView chains
+      if (document.activeElement === iframe) {
+        return;
+      }
+      nativeScrollTo(...args);
+    } as typeof window.scrollTo;
+
+    // ── Layer 6: Blur iframe when it scrolls out of view ──
+    const wrapper = iframe.closest('[data-iframe-wrapper]');
+    if (wrapper) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (!entries[0].isIntersecting && document.activeElement === iframe) {
+            iframe.blur();
+          }
+        },
+        { threshold: 0.1 }
+      );
+      observer.observe(wrapper);
+    }
+  })();
 </script>

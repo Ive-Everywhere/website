@@ -1,7 +1,8 @@
 ---
-import ParallelAnimation from './ParallelAnimation.astro';
+import MemoryAnimation from './MemoryAnimation.astro';
 import CookbookAnimation from './CookbookAnimation.astro';
-import SlackAnimation from './SlackAnimation.astro';
+import JobsAnimation from './JobsAnimation.astro';
+import ParallelAnimation from './ParallelAnimation.astro';
 ---
 
 <!-- Why Eluu — sticky card stacking section -->
@@ -14,7 +15,7 @@ import SlackAnimation from './SlackAnimation.astro';
         <div class="we-side-inner">
           <button type="button" class="we-nav active" data-i="0" aria-current="true">
             <div class="we-pie"></div>
-            <span>Multitasking</span>
+            <span>Memory</span>
           </button>
           <div class="we-divider"></div>
           <button type="button" class="we-nav" data-i="1">
@@ -24,7 +25,12 @@ import SlackAnimation from './SlackAnimation.astro';
           <div class="we-divider"></div>
           <button type="button" class="we-nav" data-i="2">
             <div class="we-pie"></div>
-            <span>Slack</span>
+            <span>Jobs</span>
+          </button>
+          <div class="we-divider"></div>
+          <button type="button" class="we-nav" data-i="3">
+            <div class="we-pie"></div>
+            <span>Multitasking</span>
           </button>
         </div>
       </nav>
@@ -37,21 +43,21 @@ import SlackAnimation from './SlackAnimation.astro';
       <!-- Cards -->
       <div class="we-cards">
 
-        <!-- Card 1 — Multitasking -->
+        <!-- Card 1 — Memory -->
         <section class="we-card" data-card="0"
           style="--ct:128px; --ch:640px; --cm:0px; --cz:1;">
           <div class="we-text">
-            <h3>Deploy colleagues that truly multitask</h3>
-            <p>Create AI colleagues purpose-built for your team — then watch them work in parallel. While one analyses competitors, another drafts your report, and a third updates your CRM. Real parallel execution, not just queuing tasks.</p>
+            <h3>They remember, so you don't have to</h3>
+            <p>Every colleague builds its own memory — learning your workflows, context, and preferences. Over time, they understand your work better than a new hire ever could.</p>
           </div>
           <div class="we-media we-anim">
-            <ParallelAnimation />
+            <MemoryAnimation />
           </div>
         </section>
 
         <!-- Card 2 — Cookbook -->
         <section class="we-card" data-card="1"
-          style="--ct:228px; --ch:540px; --cm:-100px; --cz:2;">
+          style="--ct:128px; --ch:640px; --cm:0px; --cz:2;">
           <div class="we-text">
             <h3>Complex workflows, one recipe</h3>
             <p>Build multi-step workflows that span your entire tool stack. Pull data from CRMs, run analyses, format reports, and deliver results — all orchestrated from a single recipe with the integrations you already use.</p>
@@ -61,15 +67,27 @@ import SlackAnimation from './SlackAnimation.astro';
           </div>
         </section>
 
-        <!-- Card 3 — Slack -->
+        <!-- Card 3 — Jobs -->
         <section class="we-card" data-card="2"
-          style="--ct:296px; --ch:472px; --cm:-80px; --cz:3;">
+          style="--ct:128px; --ch:640px; --cm:0px; --cz:3;">
           <div class="we-text">
-            <h3>Message them like a teammate</h3>
-            <p>Your AI colleagues live in Slack — right where your team works. Assign tasks, get progress updates, and receive deliverables in your channels. Just like a highly efficient remote teammate who never drops the ball.</p>
+            <h3>Set it once, it runs forever</h3>
+            <p>Schedule recurring tasks or trigger them from real-world events — a keyword in an email, a deal stage change, a Slack message. Jobs fire automatically and deliver results without you lifting a finger.</p>
           </div>
           <div class="we-media we-anim">
-            <SlackAnimation />
+            <JobsAnimation />
+          </div>
+        </section>
+
+        <!-- Card 4 — Multitasking -->
+        <section class="we-card" data-card="3"
+          style="--ct:128px; --ch:640px; --cm:0px; --cz:4;">
+          <div class="we-text">
+            <h3>Deploy colleagues that truly multitask</h3>
+            <p>Create AI colleagues purpose-built for your team — then watch them work in parallel. While one analyses competitors, another drafts your report, and a third updates your CRM. Real parallel execution, not just queuing tasks.</p>
+          </div>
+          <div class="we-media we-anim">
+            <ParallelAnimation />
           </div>
         </section>
 
@@ -110,7 +128,7 @@ import SlackAnimation from './SlackAnimation.astro';
 
   .we-side-inner {
     position: sticky;
-    top: 128px;
+    top: 160px;
     display: flex;
     flex-direction: column;
     gap: 28px;
@@ -247,7 +265,7 @@ import SlackAnimation from './SlackAnimation.astro';
     justify-content: center;
     min-height: 300px;
     border: 1px solid #d4d3cb;
-    border-radius: 16px;
+    border-radius: 0;
     overflow: hidden;
   }
   @media (min-width: 1024px) {
