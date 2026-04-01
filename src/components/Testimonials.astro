@@ -23,17 +23,17 @@ const testimonials = [
 
 <section style="background: #f4f3ec; padding: 64px 24px 80px;">
   <div style="max-width: 1440px; margin: 0 auto; padding: 0 0;">
-    <!-- Company tabs -->
+    <!-- Company tabs — logo images -->
     <div class="ts-tabs reveal">
-      {testimonials.map((t, i) => (
-        <button
-          type="button"
-          class={`ts-tab ${i === 0 ? 'active' : ''}`}
-          data-ts={i}
-        >
-          {t.company}
-        </button>
-      ))}
+      <button type="button" class="ts-tab active" data-ts="0">
+        <img src="/logos/testimonials/testmu.png" alt="TestMu AI" class="ts-logo" />
+      </button>
+      <button type="button" class="ts-tab" data-ts="1">
+        <img src="/logos/testimonials/loom.png" alt="Loom" class="ts-logo" />
+      </button>
+      <button type="button" class="ts-tab" data-ts="2">
+        <img src="/logos/testimonials/rippling.png" alt="Rippling" class="ts-logo" />
+      </button>
     </div>
 
     <!-- Quotes container -->
@@ -60,61 +60,42 @@ const testimonials = [
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 24px;
+    align-items: center;
+    gap: 32px;
     margin-bottom: 56px;
   }
   @media (min-width: 640px) { .ts-tabs { gap: 48px; } }
 
   .ts-tab {
-    font-family: 'Inter', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-    color: rgba(23, 16, 14, 0.2);
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
-    transition: color 0.3s ease, opacity 0.3s ease;
-    opacity: 0.6;
+    transition: opacity 0.3s ease;
+    opacity: 0.35;
   }
-  @media (min-width: 640px) { .ts-tab { font-size: 22px; } }
-  @media (min-width: 1024px) { .ts-tab { font-size: 26px; } }
+  .ts-tab:hover { opacity: 0.6; }
+  .ts-tab.active { opacity: 1; }
 
-  .ts-tab:hover { color: rgba(23, 16, 14, 0.5); opacity: 0.8; }
-  .ts-tab.active { color: #17100e; opacity: 1; }
-
-  /* Distinct wordmark styles per company */
-  .ts-tab:nth-child(1) {
-    font-family: 'Inter', sans-serif;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    text-transform: none;
+  .ts-logo {
+    height: 24px;
+    width: auto;
+    display: block;
+    filter: brightness(0);
   }
-  .ts-tab:nth-child(2) {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-  }
-  .ts-tab:nth-child(3) {
-    font-family: 'Inter', sans-serif;
-    font-weight: 800;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    font-size: 16px;
-  }
-  @media (min-width: 640px) { .ts-tab:nth-child(3) { font-size: 19px; } }
-  @media (min-width: 1024px) { .ts-tab:nth-child(3) { font-size: 22px; } }
+  @media (min-width: 640px) { .ts-logo { height: 30px; } }
+  @media (min-width: 1024px) { .ts-logo { height: 36px; } }
 
   /* ── Quotes container ── */
   .ts-quotes {
     position: relative;
-    min-height: 300px;
+    min-height: 220px;
     text-align: center;
     max-width: 1060px;
     margin: 0 auto;
   }
-  @media (min-width: 640px) { .ts-quotes { min-height: 420px; } }
+  @media (min-width: 640px) { .ts-quotes { min-height: 320px; } }
+  @media (min-width: 768px) { .ts-quotes { min-height: 420px; } }
   @media (min-width: 1024px) { .ts-quotes { min-height: 460px; } }
 
   /* ── Single quote ── */
@@ -133,15 +114,18 @@ const testimonials = [
   blockquote {
     font-family: 'Inter', sans-serif;
     font-weight: 300;
-    font-size: 36px;
-    line-height: 1.2;
-    letter-spacing: -0.3px;
+    font-size: 22px;
+    line-height: 1.3;
+    letter-spacing: -0.2px;
     color: #000000;
     margin: 0;
-    padding-bottom: 48px;
+    padding-bottom: 32px;
     text-indent: -0.4em;
   }
   @media (min-width: 640px) {
+    blockquote { font-size: 36px; letter-spacing: -0.5px; padding-bottom: 48px; }
+  }
+  @media (min-width: 768px) {
     blockquote { font-size: 52px; letter-spacing: -0.8px; }
   }
   @media (min-width: 1024px) {

@@ -65,7 +65,7 @@ const platform = [
 
     <div class="ft-cards">
       {products.map((p) => (
-        <a class="ft-card group reveal" href="#">
+        <div class="ft-card group reveal">
           <div class="ft-card-hover"></div>
           <div class="ft-card-icon">
             {p.icon === 'colleagues' && (
@@ -103,7 +103,7 @@ const platform = [
             <h3>{p.title}</h3>
             <p>{p.description}</p>
           </div>
-        </a>
+        </div>
       ))}
     </div>
 

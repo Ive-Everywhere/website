@@ -97,6 +97,26 @@
           </div>
         </div>
       </div>
+
+      <!-- Row 5: Bonus — queued after first batch -->
+      <div class="pa-row pa-r5" id="pa-bonus">
+        <img src="/images/avatar-iris.png" alt="" class="pa-avatar" />
+        <div class="pa-info">
+          <div class="pa-top">
+            <span class="pa-name">Iris</span>
+            <span class="pa-role">Product</span>
+          </div>
+          <div class="pa-task">Drafting weekly changelog from merged PRs</div>
+          <div class="pa-bar-row">
+            <div class="pa-bar"><div class="pa-fill pa-f5"></div></div>
+            <div class="pa-icons">
+              <img src="/logos/integrations/github.svg" alt="" style="filter:invert(0.5);" />
+              <img src="/logos/integrations/notion.svg" alt="" style="filter:invert(0.5);" />
+            </div>
+            <div class="pa-done pa-d5">&#10003;</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -140,12 +160,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 14px;
+    padding: 10px 14px;
     border-bottom: 1px solid rgba(0,0,0,0.06);
   }
   .pa-dots { display: flex; gap: 6px; }
-  .pa-dots span { width: 8px; height: 8px; border-radius: 50%; }
-  .pa-chrome-right { font-size: 12px; color: #7d7d7d; font-weight: 500; }
+  .pa-dots span { width: 10px; height: 10px; border-radius: 50%; }
+  .pa-chrome-right { font-size: 13px; color: #17100e; font-weight: 600; }
 
   .pa-body { padding: 4px 0; }
 
@@ -234,28 +254,31 @@
   const body = document.getElementById('pa-body');
   if (!body) return;
 
-  const rows = body.querySelectorAll('.pa-row') as NodeListOf<HTMLElement>;
-  const fills = body.querySelectorAll('.pa-fill') as NodeListOf<HTMLElement>;
-  const dones = body.querySelectorAll('.pa-done') as NodeListOf<HTMLElement>;
+  const mainRows = Array.from(body.querySelectorAll('.pa-row')).slice(0, 4) as HTMLElement[];
+  const bonusRow = document.getElementById('pa-bonus') as HTMLElement;
+  const allRows = [...mainRows, bonusRow];
+  const mainFills = Array.from(body.querySelectorAll('.pa-fill')).slice(0, 4) as HTMLElement[];
+  const bonusFill = body.querySelector('.pa-f5') as HTMLElement;
+  const mainDones = Array.from(body.querySelectorAll('.pa-done')).slice(0, 4) as HTMLElement[];
+  const bonusDone = body.querySelector('.pa-d5') as HTMLElement;
 
-  // Different durations for organic feel — all start together
   const durations = [3200, 3800, 3500, 4100];
+  const BONUS_DUR = 2800;
   const STAGGER_IN = 100;
-  const HOLD = 1500;
   const FADE_IN = 400;
   const FADE_OUT = 500;
 
   function reset() {
-    rows.forEach(r => {
+    allRows.forEach(r => {
       r.style.transition = 'none';
       r.style.opacity = '0';
       r.style.transform = 'translateY(8px)';
     });
-    fills.forEach(f => {
+    [...mainFills, bonusFill].forEach(f => {
       f.style.transition = 'none';
       f.style.width = '0%';
     });
-    dones.forEach(d => {
+    [...mainDones, bonusDone].forEach(d => {
       d.style.transition = 'none';
       d.style.opacity = '0';
       d.style.transform = 'scale(0)';
@@ -272,39 +295,55 @@
       reset();
       await sleep(300);
 
-      // Stagger rows in
-      for (let i = 0; i < rows.length; i++) {
+      // Stagger first 4 rows in
+      for (let i = 0; i < mainRows.length; i++) {
         setTimeout(() => {
-          rows[i].style.transition = `all ${FADE_IN}ms cubic-bezier(0.16, 1, 0.3, 1)`;
-          rows[i].style.opacity = '1';
-          rows[i].style.transform = 'translateY(0)';
+          mainRows[i].style.transition = `all ${FADE_IN}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+          mainRows[i].style.opacity = '1';
+          mainRows[i].style.transform = 'translateY(0)';
         }, i * STAGGER_IN);
       }
-      await sleep(FADE_IN + rows.length * STAGGER_IN);
+      await sleep(FADE_IN + mainRows.length * STAGGER_IN);
 
-      // Start ALL progress bars simultaneously
-      fills.forEach((f, i) => {
+      // Start all 4 progress bars simultaneously
+      mainFills.forEach((f, i) => {
         f.style.transition = `width ${durations[i]}ms cubic-bezier(0.4, 0, 0.2, 1)`;
         f.style.width = '100%';
       });
 
       // Show checkmarks as each finishes
-      for (let i = 0; i < fills.length; i++) {
-        const sorted = durations.map((d, idx) => ({ d, idx })).sort((a, b) => a.d - b.d);
-        // Wait for each to finish in order of speed
+      const sorted = durations.map((d, idx) => ({ d, idx })).sort((a, b) => a.d - b.d);
+      for (let i = 0; i < sorted.length; i++) {
         setTimeout(() => {
           const idx = sorted[i].idx;
-          dones[idx].style.transition = 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)';
-          dones[idx].style.opacity = '1';
-          dones[idx].style.transform = 'scale(1)';
+          mainDones[idx].style.transition = 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)';
+          mainDones[idx].style.opacity = '1';
+          mainDones[idx].style.transform = 'scale(1)';
         }, sorted[i].d);
       }
 
-      // Wait for slowest + hold
-      await sleep(Math.max(...durations) + HOLD);
+      // Wait for all 4 to finish
+      await sleep(Math.max(...durations) + 400);
 
-      // Fade out all rows
-      rows.forEach(r => {
+      // 5th task slides in
+      bonusRow.style.transition = `all ${FADE_IN}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+      bonusRow.style.opacity = '1';
+      bonusRow.style.transform = 'translateY(0)';
+      await sleep(500);
+
+      // Its bar starts filling
+      bonusFill.style.transition = `width ${BONUS_DUR}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+      bonusFill.style.width = '100%';
+      await sleep(BONUS_DUR);
+
+      // Checkmark
+      bonusDone.style.transition = 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)';
+      bonusDone.style.opacity = '1';
+      bonusDone.style.transform = 'scale(1)';
+      await sleep(1200);
+
+      // Fade out everything
+      allRows.forEach(r => {
         r.style.transition = `all ${FADE_OUT}ms cubic-bezier(0.4, 0, 0.2, 1)`;
         r.style.opacity = '0';
         r.style.transform = 'translateY(-6px)';
