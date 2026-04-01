@@ -30,13 +30,11 @@
             <div style="aspect-ratio: 16 / 9.5; border-radius: 14px; overflow: hidden; position: relative; background: #ffffff; contain: layout style;">
               <iframe
                 id="hero-iframe"
-                src="about:blank"
-                data-src="https://demo.eluu.ai/?autoplay=1&embed=1"
+                src="https://demo.eluu.ai/?autoplay=1&embed=1"
                 title="Eluu product demo"
                 allow="autoplay"
                 sandbox="allow-scripts allow-same-origin"
                 tabindex="-1"
-                loading="lazy"
                 style="position: absolute; top: 0; left: 0; width: 133.33%; height: 133.33%; transform: scale(0.75); transform-origin: 0 0; border: none; border-radius: 14px; background: #ffffff; contain: strict;"
               ></iframe>
             </div>
@@ -121,9 +119,7 @@
       }
     }
 
-    // ── Layer 1: Load iframe source, blur on load ──
-    iframe.src = iframe.getAttribute('data-src') || '';
-
+    // ── Layer 1: Blur on load ──
     iframe.addEventListener('load', () => {
       if (document.activeElement === iframe) {
         iframe.blur();
