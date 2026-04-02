@@ -34,12 +34,16 @@
   .cta-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.35);
+    background: linear-gradient(
+      to bottom,
+      rgba(23, 16, 14, 0.25) 0%,
+      rgba(23, 16, 14, 0.45) 100%
+    );
   }
   .cta-content {
     position: relative;
     z-index: 2;
-    padding: 48px 24px;
+    padding: 56px 24px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -47,11 +51,11 @@
     justify-content: center;
     min-height: inherit;
   }
-  @media (min-width: 640px) { .cta-content { padding: 64px 40px; } }
-  @media (min-width: 1024px) { .cta-content { padding: 120px 60px; } }
+  @media (min-width: 640px) { .cta-content { padding: 80px 40px; } }
+  @media (min-width: 1024px) { .cta-content { padding: 80px 48px; } }
 
   .cta-heading {
-    font-family: 'Bricolage Grotesque', sans-serif;
+    font-family: 'Season Mix', sans-serif;
     font-weight: 700;
     font-size: clamp(28px, 5vw, 48px);
     letter-spacing: -1px;
@@ -83,10 +87,16 @@
     border-radius: 10px;
     text-decoration: none;
     line-height: 1;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .cta-btn:hover {
+    transform: translateY(-1px);
   }
   @media (min-width: 640px) {
     .cta-btn { font-size: 15px; padding: 10px 48px; }
   }
-  .cta-btn-dark { color: #ffffff; background: #343636; }
-  .cta-btn-light { color: #000000; background: #ffffff; }
+  .cta-btn-dark { color: #ffffff; background: #17100e; }
+  .cta-btn-dark:hover { box-shadow: 0 4px 16px rgba(23, 16, 14, 0.3); }
+  .cta-btn-light { color: #17100e; background: #ffffff; }
+  .cta-btn-light:hover { box-shadow: 0 4px 16px rgba(255, 255, 255, 0.3); }
 </style>
