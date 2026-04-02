@@ -16,11 +16,15 @@
       <!-- Text block -->
       <div class="reveal" style="display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center;">
         <h1 style="font-family: 'Season Mix', sans-serif; font-weight: 700; font-size: clamp(32px, 7vw, 100px); letter-spacing: -2px; color: #17100e; line-height: 1; margin: 0;">
-          There's a new way to work
+          Connect AI to your tools. Let it do the work.
         </h1>
-        <p style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: clamp(18px, 4vw, 64px); letter-spacing: -1px; color: #17100e; line-height: 1.1; margin: 0;">
-          Say Eluu to your AI colleagues.
+        <p style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: clamp(16px, 2.5vw, 24px); letter-spacing: -0.3px; color: #5c5c5c; line-height: 1.5; margin: 0; max-width: 720px;">
+          Eluu connects to your CRM, spreadsheets, and 20+ tools — then runs the workflows your team does manually.
         </p>
+        <div class="hero-ctas">
+          <a href="https://app.eluu.ai" class="hero-btn hero-btn-dark">Get started</a>
+          <a href="https://app.eluu.ai" class="hero-btn hero-btn-light">Book a demo</a>
+        </div>
       </div>
 
       <!-- Iframe — in normal flow, large -->
@@ -51,6 +55,28 @@
     position: relative;
     overflow: hidden;
   }
+  .hero-ctas {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .hero-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 12px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    line-height: 1;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .hero-btn:hover { transform: translateY(-1px); }
+  .hero-btn-dark { color: #ffffff; background: #17100e; }
+  .hero-btn-dark:hover { box-shadow: 0 4px 12px rgba(23, 16, 14, 0.2); }
+  .hero-btn-light { color: #17100e; background: #ffffff; border: 1px solid rgba(23, 16, 14, 0.12); }
+  .hero-btn-light:hover { box-shadow: 0 4px 12px rgba(23, 16, 14, 0.08); }
+
   .hero-content {
     position: relative;
     z-index: 1;

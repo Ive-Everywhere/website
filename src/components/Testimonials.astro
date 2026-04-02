@@ -1,21 +1,21 @@
 ---
 const testimonials = [
   {
-    quote: 'Eluu colleagues run daily briefings, track pipelines, and log in our deals — all from Slack. What used to take 3 hours every morning is just done.',
-    name: 'Sarah Chen',
-    role: 'Head of Revenue',
+    quote: "I tried ChatGPT, Claude, Zapier — none of them connect to my tools natively. With Eluu, I have a colleague that checks my entire pipeline every morning, cross-references three systems, and DMs me anomalies before my first meeting. What took a week now takes 5 minutes.",
+    name: 'COO',
+    role: 'B2B SaaS company',
     company: 'TestMu AI',
   },
   {
-    quote: "With Eluu colleagues, our team completes projects which took a week to completion in a couple of hours. We couldn't go back to the old way.",
-    name: 'Raj Patel',
-    role: 'Co-founder',
+    quote: "We process 30-40 invoices a day — each one used to take 5 minutes of manual work across Salesforce and Stripe. Our Eluu colleague handles all of it. It also built us an analytics engine across dozens of spreadsheets that would have taken 10,000 lines of code. We couldn't go back.",
+    name: 'Head of Finance',
+    role: 'B2B SaaS company',
     company: 'Loom',
   },
   {
-    quote: 'We connected 4 tools and had an engineering colleague running PR reviews in our sprint health. Setup took less than a day and we were seeing results immediately.',
-    name: 'James Liu',
-    role: 'Engineering Lead',
+    quote: 'We connected 4 tools and had an engineering colleague running PR reviews against our sprint backlog. Setup took less than a day and we were seeing results immediately.',
+    name: 'Engineering Lead',
+    role: '',
     company: 'RIPPLING',
   },
 ];
@@ -45,7 +45,7 @@ const testimonials = [
           </blockquote>
           <div class="ts-attr">
             <p>
-              <span class="ts-name">{t.name}</span>, {t.role}
+              <span class="ts-name">{t.name}</span>{t.role ? `, ${t.role}` : ''}
             </p>
           </div>
         </div>
@@ -103,14 +103,14 @@ const testimonials = [
   /* ── Quotes container ── */
   .ts-quotes {
     position: relative;
-    min-height: 220px;
+    min-height: 280px;
     text-align: center;
     max-width: 1060px;
     margin: 0 auto;
   }
-  @media (min-width: 640px) { .ts-quotes { min-height: 320px; } }
-  @media (min-width: 768px) { .ts-quotes { min-height: 420px; } }
-  @media (min-width: 1024px) { .ts-quotes { min-height: 460px; } }
+  @media (min-width: 640px) { .ts-quotes { min-height: 300px; } }
+  @media (min-width: 768px) { .ts-quotes { min-height: 320px; } }
+  @media (min-width: 1024px) { .ts-quotes { min-height: 340px; } }
 
   /* ── Single quote ── */
   .ts-quote {
@@ -128,22 +128,22 @@ const testimonials = [
   blockquote {
     font-family: 'Season Mix', sans-serif;
     font-weight: 400;
-    font-size: 22px;
-    line-height: 1.25;
-    letter-spacing: -0.3px;
+    font-size: 18px;
+    line-height: 1.35;
+    letter-spacing: -0.2px;
     color: #17100e;
     margin: 0;
-    padding-bottom: 32px;
+    padding-bottom: 24px;
     text-indent: -0.4em;
   }
   @media (min-width: 640px) {
-    blockquote { font-size: 36px; letter-spacing: -0.5px; padding-bottom: 48px; }
+    blockquote { font-size: 24px; letter-spacing: -0.3px; padding-bottom: 32px; }
   }
   @media (min-width: 768px) {
-    blockquote { font-size: 52px; letter-spacing: -0.8px; }
+    blockquote { font-size: 30px; letter-spacing: -0.5px; }
   }
   @media (min-width: 1024px) {
-    blockquote { font-size: 68px; letter-spacing: -1.5px; }
+    blockquote { font-size: 36px; letter-spacing: -0.8px; }
   }
 
   /* ── Attribution ── */
