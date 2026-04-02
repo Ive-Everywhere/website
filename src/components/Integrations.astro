@@ -209,13 +209,20 @@ const icons = [
 
     function advance() {
       idx--;
-      // When we leave the middle set, jump back — visually identical
       if (idx < setSize) {
+        // Jump to identical position in next set — no visual change
         idx += setSize;
         setPos(idx, false);
-        idx--;
+        // Wait for the jump to render, then animate the next step
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            idx--;
+            setPos(idx, true);
+          });
+        });
+      } else {
+        setPos(idx, true);
       }
-      setPos(idx, true);
     }
 
     setInterval(advance, 1800);
