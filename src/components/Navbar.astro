@@ -6,17 +6,12 @@
     <!-- Left: Logo + Name -->
     <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
       <img src="/images/logo.svg" alt="Eluu" class="nav-logo" />
-      <span style="font-family: 'Radio Canada Big', sans-serif; font-weight: 500; font-size: clamp(24px, 3vw, 40px); color: #000000; line-height: 1;">Eluu</span>
+      <span style="font-family: 'Radio Canada Big', sans-serif; font-weight: 500; font-size: clamp(24px, 3vw, 40px); color: #17100e; line-height: 1;">Eluu</span>
     </a>
 
     <!-- Right: Log in button -->
     <div style="display: flex; align-items: center; gap: 12px;">
-      <a
-        href="https://app.eluu.ai"
-        class="nav-link"
-        class="nav-btn"
-        style="font-family: 'Inter', sans-serif; font-size: 14px; color: #ffffff; background: #343636; border-radius: 10px; padding: 10px 24px; text-decoration: none; line-height: 1;"
-      >Log in</a>
+      <a href="https://app.eluu.ai" class="nav-btn">Log in</a>
     </div>
   </div>
 </nav>
@@ -42,12 +37,26 @@
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(23, 16, 14, 0.06);
   }
   .nav-logo { width: 40px; height: 40px; }
   @media (min-width: 640px) { .nav-logo { width: 48px; height: 48px; } }
 
-  .nav-link:hover {
+  .nav-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff;
+    background: #17100e;
+    border-radius: 10px;
+    padding: 10px 24px;
+    text-decoration: none;
+    line-height: 1;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .nav-btn:hover {
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(23, 16, 14, 0.15);
   }
   @media (min-width: 640px) {
     .site-nav { padding: 16px 24px; }

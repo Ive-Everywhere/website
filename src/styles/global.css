@@ -1,8 +1,37 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Season Mix';
+  src: url('/fonts/season-mix-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Season Mix';
+  src: url('/fonts/season-mix-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Season Mix';
+  src: url('/fonts/season-mix-semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Season Mix';
+  src: url('/fonts/season-mix-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme inline {
   --font-sans: "Inter", sans-serif;
-  --font-heading: "Bricolage Grotesque", sans-serif;
+  --font-heading: "Season Mix", sans-serif;
   --font-serif: "Crimson Text", serif;
   --font-mono: "Roboto Mono", monospace;
 

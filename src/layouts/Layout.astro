@@ -8,11 +8,33 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
+  <meta name="description" content="Purpose-built AI colleagues for your team. Memory, integrations, parallel execution — all on autopilot." />
+  <link rel="canonical" href="https://staging.eluu.ai" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://staging.eluu.ai" />
+  <meta property="og:title" content="Eluu — AI Colleagues" />
+  <meta property="og:description" content="Purpose-built AI colleagues for your team. Memory, integrations, parallel execution — all on autopilot." />
+  <meta property="og:image" content="https://staging.eluu.ai/images/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Eluu — AI Colleagues" />
+  <meta name="twitter:description" content="Purpose-built AI colleagues for your team. Memory, integrations, parallel execution — all on autopilot." />
+  <meta name="twitter:image" content="https://staging.eluu.ai/images/og-image.png" />
+
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" href="/favicon.ico" />
+  <link rel="preload" href="/fonts/season-mix-bold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/season-mix-regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preconnect" href="https://demo.eluu.ai" />
+  <link rel="dns-prefetch" href="https://demo.eluu.ai" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Crimson+Text:ital@0;1&family=Inter:wght@300;400;500;600;700&family=Radio+Canada+Big:wght@400;500;600;700&family=Roboto+Mono&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Radio+Canada+Big:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <slot />
