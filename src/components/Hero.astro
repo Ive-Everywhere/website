@@ -12,14 +12,14 @@
 
   <!-- Content area — all in normal flow so section height is correct -->
   <div class="hero-content">
-    <div style="max-width: 1320px; margin: 0 auto; padding: 0 16px; display: flex; flex-direction: column; align-items: center; gap: 24px;">
+    <div class="hero-inner">
       <!-- Text block -->
       <div class="reveal" style="display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center;">
-        <h1 style="font-family: 'Season Mix', sans-serif; font-weight: 700; font-size: clamp(36px, 7vw, 80px); letter-spacing: -2px; color: #17100e; line-height: 1; margin: 0;">
-          AI that works your tools.
+        <h1 class="hero-heading">
+          Your best colleagues aren't human anymore.
         </h1>
-        <p style="font-family: 'Inter', sans-serif; font-weight: 400; font-size: clamp(16px, 2.5vw, 24px); letter-spacing: -0.3px; color: #5c5c5c; line-height: 1.5; margin: 0; max-width: 720px;">
-          Eluu connects to your CRM, spreadsheets, and 20+ tools — then runs the workflows your team does manually.
+        <p class="hero-subheading">
+          Eluu colleagues connect to your tools, learn your workflows, and execute real work — on repeat, 24/7, without reminders.
         </p>
         <div class="hero-ctas">
           <a href="https://app.eluu.ai" class="hero-btn hero-btn-dark">Get started</a>
@@ -28,7 +28,7 @@
       </div>
 
       <!-- Iframe — in normal flow, large -->
-      <div class="reveal" style="width: 100%; max-width: 1800px; margin-top: 16px;" data-iframe-wrapper>
+      <div class="reveal hero-iframe-wrap" data-iframe-wrapper>
         <div class="iframe-glow">
           <div class="iframe-border">
             <div style="aspect-ratio: 16 / 9.5; border-radius: 14px; overflow: hidden; position: relative; background: #ffffff; contain: layout style;">
@@ -77,11 +77,61 @@
   .hero-btn-light { color: #17100e; background: #ffffff; border: 1px solid rgba(23, 16, 14, 0.12); }
   .hero-btn-light:hover { box-shadow: 0 4px 12px rgba(23, 16, 14, 0.08); }
 
+  .hero-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    box-sizing: border-box;
+  }
+  @media (max-width: 480px) {
+    .hero-inner { padding: 0 16px; gap: 16px; }
+  }
+
+  .hero-heading {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 7vw, 80px);
+    letter-spacing: -2px;
+    color: #17100e;
+    line-height: 1;
+    margin: 0;
+    overflow-wrap: break-word;
+  }
+  @media (max-width: 480px) {
+    .hero-heading { letter-spacing: -1px; }
+  }
+
+  .hero-subheading {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: clamp(15px, 2.5vw, 24px);
+    letter-spacing: -0.3px;
+    color: #5c5c5c;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 720px;
+  }
+
+  .hero-iframe-wrap {
+    width: 100%;
+    max-width: 1800px;
+    margin-top: 16px;
+    overflow: hidden;
+  }
+  @media (max-width: 480px) {
+    .hero-iframe-wrap { margin-top: 8px; }
+  }
+
   .hero-content {
     position: relative;
     z-index: 1;
-    padding: 56px 0 24px;
+    padding: 40px 0 16px;
   }
+  @media (min-width: 480px) { .hero-content { padding: 48px 0 20px; } }
   @media (min-width: 640px) { .hero-content { padding: 80px 0 40px; } }
 
   .hero-bg-img {
@@ -89,14 +139,20 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    min-width: 2400px;
+    min-width: 1200px;
     width: 100%;
     height: auto;
     pointer-events: none;
     z-index: 0;
   }
-  @media (max-width: 640px) {
-    .hero-bg-img { min-width: 1200px; }
+  @media (min-width: 768px) {
+    .hero-bg-img { min-width: 2400px; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-btn { font-size: 14px; padding: 10px 22px; }
+    .iframe-border { border-radius: 12px; }
+    .iframe-glow { border-radius: 16px; }
   }
 
   .iframe-border {

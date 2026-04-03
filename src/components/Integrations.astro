@@ -7,10 +7,10 @@ const icons = [
 ];
 ---
 
-<section style="background: #f4f3ec; padding: 80px 24px;">
+<section class="ig-section">
   <div style="max-width: 1440px; margin: 0 auto;">
-    <div style="padding: 0 0 40px;">
-      <h2 class="reveal" style="font-family: 'Season Mix', sans-serif; font-weight: 700; font-size: clamp(32px, 5vw, 56px); letter-spacing: -1.5px; color: #17100e; line-height: 1.1; margin: 0;">
+    <div class="ig-header">
+      <h2 class="reveal" style="font-family: 'Season Mix', sans-serif; font-weight: 700; font-size: clamp(26px, 5vw, 56px); letter-spacing: -1.5px; color: #17100e; line-height: 1.1; margin: 0;">
         Plug into the tools you already use.
       </h2>
       <p class="reveal" style="font-family: 'Inter', sans-serif; font-size: 16px; color: #5c5c5c; line-height: 1.7; margin: 20px 0 0;">
@@ -39,6 +39,19 @@ const icons = [
 </section>
 
 <style>
+  .ig-section {
+    background: #f4f3ec;
+    padding: 40px 16px;
+  }
+  @media (min-width: 640px) { .ig-section { padding: 60px 24px; } }
+  @media (min-width: 1024px) { .ig-section { padding: 80px 24px; } }
+
+  .ig-header {
+    padding: 0 0 24px;
+  }
+  @media (min-width: 640px) { .ig-header { padding: 0 0 32px; } }
+  @media (min-width: 1024px) { .ig-header { padding: 0 0 40px; } }
+
   .ig-container {
     position: relative;
     background:
@@ -69,7 +82,7 @@ const icons = [
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 100px;
+    width: 48px;
     z-index: 3;
     pointer-events: none;
   }
@@ -144,6 +157,18 @@ const icons = [
         0 0 0 8px rgba(210, 140, 100, 0.35),
         0 0 40px rgba(210, 140, 100, 0.2);
     }
+  }
+
+  /* Very small screens (360px) */
+  @media (max-width: 400px) {
+    .ig-container { height: 130px; border-radius: 20px; }
+    .ig-container::before { border-radius: 20px; }
+    .ig-center { width: 70px; height: 70px; border-radius: 20px; }
+    .ig-center img { width: 70px; height: 70px; border-radius: 16px; }
+    .ig-icon { width: 56px; height: 56px; border-radius: 12px; }
+    .ig-icon img { width: 28px; height: 28px; }
+    .ig-track { gap: 12px; padding: 0 12px; }
+    .ig-mask-l, .ig-mask-r { width: 32px; }
   }
 
   @media (min-width: 640px) {

@@ -103,9 +103,10 @@ import ParallelAnimation from './ParallelAnimation.astro';
   .we-wrap {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 80px 24px;
+    padding: 48px 16px;
   }
-  @media (min-width: 640px)  { .we-wrap { padding: 80px 40px; } }
+  @media (min-width: 640px)  { .we-wrap { padding: 60px 24px; } }
+  @media (min-width: 768px)  { .we-wrap { padding: 64px 32px; } }
   @media (min-width: 1024px) { .we-wrap { padding: 80px 48px; } }
 
   /* ── Grid ── */
@@ -174,8 +175,10 @@ import ParallelAnimation from './ParallelAnimation.astro';
   .we-head {
     grid-column: 1;
     grid-row: 1;
-    padding-bottom: 40px;
+    padding-bottom: 24px;
   }
+  @media (min-width: 640px)  { .we-head { padding-bottom: 32px; } }
+  @media (min-width: 768px)  { .we-head { padding-bottom: 36px; } }
   @media (min-width: 1024px) {
     .we-head { grid-column: 2; grid-row: 1; padding-bottom: 0; }
   }
@@ -183,14 +186,16 @@ import ParallelAnimation from './ParallelAnimation.astro';
   .we-title {
     font-family: 'Season Mix', sans-serif;
     font-weight: 700;
-    font-size: clamp(32px, 6vw, 56px);
+    font-size: clamp(28px, 5vw + 4px, 56px);
     color: #17100e;
     line-height: 1.1;
-    letter-spacing: -1.5px;
+    letter-spacing: -1px;
     margin: 0;
-    padding-bottom: 32px;
+    padding-bottom: 20px;
   }
-  @media (min-width: 640px) { .we-title { padding-bottom: 40px; letter-spacing: -2px; } }
+  @media (min-width: 640px)  { .we-title { padding-bottom: 28px; letter-spacing: -1.5px; } }
+  @media (min-width: 768px)  { .we-title { padding-bottom: 32px; } }
+  @media (min-width: 1024px) { .we-title { padding-bottom: 40px; letter-spacing: -2px; } }
 
   /* ── Cards container ── */
   .we-cards { grid-column: 1; grid-row: 2; }
@@ -203,9 +208,16 @@ import ParallelAnimation from './ParallelAnimation.astro';
     border-top: 1px solid #d4d3cb;
     background: #f4f3ec;
     width: 100%;
-    margin-bottom: 48px;
+    margin-bottom: 32px;
   }
   .we-card:last-child { margin-bottom: 0; }
+
+  @media (min-width: 640px) {
+    .we-card { margin-bottom: 40px; }
+  }
+  @media (min-width: 768px) {
+    .we-card { margin-bottom: 48px; }
+  }
 
   @media (min-width: 1024px) {
     .we-card {
@@ -224,13 +236,15 @@ import ParallelAnimation from './ParallelAnimation.astro';
   .we-text {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 20px 0;
+    gap: 10px;
+    padding: 16px 0;
   }
-  @media (min-width: 640px) { .we-text { gap: 16px; padding: 32px 0; } }
+  @media (min-width: 640px) { .we-text { gap: 12px; padding: 24px 0; } }
+  @media (min-width: 768px) { .we-text { gap: 14px; padding: 28px 0; } }
   @media (min-width: 1024px) {
     .we-text {
       width: 32%;
+      gap: 16px;
       padding: 32px 48px 32px 0;
       flex-shrink: 0;
     }
@@ -238,7 +252,7 @@ import ParallelAnimation from './ParallelAnimation.astro';
 
   .we-text h3 {
     font-family: 'Season Mix', sans-serif;
-    font-size: 24px;
+    font-size: clamp(20px, 2.5vw + 4px, 32px);
     font-weight: 700;
     color: #17100e;
     line-height: 1.15;
@@ -246,12 +260,12 @@ import ParallelAnimation from './ParallelAnimation.astro';
     margin: 0;
   }
   @media (min-width: 1024px) {
-    .we-text h3 { font-size: 32px; letter-spacing: -1px; }
+    .we-text h3 { letter-spacing: -1px; }
   }
 
   .we-text p {
     font-family: 'Inter', sans-serif;
-    font-size: 16px;
+    font-size: clamp(14px, 1vw + 6px, 16px);
     color: #5c5c5c;
     line-height: 1.6;
     margin: 0;
@@ -263,16 +277,18 @@ import ParallelAnimation from './ParallelAnimation.astro';
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 260px;
+    min-height: 200px;
     border: 1px solid #d4d3cb;
     border-radius: 0;
     overflow: hidden;
   }
-  @media (min-width: 640px) { .we-media { min-height: 300px; } }
+  @media (min-width: 640px) { .we-media { min-height: 240px; } }
+  @media (min-width: 768px) { .we-media { min-height: 280px; } }
   @media (min-width: 1024px) {
     .we-media {
       flex: 1;
       min-width: 0;
+      min-height: 300px;
       border-radius: 0;
       border-top: none;
     }
@@ -299,7 +315,10 @@ import ParallelAnimation from './ParallelAnimation.astro';
     height: 100%;
     object-fit: cover;
     display: block;
-    border-radius: 16px;
+    border-radius: 12px;
+  }
+  @media (min-width: 768px) {
+    .we-vid video { border-radius: 16px; }
   }
   @media (min-width: 1024px) {
     .we-vid video { border-radius: 0; }
