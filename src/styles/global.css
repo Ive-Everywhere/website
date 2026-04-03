@@ -59,6 +59,13 @@
 html {
   scroll-behavior: auto;
   overflow-x: hidden;
+  scroll-padding-top: 80px;
+}
+@media (min-width: 640px) {
+  html { scroll-padding-top: 96px; }
+}
+@media (min-width: 1024px) {
+  html { scroll-padding-top: 110px; }
 }
 
 body {
