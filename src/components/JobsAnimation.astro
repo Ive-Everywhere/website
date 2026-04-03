@@ -1,98 +1,110 @@
 ---
-// Jobs animation — scheduled and event-based triggers with task execution
+// Repeat from any surface — Slack, Web, API, Trigger
 ---
 
-<div class="jb-wrap">
-  <img src="/images/cookbook-bg.png" alt="" class="jb-bg" />
+<div class="rp-wrap">
+  <img src="/images/cookbook-bg.png" alt="" class="rp-bg" />
 
-  <div class="jb-window">
-    <div class="jb-chrome">
-      <div class="jb-dots">
+  <div class="rp-window">
+    <div class="rp-chrome">
+      <div class="rp-dots">
         <span style="background:#e8655a;"></span>
         <span style="background:#e8c15a;"></span>
         <span style="background:#67c96c;"></span>
       </div>
-      <div class="jb-chrome-right">
-        <span class="jb-label">Jobs</span>
-      </div>
     </div>
 
-    <div class="jb-body" id="jb-body">
+    <div class="rp-body" id="rp-body">
 
-      <!-- Timeline strip — always visible -->
-      <div class="jb-timeline">
-        <div class="jb-day" data-day="mon">
-          <span class="jb-day-label">Mon</span>
-          <span class="jb-day-dot"></span>
-          <span class="jb-day-time">6:00 AM</span>
-        </div>
-        <div class="jb-day" data-day="tue">
-          <span class="jb-day-label">Tue</span>
-          <span class="jb-day-dot"></span>
-          <span class="jb-day-time"></span>
-        </div>
-        <div class="jb-day" data-day="wed">
-          <span class="jb-day-label">Wed</span>
-          <span class="jb-day-dot"></span>
-          <span class="jb-day-time">6:00 AM</span>
-        </div>
-        <div class="jb-day" data-day="thu">
-          <span class="jb-day-label">Thu</span>
-          <span class="jb-day-dot"></span>
-          <span class="jb-day-time"></span>
-        </div>
-        <div class="jb-day" data-day="fri">
-          <span class="jb-day-label">Fri</span>
-          <span class="jb-day-dot"></span>
-          <span class="jb-day-time">6:00 AM</span>
-        </div>
+      <!-- Pill strip -->
+      <div class="rp-pills">
+        <div class="rp-pill-track" id="rp-indicator"></div>
+        <button class="rp-pill" data-rp="0">Slack</button>
+        <button class="rp-pill" data-rp="1">Web</button>
+        <button class="rp-pill" data-rp="2">API</button>
+        <button class="rp-pill" data-rp="3">Trigger</button>
       </div>
 
-      <!-- Content area — cards stack here -->
-      <div class="jb-content">
+      <!-- Content area -->
+      <div class="rp-content">
 
-        <!-- Scheduled task card -->
-        <div class="jb-card" id="jb-sched">
-          <div class="jb-card-row">
-            <div class="jb-card-info">
-              <span class="jb-card-title">Daily pipeline review</span>
-              <span class="jb-card-sub">Research colleague</span>
+        <!-- 0: Slack -->
+        <div class="rp-panel" data-panel="0">
+          <div class="rp-slack">
+            <div class="rp-sl-header"><span class="rp-sl-hash">&num;</span> revenue-ops</div>
+            <div class="rp-sl-msg rp-sl-user">
+              <div class="rp-sl-av">LK</div>
+              <div class="rp-sl-body">
+                <div class="rp-sl-meta"><span class="rp-sl-name">Likith</span><span class="rp-sl-time">2:34 PM</span></div>
+                <div class="rp-sl-text"><span class="rp-sl-mention">{'@'}Lewis</span> check pipeline for deals that moved backwards this week</div>
+              </div>
             </div>
-            <div class="jb-badge" id="jb-sched-badge">
-              <span class="jb-badge-dot"></span>
-              <span class="jb-badge-text">Running...</span>
+            <div class="rp-sl-msg rp-sl-typing" id="rp-typing">
+              <div class="rp-sl-av rp-sl-av-bot"><img src="/images/eluu-logo.svg" alt="" width="20" height="20" style="border-radius:4px;" /></div>
+              <div class="rp-sl-body">
+                <div class="rp-sl-typing-bar"><span class="rp-sl-typing-name">Lewis</span><span class="rp-sl-typing-label">is typing</span><span class="rp-sl-typing-dots"><i></i><i></i><i></i></span></div>
+              </div>
+            </div>
+            <div class="rp-sl-msg rp-sl-bot" id="rp-sl-reply">
+              <div class="rp-sl-av rp-sl-av-bot"><img src="/images/eluu-logo.svg" alt="" width="20" height="20" style="border-radius:4px;" /></div>
+              <div class="rp-sl-body">
+                <div class="rp-sl-meta"><span class="rp-sl-name">Lewis</span><span class="rp-sl-app">APP</span><span class="rp-sl-time">2:34 PM</span></div>
+                <div class="rp-sl-text">Found 3 deals that regressed. Acme Corp ($45K) — no activity 12 days. Flagged in Pipeline Health.</div>
+              </div>
             </div>
           </div>
-          <div class="jb-output" id="jb-sched-output">47 deals reviewed, 3 flagged at-risk → pushed to #sales</div>
         </div>
 
-        <!-- Email notification -->
-        <div class="jb-email" id="jb-email">
-          <div class="jb-email-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-            </svg>
+        <!-- 1: Web -->
+        <div class="rp-panel" data-panel="1">
+          <div class="rp-web">
+            <div class="rp-web-bubble rp-web-user">Run the weekly revenue report and send to #leadership</div>
+            <div class="rp-web-reply" id="rp-web-reply">
+              <div class="rp-web-av"><img src="/images/eluu-logo.svg" alt="" width="20" height="20" style="border-radius:4px;" /></div>
+              <div class="rp-web-body">
+                <div class="rp-web-meta"><span class="rp-web-name">Lewis</span></div>
+                <div class="rp-web-text">Revenue report generated. $1.2M pipeline, 47 deals active, 3 at-risk. Posted to #leadership with executive summary.</div>
+              </div>
+            </div>
           </div>
-          <div class="jb-email-text">
-            <span class="jb-email-from">john@acme.com</span>
-            <span class="jb-email-subj">Re: <mark class="jb-kw">proposal</mark> for Q3 expansion</span>
-          </div>
-          <span class="jb-kw-pill" id="jb-kw-pill">Keyword matched</span>
         </div>
 
-        <!-- Event task card -->
-        <div class="jb-card" id="jb-event">
-          <div class="jb-card-row">
-            <div class="jb-card-info">
-              <span class="jb-card-title">Extract deal details & update CRM</span>
-              <span class="jb-card-sub">Sales colleague &middot; Triggered</span>
-            </div>
-            <div class="jb-badge" id="jb-event-badge">
-              <span class="jb-badge-dot"></span>
-              <span class="jb-badge-text">Running...</span>
+        <!-- 2: API -->
+        <div class="rp-panel" data-panel="2">
+          <div class="rp-api">
+            <div class="rp-api-block" id="rp-api-req">
+              <pre class="rp-api-code" id="rp-api-pre"></pre>
             </div>
           </div>
-          <div class="jb-output" id="jb-event-output">Contact added to HubSpot, deal $85K, follow-up Thursday</div>
+        </div>
+
+        <!-- 3: Trigger -->
+        <div class="rp-panel" data-panel="3">
+          <div class="rp-trigger">
+            <div class="rp-tr-email" id="rp-tr-email">
+              <div class="rp-tr-email-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </div>
+              <div class="rp-tr-email-body">
+                <span class="rp-tr-from">john@acme.com</span>
+                <span class="rp-tr-subj">Re: <mark class="rp-tr-kw">proposal</mark> for Q3 expansion</span>
+              </div>
+              <span class="rp-tr-pill" id="rp-tr-pill">Keyword matched</span>
+            </div>
+            <div class="rp-tr-card" id="rp-tr-card">
+              <div class="rp-tr-card-row">
+                <div class="rp-tr-card-info">
+                  <span class="rp-tr-card-title">Extract deal details & update CRM</span>
+                  <span class="rp-tr-card-sub">Sales colleague &middot; Triggered</span>
+                </div>
+                <div class="rp-tr-badge" id="rp-tr-badge">
+                  <span class="rp-tr-badge-dot"></span>
+                  <span class="rp-tr-badge-text">Running...</span>
+                </div>
+              </div>
+              <div class="rp-tr-output" id="rp-tr-output">Contact added to HubSpot, deal $85K, follow-up Thursday</div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -101,18 +113,14 @@
 </div>
 
 <style>
-  .jb-wrap {
+  .rp-wrap {
     position: absolute; inset: 0; overflow: hidden;
     display: flex; align-items: center; justify-content: center;
     padding: 24px; box-sizing: border-box;
   }
-  .jb-bg {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%; object-fit: cover; z-index: 0;
-  }
-  .jb-window {
-    position: relative; z-index: 1;
-    width: 100%; max-width: 460px; height: 340px;
+  .rp-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .rp-window {
+    position: relative; z-index: 1; width: 100%; max-width: 460px; height: 340px;
     background: rgba(250, 249, 244, 0.95);
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     border-radius: 12px;
@@ -120,161 +128,183 @@
     overflow: hidden; font-family: 'Inter', sans-serif;
     display: flex; flex-direction: column;
   }
-  .jb-chrome {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); flex-shrink: 0;
+  .rp-chrome {
+    display: flex; align-items: center; padding: 10px 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.06); flex-shrink: 0;
   }
-  .jb-dots { display: flex; gap: 6px; }
-  .jb-dots > span { width: 10px; height: 10px; border-radius: 50%; }
-  .jb-label { font-size: 13px; font-weight: 600; color: #17100e; }
+  .rp-dots { display: flex; gap: 6px; }
+  .rp-dots > span { width: 10px; height: 10px; border-radius: 50%; }
 
-  .jb-body {
-    flex: 1; padding: 14px 16px;
-    display: flex; flex-direction: column; gap: 14px; overflow: hidden;
-  }
+  .rp-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
-  /* ── Timeline ── */
-  .jb-timeline {
-    display: flex; justify-content: space-between;
-    padding: 8px 4px 4px; flex-shrink: 0;
+  /* ── Pills ── */
+  .rp-pills {
+    display: flex; gap: 4px; padding: 10px 14px 8px;
+    flex-shrink: 0; position: relative;
   }
-  .jb-day {
-    display: flex; flex-direction: column; align-items: center; gap: 5px;
-    flex: 1; position: relative;
+  .rp-pill {
+    position: relative; z-index: 1;
+    font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+    color: #a3a3a3; background: none; border: none; cursor: default;
+    padding: 5px 14px; border-radius: 6px;
+    transition: color 0.4s ease;
   }
-  .jb-day-label {
-    font-size: 10px; font-weight: 600; color: #b0afa8;
-    text-transform: uppercase; letter-spacing: 0.3px;
-    transition: color 0.3s ease;
-  }
-  .jb-day-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: #d4d3cb; transition: all 0.4s ease;
-  }
-  .jb-day-time {
-    font-size: 9px; font-weight: 600; color: transparent;
-    letter-spacing: 0.2px; height: 12px;
-    transition: color 0.3s ease;
+  .rp-pill.active { color: #17100e; }
+  .rp-pill-track {
+    position: absolute; height: 28px; border-radius: 6px;
+    background: rgba(23, 16, 14, 0.06);
+    transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1), width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 0;
   }
 
-  /* Active day — soft warm red */
-  .jb-day.active .jb-day-label { color: #c0392b; }
-  .jb-day.active .jb-day-dot {
-    background: #c0392b;
-    box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.15);
-    animation: jb-pulse 1.2s ease infinite;
+  /* ── Content ── */
+  .rp-content { flex: 1; position: relative; overflow: hidden; }
+  .rp-panel {
+    position: absolute; top: 0; left: 0; right: 0; padding: 10px 14px;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
   }
-  .jb-day.active .jb-day-time { color: #c0392b; }
+  .rp-panel.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
-  @keyframes jb-pulse {
-    0%, 100% { box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.15); }
-    50% { box-shadow: 0 0 0 7px rgba(192, 57, 43, 0.06); }
+  /* ── Slack ── */
+  .rp-slack { display: flex; flex-direction: column; gap: 0; }
+  .rp-sl-header {
+    font-size: 12px; font-weight: 600; color: #17100e;
+    padding: 0 0 8px; border-bottom: 1px solid rgba(0,0,0,0.05); margin-bottom: 8px;
   }
-
-  /* ── Content area ── */
-  .jb-content {
-    flex: 1; position: relative;
+  .rp-sl-hash { color: #a3a3a3; font-weight: 500; }
+  .rp-sl-msg { display: flex; gap: 8px; margin-bottom: 10px; opacity: 0; transform: translateY(6px); }
+  .rp-sl-av {
+    width: 28px; height: 28px; border-radius: 5px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: #343636; color: #f4f3ec; font-size: 9px; font-weight: 700;
   }
+  .rp-sl-av-bot { background: transparent; }
+  .rp-sl-body { flex: 1; min-width: 0; }
+  .rp-sl-meta { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; }
+  .rp-sl-name { font-size: 12px; font-weight: 600; color: #17100e; }
+  .rp-sl-app { font-size: 8px; font-weight: 700; color: #7d7d7d; background: rgba(0,0,0,0.05); padding: 1px 4px; border-radius: 3px; letter-spacing: 0.4px; }
+  .rp-sl-time { font-size: 10px; color: #a3a3a3; }
+  .rp-sl-text { font-size: 12px; color: #343636; line-height: 1.5; }
+  .rp-sl-mention { color: #5e6ad2; font-weight: 500; }
+  .rp-sl-typing { display: none; }
+  .rp-sl-typing-bar { display: flex; align-items: center; gap: 4px; font-size: 11px; padding: 3px 0; }
+  .rp-sl-typing-name { font-weight: 600; color: #17100e; }
+  .rp-sl-typing-label { color: #a3a3a3; }
+  .rp-sl-typing-dots { display: inline-flex; gap: 2px; margin-left: 2px; }
+  .rp-sl-typing-dots i { display: block; width: 4px; height: 4px; border-radius: 50%; background: #a3a3a3; }
 
-  /* ── Task card ── */
-  .jb-card {
-    position: absolute; top: 0; left: 0; right: 0;
-    background: #ffffff; border-radius: 10px;
-    padding: 12px 14px;
+  /* ── Web ── */
+  .rp-web { display: flex; flex-direction: column; gap: 12px; }
+  .rp-web-bubble {
+    align-self: flex-end; max-width: 80%;
+    font-size: 12px; color: #fff; background: #343636;
+    padding: 8px 12px; border-radius: 14px 14px 4px 14px;
+    line-height: 1.45; opacity: 0; transform: translateY(6px);
+  }
+  .rp-web-reply {
+    display: flex; gap: 8px; align-items: flex-start;
+    opacity: 0; transform: translateY(6px);
+  }
+  .rp-web-av { width: 28px; height: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .rp-web-body { flex: 1; min-width: 0; }
+  .rp-web-meta { margin-bottom: 3px; }
+  .rp-web-name { font-size: 12px; font-weight: 600; color: #17100e; }
+  .rp-web-text { font-size: 12px; color: #5c5c5c; line-height: 1.5; }
+
+  /* ── API ── */
+  .rp-api { display: flex; flex-direction: column; }
+  .rp-api-block {
+    border-radius: 10px; overflow: hidden;
+    opacity: 0; transform: translateY(6px);
+  }
+  .rp-api-code {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 11px; line-height: 1.55;
+    color: #d4d4d4; background: #1a1a1a;
+    padding: 14px 16px; margin: 0;
+    white-space: pre; overflow-x: auto;
+  }
+  .rp-api-comment { color: #6a9955; }
+  .rp-api-method { color: #569cd6; font-weight: 700; }
+  .rp-api-url { color: #9cdcfe; }
+  .rp-api-key { color: #9cdcfe; }
+  .rp-api-str { color: #ce9178; }
+  .rp-api-num { color: #b5cea8; }
+  .rp-api-status { color: #34a853; font-weight: 600; }
+
+  /* ── Trigger ── */
+  .rp-trigger { display: flex; flex-direction: column; gap: 10px; position: relative; }
+  .rp-tr-email {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: #ffffff; border-radius: 10px; padding: 10px 14px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    opacity: 0; transform: translateY(10px);
+    position: relative;
+    opacity: 0; transform: translateY(6px);
   }
-  .jb-card-row {
-    display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+  .rp-tr-email-icon {
+    width: 28px; height: 28px; border-radius: 6px; background: rgba(0,0,0,0.04);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #7d7d7d;
   }
-  .jb-card-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .jb-card-title { font-size: 13px; font-weight: 600; color: #17100e; line-height: 1.3; }
-  .jb-card-sub { font-size: 11px; color: #a3a3a3; font-weight: 500; }
-
-  /* Badge */
-  .jb-badge {
+  .rp-tr-email-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+  .rp-tr-from { font-size: 12px; font-weight: 600; color: #17100e; }
+  .rp-tr-subj { font-size: 11.5px; color: #5c5c5c; line-height: 1.4; }
+  .rp-tr-kw {
+    background: transparent; color: inherit; padding: 0 2px; border-radius: 3px;
+    transition: all 0.4s ease;
+  }
+  .rp-tr-kw.glow { background: rgba(192,57,43,0.12); color: #c0392b; font-weight: 600; }
+  .rp-tr-pill {
+    position: absolute; top: -6px; right: 14px;
+    font-size: 9px; font-weight: 700; color: #c0392b;
+    background: rgba(192,57,43,0.08); border: 1px solid rgba(192,57,43,0.15);
+    padding: 2px 7px; border-radius: 4px; letter-spacing: 0.2px; text-transform: uppercase;
+    opacity: 0; transform: scale(0.9);
+  }
+  .rp-tr-card {
+    position: absolute; top: 0; left: 0; right: 0;
+    background: #ffffff; border-radius: 10px; padding: 12px 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    opacity: 0; transform: translateY(6px);
+  }
+  .rp-tr-card-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .rp-tr-card-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .rp-tr-card-title { font-size: 13px; font-weight: 600; color: #17100e; line-height: 1.3; }
+  .rp-tr-card-sub { font-size: 11px; color: #a3a3a3; font-weight: 500; }
+  .rp-tr-badge {
     display: flex; align-items: center; gap: 5px; flex-shrink: 0;
     padding: 3px 8px; border-radius: 6px; background: rgba(0,0,0,0.04);
     transition: background 0.3s ease;
   }
-  .jb-badge-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #e8a838;
-    animation: jb-blink 0.8s ease infinite;
-  }
-  @keyframes jb-blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-  .jb-badge.done .jb-badge-dot { background: #34a853; animation: none; }
-  .jb-badge-text { font-size: 11px; font-weight: 600; color: #7d7d7d; white-space: nowrap; }
-  .jb-badge.done .jb-badge-text { color: #34a853; }
-
-  /* Output */
-  .jb-output {
-    font-size: 12px; color: #5c5c5c; line-height: 1.5;
-    margin-top: 10px; padding: 6px 10px;
-    background: rgba(94, 106, 210, 0.06); border-radius: 6px;
+  .rp-tr-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #e8a838; animation: rp-blink 0.8s ease infinite; }
+  @keyframes rp-blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+  .rp-tr-badge.done .rp-tr-badge-dot { background: #34a853; animation: none; }
+  .rp-tr-badge-text { font-size: 11px; font-weight: 600; color: #7d7d7d; white-space: nowrap; }
+  .rp-tr-badge.done .rp-tr-badge-text { color: #34a853; }
+  .rp-tr-output {
+    font-size: 12px; color: #5c5c5c; line-height: 1.5; margin-top: 10px;
+    padding: 6px 10px; background: rgba(94,106,210,0.06); border-radius: 6px;
     opacity: 0; transform: translateY(4px);
   }
 
-  /* ── Email ── */
-  .jb-email {
-    position: absolute; top: 0; left: 0; right: 0;
-    display: flex; align-items: flex-start; gap: 10px;
-    background: #ffffff; border-radius: 10px;
-    padding: 12px 14px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    opacity: 0; transform: translateY(10px);
-  }
-  .jb-email-icon {
-    width: 28px; height: 28px; border-radius: 6px;
-    background: rgba(0,0,0,0.04);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; color: #7d7d7d;
-  }
-  .jb-email-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
-  .jb-email-from { font-size: 12px; font-weight: 600; color: #17100e; }
-  .jb-email-subj { font-size: 11.5px; color: #5c5c5c; line-height: 1.4; }
-  .jb-kw {
-    background: transparent; color: inherit;
-    padding: 0 2px; border-radius: 3px;
-    transition: all 0.4s ease;
-  }
-  .jb-kw.glow {
-    background: rgba(192, 57, 43, 0.12);
-    color: #c0392b;
-    font-weight: 600;
-  }
-
-  /* Keyword pill */
-  .jb-kw-pill {
-    position: absolute; top: -6px; right: 14px;
-    font-size: 9px; font-weight: 700;
-    color: #c0392b;
-    background: rgba(192, 57, 43, 0.08);
-    border: 1px solid rgba(192, 57, 43, 0.15);
-    padding: 2px 7px; border-radius: 4px;
-    letter-spacing: 0.2px; text-transform: uppercase;
-    opacity: 0; transform: scale(0.9);
-  }
+  /* ── Typing bounce ── */
+  @keyframes rp-bounce { 0%,60%,100% { transform:translateY(0); opacity:0.4; } 30% { transform:translateY(-3px); opacity:1; } }
 </style>
 
 <script>
 (function() {
-  const body = document.getElementById('jb-body');
+  const body = document.getElementById('rp-body');
   if (!body) return;
 
-  const days = body.querySelectorAll('.jb-day') as NodeListOf<HTMLElement>;
-  const sched = document.getElementById('jb-sched') as HTMLElement;
-  const schedBadge = document.getElementById('jb-sched-badge') as HTMLElement;
-  const schedOut = document.getElementById('jb-sched-output') as HTMLElement;
-  const email = document.getElementById('jb-email') as HTMLElement;
-  const kwPill = document.getElementById('jb-kw-pill') as HTMLElement;
-  const kw = body.querySelector('.jb-kw') as HTMLElement;
-  const evt = document.getElementById('jb-event') as HTMLElement;
-  const evtBadge = document.getElementById('jb-event-badge') as HTMLElement;
-  const evtOut = document.getElementById('jb-event-output') as HTMLElement;
+  const pills = body.querySelectorAll('.rp-pill') as NodeListOf<HTMLElement>;
+  const panels = body.querySelectorAll('.rp-panel') as NodeListOf<HTMLElement>;
+  const indicator = document.getElementById('rp-indicator') as HTMLElement;
 
   const EASE = 'all 400ms cubic-bezier(0.16, 1, 0.3, 1)';
   const FADE = 'all 350ms cubic-bezier(0.4, 0, 0.2, 1)';
+
+  function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
 
   function show(el: HTMLElement, t?: string) {
     el.style.transition = t || EASE;
@@ -284,93 +314,141 @@
   function hide(el: HTMLElement) {
     el.style.transition = FADE;
     el.style.opacity = '0';
-    el.style.transform = 'translateY(-6px)';
-  }
-  function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
-
-  function setDone(badge: HTMLElement) {
-    badge.classList.add('done');
-    const t = badge.querySelector('.jb-badge-text') as HTMLElement;
-    if (t) t.textContent = 'Complete';
+    el.style.transform = 'translateY(6px)';
   }
 
-  function reset() {
-    days.forEach(d => d.classList.remove('active'));
+  // Populate API code block via JS to avoid Astro template parsing issues
+  const apiPre = document.getElementById('rp-api-pre');
+  if (apiPre) {
+    apiPre.innerHTML = '<span class="rp-api-comment">// Send a task via API</span>\n<span class="rp-api-method">POST</span> <span class="rp-api-url">/v1/tasks</span>\n\n{\n  <span class="rp-api-key">"colleague"</span>: <span class="rp-api-str">"lewis"</span>,\n  <span class="rp-api-key">"task"</span>: <span class="rp-api-str">"enrich new leads"</span>,\n  <span class="rp-api-key">"tools"</span>: [<span class="rp-api-str">"hubspot"</span>, <span class="rp-api-str">"sheets"</span>]\n}\n\n<span class="rp-api-comment">// Response</span>\n<span class="rp-api-status">200 OK</span>\n{\n  <span class="rp-api-key">"status"</span>: <span class="rp-api-str">"complete"</span>,\n  <span class="rp-api-key">"enriched"</span>: <span class="rp-api-num">47</span>,\n  <span class="rp-api-key">"updated"</span>: <span class="rp-api-str">"pipeline-tracker"</span>\n}';
+  }
 
-    [sched, evt, email].forEach(el => {
-      el.style.transition = 'none'; el.style.opacity = '0';
-      el.style.transform = 'translateY(10px)';
+  function activatePill(idx: number) {
+    pills.forEach((p, i) => p.classList.toggle('active', i === idx));
+    // Slide indicator
+    const pill = pills[idx];
+    indicator.style.left = pill.offsetLeft + 'px';
+    indicator.style.width = pill.offsetWidth + 'px';
+    indicator.style.top = pill.offsetTop + 'px';
+  }
+
+  function showPanel(idx: number) {
+    panels.forEach((p, i) => {
+      if (i === idx) { p.classList.add('active'); }
+      else { p.classList.remove('active'); }
     });
-    [schedOut, evtOut].forEach(el => {
-      el.style.transition = 'none'; el.style.opacity = '0';
-      el.style.transform = 'translateY(4px)';
+  }
+
+  function resetElements(panel: HTMLElement) {
+    panel.querySelectorAll('.rp-sl-msg, .rp-web-bubble, .rp-web-reply, .rp-api-block, .rp-tr-email, .rp-tr-card').forEach((el) => {
+      const e = el as HTMLElement;
+      e.style.transition = 'none'; e.style.opacity = '0'; e.style.transform = 'translateY(6px)';
     });
-    kwPill.style.transition = 'none';
-    kwPill.style.opacity = '0';
-    kwPill.style.transform = 'scale(0.9)';
-    kw.classList.remove('glow');
-    [schedBadge, evtBadge].forEach(b => {
-      b.classList.remove('done');
-      const t = b.querySelector('.jb-badge-text') as HTMLElement;
-      if (t) t.textContent = 'Running...';
-    });
+    const typing = panel.querySelector('.rp-sl-typing') as HTMLElement;
+    if (typing) { typing.style.display = 'none'; typing.style.opacity = '0'; }
+    const reply = panel.querySelector('#rp-sl-reply') as HTMLElement;
+    if (reply) { reply.style.opacity = '0'; reply.style.transform = 'translateY(6px)'; }
+    const trPill = panel.querySelector('.rp-tr-pill') as HTMLElement;
+    if (trPill) { trPill.style.opacity = '0'; trPill.style.transform = 'scale(0.9)'; }
+    const trOutput = panel.querySelector('.rp-tr-output') as HTMLElement;
+    if (trOutput) { trOutput.style.opacity = '0'; trOutput.style.transform = 'translateY(4px)'; }
+    const kw = panel.querySelector('.rp-tr-kw') as HTMLElement;
+    if (kw) kw.classList.remove('glow');
+    const badge = panel.querySelector('.rp-tr-badge') as HTMLElement;
+    if (badge) { badge.classList.remove('done'); const t = badge.querySelector('.rp-tr-badge-text') as HTMLElement; if(t) t.textContent = 'Running...'; }
     void body!.offsetHeight;
   }
 
+  // ── Slack animation ──
+  async function animateSlack(panel: HTMLElement) {
+    const userMsg = panel.querySelector('.rp-sl-user') as HTMLElement;
+    const typing = panel.querySelector('.rp-sl-typing') as HTMLElement;
+    const reply = panel.querySelector('#rp-sl-reply') as HTMLElement;
+    const dots = panel.querySelectorAll('.rp-sl-typing-dots i') as NodeListOf<HTMLElement>;
+
+    show(userMsg);
+    await sleep(800);
+
+    typing.style.display = 'flex';
+    void typing.offsetHeight;
+    show(typing);
+    dots.forEach((d, i) => { d.style.animation = `rp-bounce 0.6s ease ${i * 0.15}s infinite`; });
+    await sleep(1400);
+
+    typing.style.transition = FADE; typing.style.opacity = '0';
+    await sleep(200);
+    typing.style.display = 'none';
+    dots.forEach(d => { d.style.animation = 'none'; });
+
+    show(reply);
+    await sleep(3000);
+  }
+
+  // ── Web animation ──
+  async function animateWeb(panel: HTMLElement) {
+    const bubble = panel.querySelector('.rp-web-bubble') as HTMLElement;
+    const reply = panel.querySelector('.rp-web-reply') as HTMLElement;
+
+    show(bubble);
+    await sleep(900);
+    show(reply);
+    await sleep(3500);
+  }
+
+  // ── API animation ──
+  async function animateApi(panel: HTMLElement) {
+    const block = panel.querySelector('#rp-api-req') as HTMLElement;
+    show(block);
+    await sleep(4500);
+  }
+
+  // ── Trigger animation ──
+  async function animateTrigger(panel: HTMLElement) {
+    const email = panel.querySelector('.rp-tr-email') as HTMLElement;
+    const kw = panel.querySelector('.rp-tr-kw') as HTMLElement;
+    const pill = panel.querySelector('.rp-tr-pill') as HTMLElement;
+    const card = panel.querySelector('.rp-tr-card') as HTMLElement;
+    const badge = panel.querySelector('.rp-tr-badge') as HTMLElement;
+    const output = panel.querySelector('.rp-tr-output') as HTMLElement;
+
+    show(email);
+    await sleep(600);
+    kw.classList.add('glow');
+    await sleep(400);
+    pill.style.transition = 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)';
+    pill.style.opacity = '1'; pill.style.transform = 'scale(1)';
+    await sleep(1000);
+
+    hide(email);
+    pill.style.transition = FADE; pill.style.opacity = '0';
+    kw.classList.remove('glow');
+    await sleep(400);
+
+    show(card);
+    await sleep(1400);
+
+    badge.classList.add('done');
+    const badgeText = badge.querySelector('.rp-tr-badge-text') as HTMLElement;
+    if (badgeText) badgeText.textContent = 'Complete';
+    await sleep(300);
+    show(output);
+    await sleep(2000);
+  }
+
+  const animators = [animateSlack, animateWeb, animateApi, animateTrigger];
+
   async function run() {
+    // Init indicator
+    activatePill(0);
+
     while (true) {
-      reset();
-      await sleep(600);
-
-      // ═══ Beat 1: Scheduled ═══
-      const wed = body!.querySelector('[data-day="wed"]') as HTMLElement;
-      wed.classList.add('active');
-      await sleep(900);
-
-      show(sched);
-      await sleep(1600);
-
-      setDone(schedBadge);
-      await sleep(400);
-
-      show(schedOut);
-      await sleep(2400);
-
-      hide(sched);
-      schedOut.style.transition = FADE; schedOut.style.opacity = '0';
-      wed.classList.remove('active');
-      await sleep(500);
-
-      // ═══ Beat 2: Event ═══
-      show(email);
-      await sleep(700);
-
-      kw.classList.add('glow');
-      await sleep(500);
-
-      kwPill.style.transition = 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)';
-      kwPill.style.opacity = '1';
-      kwPill.style.transform = 'scale(1)';
-      await sleep(1200);
-
-      // Fade email, show event card
-      hide(email);
-      kwPill.style.transition = FADE; kwPill.style.opacity = '0';
-      kw.classList.remove('glow');
-      await sleep(450);
-
-      show(evt);
-      await sleep(1600);
-
-      setDone(evtBadge);
-      await sleep(400);
-
-      show(evtOut);
-      await sleep(2400);
-
-      hide(evt);
-      evtOut.style.transition = FADE; evtOut.style.opacity = '0';
-      await sleep(800);
+      for (let i = 0; i < 4; i++) {
+        activatePill(i);
+        resetElements(panels[i]);
+        showPanel(i);
+        await sleep(300);
+        await animators[i](panels[i]);
+      }
     }
   }
 

@@ -2,28 +2,28 @@
 const products = [
   {
     title: 'Colleagues',
-    description: 'Autonomous agents that learn your workflows and get work done independently.',
+    description: 'AI teammates that learn your workflows, connect to your tools, and execute real work.',
     icon: 'colleagues',
   },
   {
     title: 'Cookbook',
-    description: 'Multi-step automations across your entire tool stack. No code required.',
+    description: 'Pre-built recipes that chain tools into multi-step workflows. Activate in one click.',
     icon: 'cookbook',
   },
   {
-    title: 'Slack',
-    description: 'Assign tasks and get deliverables right in your channels.',
-    icon: 'slack',
+    title: 'Team Drive',
+    description: 'Upload files, playbooks, and SOPs. Every colleague shares the same context.',
+    icon: 'teamdrive',
   },
   {
-    title: 'Automations',
-    description: 'Scheduled jobs and event triggers. Set once, runs forever.',
-    icon: 'automations',
+    title: 'Dashboards',
+    description: 'Real-time views of pipeline health, revenue metrics, and colleague activity.',
+    icon: 'dashboards',
   },
   {
-    title: 'Knowledge Base',
-    description: 'Upload files and playbooks. Every colleague shares the same context.',
-    icon: 'drive',
+    title: 'Integrations',
+    description: '20+ native connectors — CRM, billing, spreadsheets, Slack, and more.',
+    icon: 'integrations',
   },
   {
     title: 'Abilities',
@@ -34,23 +34,23 @@ const products = [
 
 const platform = [
   {
-    title: 'Parallel execution',
-    description: 'Multiple colleagues working across tools simultaneously. No queuing, no bottlenecks.',
-    icon: 'parallel',
-  },
-  {
-    title: 'Persistent memory',
-    description: 'Remembers preferences, past interactions, and context. Gets more valuable the longer you use it.',
-    icon: 'memory',
-  },
-  {
-    title: 'Enterprise security',
-    description: 'End-to-end encryption, role-based permissions, on-premise deployment option. Your data stays yours.',
+    title: 'Integration security',
+    description: 'Scoped permissions per tool. Each colleague gets the minimum access it needs — read, write, or both. Revoke anytime.',
     icon: 'security',
   },
   {
-    title: 'Scheduled operations',
-    description: 'Daily pipeline checks, weekly reports, monthly reconciliations. Runs without you.',
+    title: 'Skill security',
+    description: 'Every ability and recipe runs in a sandboxed environment. No cross-tenant data leakage, no unscoped actions.',
+    icon: 'parallel',
+  },
+  {
+    title: 'Data exfiltration protection',
+    description: 'Real-time monitoring of all data movement. Alerts on anomalous transfers, blocked exports, and unauthorized access attempts.',
+    icon: 'memory',
+  },
+  {
+    title: 'Continuous monitoring',
+    description: 'Audit logs for every action, every tool call, every data access. Full visibility into what your colleagues do and when.',
     icon: 'configure',
   },
 ];
@@ -78,19 +78,19 @@ const platform = [
                 <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="13" y2="11"/>
               </svg>
             )}
-            {p.icon === 'slack' && (
+            {p.icon === 'teamdrive' && (
               <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f4f3ec" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19v-1.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M14 20.5V19h1.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5z"/><path d="M10 9.5C10 10.33 9.33 11 8.5 11h-5C2.67 11 2 10.33 2 9.5S2.67 8 3.5 8h5c.83 0 1.5.67 1.5 1.5z"/><path d="M10 3.5V5H8.5C7.67 5 7 4.33 7 3.5S7.67 2 8.5 2s1.5.67 1.5 1.5z"/>
+                <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/>
               </svg>
             )}
-            {p.icon === 'automations' && (
+            {p.icon === 'dashboards' && (
               <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f4f3ec" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+                <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
               </svg>
             )}
-            {p.icon === 'drive' && (
+            {p.icon === 'integrations' && (
               <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f4f3ec" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-                <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
               </svg>
             )}
             {p.icon === 'abilities' && (
@@ -110,9 +110,9 @@ const platform = [
     <div class="ft-platform" style="padding-top: 80px; padding-bottom: 72px;">
     <!-- Left: text -->
     <div class="ft-plat-text">
-      <h2 class="ft-heading reveal">Your AI team, working right now.</h2>
+      <h2 class="ft-heading reveal">Enterprise-grade security, built in.</h2>
       <p class="reveal" style="font-family: 'Inter', sans-serif; font-size: 16px; color: #5c5c5c; line-height: 1.6; margin: 12px 0 0;">
-        Purpose-built colleagues running real workflows across your tools — simultaneously.
+        Your AI colleagues handle sensitive data across tools. Every layer is locked down — from integrations to execution.
       </p>
     </div>
 
@@ -122,24 +122,24 @@ const platform = [
         <div class="ft-plat-item reveal">
           <div class="ft-plat-head">
             <div class="ft-plat-icon">
+              {f.icon === 'security' && (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+                </svg>
+              )}
               {f.icon === 'parallel' && (
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>
                 </svg>
               )}
               {f.icon === 'memory' && (
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2a7 7 0 00-4 12.7V17a1 1 0 001 1h6a1 1 0 001-1v-2.3A7 7 0 0012 2z"/><line x1="9" y1="21" x2="15" y2="21"/>
-                </svg>
-              )}
-              {f.icon === 'security' && (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                 </svg>
               )}
               {f.icon === 'configure' && (
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0118.8-4.3M22 12.5a10 10 0 01-18.8 4.2"/>
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
                 </svg>
               )}
             </div>

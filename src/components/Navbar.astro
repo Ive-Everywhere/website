@@ -6,7 +6,7 @@
     <!-- Left: Logo + Name -->
     <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
       <img src="/images/logo.svg" alt="Eluu" class="nav-logo" />
-      <span style="font-family: 'Radio Canada Big', sans-serif; font-weight: 500; font-size: clamp(24px, 3vw, 40px); color: #17100e; line-height: 1;">Eluu</span>
+      <span class="nav-wordmark">Eluu AI</span>
     </a>
 
     <!-- Right: Log in button -->
@@ -42,6 +42,14 @@
   }
   .nav-logo { width: 40px; height: 40px; }
   @media (min-width: 640px) { .nav-logo { width: 48px; height: 48px; } }
+  .nav-wordmark {
+    font-family: 'Jersey 10', cursive;
+    font-size: 34px;
+    color: #17100e;
+    line-height: 1;
+    letter-spacing: -0.3px;
+  }
+  @media (min-width: 640px) { .nav-wordmark { font-size: 40px; } }
 
   .nav-link-login {
     font-family: 'Inter', sans-serif;
