@@ -1,6 +1,14 @@
 @import "tailwindcss";
 
 @font-face {
+  font-family: 'Jersey 10';
+  src: url('/fonts/jersey-10.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
   font-family: 'Season Mix';
   src: url('/fonts/season-mix-regular.woff2') format('woff2');
   font-weight: 400;

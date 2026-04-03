@@ -1,5 +1,5 @@
 ---
-// Parallel execution animation — 4 colleagues processing tasks simultaneously
+// Parallel execution animation — 4 colleagues, two batches
 ---
 
 <div class="pa-wrap">
@@ -12,108 +12,109 @@
         <span style="background:#e8c15a;"></span>
         <span style="background:#67c96c;"></span>
       </div>
-      <div class="pa-chrome-right">
-        <span>Colleagues</span>
-      </div>
     </div>
 
     <div class="pa-body" id="pa-body">
-      <!-- Row 1: Lewis -->
-      <div class="pa-row pa-r1">
-        <img src="/images/avatar-lewis.png" alt="" class="pa-avatar" />
-        <div class="pa-info">
-          <div class="pa-top">
-            <span class="pa-name">Lewis</span>
-            <span class="pa-role">Marketing</span>
-          </div>
-          <div class="pa-task">Enriching 47 contacts from HubSpot</div>
-          <div class="pa-bar-row">
-            <div class="pa-bar"><div class="pa-fill pa-f1"></div></div>
-            <div class="pa-icons">
-              <img src="/logos/integrations/hubspot.svg" alt="" />
-              <img src="/logos/integrations/salesforce.svg" alt="" />
+      <!-- Batch 1 -->
+      <div class="pa-batch" data-batch="0">
+        <div class="pa-row">
+          <img src="/images/avatar-lewis.png" alt="" class="pa-avatar" />
+          <div class="pa-info">
+            <div class="pa-top"><span class="pa-name">Lewis</span><span class="pa-role">Revenue Ops</span></div>
+            <div class="pa-task">Enriching 47 contacts from HubSpot</div>
+            <div class="pa-bar-row">
+              <div class="pa-bar"><div class="pa-fill"></div></div>
+              <div class="pa-icons"><img src="/logos/integrations/hubspot.svg" alt="" /><img src="/logos/integrations/salesforce.svg" alt="" /></div>
+              <div class="pa-done"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
             </div>
-            <div class="pa-done pa-d1">&#10003;</div>
+          </div>
+        </div>
+        <div class="pa-row">
+          <img src="/images/avatar-iris.png" alt="" class="pa-avatar" />
+          <div class="pa-info">
+            <div class="pa-top"><span class="pa-name">Iris</span><span class="pa-role">Finance</span></div>
+            <div class="pa-task">Processing 34 invoices from Salesforce</div>
+            <div class="pa-bar-row">
+              <div class="pa-bar"><div class="pa-fill"></div></div>
+              <div class="pa-icons"><img src="/logos/integrations/salesforce.svg" alt="" /><img src="/logos/integrations/stripe.svg" alt="" /></div>
+              <div class="pa-done"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+            </div>
+          </div>
+        </div>
+        <div class="pa-row">
+          <img src="/images/avatar-priya.png" alt="" class="pa-avatar" />
+          <div class="pa-info">
+            <div class="pa-top"><span class="pa-name">Priya</span><span class="pa-role">Sales</span></div>
+            <div class="pa-task">Checking pipeline for anomalies</div>
+            <div class="pa-bar-row">
+              <div class="pa-bar"><div class="pa-fill"></div></div>
+              <div class="pa-icons"><img src="/logos/integrations/salesforce.svg" alt="" /><img src="/logos/integrations/googlesheets.svg" alt="" /></div>
+              <div class="pa-done"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+            </div>
+          </div>
+        </div>
+        <div class="pa-row">
+          <img src="/images/avatar-james.png" alt="" class="pa-avatar" />
+          <div class="pa-info">
+            <div class="pa-top"><span class="pa-name">James</span><span class="pa-role">Engineering</span></div>
+            <div class="pa-task">Running PR review on sprint backlog</div>
+            <div class="pa-bar-row">
+              <div class="pa-bar"><div class="pa-fill"></div></div>
+              <div class="pa-icons"><img src="/logos/integrations/github.svg" alt="" style="filter:invert(0.5);" /><img src="/logos/integrations/jira.svg" alt="" /></div>
+              <div class="pa-done"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Row 2: Iris -->
-      <div class="pa-row pa-r2">
-        <img src="/images/avatar-iris.png" alt="" class="pa-avatar" />
-        <div class="pa-info">
-          <div class="pa-top">
-            <span class="pa-name">Iris</span>
-            <span class="pa-role">Product</span>
-          </div>
-          <div class="pa-task">Analyzing feature requests from feedback</div>
-          <div class="pa-bar-row">
-            <div class="pa-bar"><div class="pa-fill pa-f2"></div></div>
-            <div class="pa-icons">
-              <img src="/logos/integrations/notion.svg" alt="" style="filter:invert(0.5);" />
-              <img src="/logos/integrations/intercom.svg" alt="" />
+      <!-- Batch 2 — same colleagues, different tasks -->
+      <div class="pa-batch" data-batch="1">
+        <div class="pa-row">
+          <img src="/images/avatar-lewis.png" alt="" class="pa-avatar" />
+          <div class="pa-info">
+            <div class="pa-top"><span class="pa-name">Lewis</span><span class="pa-role">Revenue Ops</span></div>
+            <div class="pa-task">Scoring leads against ICP criteria</div>
+            <div class="pa-bar-row">
+              <div class="pa-bar"><div class="pa-fill"></div></div>
+              <div class="pa-icons"><img src="/logos/integrations/hubspot.svg" alt="" /><img src="/logos/integrations/googlesheets.svg" alt="" /></div>
+              <div class="pa-done"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
             </div>
-            <div class="pa-done pa-d2">&#10003;</div>
           </div>
         </div>
-      </div>
-
-      <!-- Row 3: Priya -->
-      <div class="pa-row pa-r3">
-        <img src="/images/avatar-priya.png" alt="" class="pa-avatar" />
-        <div class="pa-info">
-          <div class="pa-top">
-            <span class="pa-name">Priya</span>
-            <span class="pa-role">Sales</span>
-          </div>
-          <div class="pa-task">Generating Q3 pipeline forecast</div>
-          <div class="pa-bar-row">
-            <div class="pa-bar"><div class="pa-fill pa-f3"></div></div>
-            <div class="pa-icons">
-              <img src="/logos/integrations/googlesheets.svg" alt="" />
-              <img src="/logos/integrations/slack.svg" alt="" />
+        <div class="pa-row">
+          <img src="/images/avatar-iris.png" alt="" class="pa-avatar" />
+          <div class="pa-info">
+            <div class="pa-top"><span class="pa-name">Iris</span><span class="pa-role">Finance</span></div>
+            <div class="pa-task">Reconciling payments against revenue sheet</div>
+            <div class="pa-bar-row">
+              <div class="pa-bar"><div class="pa-fill"></div></div>
+              <div class="pa-icons"><img src="/logos/integrations/stripe.svg" alt="" /><img src="/logos/integrations/googlesheets.svg" alt="" /></div>
+              <div class="pa-done"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
             </div>
-            <div class="pa-done pa-d3">&#10003;</div>
           </div>
         </div>
-      </div>
-
-      <!-- Row 4: James -->
-      <div class="pa-row pa-r4">
-        <img src="/images/avatar-james.png" alt="" class="pa-avatar" />
-        <div class="pa-info">
-          <div class="pa-top">
-            <span class="pa-name">James</span>
-            <span class="pa-role">Engineering</span>
-          </div>
-          <div class="pa-task">Running PR review on sprint backlog</div>
-          <div class="pa-bar-row">
-            <div class="pa-bar"><div class="pa-fill pa-f4"></div></div>
-            <div class="pa-icons">
-              <img src="/logos/integrations/github.svg" alt="" style="filter:invert(0.5);" />
-              <img src="/logos/integrations/jira.svg" alt="" />
+        <div class="pa-row">
+          <img src="/images/avatar-priya.png" alt="" class="pa-avatar" />
+          <div class="pa-info">
+            <div class="pa-top"><span class="pa-name">Priya</span><span class="pa-role">Sales</span></div>
+            <div class="pa-task">Drafting follow-ups for stalled deals</div>
+            <div class="pa-bar-row">
+              <div class="pa-bar"><div class="pa-fill"></div></div>
+              <div class="pa-icons"><img src="/logos/integrations/salesforce.svg" alt="" /><img src="/logos/integrations/slack.svg" alt="" /></div>
+              <div class="pa-done"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
             </div>
-            <div class="pa-done pa-d4">&#10003;</div>
           </div>
         </div>
-      </div>
-
-      <!-- Row 5: Bonus — queued after first batch -->
-      <div class="pa-row pa-r5" id="pa-bonus">
-        <img src="/images/avatar-iris.png" alt="" class="pa-avatar" />
-        <div class="pa-info">
-          <div class="pa-top">
-            <span class="pa-name">Iris</span>
-            <span class="pa-role">Product</span>
-          </div>
-          <div class="pa-task">Drafting weekly changelog from merged PRs</div>
-          <div class="pa-bar-row">
-            <div class="pa-bar"><div class="pa-fill pa-f5"></div></div>
-            <div class="pa-icons">
-              <img src="/logos/integrations/github.svg" alt="" style="filter:invert(0.5);" />
-              <img src="/logos/integrations/notion.svg" alt="" style="filter:invert(0.5);" />
+        <div class="pa-row">
+          <img src="/images/avatar-james.png" alt="" class="pa-avatar" />
+          <div class="pa-info">
+            <div class="pa-top"><span class="pa-name">James</span><span class="pa-role">Engineering</span></div>
+            <div class="pa-task">Posting sprint summary to #engineering</div>
+            <div class="pa-bar-row">
+              <div class="pa-bar"><div class="pa-fill"></div></div>
+              <div class="pa-icons"><img src="/logos/integrations/github.svg" alt="" style="filter:invert(0.5);" /><img src="/logos/integrations/slack.svg" alt="" /></div>
+              <div class="pa-done"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
             </div>
-            <div class="pa-done pa-d5">&#10003;</div>
           </div>
         </div>
       </div>
@@ -123,56 +124,39 @@
 
 <style>
   .pa-wrap {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    box-sizing: border-box;
+    position: absolute; inset: 0; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px; box-sizing: border-box;
   }
-
   .pa-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: 0;
   }
-
   .pa-window {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 460px;
+    position: relative; z-index: 1; width: 100%; max-width: 460px;
     background: rgba(250, 249, 244, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     border-radius: 12px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.1);
-    overflow: hidden;
-    font-family: 'Inter', sans-serif;
+    overflow: hidden; font-family: 'Inter', sans-serif;
   }
-
   .pa-chrome {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; border-bottom: 1px solid rgba(0,0,0,0.06);
   }
   .pa-dots { display: flex; gap: 6px; }
   .pa-dots span { width: 10px; height: 10px; border-radius: 50%; }
-  .pa-chrome-right { font-size: 13px; color: #17100e; font-weight: 600; }
 
-  .pa-body { padding: 4px 0; }
+  .pa-body { padding: 6px 0; position: relative; }
+
+  .pa-batch { display: none; }
+  .pa-batch.active { display: block; }
 
   .pa-row {
     display: flex;
-    gap: 10px;
-    padding: 8px 14px;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
     border-bottom: 1px solid rgba(0,0,0,0.04);
     opacity: 0;
     transform: translateY(8px);
@@ -180,72 +164,35 @@
   .pa-row:last-child { border-bottom: none; }
 
   .pa-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    object-fit: cover;
+    width: 32px; height: 32px; border-radius: 50%;
+    flex-shrink: 0; object-fit: cover; margin-top: 1px;
   }
-
   .pa-info { flex: 1; min-width: 0; }
-
   .pa-top {
-    display: flex;
-    align-items: baseline;
-    gap: 5px;
-    margin-bottom: 2px;
+    display: flex; align-items: baseline; gap: 6px; margin-bottom: 3px;
   }
-  .pa-name { font-size: 12px; font-weight: 600; color: #17100e; }
-  .pa-role { font-size: 10px; color: #a3a3a3; }
-
+  .pa-name { font-size: 13px; font-weight: 600; color: #17100e; }
+  .pa-role { font-size: 11px; color: #a3a3a3; font-weight: 500; }
   .pa-task {
-    font-size: 10px;
-    color: #7d7d7d;
-    margin-bottom: 6px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 11px; color: #7d7d7d; margin-bottom: 8px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-
   .pa-bar-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: flex; align-items: center; gap: 10px;
   }
-
   .pa-bar {
-    flex: 1;
-    height: 3px;
-    background: rgba(0,0,0,0.06);
-    border-radius: 2px;
-    overflow: hidden;
+    flex: 1; height: 3px; background: rgba(0,0,0,0.06);
+    border-radius: 2px; overflow: hidden;
   }
   .pa-fill {
-    height: 100%;
-    background: #17100e;
-    border-radius: 2px;
-    width: 0%;
+    height: 100%; background: #17100e; border-radius: 2px; width: 0%;
   }
-
-  .pa-icons {
-    display: flex;
-    gap: 4px;
-    flex-shrink: 0;
-  }
-  .pa-icons img {
-    width: 14px;
-    height: 14px;
-    opacity: 0.45;
-  }
-
+  .pa-icons { display: flex; gap: 5px; flex-shrink: 0; }
+  .pa-icons img { width: 16px; height: 16px; opacity: 0.85; }
   .pa-done {
-    font-size: 12px;
-    color: #17100e;
-    opacity: 0;
-    transform: scale(0);
-    flex-shrink: 0;
-    width: 16px;
-    text-align: center;
+    color: #34a853; opacity: 0; transform: scale(0);
+    flex-shrink: 0; width: 16px; height: 16px;
+    display: flex; align-items: center; justify-content: center;
   }
 </style>
 
@@ -254,110 +201,84 @@
   const body = document.getElementById('pa-body');
   if (!body) return;
 
-  const mainRows = Array.from(body.querySelectorAll('.pa-row')).slice(0, 4) as HTMLElement[];
-  const bonusRow = document.getElementById('pa-bonus') as HTMLElement;
-  const allRows = [...mainRows, bonusRow];
-  const mainFills = Array.from(body.querySelectorAll('.pa-fill')).slice(0, 4) as HTMLElement[];
-  const bonusFill = body.querySelector('.pa-f5') as HTMLElement;
-  const mainDones = Array.from(body.querySelectorAll('.pa-done')).slice(0, 4) as HTMLElement[];
-  const bonusDone = body.querySelector('.pa-d5') as HTMLElement;
+  const batches = body.querySelectorAll('.pa-batch') as NodeListOf<HTMLElement>;
+  if (!batches.length) return;
 
-  const durations = [3200, 3800, 3500, 4100];
-  const BONUS_DUR = 2800;
-  const STAGGER_IN = 100;
+  const durations = [2800, 3400, 3100, 3700];
+  const STAGGER = 100;
   const FADE_IN = 400;
-  const FADE_OUT = 500;
+  const FADE_OUT = 400;
 
-  function reset() {
-    allRows.forEach(r => {
-      r.style.transition = 'none';
-      r.style.opacity = '0';
-      r.style.transform = 'translateY(8px)';
-    });
-    [...mainFills, bonusFill].forEach(f => {
-      f.style.transition = 'none';
-      f.style.width = '0%';
-    });
-    [...mainDones, bonusDone].forEach(d => {
-      d.style.transition = 'none';
-      d.style.opacity = '0';
-      d.style.transform = 'scale(0)';
-    });
-    void body.offsetHeight;
+  function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
+
+  function resetBatch(batch: HTMLElement) {
+    const rows = batch.querySelectorAll('.pa-row') as NodeListOf<HTMLElement>;
+    const fills = batch.querySelectorAll('.pa-fill') as NodeListOf<HTMLElement>;
+    const dones = batch.querySelectorAll('.pa-done') as NodeListOf<HTMLElement>;
+    rows.forEach(r => { r.style.transition = 'none'; r.style.opacity = '0'; r.style.transform = 'translateY(8px)'; });
+    fills.forEach(f => { f.style.transition = 'none'; f.style.width = '0%'; });
+    dones.forEach(d => { d.style.transition = 'none'; d.style.opacity = '0'; d.style.transform = 'scale(0)'; });
+    void body!.offsetHeight;
   }
 
-  function sleep(ms: number) {
-    return new Promise(r => setTimeout(r, ms));
+  async function animateBatch(batch: HTMLElement) {
+    const rows = batch.querySelectorAll('.pa-row') as NodeListOf<HTMLElement>;
+    const fills = batch.querySelectorAll('.pa-fill') as NodeListOf<HTMLElement>;
+    const dones = batch.querySelectorAll('.pa-done') as NodeListOf<HTMLElement>;
+
+    resetBatch(batch);
+    batch.classList.add('active');
+    await sleep(200);
+
+    // Stagger rows in
+    for (let i = 0; i < rows.length; i++) {
+      setTimeout(() => {
+        rows[i].style.transition = `all ${FADE_IN}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+        rows[i].style.opacity = '1';
+        rows[i].style.transform = 'translateY(0)';
+      }, i * STAGGER);
+    }
+    await sleep(FADE_IN + rows.length * STAGGER);
+
+    // Start all bars
+    fills.forEach((f, i) => {
+      f.style.transition = `width ${durations[i]}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+      f.style.width = '100%';
+    });
+
+    // Checkmarks as each finishes
+    const sorted = durations.map((d, idx) => ({ d, idx })).sort((a, b) => a.d - b.d);
+    for (let i = 0; i < sorted.length; i++) {
+      setTimeout(() => {
+        dones[sorted[i].idx].style.transition = 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)';
+        dones[sorted[i].idx].style.opacity = '1';
+        dones[sorted[i].idx].style.transform = 'scale(1)';
+      }, sorted[i].d);
+    }
+
+    await sleep(Math.max(...durations) + 1000);
+
+    // Fade out
+    rows.forEach(r => {
+      r.style.transition = `all ${FADE_OUT}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+      r.style.opacity = '0';
+      r.style.transform = 'translateY(-6px)';
+    });
+    await sleep(FADE_OUT + 200);
+
+    batch.classList.remove('active');
   }
 
   async function run() {
+    let idx = 0;
     while (true) {
-      reset();
-      await sleep(300);
-
-      // Stagger first 4 rows in
-      for (let i = 0; i < mainRows.length; i++) {
-        setTimeout(() => {
-          mainRows[i].style.transition = `all ${FADE_IN}ms cubic-bezier(0.16, 1, 0.3, 1)`;
-          mainRows[i].style.opacity = '1';
-          mainRows[i].style.transform = 'translateY(0)';
-        }, i * STAGGER_IN);
-      }
-      await sleep(FADE_IN + mainRows.length * STAGGER_IN);
-
-      // Start all 4 progress bars simultaneously
-      mainFills.forEach((f, i) => {
-        f.style.transition = `width ${durations[i]}ms cubic-bezier(0.4, 0, 0.2, 1)`;
-        f.style.width = '100%';
-      });
-
-      // Show checkmarks as each finishes
-      const sorted = durations.map((d, idx) => ({ d, idx })).sort((a, b) => a.d - b.d);
-      for (let i = 0; i < sorted.length; i++) {
-        setTimeout(() => {
-          const idx = sorted[i].idx;
-          mainDones[idx].style.transition = 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)';
-          mainDones[idx].style.opacity = '1';
-          mainDones[idx].style.transform = 'scale(1)';
-        }, sorted[i].d);
-      }
-
-      // Wait for all 4 to finish
-      await sleep(Math.max(...durations) + 400);
-
-      // 5th task slides in
-      bonusRow.style.transition = `all ${FADE_IN}ms cubic-bezier(0.16, 1, 0.3, 1)`;
-      bonusRow.style.opacity = '1';
-      bonusRow.style.transform = 'translateY(0)';
-      await sleep(500);
-
-      // Its bar starts filling
-      bonusFill.style.transition = `width ${BONUS_DUR}ms cubic-bezier(0.4, 0, 0.2, 1)`;
-      bonusFill.style.width = '100%';
-      await sleep(BONUS_DUR);
-
-      // Checkmark
-      bonusDone.style.transition = 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)';
-      bonusDone.style.opacity = '1';
-      bonusDone.style.transform = 'scale(1)';
-      await sleep(1200);
-
-      // Fade out everything
-      allRows.forEach(r => {
-        r.style.transition = `all ${FADE_OUT}ms cubic-bezier(0.4, 0, 0.2, 1)`;
-        r.style.opacity = '0';
-        r.style.transform = 'translateY(-6px)';
-      });
-      await sleep(FADE_OUT + 400);
+      await animateBatch(batches[idx]);
+      idx = (idx + 1) % batches.length;
     }
   }
 
-  // Start when visible
   const io = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      io.disconnect();
-      run();
-    }
+    if (entries[0].isIntersecting) { io.disconnect(); run(); }
   }, { threshold: 0.3 });
   io.observe(body);
 })();

@@ -18,130 +18,244 @@ const { title, pageTitle, updatedDate = 'February 24, 2026' } = Astro.props;
 </head>
 <body>
   <!-- Navbar -->
-  <nav id="main-nav" class="site-nav scrolled">
-    <div style="max-width: 1800px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
-      <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-        <img src="/images/logo.svg" alt="Eluu" class="nav-logo" />
-        <span style="font-family: 'Radio Canada Big', sans-serif; font-weight: 500; font-size: clamp(24px, 3vw, 40px); color: #17100e; line-height: 1;">Eluu</span>
+  <nav class="ln-nav">
+    <div class="ln-nav-inner">
+      <a href="/" class="ln-nav-logo">
+        <img src="/images/logo.svg" alt="Eluu" class="ln-nav-icon" />
+        <span class="ln-nav-name">Eluu</span>
       </a>
-      <a href="https://app.eluu.ai" class="nav-btn">Log in</a>
+      <a href="https://app.eluu.ai" class="ln-nav-btn">Log in</a>
     </div>
   </nav>
 
   <!-- Legal content -->
-  <main class="legal-main">
-    <div class="legal-container">
-      <header class="legal-header">
-        <h1 class="legal-title">{pageTitle}</h1>
-        <p class="legal-date">Updated {updatedDate}</p>
+  <main class="ln-main">
+    <article class="ln-article">
+      <header class="ln-header">
+        <h1 class="ln-title">{pageTitle}</h1>
+        <div class="ln-meta">
+          <span class="ln-date">Updated {updatedDate}</span>
+        </div>
+        <div class="ln-divider"></div>
       </header>
-      <div class="legal-body">
+      <div class="ln-body">
         <slot />
       </div>
-    </div>
+    </article>
   </main>
 
   <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-left">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <img src="/images/logo.svg" alt="Eluu" style="width: 36px; height: 36px;" />
-          <span style="font-family: 'Radio Canada Big', sans-serif; font-weight: 500; font-size: 26px; color: #17100e; line-height: 1;">Eluu</span>
+  <footer class="ln-footer">
+    <div class="ln-footer-inner">
+      <div class="ln-footer-left">
+        <div class="ln-footer-brand">
+          <img src="/images/logo.svg" alt="Eluu" style="width: 32px; height: 32px;" />
+          <span class="ln-footer-name">Eluu</span>
         </div>
-        <span class="footer-copy">&copy; 2025 Eluu AI — All rights reserved</span>
+        <span class="ln-footer-copy">&copy; 2025 Eluu AI — All rights reserved</span>
       </div>
-      <div class="footer-links">
+      <div class="ln-footer-links">
         <a href="/terms">Terms of Service</a>
-        <span class="footer-dot"></span>
+        <span class="ln-footer-dot"></span>
         <a href="/privacy">Privacy Policy</a>
-        <span class="footer-dot"></span>
+        <span class="ln-footer-dot"></span>
         <a href="/security">Security</a>
       </div>
     </div>
   </footer>
 
-  <style>
-    .site-nav {
+  <style is:global>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: #f4f3ec; }
+
+    /* ── Navbar ── */
+    .ln-nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 50;
       padding: 12px 16px;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(244, 243, 236, 0.9);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(23, 16, 14, 0.06);
     }
-    .nav-logo { width: 40px; height: 40px; }
-    @media (min-width: 640px) { .nav-logo { width: 48px; height: 48px; } .site-nav { padding: 16px 24px; } }
-    @media (min-width: 1024px) { .site-nav { padding: 20px 36px; } }
-    .nav-btn {
-      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
-      color: #ffffff; background: #17100e; border-radius: 10px;
-      padding: 10px 24px; text-decoration: none; line-height: 1;
+    @media (min-width: 640px) { .ln-nav { padding: 16px 24px; } }
+    @media (min-width: 1024px) { .ln-nav { padding: 16px 48px; } }
+
+    .ln-nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .ln-nav-logo {
+      display: flex; align-items: center; gap: 10px; text-decoration: none;
+    }
+    .ln-nav-icon { width: 36px; height: 36px; }
+    @media (min-width: 640px) { .ln-nav-icon { width: 40px; height: 40px; } }
+    .ln-nav-name {
+      font-family: 'Radio Canada Big', sans-serif; font-weight: 500;
+      font-size: 22px; color: #17100e; line-height: 1;
+    }
+    @media (min-width: 640px) { .ln-nav-name { font-size: 26px; } }
+    .ln-nav-btn {
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      color: #17100e; background: transparent; border: 1px solid rgba(23,16,14,0.15);
+      border-radius: 8px; padding: 8px 20px; text-decoration: none; line-height: 1;
+      transition: background 0.2s ease;
+    }
+    .ln-nav-btn:hover { background: rgba(23,16,14,0.04); }
+
+    /* ── Main ── */
+    .ln-main {
+      min-height: 100vh;
+      padding: 100px 20px 80px;
+    }
+    @media (min-width: 640px) { .ln-main { padding: 120px 40px 80px; } }
+    @media (min-width: 1024px) { .ln-main { padding: 140px 48px 100px; } }
+
+    /* ── Article ── */
+    .ln-article {
+      max-width: 720px;
+      margin: 0 auto;
     }
 
-    .legal-main { background: #f4f3ec; min-height: 100vh; padding: 100px 16px 60px; }
-    @media (min-width: 640px) { .legal-main { padding: 130px 40px 80px; } }
-    @media (min-width: 1024px) { .legal-main { padding: 140px 48px 80px; } }
+    /* ── Header ── */
+    .ln-header {
+      margin-bottom: 40px;
+    }
+    @media (min-width: 640px) { .ln-header { margin-bottom: 56px; } }
 
-    .legal-container { max-width: 800px; margin: 0 auto; }
-
-    .legal-header { margin-bottom: 32px; }
-    @media (min-width: 640px) { .legal-header { margin-bottom: 48px; } }
-    .legal-title {
+    .ln-title {
       font-family: 'Season Mix', sans-serif; font-weight: 700;
-      font-size: clamp(28px, 5vw, 48px); color: #17100e;
-      letter-spacing: -1px; line-height: 1.1; margin: 0 0 10px;
+      font-size: clamp(28px, 5vw, 42px); color: #17100e;
+      letter-spacing: -1px; line-height: 1.15; margin: 0 0 12px;
     }
-    @media (min-width: 640px) { .legal-title { letter-spacing: -1.5px; margin: 0 0 12px; } }
-    .legal-date {
-      font-family: 'Inter', sans-serif; font-size: 14px;
-      color: #7d7d7d; margin: 0;
-    }
-    @media (min-width: 640px) { .legal-date { font-size: 15px; } }
 
-    .legal-body {
-      font-family: 'Inter', sans-serif; font-size: 14px;
-      color: #5c5c5c; line-height: 1.7;
+    .ln-meta {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 24px;
     }
-    @media (min-width: 640px) { .legal-body { font-size: 15px; line-height: 1.75; } }
-    .legal-body h2 {
+    .ln-date {
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      color: #a3a3a3; font-weight: 500;
+    }
+
+    .ln-divider {
+      height: 1px;
+      background: rgba(23, 16, 14, 0.08);
+    }
+
+    /* ── Body ── */
+    .ln-body {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: #5c5c5c;
+      line-height: 1.8;
+    }
+    @media (min-width: 640px) { .ln-body { font-size: 15.5px; } }
+
+    /* Headings */
+    .ln-body h2 {
       font-family: 'Season Mix', sans-serif; font-weight: 600;
-      font-size: 19px; color: #17100e; letter-spacing: -0.2px;
-      margin: 36px 0 12px; line-height: 1.3;
+      font-size: 20px; color: #17100e; letter-spacing: -0.3px;
+      margin: 48px 0 16px; line-height: 1.3;
+      padding-top: 24px;
+      border-top: 1px solid rgba(23, 16, 14, 0.06);
     }
-    @media (min-width: 640px) { .legal-body h2 { font-size: 22px; letter-spacing: -0.3px; margin: 48px 0 16px; } }
-    .legal-body h3 {
+    @media (min-width: 640px) {
+      .ln-body h2 { font-size: 22px; margin: 56px 0 20px; padding-top: 32px; }
+    }
+    .ln-body h2:first-child {
+      margin-top: 0; padding-top: 0; border-top: none;
+    }
+
+    .ln-body h3 {
       font-family: 'Inter', sans-serif; font-weight: 600;
       font-size: 15px; color: #17100e;
-      margin: 24px 0 10px; line-height: 1.4;
+      margin: 28px 0 10px; line-height: 1.4;
+      letter-spacing: -0.1px;
     }
-    .legal-body p { margin: 0 0 14px; }
-    @media (min-width: 640px) { .legal-body p { margin: 0 0 16px; } }
-    .legal-body ul, .legal-body ol {
-      margin: 0 0 14px; padding-left: 20px;
+    @media (min-width: 640px) {
+      .ln-body h3 { font-size: 16px; margin: 32px 0 12px; }
     }
-    @media (min-width: 640px) { .legal-body ul, .legal-body ol { margin: 0 0 16px; padding-left: 24px; } }
-    .legal-body li { margin-bottom: 6px; }
-    @media (min-width: 640px) { .legal-body li { margin-bottom: 8px; } }
-    .legal-body a { color: #17100e; text-decoration: underline; text-underline-offset: 2px; }
-    .legal-body a:hover { color: #5c5c5c; }
-    .legal-body strong { color: #17100e; font-weight: 600; }
 
-    .site-footer { background: #ffffff; padding: 48px 24px; }
-    @media (min-width: 640px) { .site-footer { padding: 48px 40px; } }
-    @media (min-width: 1024px) { .site-footer { padding: 48px 48px; } }
-    .footer-inner {
-      display: flex; flex-direction: column; gap: 32px;
-      max-width: 1440px; margin: 0 auto;
+    /* Paragraphs */
+    .ln-body p {
+      margin: 0 0 16px;
+    }
+
+    /* Lists */
+    .ln-body ul, .ln-body ol {
+      margin: 0 0 16px;
+      padding-left: 24px;
+    }
+    .ln-body li {
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+    .ln-body li::marker {
+      color: #a3a3a3;
+    }
+
+    /* Links */
+    .ln-body a {
+      color: #17100e;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: rgba(23, 16, 14, 0.25);
+      transition: text-decoration-color 0.2s ease;
+    }
+    .ln-body a:hover {
+      text-decoration-color: #17100e;
+    }
+
+    /* Strong */
+    .ln-body strong {
+      color: #17100e;
+      font-weight: 600;
+    }
+
+    /* Blockquotes (if any) */
+    .ln-body blockquote {
+      margin: 24px 0;
+      padding: 16px 24px;
+      border-left: 3px solid rgba(23, 16, 14, 0.1);
+      color: #7d7d7d;
+      font-style: italic;
+    }
+
+    /* ── Footer ── */
+    .ln-footer {
+      background: #ffffff;
+      padding: 40px 20px;
+    }
+    @media (min-width: 640px) { .ln-footer { padding: 40px 40px; } }
+    @media (min-width: 1024px) { .ln-footer { padding: 40px 48px; } }
+
+    .ln-footer-inner {
+      display: flex; flex-direction: column; gap: 24px;
+      max-width: 720px; margin: 0 auto;
     }
     @media (min-width: 768px) {
-      .footer-inner { flex-direction: row; justify-content: space-between; align-items: flex-end; }
+      .ln-footer-inner { flex-direction: row; justify-content: space-between; align-items: center; }
     }
-    .footer-left { display: flex; flex-direction: column; gap: 16px; }
-    .footer-copy { font-family: 'Inter', sans-serif; font-size: 14px; color: #a3a3a3; }
-    .footer-links { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .footer-links a { font-family: 'Inter', sans-serif; font-size: 14px; color: #a3a3a3; text-decoration: none; }
-    .footer-links a:hover { color: #17100e; }
-    .footer-dot { width: 4px; height: 4px; border-radius: 50%; background: #7c7c7c; display: inline-block; }
+
+    .ln-footer-left { display: flex; flex-direction: column; gap: 12px; }
+    .ln-footer-brand { display: flex; align-items: center; gap: 8px; }
+    .ln-footer-name {
+      font-family: 'Radio Canada Big', sans-serif; font-weight: 500;
+      font-size: 20px; color: #17100e; line-height: 1;
+    }
+    .ln-footer-copy {
+      font-family: 'Inter', sans-serif; font-size: 13px; color: #a3a3a3;
+    }
+    .ln-footer-links {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .ln-footer-links a {
+      font-family: 'Inter', sans-serif; font-size: 13px; color: #a3a3a3; text-decoration: none;
+    }
+    .ln-footer-links a:hover { color: #17100e; }
+    .ln-footer-dot {
+      width: 3px; height: 3px; border-radius: 50%; background: #d4d3cb; display: inline-block;
+    }
   </style>
 </body>
 </html>
