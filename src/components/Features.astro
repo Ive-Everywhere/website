@@ -57,7 +57,7 @@ const platform = [
 ---
 
 <!-- Products + Platform -->
-<section style="background: #f4f3ec; padding: 80px 24px;">
+<section class="ft-section">
   <div style="max-width: 1440px; margin: 0 auto;">
     <div class="ft-header">
       <h2 class="ft-heading reveal">Everything runs on a powerful foundation.</h2>
@@ -107,7 +107,7 @@ const platform = [
       ))}
     </div>
 
-    <div class="ft-platform" style="padding-top: 80px; padding-bottom: 72px;">
+    <div class="ft-platform">
     <!-- Left: text -->
     <div class="ft-plat-text">
       <h2 class="ft-heading reveal">Enterprise-grade security, built in.</h2>
@@ -153,11 +153,27 @@ const platform = [
 </section>
 
 <style>
+  /* ── Section wrapper ── */
+  .ft-section {
+    background: #f4f3ec;
+    padding: 48px 20px;
+  }
+  @media (min-width: 768px) {
+    .ft-section {
+      padding: 80px 64px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .ft-section {
+      padding: 96px 120px;
+    }
+  }
+
   /* ── Shared ── */
   .ft-heading {
     font-family: 'Season Mix', sans-serif;
     font-weight: 700;
-    font-size: clamp(28px, 5vw, 48px);
+    font-size: clamp(32px, 6vw, 56px);
     letter-spacing: -1.5px;
     color: #17100e;
     line-height: 1.1;
@@ -170,8 +186,14 @@ const platform = [
   /* ── Product cards ── */
   .ft-cards {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media (min-width: 480px) {
+    .ft-cards {
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
   }
   @media (min-width: 640px) {
     .ft-cards { gap: 20px; }
@@ -227,6 +249,14 @@ const platform = [
     background: url('/images/products-bg.webp') center / 600% no-repeat;
     background-attachment: local;
   }
+
+  /* On single-column mobile, constrain icon block so it doesn't fill entire width */
+  @media (max-width: 479px) {
+    .ft-card-icon {
+      max-width: 200px;
+    }
+  }
+
   /* Each card shows a different slice of the background */
   .ft-card:nth-child(1) .ft-card-icon { background-position: 0% 50%; }
   .ft-card:nth-child(2) .ft-card-icon { background-position: 20% 50%; }
@@ -243,7 +273,7 @@ const platform = [
   /* ── Card text ── */
   .ft-card-text h3 {
     font-family: 'Season Mix', sans-serif;
-    font-size: 20px;
+    font-size: clamp(18px, 2.5vw, 20px);
     font-weight: 700;
     color: #17100e;
     margin: 0 0 6px;
@@ -262,12 +292,16 @@ const platform = [
     display: flex;
     flex-direction: column;
     gap: 48px;
+    padding-top: 64px;
+    padding-bottom: 0;
   }
   @media (min-width: 768px) {
     .ft-platform {
       flex-direction: row;
       align-items: flex-start;
       gap: 80px;
+      padding-top: 80px;
+      padding-bottom: 72px;
     }
   }
 
@@ -281,7 +315,7 @@ const platform = [
   .ft-plat-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 32px;
   }
   @media (min-width: 640px) {
     .ft-plat-grid {
@@ -291,6 +325,18 @@ const platform = [
   }
   @media (min-width: 768px) {
     .ft-plat-grid { width: 66.66%; }
+  }
+
+  /* On mobile single-column, add dividers between platform items */
+  @media (max-width: 639px) {
+    .ft-plat-item {
+      padding-bottom: 24px;
+      border-bottom: 1px solid #d4d3c8;
+    }
+    .ft-plat-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
   }
 
   .ft-plat-item {
@@ -312,7 +358,7 @@ const platform = [
 
   .ft-plat-item h4 {
     font-family: 'Season Mix', sans-serif;
-    font-size: 20px;
+    font-size: clamp(18px, 2.5vw, 20px);
     font-weight: 700;
     color: #17100e;
     margin: 0;

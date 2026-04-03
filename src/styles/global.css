@@ -56,9 +56,13 @@
   --color-dark-3: #313130;
 }
 
-html { scroll-behavior: auto; }
+html {
+  scroll-behavior: auto;
+  overflow-x: hidden;
+}
 
 body {
+  overflow-x: hidden;
   background: #ffffff;
   color: #171717;
   -webkit-font-smoothing: antialiased;

@@ -6,8 +6,8 @@
     <!-- Left side -->
     <div class="footer-left">
       <div style="display: flex; align-items: center; gap: 8px;">
-        <img src="/images/logo.svg" alt="Eluu" style="width: 36px; height: 36px;" />
-        <span style="font-family: 'Jersey 10', cursive; font-size: 34px; color: #17100e; line-height: 1; letter-spacing: -0.3px;">Eluu AI</span>
+        <img src="/images/logo.svg" alt="Eluu" class="footer-logo-img" />
+        <span class="footer-logo-text">Eluu AI</span>
       </div>
       <div style="display: flex; align-items: center; gap: 16px;">
         <a href="#" aria-label="Twitter" style="color: #a3a3a3; display: flex;">
@@ -37,9 +37,10 @@
 <style>
   .site-footer {
     background: #ffffff;
-    padding: 48px 24px;
+    padding: 36px 16px;
   }
-  @media (min-width: 640px) { .site-footer { padding: 48px 40px; } }
+  @media (min-width: 640px) { .site-footer { padding: 48px 24px; } }
+  @media (min-width: 768px) { .site-footer { padding: 48px 40px; } }
   @media (min-width: 1024px) { .site-footer { padding: 48px 48px; } }
 
   .footer-inner {
@@ -61,6 +62,19 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+
+  .footer-logo-img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .footer-logo-text {
+    font-family: 'Jersey 10', cursive;
+    font-size: clamp(26px, 4vw, 34px);
+    color: #17100e;
+    line-height: 1;
+    letter-spacing: -0.3px;
   }
 
   .footer-tagline {
@@ -96,5 +110,14 @@
     border-radius: 50%;
     background: #7c7c7c;
     display: inline-block;
+  }
+
+  /* Very small screens (360px) */
+  @media (max-width: 400px) {
+    .footer-logo-img { width: 30px; height: 30px; }
+    .footer-links { gap: 8px; }
+    .footer-links a { font-size: 13px; }
+    .footer-tagline { font-size: 14px; }
+    .footer-copy { font-size: 13px; }
   }
 </style>
