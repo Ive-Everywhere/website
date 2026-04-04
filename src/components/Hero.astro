@@ -31,7 +31,7 @@
       <div class="reveal hero-iframe-wrap" data-iframe-wrapper>
         <div class="iframe-glow">
           <div class="iframe-border">
-            <div style="aspect-ratio: 16 / 9.5; border-radius: 14px; overflow: hidden; position: relative; background: #ffffff; contain: layout style;">
+            <div style="aspect-ratio: 16 / 9.5; border-radius: 14px; overflow: hidden; position: relative; background: #ffffff; contain: layout style; will-change: transform; isolation: isolate;">
               <iframe
                 id="hero-iframe"
                 src="https://demo.eluu.ai/?autoplay=1&embed=1"
@@ -39,7 +39,7 @@
                 allow="autoplay"
                 sandbox="allow-scripts allow-same-origin"
                 tabindex="-1"
-                style="position: absolute; top: 0; left: 0; width: 111.11%; height: 111.11%; transform: scale(0.9); transform-origin: 0 0; border: none; border-radius: 14px; background: #ffffff; contain: strict;"
+                style="position: absolute; top: 0; left: 0; width: 111.11%; height: 111.11%; transform: scale(0.9); transform-origin: 0 0; border: none; background: #ffffff; contain: strict;"
               ></iframe>
             </div>
           </div>
@@ -253,7 +253,7 @@
 
         // If iframe was just active and we got a big jump toward the iframe
         // (which is near the top of the page), revert it
-        if (iframeHovered && delta > 100 && currentY < lastScrollY) {
+        if (iframeHovered && delta > 100 && document.activeElement === iframe) {
           window.scrollTo(savedX, savedY);
         }
 
@@ -262,16 +262,22 @@
       });
     }, { passive: true });
 
-    // ── Layer 5: Override window.scrollTo to block iframe-triggered scrolls ──
+    // ── Layer 5: Block iframe-triggered scrolls with short-lived flag ──
     const nativeScrollTo = window.scrollTo.bind(window);
     (window as any).__safeScrollTo = nativeScrollTo;
 
-    window.scrollTo = function (...args: any[]) {
-      // If the iframe is the active element and something is trying to scroll,
-      // block it — this catches iframe internal .focus() → scrollIntoView chains
-      if (document.activeElement === iframe) {
-        return;
+    let blockScroll = false;
+
+    // When iframe grabs focus, block scrollTo for one frame
+    document.addEventListener('focusin', (e) => {
+      if (e.target === iframe) {
+        blockScroll = true;
+        requestAnimationFrame(() => { blockScroll = false; });
       }
+    }, true);
+
+    window.scrollTo = function (...args: any[]) {
+      if (blockScroll) return;
       nativeScrollTo(...args);
     } as typeof window.scrollTo;
 
@@ -288,5 +294,50 @@
       );
       observer.observe(wrapper);
     }
+
+    // ── Layer 7: Zoom cap — iframe stops scaling past a threshold ──
+    const BASE_SCALE = 0.9;       // your current zoom at 100% browser zoom
+    const BASE_WIDTH = 111.11;    // % — matches the 0.9 scale inverse
+    const MAX_ZOOM = 1.3;         // iframe zooms with page up to 130%
+
+    function getZoomLevel(): number {
+      // visualViewport.scale tracks pinch zoom on mobile
+      if (window.visualViewport && window.visualViewport.scale !== 1) {
+        return window.visualViewport.scale;
+      }
+      // For desktop browser zoom: compare current innerWidth to expected
+      // screen.availWidth is stable regardless of zoom
+      const ratio = window.screen.availWidth / window.innerWidth;
+      return Math.max(ratio, 1);
+    }
+
+    function updateIframeScale() {
+      const zoom = getZoomLevel();
+
+      if (zoom <= MAX_ZOOM) {
+        // Normal range: iframe scales naturally with page (use base values)
+        iframe.style.transform = `scale(${BASE_SCALE})`;
+        iframe.style.width = `${BASE_WIDTH}%`;
+        iframe.style.height = `${BASE_WIDTH}%`;
+      } else {
+        // Past threshold: counteract the extra zoom so iframe stays locked
+        const compensation = MAX_ZOOM / zoom;
+        const newScale = BASE_SCALE * compensation;
+        const newSize = BASE_WIDTH / compensation;
+        iframe.style.transform = `scale(${newScale})`;
+        iframe.style.width = `${newSize}%`;
+        iframe.style.height = `${newSize}%`;
+      }
+    }
+
+    // Listen to viewport changes (covers both pinch zoom and browser zoom)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', updateIframeScale);
+    }
+    // Also catch desktop browser zoom via window resize
+    window.addEventListener('resize', updateIframeScale);
+
+    // Initial check
+    updateIframeScale();
   })();
 </script>

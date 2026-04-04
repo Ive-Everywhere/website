@@ -21,7 +21,7 @@ const testimonials = [
 ];
 ---
 
-<section style="background: #f4f3ec; padding: 80px 24px;">
+<section class="ts-section">
   <div style="max-width: 1440px; margin: 0 auto; padding: 0 0;">
     <!-- Company tabs -->
     <div class="ts-tabs reveal">
@@ -55,6 +55,14 @@ const testimonials = [
 </section>
 
 <style>
+  /* ── Section ── */
+  .ts-section {
+    background: #f4f3ec;
+    padding: 48px 16px;
+  }
+  @media (min-width: 640px) { .ts-section { padding: 60px 24px; } }
+  @media (min-width: 1024px) { .ts-section { padding: 80px 24px; } }
+
   /* ── Tabs ── */
   .ts-tabs {
     display: flex;
@@ -152,14 +160,6 @@ const testimonials = [
     align-items: center;
     justify-content: center;
     gap: 10px;
-  }
-
-  .ts-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #4ade80;
-    flex-shrink: 0;
   }
 
   .ts-attr p {
