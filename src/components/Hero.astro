@@ -39,7 +39,7 @@
                 allow="autoplay"
                 sandbox="allow-scripts allow-same-origin"
                 tabindex="-1"
-                style="position: absolute; top: 0; left: 0; width: 111.11%; height: 111.11%; transform: scale(0.9); transform-origin: 0 0; border: none; background: #ffffff; contain: strict;"
+                class="hero-iframe"
               ></iframe>
             </div>
           </div>
@@ -148,6 +148,25 @@
   }
   @media (min-width: 768px) {
     .hero-bg-img { min-width: 2400px; }
+  }
+
+  /* Iframe: normal scale on mobile, slight zoom on desktop */
+  .hero-iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    transform: scale(1);
+    transform-origin: 0 0;
+    border: none;
+    background: #ffffff;
+    contain: strict;
+  }
+  @media (min-width: 768px) {
+    .hero-iframe {
+      width: 111.11%;
+      height: 111.11%;
+      transform: scale(0.9);
+    }
   }
 
   @media (max-width: 480px) {
@@ -296,48 +315,46 @@
     }
 
     // ── Layer 7: Zoom cap — iframe stops scaling past a threshold ──
-    const BASE_SCALE = 0.9;       // your current zoom at 100% browser zoom
-    const BASE_WIDTH = 111.11;    // % — matches the 0.9 scale inverse
-    const MAX_ZOOM = 1.3;         // iframe zooms with page up to 130%
+    const MAX_ZOOM = 1.3;
+
+    function getBaseValues() {
+      // Mobile (<768px): normal scale. Desktop: slight zoom.
+      const isDesktop = window.innerWidth >= 768;
+      return {
+        scale: isDesktop ? 0.9 : 1,
+        size: isDesktop ? 111.11 : 100,
+      };
+    }
 
     function getZoomLevel(): number {
-      // visualViewport.scale tracks pinch zoom on mobile
       if (window.visualViewport && window.visualViewport.scale !== 1) {
         return window.visualViewport.scale;
       }
-      // For desktop browser zoom: compare current innerWidth to expected
-      // screen.availWidth is stable regardless of zoom
       const ratio = window.screen.availWidth / window.innerWidth;
       return Math.max(ratio, 1);
     }
 
     function updateIframeScale() {
+      const { scale: baseScale, size: baseSize } = getBaseValues();
       const zoom = getZoomLevel();
 
       if (zoom <= MAX_ZOOM) {
-        // Normal range: iframe scales naturally with page (use base values)
-        iframe.style.transform = `scale(${BASE_SCALE})`;
-        iframe.style.width = `${BASE_WIDTH}%`;
-        iframe.style.height = `${BASE_WIDTH}%`;
+        iframe.style.transform = `scale(${baseScale})`;
+        iframe.style.width = `${baseSize}%`;
+        iframe.style.height = `${baseSize}%`;
       } else {
-        // Past threshold: counteract the extra zoom so iframe stays locked
         const compensation = MAX_ZOOM / zoom;
-        const newScale = BASE_SCALE * compensation;
-        const newSize = BASE_WIDTH / compensation;
-        iframe.style.transform = `scale(${newScale})`;
-        iframe.style.width = `${newSize}%`;
-        iframe.style.height = `${newSize}%`;
+        iframe.style.transform = `scale(${baseScale * compensation})`;
+        iframe.style.width = `${baseSize / compensation}%`;
+        iframe.style.height = `${baseSize / compensation}%`;
       }
     }
 
-    // Listen to viewport changes (covers both pinch zoom and browser zoom)
     if (window.visualViewport) {
       window.visualViewport.addEventListener('resize', updateIframeScale);
     }
-    // Also catch desktop browser zoom via window resize
     window.addEventListener('resize', updateIframeScale);
 
-    // Initial check
     updateIframeScale();
   })();
 </script>

@@ -69,32 +69,32 @@ const platform = [
           <div class="ft-card-hover"></div>
           <div class="ft-card-icon">
             {p.icon === 'colleagues' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f4f3ec" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
               </svg>
             )}
             {p.icon === 'cookbook' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f4f3ec" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="13" y2="11"/>
               </svg>
             )}
             {p.icon === 'teamdrive' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f4f3ec" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/>
               </svg>
             )}
             {p.icon === 'dashboards' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f4f3ec" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
               </svg>
             )}
             {p.icon === 'integrations' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f4f3ec" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
               </svg>
             )}
             {p.icon === 'abilities' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f4f3ec" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
               </svg>
             )}
@@ -235,13 +235,20 @@ const platform = [
     background: #d4d3c8;
     opacity: 0;
     transition: opacity 0.15s ease;
+    border-radius: 12px;
+  }
+  /* Contain the hover overflow */
+  .ft-cards {
+    overflow: hidden;
+    padding: 12px;
+    margin: -12px;
   }
   .ft-card:hover .ft-card-hover,
   .ft-card:active .ft-card-hover {
     opacity: 1;
   }
 
-  /* ── Icon block — window into shared bg image ── */
+  /* ── Icon block — window into shared bg image with overlay for icon contrast ── */
   .ft-card-icon {
     display: flex;
     align-items: center;
@@ -249,24 +256,47 @@ const platform = [
     width: 100%;
     aspect-ratio: 1;
     padding: 30%;
+    position: relative;
+    overflow: hidden;
+  }
+  .ft-card-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
     background: url('/images/products-bg.webp') center / 600% no-repeat;
     background-attachment: local;
+    z-index: 0;
+  }
+  .ft-card-icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 1;
+  }
+  .ft-card-icon svg {
+    position: relative;
+    z-index: 2;
   }
 
-  /* On single-column mobile, constrain icon block so it doesn't fill entire width */
+  /* On single-column mobile, constrain icon block — use fixed padding not % */
   @media (max-width: 479px) {
     .ft-card-icon {
-      max-width: 200px;
+      max-width: 140px;
+      padding: 30px;
+    }
+    .ft-card-icon::before {
+      background-size: 300%;
     }
   }
 
   /* Each card shows a different slice of the background */
-  .ft-card:nth-child(1) .ft-card-icon { background-position: 0% 50%; }
-  .ft-card:nth-child(2) .ft-card-icon { background-position: 20% 50%; }
-  .ft-card:nth-child(3) .ft-card-icon { background-position: 40% 50%; }
-  .ft-card:nth-child(4) .ft-card-icon { background-position: 60% 50%; }
-  .ft-card:nth-child(5) .ft-card-icon { background-position: 80% 50%; }
-  .ft-card:nth-child(6) .ft-card-icon { background-position: 100% 50%; }
+  .ft-card:nth-child(1) .ft-card-icon::before { background-position: 0% 50%; }
+  .ft-card:nth-child(2) .ft-card-icon::before { background-position: 20% 50%; }
+  .ft-card:nth-child(3) .ft-card-icon::before { background-position: 40% 50%; }
+  .ft-card:nth-child(4) .ft-card-icon::before { background-position: 60% 50%; }
+  .ft-card:nth-child(5) .ft-card-icon::before { background-position: 80% 50%; }
+  .ft-card:nth-child(6) .ft-card-icon::before { background-position: 100% 50%; }
 
   .ft-card-icon svg {
     width: 100%;
