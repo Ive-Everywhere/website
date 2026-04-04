@@ -58,7 +58,6 @@
 
 html {
   scroll-behavior: auto;
-  overflow-x: hidden;
   scroll-padding-top: 80px;
 }
 @media (min-width: 640px) {
@@ -69,7 +68,6 @@ html {
 }
 
 body {
-  overflow-x: hidden;
   background: #ffffff;
   color: #171717;
   -webkit-font-smoothing: antialiased;
