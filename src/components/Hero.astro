@@ -314,59 +314,7 @@
       observer.observe(wrapper);
     }
 
-    // ── Layer 7: Zoom cap ──
-    // At 100% zoom: iframe shows at its default scale (desktop: 0.9, mobile: 1)
-    // Zoom in up to 130%: iframe zooms along with the page normally
-    // Past 130%: iframe stays frozen at its 130% visual size while page keeps zooming
-    //
-    // How: past the cap, we divide the iframe's CSS scale by the excess zoom,
-    // exactly counteracting the browser's magnification so the iframe stays the same
-    // visual size on screen.
-
-    const MAX_ZOOM = 1.3;
-
-    // Capture the initial layout viewport width before any zoom
-    const initialLayoutWidth = window.innerWidth;
-
-    function getBaseScale() {
-      return initialLayoutWidth >= 768 ? 0.9 : 1;
-    }
-
-    function getZoomLevel(): number {
-      // Mobile pinch zoom
-      if (window.visualViewport && window.visualViewport.scale > 1) {
-        return window.visualViewport.scale;
-      }
-      // Desktop browser zoom
-      if (initialLayoutWidth >= 768) {
-        const ratio = window.screen.availWidth / window.innerWidth;
-        return Math.max(ratio, 1);
-      }
-      return 1;
-    }
-
-    function updateIframeScale() {
-      const base = getBaseScale();
-      const zoom = getZoomLevel();
-
-      if (zoom <= MAX_ZOOM) {
-        // Normal range: remove any inline override, let CSS handle it naturally
-        // Browser zoom magnifies the iframe along with everything else — this is fine
-        iframe.style.removeProperty('transform');
-      } else {
-        // Past cap: counteract the extra zoom so iframe freezes visually
-        // e.g. at 2x zoom: scale = base * (1.3 / 2.0) = base * 0.65
-        // The browser magnifies everything by 2x, but we shrink the iframe by 0.65,
-        // so net visual size = base * 0.65 * 2.0 = base * 1.3 = the cap
-        iframe.style.transform = `scale(${base * MAX_ZOOM / zoom})`;
-      }
-    }
-
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', updateIframeScale);
-    }
-    window.addEventListener('resize', updateIframeScale);
-
-    updateIframeScale();
+    // Zoom cap is handled inside the iframe (demo app) itself.
+    // See eluu-demo/src/main.tsx for the implementation.
   })();
 </script>
