@@ -23,7 +23,7 @@
         </p>
         <div class="hero-ctas">
           <a href="https://app.eluu.ai" class="hero-btn hero-btn-dark">Get started</a>
-          <a href="https://app.eluu.ai" class="hero-btn hero-btn-light">Book a demo</a>
+          <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="hero-btn hero-btn-light">Book a demo</a>
         </div>
       </div>
 
@@ -322,20 +322,29 @@
     }
 
     // ── Hide iframe when zoom exceeds 200% ──
-    const iframeWrap = iframe.closest('[data-iframe-wrapper]') as HTMLElement;
-    if (iframeWrap) {
+    if (wrapper) {
+      const iframeWrap = wrapper as HTMLElement;
       const MAX_ZOOM = 2; // 200%
 
       function checkZoom() {
-        // Desktop: outerWidth/innerWidth = actual browser zoom (works at any initial zoom)
+        // Desktop: outerWidth/innerWidth = browser zoom level
         const desktopZoom = window.outerWidth / window.innerWidth;
         // Mobile: visualViewport.scale = pinch zoom level
         const mobileZoom = window.visualViewport?.scale ?? 1;
         iframeWrap.style.display = (desktopZoom > MAX_ZOOM || mobileZoom > MAX_ZOOM) ? 'none' : '';
       }
 
+      // Desktop: resize fires on browser zoom
       window.addEventListener('resize', checkZoom);
-      window.visualViewport?.addEventListener('resize', checkZoom);
+      // Mobile: poll visualViewport.scale — events are unreliable on iOS Safari
+      // and touchend doesn't propagate from cross-origin iframes
+      if (window.visualViewport) {
+        let pollId = setInterval(checkZoom, 400);
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) { clearInterval(pollId); }
+          else { checkZoom(); pollId = setInterval(checkZoom, 400); }
+        });
+      }
       checkZoom();
     }
   })();
