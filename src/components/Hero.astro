@@ -31,10 +31,10 @@
       <div class="reveal hero-iframe-wrap" data-iframe-wrapper>
         <div class="iframe-glow">
           <div class="iframe-border">
-            <div style="aspect-ratio: 16 / 9.5; border-radius: 14px; overflow: hidden; position: relative; background: #ffffff; contain: layout style; will-change: transform; isolation: isolate;">
+            <div class="iframe-aspect-box">
               <iframe
                 id="hero-iframe"
-                src="https://demo.eluu.ai/?autoplay=1&embed=1"
+                src="https://localhost:3001/?autoplay=1&embed=1"
                 title="Eluu product demo"
                 allow="autoplay"
                 sandbox="allow-scripts allow-same-origin"
@@ -150,16 +150,23 @@
     .hero-bg-img { min-width: 2400px; }
   }
 
-  /* Iframe: normal scale on mobile, slight zoom on desktop */
+  /* Iframe aspect container — clips the fixed-size iframe */
+  .iframe-aspect-box {
+    aspect-ratio: 16 / 9.5;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    background: #ffffff;
+  }
+
+  /* Iframe element */
   .hero-iframe {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    transform: scale(1);
     transform-origin: 0 0;
     border: none;
     background: #ffffff;
-    contain: strict;
   }
   @media (min-width: 768px) {
     .hero-iframe {
@@ -314,7 +321,22 @@
       observer.observe(wrapper);
     }
 
-    // Zoom cap is handled inside the iframe (demo app) itself.
-    // See eluu-demo/src/main.tsx for the implementation.
+    // ── Hide iframe when zoom exceeds 200% ──
+    const iframeWrap = iframe.closest('[data-iframe-wrapper]') as HTMLElement;
+    if (iframeWrap) {
+      const MAX_ZOOM = 2; // 200%
+
+      function checkZoom() {
+        // Desktop: outerWidth/innerWidth = actual browser zoom (works at any initial zoom)
+        const desktopZoom = window.outerWidth / window.innerWidth;
+        // Mobile: visualViewport.scale = pinch zoom level
+        const mobileZoom = window.visualViewport?.scale ?? 1;
+        iframeWrap.style.display = (desktopZoom > MAX_ZOOM || mobileZoom > MAX_ZOOM) ? 'none' : '';
+      }
+
+      window.addEventListener('resize', checkZoom);
+      window.visualViewport?.addEventListener('resize', checkZoom);
+      checkZoom();
+    }
   })();
 </script>
