@@ -1,18 +1,9 @@
-<div class="land" id="land"></div>
+<!-- Minimal scroll reveal for non-React elements -->
 <script>
-  const land = document.getElementById('land');
-  if (land) {
-    for (let i = 0; i < 20; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      const s = Math.random() * 4 + 2;
-      p.style.width = s + 'px';
-      p.style.height = s + 'px';
-      p.style.left = Math.random() * 100 + '%';
-      p.style.bottom = '0';
-      p.style.animationDuration = (Math.random() * 6 + 4) + 's';
-      p.style.animationDelay = (Math.random() * 8) + 's';
-      land.appendChild(p);
-    }
-  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>

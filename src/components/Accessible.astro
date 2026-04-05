@@ -1,70 +1,378 @@
-<section class="access">
-  <div class="access-inner">
-    <h2>Access from <em>anywhere</em></h2>
-    <p class="sub-h">Desktop, terminal, SDK, or deploy on any surface your team already uses.</p>
-    <div class="access-box">
+---
+import { WordReveal } from './ScrollReveal';
+---
 
-      <!-- Row 1: Desktop App -->
-      <div class="access-row">
-        <div class="ar-img">
-          <div class="mock-icons">
-            <div class="mock-icon" style="background:linear-gradient(135deg,#1a181b,#242126);">
-              <span style="font-family:var(--fd);color:var(--alr);">E</span>
-            </div>
-            <div class="mock-icon" style="background:linear-gradient(135deg,#242126,#33303a);transform:translateY(-8px);">
-              <span style="font-size:16px;">&#9881;</span>
-            </div>
-            <div class="mock-icon" style="background:linear-gradient(135deg,#33303a,#3d1a2e);">
-              <span style="font-size:16px;">&#9733;</span>
-            </div>
-          </div>
-        </div>
-        <h4>Desktop app</h4>
-        <a class="btn-dark" href="#">Download</a>
-      </div>
-
-      <!-- Row 2: Terminal -->
-      <div class="access-row">
-        <div class="ar-img">
-          <div class="mock-t">
-            <div><span class="p">$</span> <span class="c">eluu</span> <span class="o">run</span> <span class="o">"summarize yesterday's tickets"</span></div>
-            <div style="margin-top:6px;"><span class="p">&gt;</span> <span class="o">Analyzing 47 tickets...</span><span class="cur"></span></div>
-          </div>
-        </div>
-        <h4>Terminal</h4>
-        <a class="btn-dark" href="#">View CLI docs</a>
-      </div>
-
-      <!-- Row 3: SDK -->
-      <div class="access-row">
-        <div class="ar-img">
-          <div class="mock-code">
-            <span class="kw">import</span> <span class="fn">{'{ Eluu }'}</span> <span class="kw">from</span> <span class="str">'@eluu/sdk'</span><br/>
-            <br/>
-            <span class="kw">const</span> <span class="fn">colleague</span> = <span class="kw">await</span> Eluu.<span class="fn">create</span>({'{'}<br/>
-            &nbsp;&nbsp;name: <span class="str">'ops-lead'</span>,<br/>
-            &nbsp;&nbsp;tools: [<span class="str">'salesforce'</span>, <span class="str">'slack'</span>]<br/>
-            {'}'})<br/>
-          </div>
-        </div>
-        <h4>SDK</h4>
-        <a class="btn-dark" href="#">Explore SDK</a>
-      </div>
-
-      <!-- Row 4: Deploy on any surface -->
-      <div class="access-row">
-        <div class="ar-img">
-          <div class="mock-pills">
-            <span class="mock-pill">Slack</span>
-            <span class="mock-pill">Web</span>
-            <span class="mock-pill">Mobile</span>
-            <span class="mock-pill">API</span>
-          </div>
-        </div>
-        <h4>Deploy on any surface</h4>
-        <a class="btn-dark" href="#">See integrations</a>
-      </div>
-
+<!-- SECTION 1: Word Reveal -->
+<section class="word-reveal" id="word-reveal">
+  <WordReveal
+    client:visible
+    text="Your team thinks. Your colleagues build. That's the new way to work."
+    className="word-reveal-text"
+  />
+  <div class="progress-line">
+    <div class="progress-track">
+      <div class="progress-dot teal" style="left:25%;"></div>
+      <div class="progress-dot teal" style="left:50%;"></div>
+      <div class="progress-dot green" style="left:75%;"></div>
     </div>
   </div>
 </section>
+
+<div class="section-border">
+  <span class="corner-mark bl"></span>
+  <span class="corner-mark br"></span>
+</div>
+
+<!-- SECTION 2: "For the rest" transition -->
+<section class="features" style="padding-top:60px;padding-bottom:60px;">
+  <div style="text-align:right;max-width:720px;margin-left:auto;">
+    <span style="font-family:var(--fd);font-style:italic;font-size:36px;color:var(--green);display:block;margin-bottom:12px;">For everything else</span>
+    <span style="font-family:var(--fd);font-size:38px;color:var(--t1);line-height:1.3;display:block;">a colleague that builds, ships, and iterates — so your team stays focused on what matters.</span>
+  </div>
+</section>
+
+<!-- SECTION 3: Dark section with INBOX split -->
+<div class="dark-section">
+  <div class="dark-inner">
+    <div class="dark-split">
+      <div>
+        <div class="eyebrow">INBOX</div>
+        <div class="dark-heading">Your colleague builds it. You review it.</div>
+      </div>
+      <div>
+        <div class="dark-card">
+          <div class="dark-card-inner" style="padding:0;flex-direction:column;overflow:hidden;">
+            <!-- Inbox header -->
+            <div style="padding:20px 24px 16px;border-bottom:1px solid var(--cream-x);display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-family:var(--fd);font-size:18px;color:var(--t1);font-weight:600;">Inbox</span>
+              <span style="font-size:12px;color:var(--t3);font-family:var(--fm);">3 new</span>
+            </div>
+            <!-- Message rows -->
+            <div style="display:flex;flex-direction:column;">
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--cream-x);">
+                <div style="width:32px;height:32px;border-radius:50%;background:#7c6fe0;flex-shrink:0;"></div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:14px;color:var(--t1);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Password reset request from user #4821</div>
+                  <div style="font-size:12px;color:var(--t3);margin-top:2px;">Needs approval to proceed</div>
+                </div>
+                <span style="font-size:11px;color:var(--ts);white-space:nowrap;font-family:var(--fm);">1 hr ago</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--cream-x);">
+                <div style="width:32px;height:32px;border-radius:50%;background:var(--accent);flex-shrink:0;"></div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:14px;color:var(--t1);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Invoice #1092 flagged for review</div>
+                  <div style="font-size:12px;color:var(--t3);margin-top:2px;">Amount exceeds policy threshold</div>
+                </div>
+                <span style="font-size:11px;color:var(--ts);white-space:nowrap;font-family:var(--fm);">1 hr ago</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--cream-x);">
+                <div style="width:32px;height:32px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:14px;color:var(--t1);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Onboarding checklist completed for new hire</div>
+                  <div style="font-size:12px;color:var(--t3);margin-top:2px;">All steps verified</div>
+                </div>
+                <span style="font-size:11px;color:var(--ts);white-space:nowrap;font-family:var(--fm);">2 hr ago</span>
+              </div>
+            </div>
+            <!-- Message detail -->
+            <div style="padding:20px 24px;border-top:2px solid var(--cream-x);">
+              <div style="font-size:11px;color:var(--t3);font-family:var(--fm);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Summary</div>
+              <p style="font-size:13px;color:var(--t2);line-height:1.5;margin:0 0 16px;">User requested a password reset. Identity verified via email confirmation. Awaiting your approval to send the reset link.</p>
+              <div style="display:flex;gap:10px;">
+                <button style="padding:8px 20px;border-radius:var(--radius-sm);background:var(--accent);color:#fff;border:none;font-size:13px;font-weight:500;cursor:pointer;">Approve</button>
+                <button style="padding:8px 20px;border-radius:var(--radius-sm);background:transparent;color:var(--t2);border:1px solid var(--td);font-size:13px;font-weight:500;cursor:pointer;">Look up</button>
+              </div>
+            </div>
+            <!-- Reply bar -->
+            <div style="padding:12px 24px;border-top:1px solid var(--cream-x);display:flex;align-items:center;gap:10px;">
+              <div style="flex:1;padding:10px 14px;background:var(--cream-s);border-radius:var(--radius-sm);font-size:13px;color:var(--ts);">Reply or add a note...</div>
+              <div style="width:32px;height:32px;border-radius:var(--radius-sm);background:var(--accent);display:flex;align-items:center;justify-content:center;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-border" style="border-color:rgba(255,255,255,0.06);margin:80px 0;">
+      <span class="corner-mark bl" style="background:var(--green);"></span>
+      <span class="corner-mark br" style="background:var(--green);"></span>
+    </div>
+
+    <!-- SECTION 4: Dark section with CHAT split (reversed) -->
+    <div class="dark-split">
+      <div>
+        <div class="dark-card">
+          <div class="dark-card-inner" style="padding:0;flex-direction:column;overflow:hidden;">
+            <!-- Chat messages -->
+            <div style="padding:28px 24px;display:flex;flex-direction:column;gap:16px;min-height:280px;">
+              <!-- User message -->
+              <div style="display:flex;justify-content:flex-end;">
+                <div style="background:var(--accent);color:#fff;padding:12px 18px;border-radius:var(--radius) var(--radius) 4px var(--radius);font-size:14px;line-height:1.5;max-width:85%;">
+                  What were the main causes of our support load last week?
+                </div>
+              </div>
+              <!-- AI thinking -->
+              <div style="display:flex;align-items:flex-end;gap:10px;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--cream-x);flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4m-9-9h4m14 0h4"/></svg>
+                </div>
+                <div style="background:var(--cream-s);padding:12px 18px;border-radius:4px var(--radius) var(--radius) var(--radius);font-size:14px;color:var(--t2);display:flex;align-items:center;gap:10px;">
+                  <span>Thinking</span>
+                  <span class="chat-spinner"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="eyebrow">CHAT</div>
+        <div class="dark-heading">Ask your colleague to build anything on demand</div>
+      </div>
+    </div>
+
+    <div class="section-border" style="border-color:rgba(255,255,255,0.06);margin:80px 0;">
+      <span class="corner-mark bl" style="background:var(--green);"></span>
+      <span class="corner-mark br" style="background:var(--green);"></span>
+    </div>
+
+    <!-- SECTION 5: Timeline -->
+    <div class="timeline">
+      <div class="timeline-header">
+        <div class="eyebrow" style="color:var(--green);">GET STARTED</div>
+        <h2 style="font-family:var(--fd);font-size:38px;font-weight:400;color:var(--cream);letter-spacing:-1px;line-height:1.2;margin-bottom:40px;">From idea to working app in days</h2>
+      </div>
+      <div class="timeline-grid">
+        <div class="timeline-col">
+          <div class="week-tag teal">Day 1</div>
+          <h4>Tell it what to build</h4>
+          <ul>
+            <li><span class="check">&#10003;</span> Connect apps in 30 min</li>
+            <li><span class="check">&#10003;</span> Import skills from template library</li>
+            <li><span class="check">&#10003;</span> Set up custom access policies</li>
+            <li><span class="check">&#10003;</span> Link existing knowledge base</li>
+          </ul>
+        </div>
+        <div class="timeline-col">
+          <div class="week-tag teal">Day 3</div>
+          <h4>Review and refine</h4>
+          <ul>
+            <li><span class="check">&#10003;</span> Create custom colleague skills</li>
+            <li><span class="check">&#10003;</span> Collect insights using dashboard</li>
+            <li><span class="check">&#10003;</span> Colleagues suggest workflow improvements</li>
+          </ul>
+        </div>
+        <div class="timeline-col">
+          <div class="week-tag dark">Week 2</div>
+          <h4>It runs on its own</h4>
+          <ul>
+            <li><span class="check">&#10003;</span> Over 80% of tasks auto-resolved</li>
+            <li><span class="check">&#10003;</span> Near-instant responses for end users</li>
+            <li><span class="check">&#10003;</span> Team freed up for strategic work</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-border">
+  <span class="corner-mark tl"></span>
+  <span class="corner-mark tr"></span>
+</div>
+
+<!-- SECTION 6: Integrations -->
+<section class="features" style="padding-top:60px;padding-bottom:60px;">
+  <div style="text-align:center;max-width:720px;margin:0 auto 48px;">
+    <div class="eyebrow" style="color:var(--green);">INTEGRATIONS</div>
+    <h2 style="font-family:var(--fd);font-size:42px;color:var(--t1);line-height:1.2;margin-top:16px;">Unlock hundreds of prebuilt actions with native integrations.</h2>
+  </div>
+  <div style="background:var(--cream);border-radius:var(--radius);padding:48px 40px;max-width:900px;margin:0 auto;position:relative;overflow:hidden;">
+    <div class="integrations-geo-bg"></div>
+    <div class="integrations-row">
+      <div class="int-icon" style="background:#4285F4;"></div>
+      <div class="int-icon" style="background:#7c6fe0;"></div>
+      <div class="int-icon" style="background:#00a86b;"></div>
+      <div class="int-icon" style="background:#e74c3c;"></div>
+      <div class="int-icon" style="background:#f39c12;"></div>
+      <div class="int-icon center-icon" style="background:var(--accent);"></div>
+      <div class="int-icon" style="background:#1da1f2;"></div>
+      <div class="int-icon" style="background:#6c5ce7;"></div>
+      <div class="int-icon" style="background:#2d3436;"></div>
+      <div class="int-icon" style="background:#00b894;"></div>
+      <div class="int-icon" style="background:#e17055;"></div>
+      <div class="int-icon" style="background:#636e72;"></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-border">
+  <span class="corner-mark bl"></span>
+  <span class="corner-mark br"></span>
+</div>
+
+<!-- SECTION 7: Security -->
+<section class="features" style="padding-top:60px;padding-bottom:80px;">
+  <div class="security">
+    <div class="eyebrow">SECURITY</div>
+    <h2>Designed to keep your data safe</h2>
+    <p>End-to-end encryption. Seamlessly integrates with SSO providers and existing IAM policies.</p>
+    <div class="cert-icons">
+      <div class="cert-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>SOC 2</span>
+      </div>
+      <div class="cert-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        <span>HIPAA</span>
+      </div>
+      <div class="cert-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span>GDPR</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Progress line */
+  .progress-line {
+    max-width: 480px;
+    margin: 48px auto 0;
+    padding: 0 var(--side-pad);
+  }
+  .progress-track {
+    position: relative;
+    height: 2px;
+    background: var(--td);
+    border-radius: 2px;
+  }
+  .progress-dot {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+  }
+  .progress-dot.teal { background: var(--green); }
+  .progress-dot.green { background: var(--green); }
+
+  /* Week tags */
+  .week-tag {
+    display: inline-block;
+    padding: 6px 16px;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--cream);
+    margin-bottom: 16px;
+  }
+  .week-tag.teal {
+    border-color: var(--green);
+  }
+  .week-tag.dark {
+    border-color: var(--cream);
+  }
+
+  /* Chat spinner */
+  .chat-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--td);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Integrations row */
+  .integrations-geo-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(19,19,18,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(19,19,18,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+  .integrations-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap;
+  }
+  .int-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  .int-icon.center-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 18px;
+    border: 3px solid var(--green);
+    box-shadow: 0 0 20px rgba(0,201,167,0.3), 0 0 40px rgba(0,201,167,0.1);
+  }
+  .int-icon:hover {
+    transform: scale(1.05);
+  }
+
+  /* Certification icons */
+  .cert-icons {
+    display: flex;
+    gap: 48px;
+    margin-top: 32px;
+  }
+  .cert-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--cream);
+    border: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .cert-icon span {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--t2);
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 768px) {
+    .integrations-row {
+      gap: 12px;
+    }
+    .int-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+    }
+    .int-icon.center-icon {
+      width: 64px;
+      height: 64px;
+    }
+    .cert-icons {
+      gap: 24px;
+    }
+    .cert-icon {
+      width: 64px;
+      height: 64px;
+    }
+  }
+</style>

@@ -1,33 +1,20 @@
-<section class="hero has-grid">
-  <div class="hero-glow"></div>
-  <div class="hero-icon">E</div>
-  <h1><em>AI Colleagues</em><br/>for your whole team</h1>
-  <p class="sub">Train AI colleagues that securely access your platforms, learn from your data, and run operations 24/7 — all under your control.</p>
-  <div class="hero-btns">
-    <a class="btn btn-fill" href="#">Get started for free</a>
-    <a class="btn btn-ghost" href="#">Request a demo</a>
+---
+import { RotatingText } from './ScrollReveal';
+---
+<section class="hero">
+  <div class="hero-left">
+    <h1>Your team focuses on thinking
+      <RotatingText
+        client:load
+        phrases={["colleagues handle the doing", "building your dashboards", "automating your workflows", "shipping your reports"]}
+      />
+    </h1>
+    <div class="hero-form">
+      <input type="email" placeholder="What's your work email?" />
+      <a class="btn btn-dark" href="#">Book a demo</a>
+    </div>
   </div>
-  <div class="hero-ss">
-    <div class="ss-bar">
-      <div class="ss-dot"></div><div class="ss-dot" style="opacity:.5"></div><div class="ss-dot" style="opacity:.2"></div>
-      <span style="margin-left:10px;font-size:10px;color:var(--ts);font-family:var(--fm);">Eluu AI</span>
-    </div>
-    <div class="ss-body">
-      <div class="ss-side">
-        <div style="font-size:10px;color:var(--ts);margin-bottom:10px;padding:0 10px;font-family:var(--fm);letter-spacing:0.5px;">COLLEAGUES</div>
-        <div class="ss-item on"><span class="d" style="background:var(--al)"></span>Ops Manager</div>
-        <div class="ss-item"><span class="d" style="background:#1fc16b"></span>Data Analyst</div>
-        <div class="ss-item"><span class="d" style="background:#7d52f4"></span>Sales Rep</div>
-        <div class="ss-item"><span class="d" style="background:#fa7319"></span>Support Agent</div>
-      </div>
-      <div class="ss-main">
-        <div class="ss-chat">
-          <div class="cb cb-u">Pull last quarter's revenue by region from Salesforce</div>
-          <div class="cb cb-u">Compare against forecast in the Google Sheet</div>
-          <div class="cb-act">Accessed Salesforce &middot; 1.8s &nbsp;&nbsp; Read Google Sheets &middot; 0.4s</div>
-          <div class="cb cb-a">Revenue was $4.2M vs $3.8M forecast — 10.5% above target. APAC drove the beat. Want me to draft the board update?</div>
-        </div>
-      </div>
-    </div>
+  <div class="hero-right">
+    <p class="sub">Eluu colleagues build dashboards, automate workflows, and ship deliverables — so your team can focus on strategy and decisions.</p>
   </div>
 </section>
