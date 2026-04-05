@@ -31,10 +31,10 @@
       <div class="reveal hero-iframe-wrap" data-iframe-wrapper>
         <div class="iframe-glow">
           <div class="iframe-border">
-            <div style="aspect-ratio: 16 / 9.5; border-radius: 14px; overflow: hidden; position: relative; background: #ffffff; contain: layout style; will-change: transform; isolation: isolate;">
+            <div class="iframe-aspect-box">
               <iframe
                 id="hero-iframe"
-                src="https://demo.eluu.ai/?autoplay=1&embed=1"
+                src="https://localhost:3001/?autoplay=1&embed=1"
                 title="Eluu product demo"
                 allow="autoplay"
                 sandbox="allow-scripts allow-same-origin"
@@ -150,16 +150,23 @@
     .hero-bg-img { min-width: 2400px; }
   }
 
-  /* Iframe: normal scale on mobile, slight zoom on desktop */
+  /* Iframe aspect container — clips the fixed-size iframe */
+  .iframe-aspect-box {
+    aspect-ratio: 16 / 9.5;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    background: #ffffff;
+  }
+
+  /* Iframe element */
   .hero-iframe {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    transform: scale(1);
     transform-origin: 0 0;
     border: none;
     background: #ffffff;
-    contain: strict;
   }
   @media (min-width: 768px) {
     .hero-iframe {
@@ -314,59 +321,22 @@
       observer.observe(wrapper);
     }
 
-    // ── Layer 7: Zoom cap ──
-    // At 100% zoom: iframe shows at its default scale (desktop: 0.9, mobile: 1)
-    // Zoom in up to 130%: iframe zooms along with the page normally
-    // Past 130%: iframe stays frozen at its 130% visual size while page keeps zooming
-    //
-    // How: past the cap, we divide the iframe's CSS scale by the excess zoom,
-    // exactly counteracting the browser's magnification so the iframe stays the same
-    // visual size on screen.
+    // ── Hide iframe when zoom exceeds 200% ──
+    const iframeWrap = iframe.closest('[data-iframe-wrapper]') as HTMLElement;
+    if (iframeWrap) {
+      const MAX_ZOOM = 2; // 200%
 
-    const MAX_ZOOM = 1.3;
-
-    // Capture the initial layout viewport width before any zoom
-    const initialLayoutWidth = window.innerWidth;
-
-    function getBaseScale() {
-      return initialLayoutWidth >= 768 ? 0.9 : 1;
-    }
-
-    function getZoomLevel(): number {
-      // Mobile pinch zoom
-      if (window.visualViewport && window.visualViewport.scale > 1) {
-        return window.visualViewport.scale;
+      function checkZoom() {
+        // Desktop: outerWidth/innerWidth = actual browser zoom (works at any initial zoom)
+        const desktopZoom = window.outerWidth / window.innerWidth;
+        // Mobile: visualViewport.scale = pinch zoom level
+        const mobileZoom = window.visualViewport?.scale ?? 1;
+        iframeWrap.style.display = (desktopZoom > MAX_ZOOM || mobileZoom > MAX_ZOOM) ? 'none' : '';
       }
-      // Desktop browser zoom
-      if (initialLayoutWidth >= 768) {
-        const ratio = window.screen.availWidth / window.innerWidth;
-        return Math.max(ratio, 1);
-      }
-      return 1;
+
+      window.addEventListener('resize', checkZoom);
+      window.visualViewport?.addEventListener('resize', checkZoom);
+      checkZoom();
     }
-
-    function updateIframeScale() {
-      const base = getBaseScale();
-      const zoom = getZoomLevel();
-
-      if (zoom <= MAX_ZOOM) {
-        // Normal range: remove any inline override, let CSS handle it naturally
-        // Browser zoom magnifies the iframe along with everything else — this is fine
-        iframe.style.removeProperty('transform');
-      } else {
-        // Past cap: counteract the extra zoom so iframe freezes visually
-        // e.g. at 2x zoom: scale = base * (1.3 / 2.0) = base * 0.65
-        // The browser magnifies everything by 2x, but we shrink the iframe by 0.65,
-        // so net visual size = base * 0.65 * 2.0 = base * 1.3 = the cap
-        iframe.style.transform = `scale(${base * MAX_ZOOM / zoom})`;
-      }
-    }
-
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', updateIframeScale);
-    }
-    window.addEventListener('resize', updateIframeScale);
-
-    updateIframeScale();
   })();
 </script>
