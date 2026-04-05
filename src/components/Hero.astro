@@ -13,17 +13,22 @@
   <!-- Content area — all in normal flow so section height is correct -->
   <div class="hero-content">
     <div class="hero-inner">
-      <!-- Text block -->
-      <div class="reveal" style="display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center;">
-        <h1 class="hero-heading">
-          Your best colleagues aren't human anymore.
-        </h1>
-        <p class="hero-subheading">
-          Eluu colleagues connect to your tools, learn your workflows, and execute real work — on repeat, 24/7, without reminders.
-        </p>
-        <div class="hero-ctas">
-          <a href="https://app.eluu.ai" class="hero-btn hero-btn-dark">Get started</a>
-          <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="hero-btn hero-btn-light">Book a demo</a>
+      <!-- Top row: title+CTAs left, subtext right -->
+      <div class="hero-top">
+        <div class="hero-left reveal">
+          <h1 class="hero-heading">
+            <span class="rotate-clip"><span class="rotate-track"><span class="rotate-word">Revenue operations</span><span class="rotate-word">Sales operations</span><span class="rotate-word">Marketing operations</span><span class="rotate-word">Engineering operations</span><span class="rotate-word" aria-hidden="true">Revenue operations</span></span></span><br />
+            Run by AI agents
+          </h1>
+        </div>
+        <div class="hero-right reveal">
+          <p class="hero-subheading">
+            Eluu colleagues connect to your tools, learn your workflows, and execute real work — on repeat, 24/7, without reminders.
+          </p>
+          <div class="hero-ctas">
+            <a href="https://app.eluu.ai" class="hero-btn hero-btn-dark">Get started</a>
+            <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="hero-btn hero-btn-light">Book a demo</a>
+          </div>
         </div>
       </div>
 
@@ -55,13 +60,39 @@
     position: relative;
     overflow: hidden;
   }
+  .hero-top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  @media (max-width: 768px) {
+    .hero-top { flex-direction: column; align-items: flex-start; gap: 24px; }
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    flex-shrink: 0;
+  }
+
+  .hero-right {
+    flex-shrink: 0;
+    max-width: 380px;
+    padding-bottom: 6px;
+  }
+  @media (max-width: 768px) {
+    .hero-right { max-width: 100%; }
+  }
+
   .hero-ctas {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: 8px;
     flex-wrap: wrap;
-    justify-content: center;
+    margin-top: 20px;
   }
   .hero-btn {
     font-family: 'Inter', sans-serif;
@@ -85,8 +116,7 @@
     padding: 0 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 24px;
+    gap: 48px;
     box-sizing: border-box;
   }
   @media (max-width: 480px) {
@@ -96,12 +126,12 @@
   .hero-heading {
     font-family: 'Season Mix', sans-serif;
     font-weight: 700;
-    font-size: clamp(28px, 7vw, 80px);
+    font-size: clamp(32px, 6vw, 72px);
     letter-spacing: -2px;
     color: #17100e;
-    line-height: 1;
+    line-height: 1.1;
     margin: 0;
-    overflow-wrap: break-word;
+    text-align: left;
   }
   @media (max-width: 480px) {
     .hero-heading { letter-spacing: -1px; }
@@ -110,12 +140,46 @@
   .hero-subheading {
     font-family: 'Inter', sans-serif;
     font-weight: 400;
-    font-size: clamp(15px, 2.5vw, 24px);
-    letter-spacing: -0.3px;
-    color: #5c5c5c;
-    line-height: 1.5;
+    font-size: 16px;
+    letter-spacing: -0.2px;
+    color: #888;
+    line-height: 1.6;
     margin: 0;
-    max-width: 720px;
+    text-align: left;
+  }
+
+  /* ── Rotating words ── */
+  .rotate-clip {
+    display: inline-flex;
+    flex-direction: column;
+    height: 1.1em;
+    overflow: hidden;
+    vertical-align: bottom;
+    color: #ED733B;
+  }
+
+  .rotate-track {
+    display: flex;
+    flex-direction: column;
+    animation: text-slide 15s cubic-bezier(0.83, 0, 0.17, 1) infinite;
+    text-align: left;
+  }
+
+  .rotate-word {
+    display: block;
+    height: 1.1em;
+    line-height: 1.1;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* 4 words + 1 duplicate = 5 items */
+  @keyframes text-slide {
+    0%, 20%        { transform: translateY(0); }
+    25%, 45%       { transform: translateY(-20%); }
+    50%, 70%       { transform: translateY(-40%); }
+    75%, 95%       { transform: translateY(-60%); }
+    100%           { transform: translateY(-80%); }
   }
 
   .hero-iframe-wrap {
@@ -131,11 +195,11 @@
   .hero-content {
     position: relative;
     z-index: 1;
-    padding: 80px 0 16px;
+    padding: 120px 0 16px;
   }
-  @media (min-width: 480px) { .hero-content { padding: 88px 0 20px; } }
-  @media (min-width: 640px) { .hero-content { padding: 100px 0 40px; } }
-  @media (min-width: 1024px) { .hero-content { padding: 120px 0 40px; } }
+  @media (min-width: 480px) { .hero-content { padding: 130px 0 20px; } }
+  @media (min-width: 640px) { .hero-content { padding: 140px 0 40px; } }
+  @media (min-width: 1024px) { .hero-content { padding: 140px 0 40px; } }
 
   .hero-bg-img {
     position: absolute;
