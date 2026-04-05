@@ -69,9 +69,10 @@ const testimonials = [
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 36px;
+    gap: 20px;
     margin-bottom: 40px;
   }
+  @media (min-width: 360px) { .ts-tabs { gap: 36px; } }
   @media (min-width: 640px) { .ts-tabs { gap: 56px; margin-bottom: 56px; } }
   @media (min-width: 1024px) { .ts-tabs { gap: 72px; } }
 
@@ -93,9 +94,14 @@ const testimonials = [
   }
 
   /* Each logo gets its own width so the TEXT portion aligns visually */
-  .ts-logo-testmu { width: 140px; }
-  .ts-logo-loom { width: 120px; }
-  .ts-logo-rippling { width: 180px; }
+  .ts-logo-testmu { width: 100px; }
+  .ts-logo-loom { width: 80px; }
+  .ts-logo-rippling { width: 120px; }
+  @media (min-width: 360px) {
+    .ts-logo-testmu { width: 140px; }
+    .ts-logo-loom { width: 120px; }
+    .ts-logo-rippling { width: 180px; }
+  }
 
   @media (min-width: 640px) {
     .ts-logo-testmu { width: 170px; }
