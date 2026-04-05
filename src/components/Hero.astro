@@ -23,7 +23,7 @@
         </p>
         <div class="hero-ctas">
           <a href="https://app.eluu.ai" class="hero-btn hero-btn-dark">Get started</a>
-          <a href="https://app.eluu.ai" class="hero-btn hero-btn-light">Book a demo</a>
+          <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="hero-btn hero-btn-light">Book a demo</a>
         </div>
       </div>
 
@@ -335,7 +335,12 @@
       }
 
       window.addEventListener('resize', checkZoom);
-      window.visualViewport?.addEventListener('resize', checkZoom);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', checkZoom);
+        window.visualViewport.addEventListener('scroll', checkZoom);
+      }
+      // Fallback: recheck after every pinch gesture ends
+      document.addEventListener('touchend', () => setTimeout(checkZoom, 100), { passive: true });
       checkZoom();
     }
   })();
