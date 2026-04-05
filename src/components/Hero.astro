@@ -325,19 +325,24 @@
     if (wrapper) {
       const iframeWrap = wrapper as HTMLElement;
       const MAX_ZOOM = 2; // 200%
+      const isTouchDevice = matchMedia('(hover: none) and (pointer: coarse)').matches;
 
       function checkZoom() {
-        // Desktop: outerWidth/innerWidth = browser zoom level
+        // Desktop browser zoom (Ctrl+/-)
         const desktopZoom = window.outerWidth / window.innerWidth;
-        // Mobile: visualViewport.scale = pinch zoom level
-        const mobileZoom = window.visualViewport?.scale ?? 1;
-        iframeWrap.style.display = (desktopZoom > MAX_ZOOM || mobileZoom > MAX_ZOOM) ? 'none' : '';
+        // Mobile pinch zoom
+        const pinchZoom = window.visualViewport?.scale ?? 1;
+        // Mobile page zoom (Android Chrome menu zoom, accessibility zoom)
+        // screen.width / innerWidth is reliable on mobile (always full-width)
+        const pageZoom = isTouchDevice ? screen.width / window.innerWidth : 1;
+
+        const hide = desktopZoom > MAX_ZOOM || pinchZoom > MAX_ZOOM || pageZoom > MAX_ZOOM;
+        iframeWrap.style.display = hide ? 'none' : '';
       }
 
-      // Desktop: resize fires on browser zoom
+      // Desktop zoom + mobile page zoom both fire resize
       window.addEventListener('resize', checkZoom);
-      // Mobile: poll visualViewport.scale — events are unreliable on iOS Safari
-      // and touchend doesn't propagate from cross-origin iframes
+      // Mobile pinch zoom: poll since events are unreliable on iOS Safari
       if (window.visualViewport) {
         let pollId = setInterval(checkZoom, 400);
         document.addEventListener('visibilitychange', () => {
