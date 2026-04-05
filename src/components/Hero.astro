@@ -327,11 +327,17 @@
     }
 
     function getZoomLevel(): number {
-      if (window.visualViewport && window.visualViewport.scale !== 1) {
-        return window.visualViewport.scale;
+      // Desktop: browser zoom changes innerWidth but not visualViewport.scale
+      const isDesktop = window.innerWidth >= 768;
+      if (isDesktop) {
+        const ratio = window.screen.availWidth / window.innerWidth;
+        return Math.max(ratio, 1);
       }
-      const ratio = window.screen.availWidth / window.innerWidth;
-      return Math.max(ratio, 1);
+      // Mobile: pinch zoom is reflected in visualViewport.scale
+      if (window.visualViewport) {
+        return Math.max(window.visualViewport.scale, 1);
+      }
+      return 1;
     }
 
     function updateIframeScale() {
@@ -343,10 +349,12 @@
         iframe.style.width = `${baseSize}%`;
         iframe.style.height = `${baseSize}%`;
       } else {
-        const compensation = MAX_ZOOM / zoom;
-        iframe.style.transform = `scale(${baseScale * compensation})`;
-        iframe.style.width = `${baseSize / compensation}%`;
-        iframe.style.height = `${baseSize / compensation}%`;
+        // Past threshold: counteract extra zoom by reducing scale only.
+        // The iframe visually freezes at its MAX_ZOOM appearance.
+        const cappedScale = baseScale * (MAX_ZOOM / zoom);
+        iframe.style.transform = `scale(${cappedScale})`;
+        iframe.style.width = `${baseSize}%`;
+        iframe.style.height = `${baseSize}%`;
       }
     }
 
