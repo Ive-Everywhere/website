@@ -7,16 +7,16 @@ const testimonials = [
     company: 'TestMu AI',
   },
   {
-    quote: "We process 30-40 invoices a day — each one used to take 5 minutes of manual work across Salesforce and Stripe. Our Eluu colleague handles all of it. It also built us an analytics engine across dozens of spreadsheets that would have taken 10,000 lines of code. We couldn't go back.",
-    name: 'Head of Finance',
-    role: 'B2B SaaS company',
-    company: 'Loom',
+    quote: "What used to take our team a full day of pulling reports and cross-referencing spreadsheets now happens automatically before I even open my laptop. Eluu has fundamentally changed how we handle pipeline reviews and client prep — it knows our data better than most people on the team.",
+    name: 'Senior Product Owner',
+    role: 'Ameriprise Financial',
+    company: 'Ameriprise',
   },
   {
-    quote: 'We connected 4 tools and had an engineering colleague running PR reviews against our sprint backlog. Setup took less than a day and we were seeing results immediately.',
-    name: 'Engineering Lead',
-    role: '',
-    company: 'RIPPLING',
+    quote: "We needed something that could work across our internal tools without engineering overhead. Eluu connected to our systems, indexed everything, and started delivering insights in hours. It runs autonomously now — monitoring, reporting, flagging issues — no babysitting required.",
+    name: 'Database Support Engineer',
+    role: 'AWS',
+    company: 'AWS',
   },
 ];
 ---
@@ -26,13 +26,13 @@ const testimonials = [
     <!-- Company tabs -->
     <div class="ts-tabs reveal">
       <button type="button" class="ts-tab active" data-ts="0">
-        <img src="/logos/testimonials/testmu.svg" alt="TestMu AI" class="ts-logo ts-logo-testmu" />
+        <img src="/logos/testimonials/testmu.png" alt="TestMu AI" class="ts-logo ts-logo-testmu" />
       </button>
       <button type="button" class="ts-tab" data-ts="1">
-        <img src="/logos/testimonials/loom.svg" alt="Loom" class="ts-logo ts-logo-loom" />
+        <img src="/logos/testimonials/ameriprise.png" alt="Ameriprise Financial" class="ts-logo ts-logo-ameriprise" />
       </button>
       <button type="button" class="ts-tab" data-ts="2">
-        <img src="/logos/testimonials/rippling.svg" alt="Rippling" class="ts-logo ts-logo-rippling" />
+        <img src="/logos/testimonials/aws.webp" alt="AWS" class="ts-logo ts-logo-aws" />
       </button>
     </div>
 
@@ -95,23 +95,23 @@ const testimonials = [
 
   /* Each logo gets its own width so the TEXT portion aligns visually */
   .ts-logo-testmu { width: 100px; }
-  .ts-logo-loom { width: 80px; }
-  .ts-logo-rippling { width: 120px; }
+  .ts-logo-ameriprise { width: 120px; }
+  .ts-logo-aws { width: 60px; }
   @media (min-width: 360px) {
     .ts-logo-testmu { width: 140px; }
-    .ts-logo-loom { width: 120px; }
-    .ts-logo-rippling { width: 180px; }
+    .ts-logo-ameriprise { width: 160px; }
+    .ts-logo-aws { width: 80px; }
   }
 
   @media (min-width: 640px) {
     .ts-logo-testmu { width: 170px; }
-    .ts-logo-loom { width: 150px; }
-    .ts-logo-rippling { width: 220px; }
+    .ts-logo-ameriprise { width: 200px; }
+    .ts-logo-aws { width: 100px; }
   }
   @media (min-width: 1024px) {
     .ts-logo-testmu { width: 200px; }
-    .ts-logo-loom { width: 180px; }
-    .ts-logo-rippling { width: 260px; }
+    .ts-logo-ameriprise { width: 240px; }
+    .ts-logo-aws { width: 120px; }
   }
 
   /* ── Quotes container ── */

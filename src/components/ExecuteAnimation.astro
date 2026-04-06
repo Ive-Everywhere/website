@@ -1,0 +1,438 @@
+---
+// Execute animation — greeting screen → chat with multi-tool execution
+---
+
+<div class="ex-wrap">
+  <img src="/images/cookbook-bg.png" alt="" class="ex-bg" />
+
+  <div class="ex-window">
+    <div class="ex-body" id="ex-body">
+
+      <!-- Scene 1: Greeting screen -->
+      <div class="ex-scene" data-scene="greeting">
+        <div class="ex-greeting">
+          <!-- Logo -->
+          <div class="ex-logo">
+            <img src="/images/eluu-logo.svg" alt="" width="32" height="32" />
+          </div>
+
+          <!-- Greeting text -->
+          <div class="ex-greet-text">
+            <h2 class="ex-greet-title">Good morning, James</h2>
+            <p class="ex-greet-sub">What should Rivera work on today?</p>
+          </div>
+
+          <!-- Colleague selector -->
+          <div class="ex-colleague">
+            <img src="/images/avatar-rivera.png" alt="" class="ex-col-img" />
+            <div class="ex-col-text">
+              <span class="ex-col-name">Rivera</span>
+              <span class="ex-col-role">Revenue Ops</span>
+            </div>
+            <svg class="ex-col-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+
+          <!-- Chat input -->
+          <div class="ex-input-box">
+            <span class="ex-input-text" id="ex-typing"></span>
+            <span class="ex-input-placeholder" id="ex-placeholder">How can I help you today?</span>
+            <div class="ex-input-btns">
+              <div class="ex-ibtn ex-ibtn-attach">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </div>
+              <div class="ex-ibtn ex-ibtn-send" id="ex-send-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick actions removed -->
+        </div>
+      </div>
+
+      <!-- Scene 2: Chat (reused for all cycles) -->
+      <div class="ex-scene" data-scene="chat">
+        <div class="ex-chat">
+          <div class="ex-chat-timeline">
+            <div class="ex-msg ex-msg-user" data-step="user"><p></p></div>
+            <div class="ex-step" data-step="thinking">
+              <div class="ex-think-row">
+                <svg class="ex-brain" width="14" height="14" viewBox="0 0 24 24" fill="#755a68"><path d="M7 6C7 6.237 7.041 6.462 7.115 6.67C7.227 6.986 7.174 7.336 6.973 7.604C6.772 7.873 6.45 8.022 6.116 8.003C6.078 8.001 6.039 8 6 8C4.895 8 4 8.895 4 10C4 10.513 4.192 10.979 4.509 11.333C4.849 11.713 4.849 12.287 4.509 12.667C4.192 13.021 4 13.487 4 14C4 14.884 4.574 15.637 5.373 15.9C5.849 16.057 6.136 16.542 6.043 17.035C6.015 17.185 6 17.34 6 17.5C6 18.881 7.119 20 8.5 20C9.759 20 10.802 19.069 10.975 17.858C10.981 17.817 10.989 17.776 11 17.736V6C11 4.895 10.105 4 9 4C7.895 4 7 4.895 7 6ZM13 17.736C13.011 17.776 13.019 17.817 13.025 17.858C13.199 19.069 14.241 20 15.5 20C16.881 20 18 18.881 18 17.5C18 17.34 17.985 17.185 17.957 17.035C17.864 16.542 18.151 16.057 18.627 15.9C19.426 15.637 20 14.884 20 14C20 13.487 19.808 13.021 19.491 12.667C19.151 12.287 19.151 11.713 19.491 11.333C19.808 10.979 20 10.513 20 10C20 8.895 19.105 8 18 8C17.961 8 17.922 8.001 17.884 8.003C17.55 8.022 17.228 7.873 17.027 7.604C16.826 7.336 16.773 6.986 16.885 6.67C16.959 6.462 17 6.237 17 6C17 4.895 16.105 4 15 4C13.895 4 13 4.895 13 6V17.736ZM9 2C10.195 2 11.267 2.524 12 3.354C12.733 2.524 13.805 2 15 2C17.209 2 19 3.791 19 6C19 6.042 18.999 6.084 18.998 6.126C20.724 6.569 22 8.135 22 10C22 10.728 21.805 11.412 21.465 12C21.805 12.588 22 13.272 22 14C22 15.482 21.195 16.773 20 17.465L20 17.5C20 19.985 17.985 22 15.5 22C14.086 22 12.825 21.348 12 20.329C11.175 21.348 9.914 22 8.5 22C6.015 22 4 19.985 4 17.5L4 17.465C2.805 16.773 2 15.482 2 14C2 13.272 2.195 12.588 2.535 12C2.195 11.412 2 10.728 2 10C2 8.135 3.276 6.569 5.002 6.126C5.001 6.084 5 6.042 5 6C5 3.791 6.791 2 9 2Z"/></svg>
+                <span class="ex-think-label">Thinking</span>
+                <div class="ex-dots-pulse"><span></span><span></span><span></span></div>
+              </div>
+            </div>
+            <div class="ex-tools" data-step="tools"></div>
+            <div class="ex-msg ex-msg-ai" data-step="response"><p></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .ex-wrap {
+    position: absolute; inset: 0; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px; box-sizing: border-box;
+  }
+  .ex-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: 0;
+  }
+  .ex-window {
+    position: relative; z-index: 1; width: 100%; max-width: 560px;
+    background: #ffffff; border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08);
+    overflow: hidden; font-family: 'Inter', sans-serif;
+    border: 1px solid #edede9;
+  }
+  .ex-body { position: relative; height: 360px; min-height: 360px; max-height: 360px; overflow: hidden; }
+  .ex-scene {
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.5s ease;
+    pointer-events: none; overflow: hidden;
+  }
+  .ex-scene.active { opacity: 1; pointer-events: auto; }
+
+  /* ── Greeting ── */
+  .ex-greeting {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center;
+    padding: 24px 20px; gap: 14px;
+    height: 100%; box-sizing: border-box;
+  }
+  .ex-logo { flex-shrink: 0; }
+  .ex-greet-text { text-align: center; }
+  .ex-greet-title {
+    font-size: 15px; font-weight: 500; color: #1e1c1e;
+    margin: 0 0 2px; letter-spacing: -0.01em;
+  }
+  .ex-greet-sub {
+    font-size: 12px; font-weight: 500; color: #aaa89e; margin: 0;
+  }
+
+  /* Colleague selector */
+  .ex-colleague {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px 8px 8px;
+    background: #fafaf8; border-radius: 100px;
+    border: 1px solid #edede9;
+    min-width: 220px;
+  }
+  .ex-col-img {
+    width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
+    flex-shrink: 0;
+  }
+  .ex-col-text { display: flex; flex-direction: column; flex: 1; }
+  .ex-col-name { font-size: 12px; font-weight: 600; color: #1e1c1e; line-height: 1.3; }
+  .ex-col-role { font-size: 10px; color: #58564d; line-height: 1.2; }
+  .ex-col-chevron { color: #aaa89e; width: 14px; height: 14px; margin-left: 4px; }
+
+  /* Input box */
+  .ex-input-box {
+    width: 100%; display: flex; align-items: flex-start; position: relative;
+    padding: 12px 12px 12px 16px;
+    border: 1px solid #edede9; border-radius: 16px; background: #fafaf8;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    min-height: 44px; box-sizing: border-box;
+  }
+  .ex-input-text {
+    font-size: 13px; color: #1e1c1e; line-height: 1.5; flex: 1;
+    min-height: 20px; white-space: pre-wrap; word-break: break-word;
+  }
+  .ex-input-placeholder {
+    position: absolute; left: 16px; top: 12px;
+    font-size: 13px; color: #aaa89e; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .ex-input-placeholder.hidden { opacity: 0; }
+  .ex-input-btns {
+    display: flex; gap: 4px; flex-shrink: 0; margin-left: 8px;
+    align-self: flex-end;
+  }
+  .ex-ibtn {
+    width: 28px; height: 28px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ex-ibtn-attach { background: #f7f7f4; color: #58564d; }
+  .ex-ibtn-send { background: #edede9; color: #58564d; transition: background 0.2s, color 0.2s; }
+  .ex-ibtn-send.active { background: #1e1c1e; color: #ffffff; }
+
+  /* ── Chat scene ── */
+  .ex-chat { padding: 24px 16px; height: 100%; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+  .ex-chat-timeline {
+    flex: 1; display: flex; flex-direction: column; gap: 12px;
+  }
+
+  /* Messages */
+  .ex-msg {
+    padding: 10px 14px; max-width: 88%;
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.45s cubic-bezier(0.16,1,0.3,1), transform 0.45s cubic-bezier(0.16,1,0.3,1);
+  }
+  .ex-msg.visible { opacity: 1; transform: translateY(0); }
+  .ex-msg p { margin: 0; font-size: 12px; line-height: 1.6; }
+  .ex-msg-user {
+    background: #edede9; align-self: flex-end;
+    border-radius: 14px 14px 6px 14px; color: #1e1c1e;
+  }
+  .ex-msg-ai {
+    align-self: flex-start; color: #1e1c1e; padding-left: 0; padding-right: 0;
+  }
+  .ex-msg-ai strong { font-weight: 600; }
+
+  /* Thinking */
+  .ex-step {
+    display: none;
+  }
+  .ex-step.visible { display: block; }
+  .ex-think-row { display: flex; align-items: center; gap: 6px; }
+  .ex-brain { animation: ex-pulse 1.5s ease-in-out infinite; }
+  @keyframes ex-pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+  .ex-think-label { font-size: 11px; font-weight: 500; color: #58564d; }
+  .ex-dots-pulse { display: flex; gap: 3px; align-items: center; }
+  .ex-dots-pulse span {
+    width: 4px; height: 4px; border-radius: 50%; background: #755a68;
+    animation: ex-dot 1.2s ease-in-out infinite;
+  }
+  .ex-dots-pulse span:nth-child(2) { animation-delay: .2s; }
+  .ex-dots-pulse span:nth-child(3) { animation-delay: .4s; }
+  @keyframes ex-dot { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+  /* Tool cards */
+  .ex-tools {
+    display: flex; flex-direction: column; gap: 6px;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .ex-tools.visible { opacity: 1; transform: translateY(0); }
+  .ex-tool {
+    display: flex; align-items: center; gap: 8px;
+    border: 1px solid #edede9; border-radius: 10px;
+    background: #ffffff; padding: 8px 10px;
+    overflow: hidden; max-height: 40px;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity 0.3s cubic-bezier(0.16,1,0.3,1), transform 0.3s cubic-bezier(0.16,1,0.3,1);
+  }
+  .ex-tool.visible { opacity: 1; transform: translateY(0); }
+  .ex-tool-icon { width: 16px; height: 16px; max-width: 16px; max-height: 16px; border-radius: 3px; flex-shrink: 0; object-fit: contain; }
+  .ex-tool-name {
+    font-size: 11px; font-weight: 500; color: #1e1c1e;
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  }
+  .ex-tool-spacer { flex: 1; }
+  .ex-tool-dur { font-size: 10px; color: #dddbd1; font-variant-numeric: tabular-nums; }
+  .ex-tool-ping {
+    width: 8px; height: 8px; border-radius: 50%; background: #f6b51e;
+    animation: ex-ping 1.5s ease-in-out infinite; flex-shrink: 0;
+  }
+  @keyframes ex-ping { 0%,100%{opacity:.4;transform:scale(.9)} 50%{opacity:1;transform:scale(1.1)} }
+  .ex-tool-check { display: none; flex-shrink: 0; }
+  .ex-tool.done .ex-tool-ping { display: none; }
+  .ex-tool.done .ex-tool-check { display: block; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ex-brain, .ex-dots-pulse span, .ex-tool-ping { animation: none; }
+  }
+  @media (max-width: 480px) {
+    .ex-window { max-width: 100%; }
+    .ex-body { height: 300px; min-height: 300px; max-height: 300px; }
+  }
+</style>
+
+<script>
+(function () {
+  const body = document.getElementById('ex-body');
+  if (!body) return;
+
+  const scenes = body.querySelectorAll('.ex-scene') as NodeListOf<HTMLElement>;
+  const greetScene = body.querySelector('[data-scene="greeting"]') as HTMLElement;
+  const chatScene = body.querySelector('[data-scene="chat"]') as HTMLElement;
+  if (!greetScene || !chatScene) return;
+
+  const typingEl = document.getElementById('ex-typing') as HTMLElement;
+  const placeholderEl = document.getElementById('ex-placeholder') as HTMLElement;
+  const sendBtn = document.getElementById('ex-send-btn') as HTMLElement;
+
+  const userMsgEl = chatScene.querySelector('[data-step="user"] p') as HTMLElement;
+  const userBubble = chatScene.querySelector('[data-step="user"]') as HTMLElement;
+  const thinking = chatScene.querySelector('[data-step="thinking"]') as HTMLElement;
+  const toolsWrap = chatScene.querySelector('[data-step="tools"]') as HTMLElement;
+  const responseEl = chatScene.querySelector('[data-step="response"] p') as HTMLElement;
+  const responseBubble = chatScene.querySelector('[data-step="response"]') as HTMLElement;
+
+  const CHECK_SVG = '<svg class="ex-tool-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1fc16b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+
+  const CYCLES = [
+    {
+      input: 'Review my pipeline, create invoices for closed deals, and email the summary',
+      userMsg: 'Review my pipeline, create invoices for closed deals, and email the summary',
+      tools: [
+        { icon: '/logos/integrations/hubspot.svg', name: 'search_deals', dur: '1.2s', wait: 1600 },
+        { icon: '/logos/integrations/stripe.svg', name: 'create_invoice', dur: '2.1s', wait: 2000 },
+        { icon: '/logos/integrations/gmail.svg', name: 'send_email', dur: '0.8s', wait: 900 },
+      ],
+      response: 'Done. Found <strong>3 closed deals</strong> worth <strong>$127K</strong>. Created invoices in Stripe for Beacon Labs, Nova Systems, and DataFlow. Emailed the summary to the team.',
+    },
+    {
+      input: 'Enrich new leads from HubSpot and add them to our outreach sheet',
+      userMsg: 'Enrich new leads from HubSpot and add them to our outreach sheet',
+      tools: [
+        { icon: '/logos/integrations/hubspot.svg', name: 'get_contacts', dur: '1.8s', wait: 1800 },
+        { icon: '/logos/integrations/linear.svg', name: 'enrich_company', dur: '3.2s', wait: 3200 },
+        { icon: '/logos/integrations/googlesheets.svg', name: 'append_rows', dur: '0.6s', wait: 600 },
+      ],
+      response: 'Enriched <strong>24 new leads</strong> from HubSpot. Added company size, industry, and funding data. Updated the outreach sheet with all enriched records.',
+    },
+    {
+      input: 'Check overdue invoices in Stripe and send reminders via Gmail',
+      userMsg: 'Check overdue invoices in Stripe and send reminders via Gmail',
+      tools: [
+        { icon: '/logos/integrations/stripe.svg', name: 'list_invoices', dur: '1.4s', wait: 1400 },
+        { icon: '/logos/integrations/gmail.svg', name: 'send_email', dur: '2.8s', wait: 2800 },
+        { icon: '/logos/integrations/googlesheets.svg', name: 'log_activity', dur: '0.5s', wait: 500 },
+      ],
+      response: 'Found <strong>7 overdue invoices</strong> totaling <strong>$43K</strong>. Sent payment reminder emails to all contacts. Logged activity in the collections tracker.',
+    },
+  ];
+
+  function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
+
+  function showScene(scene: HTMLElement) {
+    scenes.forEach(s => s.classList.remove('active'));
+    scene.classList.add('active');
+  }
+
+  function reset() {
+    typingEl.textContent = '';
+    userMsgEl.textContent = '';
+    responseEl.innerHTML = '';
+    placeholderEl.classList.remove('hidden');
+    sendBtn.classList.remove('active');
+    [userBubble, thinking, toolsWrap, responseBubble].forEach(el => el?.classList.remove('visible'));
+    toolsWrap.innerHTML = '';
+    // Remove active first, disable transitions, clear inline styles, force reflow
+    scenes.forEach(s => s.classList.remove('active'));
+    scenes.forEach(s => { s.style.transition = 'none'; s.style.opacity = ''; });
+    void body!.offsetHeight;
+    scenes.forEach(s => { s.style.transition = ''; });
+  }
+
+  function buildToolCards(tools: typeof CYCLES[0]['tools']) {
+    toolsWrap.innerHTML = tools.map((t, i) => `
+      <div class="ex-tool" data-tool="${i}">
+        <img src="${t.icon}" alt="" width="16" height="16" class="ex-tool-icon" />
+        <span class="ex-tool-name">${t.name}</span>
+        <span class="ex-tool-spacer"></span>
+        <span class="ex-tool-dur"></span>
+        <span class="ex-tool-ping"></span>
+        ${CHECK_SVG}
+      </div>
+    `).join('');
+  }
+
+  async function typeText(text: string, el: HTMLElement, speed: number) {
+    for (let i = 0; i < text.length; i++) {
+      el.textContent = text.slice(0, i + 1);
+      await sleep(speed + Math.random() * 20);
+    }
+  }
+
+  async function runFirstCycle(cycle: typeof CYCLES[0]) {
+    reset();
+
+    // Greeting with typing
+    showScene(greetScene);
+    await sleep(2000);
+    placeholderEl.classList.add('hidden');
+    await sleep(300);
+    await typeText(cycle.input, typingEl, 30);
+    sendBtn.classList.add('active');
+    await sleep(600);
+
+    // Switch to chat
+    await runChat(cycle);
+  }
+
+  async function runFollowCycle(cycle: typeof CYCLES[0]) {
+    reset();
+
+    // Skip greeting — go straight to chat with slide-in user bubble
+    userMsgEl.textContent = cycle.userMsg;
+    responseEl.innerHTML = cycle.response;
+    buildToolCards(cycle.tools);
+
+    showScene(chatScene);
+    await sleep(400);
+
+    // User msg slides up from bottom
+    userBubble.classList.add('visible');
+    await sleep(800);
+
+    await runToolsAndResponse(cycle);
+  }
+
+  async function runChat(cycle: typeof CYCLES[0]) {
+    userMsgEl.textContent = cycle.userMsg;
+    responseEl.innerHTML = cycle.response;
+    buildToolCards(cycle.tools);
+
+    showScene(chatScene);
+    await sleep(300);
+
+    userBubble.classList.add('visible');
+    await sleep(800);
+
+    await runToolsAndResponse(cycle);
+  }
+
+  async function runToolsAndResponse(cycle: typeof CYCLES[0]) {
+    // Think
+    thinking.classList.add('visible');
+    await sleep(1500);
+    thinking.classList.remove('visible');
+    await sleep(200);
+
+    // Tools
+    toolsWrap.classList.add('visible');
+    const toolEls = toolsWrap.querySelectorAll('.ex-tool') as NodeListOf<HTMLElement>;
+    for (let i = 0; i < cycle.tools.length; i++) {
+      toolEls[i].classList.add('visible');
+      await sleep(cycle.tools[i].wait);
+      const durEl = toolEls[i].querySelector('.ex-tool-dur') as HTMLElement;
+      if (durEl) durEl.textContent = cycle.tools[i].dur;
+      toolEls[i].classList.add('done');
+      await sleep(300);
+    }
+
+    // Response
+    await sleep(300);
+    responseBubble.classList.add('visible');
+    await sleep(3500);
+
+    // Fade
+    chatScene.style.transition = 'opacity 0.5s ease';
+    chatScene.style.opacity = '0';
+    await sleep(600);
+  }
+
+  async function run() {
+    let idx = 0;
+    while (true) {
+      if (idx === 0) {
+        await runFirstCycle(CYCLES[idx]);
+      } else {
+        await runFollowCycle(CYCLES[idx]);
+      }
+      idx = (idx + 1) % CYCLES.length;
+    }
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) { io.disconnect(); run(); }
+  }, { threshold: 0.3 });
+  io.observe(body);
+})();
+</script>
