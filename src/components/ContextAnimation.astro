@@ -1,0 +1,276 @@
+---
+// Context animation — memory recall: user asks, colleague pulls from accumulated context
+---
+
+<div class="cx-wrap">
+  <img src="/images/cookbook-bg.png" alt="" class="cx-bg" />
+
+  <div class="cx-window">
+    <div class="cx-body" id="cx-body">
+
+      <!-- Chat scene -->
+      <div class="cx-chat">
+        <div class="cx-timeline">
+
+          <!-- User message -->
+          <div class="cx-msg cx-msg-user" data-step="user"><p></p></div>
+
+          <!-- Thinking / Recalling -->
+          <div class="cx-step" data-step="thinking">
+            <div class="cx-think-row">
+              <svg class="cx-brain" width="14" height="14" viewBox="0 0 24 24" fill="#755a68"><path d="M7 6C7 6.237 7.041 6.462 7.115 6.67C7.227 6.986 7.174 7.336 6.973 7.604C6.772 7.873 6.45 8.022 6.116 8.003C6.078 8.001 6.039 8 6 8C4.895 8 4 8.895 4 10C4 10.513 4.192 10.979 4.509 11.333C4.849 11.713 4.849 12.287 4.509 12.667C4.192 13.021 4 13.487 4 14C4 14.884 4.574 15.637 5.373 15.9C5.849 16.057 6.136 16.542 6.043 17.035C6.015 17.185 6 17.34 6 17.5C6 18.881 7.119 20 8.5 20C9.759 20 10.802 19.069 10.975 17.858C10.981 17.817 10.989 17.776 11 17.736V6C11 4.895 10.105 4 9 4C7.895 4 7 4.895 7 6ZM13 17.736C13.011 17.776 13.019 17.817 13.025 17.858C13.199 19.069 14.241 20 15.5 20C16.881 20 18 18.881 18 17.5C18 17.34 17.985 17.185 17.957 17.035C17.864 16.542 18.151 16.057 18.627 15.9C19.426 15.637 20 14.884 20 14C20 13.487 19.808 13.021 19.491 12.667C19.151 12.287 19.151 11.713 19.491 11.333C19.808 10.979 20 10.513 20 10C20 8.895 19.105 8 18 8C17.961 8 17.922 8.001 17.884 8.003C17.55 8.022 17.228 7.873 17.027 7.604C16.826 7.336 16.773 6.986 16.885 6.67C16.959 6.462 17 6.237 17 6C17 4.895 16.105 4 15 4C13.895 4 13 4.895 13 6V17.736ZM9 2C10.195 2 11.267 2.524 12 3.354C12.733 2.524 13.805 2 15 2C17.209 2 19 3.791 19 6C19 6.042 18.999 6.084 18.998 6.126C20.724 6.569 22 8.135 22 10C22 10.728 21.805 11.412 21.465 12C21.805 12.588 22 13.272 22 14C22 15.482 21.195 16.773 20 17.465L20 17.5C20 19.985 17.985 22 15.5 22C14.086 22 12.825 21.348 12 20.329C11.175 21.348 9.914 22 8.5 22C6.015 22 4 19.985 4 17.5L4 17.465C2.805 16.773 2 15.482 2 14C2 13.272 2.195 12.588 2.535 12C2.195 11.412 2 10.728 2 10C2 8.135 3.276 6.569 5.002 6.126C5.001 6.084 5 6.042 5 6C5 3.791 6.791 2 9 2Z"/></svg>
+              <span class="cx-think-label">Recalling context</span>
+              <div class="cx-dots-pulse"><span></span><span></span><span></span></div>
+            </div>
+          </div>
+
+          <!-- Context references -->
+          <div class="cx-refs" data-step="refs"></div>
+
+          <!-- Assistant response -->
+          <div class="cx-msg cx-msg-ai" data-step="response"><p></p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .cx-wrap {
+    position: absolute; inset: 0; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px; box-sizing: border-box;
+  }
+  .cx-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: 0;
+  }
+  .cx-window {
+    position: relative; z-index: 1; width: 100%; max-width: 560px;
+    background: #ffffff; border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08);
+    overflow: hidden; font-family: 'Inter', sans-serif;
+    border: 1px solid #edede9;
+  }
+  .cx-body { position: relative; height: 360px; min-height: 360px; max-height: 360px; overflow: hidden; }
+
+  /* ── Chat ── */
+  .cx-chat { padding: 20px 16px; height: 100%; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+  .cx-timeline {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+
+  /* ── Messages ── */
+  .cx-msg {
+    padding: 10px 14px; max-width: 88%;
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.45s cubic-bezier(0.16,1,0.3,1), transform 0.45s cubic-bezier(0.16,1,0.3,1);
+  }
+  .cx-msg.visible { opacity: 1; transform: translateY(0); }
+  .cx-msg p { margin: 0; font-size: 12px; line-height: 1.5; }
+  .cx-msg-user {
+    background: #edede9; align-self: flex-end;
+    border-radius: 14px 14px 6px 14px; color: #1e1c1e;
+  }
+  .cx-msg-ai {
+    align-self: flex-start; color: #1e1c1e; padding-left: 0; padding-right: 0;
+  }
+  .cx-msg-ai strong { font-weight: 600; }
+
+  /* ── Thinking ── */
+  .cx-step { display: none; }
+  .cx-step.visible { display: block; }
+  .cx-think-row { display: flex; align-items: center; gap: 6px; }
+  .cx-brain { animation: cx-pulse 1.5s ease-in-out infinite; }
+  @keyframes cx-pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+  .cx-think-label { font-size: 11px; font-weight: 500; color: #58564d; }
+  .cx-dots-pulse { display: flex; gap: 3px; align-items: center; }
+  .cx-dots-pulse span {
+    width: 4px; height: 4px; border-radius: 50%; background: #755a68;
+    animation: cx-dot 1.2s ease-in-out infinite;
+  }
+  .cx-dots-pulse span:nth-child(2) { animation-delay: .2s; }
+  .cx-dots-pulse span:nth-child(3) { animation-delay: .4s; }
+  @keyframes cx-dot { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+  /* ── Context reference cards ── */
+  .cx-refs {
+    display: flex; flex-direction: column; gap: 6px;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .cx-refs.visible { opacity: 1; transform: translateY(0); }
+
+  .cx-ref {
+    display: flex; align-items: center; gap: 10px;
+    border: 1px solid #edede9; border-radius: 10px;
+    background: #ffffff; padding: 8px 12px;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity 0.3s cubic-bezier(0.16,1,0.3,1), transform 0.3s cubic-bezier(0.16,1,0.3,1);
+  }
+  .cx-ref.visible { opacity: 1; transform: translateY(0); }
+
+  .cx-ref-icon {
+    width: 28px; height: 28px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .cx-ref-icon svg { width: 14px; height: 14px; }
+
+  .cx-ref-text { flex: 1; min-width: 0; }
+  .cx-ref-name {
+    font-size: 11px; font-weight: 600; color: #1e1c1e;
+    display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .cx-ref-meta {
+    font-size: 9px; color: #aaa89e; display: block; margin-top: 1px;
+  }
+  .cx-ref-badge {
+    font-size: 9px; font-weight: 500; padding: 2px 6px;
+    border-radius: 4px; flex-shrink: 0;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .cx-brain, .cx-dots-pulse span { animation: none; }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .cx-window { max-width: 100%; }
+    .cx-body { height: 300px; min-height: 300px; max-height: 300px; }
+  }
+</style>
+
+<script>
+(function () {
+  const body = document.getElementById('cx-body');
+  if (!body) return;
+
+  const userMsgEl = body.querySelector('[data-step="user"] p') as HTMLElement;
+  const userBubble = body.querySelector('[data-step="user"]') as HTMLElement;
+  const thinking = body.querySelector('[data-step="thinking"]') as HTMLElement;
+  const refsWrap = body.querySelector('[data-step="refs"]') as HTMLElement;
+  const responseEl = body.querySelector('[data-step="response"] p') as HTMLElement;
+  const responseBubble = body.querySelector('[data-step="response"]') as HTMLElement;
+
+  const CYCLES = [
+    {
+      userMsg: 'Prep me for the Acme Corp call tomorrow',
+      refs: [
+        { icon: 'pdf', color: '#dc2626', bg: '#fef2f2', name: 'Q4 Pipeline Report.pdf', meta: 'Generated 3 days ago', badge: 'Report', badgeBg: '#fef2f2', badgeColor: '#dc2626' },
+        { icon: 'doc', color: '#0070d2', bg: '#ebf1ff', name: 'Acme Corp — Meeting Notes', meta: 'Updated last week', badge: 'Notes', badgeBg: '#ebf1ff', badgeColor: '#0070d2' },
+        { icon: 'sheet', color: '#0f9d58', bg: '#e0faec', name: 'Deal History & Pricing', meta: 'From HubSpot', badge: 'CRM', badgeBg: '#e0faec', badgeColor: '#0f9d58' },
+      ],
+      response: 'Here\'s your prep. Acme is at <strong>$145K</strong>, moved to Negotiation last Tuesday. Open concerns: <strong>SOC 2</strong> and <strong>API rate limits</strong>. Sarah prefers bullet-points — I\'ve pulled the latest pricing.',
+    },
+    {
+      userMsg: 'What happened with the Beacon Labs deal?',
+      refs: [
+        { icon: 'doc', color: '#0070d2', bg: '#ebf1ff', name: 'Beacon Labs — Deal Timeline', meta: 'Auto-generated', badge: 'Timeline', badgeBg: '#ebf1ff', badgeColor: '#0070d2' },
+        { icon: 'sheet', color: '#0f9d58', bg: '#e0faec', name: 'Revenue Forecast Q1', meta: 'From Google Sheets', badge: 'Forecast', badgeBg: '#e0faec', badgeColor: '#0f9d58' },
+        { icon: 'pdf', color: '#dc2626', bg: '#fef2f2', name: 'Beacon Labs Proposal v3.pdf', meta: 'Sent 2 weeks ago', badge: 'Proposal', badgeBg: '#fef2f2', badgeColor: '#dc2626' },
+      ],
+      response: 'Beacon Labs (<strong>$65K</strong>) closed won last Friday. Stalled 2 weeks over <strong>contract terms</strong> — agreed on 60-day clause. Invoice created in Stripe.',
+    },
+    {
+      userMsg: 'Draft a follow-up for the stalled Nova deal',
+      refs: [
+        { icon: 'doc', color: '#0070d2', bg: '#ebf1ff', name: 'Nova Systems — Last Touchpoint', meta: '12 days ago', badge: 'Activity', badgeBg: '#ebf1ff', badgeColor: '#0070d2' },
+        { icon: 'file', color: '#755a68', bg: '#f9f2f6', name: 'Email Templates — Stalled Deals', meta: 'From Team Drive', badge: 'Template', badgeBg: '#f9f2f6', badgeColor: '#755a68' },
+        { icon: 'sheet', color: '#0f9d58', bg: '#e0faec', name: 'Nova — Pricing & Competitors', meta: 'From Salesforce', badge: 'Intel', badgeBg: '#e0faec', badgeColor: '#0f9d58' },
+      ],
+      response: 'Drafted. Nova\'s been quiet since <strong>March 18</strong>. Used your preferred tone — mentioned the <strong>15% discount</strong> and competitor context. Ready to send.',
+    },
+  ];
+
+  const ICONS: Record<string, string> = {
+    pdf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
+    doc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+    sheet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>',
+    file: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+  };
+
+  function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
+
+  function reset() {
+    // Disable transitions during reset to prevent flash
+    const chat = body.querySelector('.cx-chat') as HTMLElement;
+    if (chat) { chat.style.transition = 'none'; chat.style.opacity = ''; }
+    void body.offsetHeight;
+    if (chat) { chat.style.transition = ''; }
+    userMsgEl.textContent = '';
+    responseEl.innerHTML = '';
+    [userBubble, thinking, refsWrap, responseBubble].forEach(el => el?.classList.remove('visible'));
+    refsWrap.innerHTML = '';
+  }
+
+  function buildRefs(refs: typeof CYCLES[0]['refs']) {
+    refsWrap.innerHTML = refs.map((r, i) => `
+      <div class="cx-ref" data-ref="${i}">
+        <div class="cx-ref-icon" style="background:${r.bg}; color:${r.color};">
+          ${ICONS[r.icon]}
+        </div>
+        <div class="cx-ref-text">
+          <span class="cx-ref-name">${r.name}</span>
+          <span class="cx-ref-meta">${r.meta}</span>
+        </div>
+        <span class="cx-ref-badge" style="background:${r.badgeBg}; color:${r.badgeColor};">${r.badge}</span>
+      </div>
+    `).join('');
+  }
+
+  async function runCycle(cycle: typeof CYCLES[0]) {
+    reset();
+    await sleep(400);
+
+    // User message slides in — fast
+    userMsgEl.textContent = cycle.userMsg;
+    userBubble.classList.add('visible');
+    await sleep(600);
+
+    // Recalling context — quick
+    thinking.classList.add('visible');
+    await sleep(1000);
+    thinking.classList.remove('visible');
+    await sleep(150);
+
+    // Build and show reference cards — rapid stagger
+    buildRefs(cycle.refs);
+    refsWrap.classList.add('visible');
+
+    const refEls = refsWrap.querySelectorAll('.cx-ref') as NodeListOf<HTMLElement>;
+    for (let i = 0; i < refEls.length; i++) {
+      refEls[i].classList.add('visible');
+      await sleep(250);
+    }
+    await sleep(400);
+
+    // Assistant response — hold longer to showcase
+    responseEl.innerHTML = cycle.response;
+    responseBubble.classList.add('visible');
+    await sleep(5000);
+
+    // Fade out
+    const chat = body.querySelector('.cx-chat') as HTMLElement;
+    chat.style.transition = 'opacity 0.5s ease';
+    chat.style.opacity = '0';
+    await sleep(600);
+    chat.style.transition = '';
+    chat.style.opacity = '';
+  }
+
+  async function run() {
+    let idx = 0;
+    while (true) {
+      await runCycle(CYCLES[idx]);
+      idx = (idx + 1) % CYCLES.length;
+    }
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) { io.disconnect(); run(); }
+  }, { threshold: 0.3 });
+  io.observe(body);
+})();
+</script>

@@ -9,10 +9,10 @@
       <span class="nav-wordmark">Eluu AI</span>
     </a>
 
-    <!-- Right: Log in button -->
+    <!-- Right: Pricing + Get started -->
     <div style="display: flex; align-items: center; gap: 10px;">
-      <a href="https://app.eluu.ai" class="nav-link-login">Log in</a>
-      <a href="https://app.eluu.ai" class="nav-btn">Get started</a>
+      <a href="/pricing" class="nav-btn-pricing">Pricing</a>
+      <a href="https://app.eluu.ai" class="nav-btn">Log in</a>
     </div>
   </div>
 </nav>
@@ -51,16 +51,20 @@
   }
   @media (min-width: 640px) { .nav-wordmark { font-size: 40px; } }
 
-  .nav-link-login {
+  .nav-btn-pricing {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 500;
     color: #17100e;
+    background: #ffffff;
     text-decoration: none;
-    padding: 10px 16px;
-    transition: opacity 0.2s ease;
+    padding: 10px 20px;
+    border-radius: 10px;
+    line-height: 1;
+    border: 1px solid rgba(23, 16, 14, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .nav-link-login:hover { opacity: 0.6; }
+  .nav-btn-pricing:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(23, 16, 14, 0.08); }
 
   .nav-btn {
     font-family: 'Inter', sans-serif;
@@ -82,14 +86,14 @@
   @media (max-width: 400px) {
     .nav-wordmark { font-size: 28px; white-space: nowrap; }
     .nav-logo { width: 34px; height: 34px; }
-    .nav-link-login { padding: 8px 10px; font-size: 13px; }
+    .nav-btn-pricing { padding: 8px 14px; font-size: 13px; }
     .nav-btn { padding: 8px 16px; font-size: 13px; }
   }
   /* Extreme zoom / ultra-narrow */
   @media (max-width: 320px) {
     .nav-wordmark { font-size: 22px; }
     .nav-logo { width: 28px; height: 28px; }
-    .nav-link-login { padding: 6px 6px; font-size: 12px; }
+    .nav-btn-pricing { padding: 6px 10px; font-size: 12px; }
     .nav-btn { padding: 6px 12px; font-size: 12px; }
   }
 

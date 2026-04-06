@@ -1,24 +1,24 @@
 ---
 const products = [
   {
-    title: 'Colleagues',
-    description: 'AI teammates that learn your workflows, connect to your tools, and execute real work.',
-    icon: 'colleagues',
-  },
-  {
-    title: 'Cookbook',
-    description: 'Pre-built recipes that chain tools into multi-step workflows. Activate in one click.',
-    icon: 'cookbook',
-  },
-  {
     title: 'Team Drive',
     description: 'Upload files, playbooks, and SOPs. Every colleague shares the same context.',
     icon: 'teamdrive',
   },
   {
-    title: 'Dashboards',
-    description: 'Real-time views of pipeline health, revenue metrics, and colleague activity.',
-    icon: 'dashboards',
+    title: 'Recipes',
+    description: 'Pre-built workflows that chain tools into multi-step automations. Activate in one click.',
+    icon: 'recipes',
+  },
+  {
+    title: 'Views',
+    description: 'Real-time dashboards of pipeline health, revenue metrics, and colleague activity.',
+    icon: 'views',
+  },
+  {
+    title: 'Multitasking',
+    description: 'Run multiple colleagues in parallel across projects. Weeks of work done in hours.',
+    icon: 'parallel',
   },
   {
     title: 'Integrations',
@@ -68,24 +68,24 @@ const platform = [
         <div class="ft-card group reveal">
           <div class="ft-card-hover"></div>
           <div class="ft-card-icon">
-            {p.icon === 'colleagues' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
-              </svg>
-            )}
-            {p.icon === 'cookbook' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="13" y2="11"/>
-              </svg>
-            )}
             {p.icon === 'teamdrive' && (
               <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/>
               </svg>
             )}
-            {p.icon === 'dashboards' && (
+            {p.icon === 'recipes' && (
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/><polyline points="9 9 9.5 10 11 8"/>
+              </svg>
+            )}
+            {p.icon === 'views' && (
               <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
+              </svg>
+            )}
+            {p.icon === 'parallel' && (
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
               </svg>
             )}
             {p.icon === 'integrations' && (
@@ -106,7 +106,13 @@ const platform = [
         </div>
       ))}
     </div>
+  </div>
+</section>
 
+<slot />
+
+<section class="ft-section ft-security-section">
+  <div style="max-width: 1440px; margin: 0 auto;">
     <div class="ft-platform">
     <!-- Left: text -->
     <div class="ft-plat-text">
@@ -156,20 +162,22 @@ const platform = [
   /* ── Section wrapper ── */
   .ft-section {
     background: #f4f3ec;
-    padding: 48px 20px;
+    padding: 48px 16px;
   }
   @media (min-width: 640px) {
-    .ft-section { padding: 60px 24px; }
+    .ft-section { padding: 48px 24px; }
   }
   @media (min-width: 768px) {
-    .ft-section {
-      padding: 80px 64px;
-    }
+    .ft-section { padding: 48px 32px; }
   }
   @media (min-width: 1024px) {
-    .ft-section {
-      padding: 96px 120px;
-    }
+    .ft-section { padding: 56px 24px; }
+  }
+  .ft-security-section {
+    padding-top: 32px;
+  }
+  @media (min-width: 1024px) {
+    .ft-security-section { padding-top: 40px; }
   }
 
   /* ── Shared ── */
@@ -325,7 +333,7 @@ const platform = [
     display: flex;
     flex-direction: column;
     gap: 48px;
-    padding-top: 64px;
+    padding-top: 0;
     padding-bottom: 0;
   }
   @media (min-width: 768px) {
@@ -333,7 +341,7 @@ const platform = [
       flex-direction: row;
       align-items: flex-start;
       gap: 80px;
-      padding-top: 80px;
+      padding-top: 0;
       padding-bottom: 72px;
     }
   }
