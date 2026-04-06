@@ -356,26 +356,7 @@
       });
     }, { passive: true });
 
-    // ── Layer 5: Block iframe-triggered scrolls with short-lived flag ──
-    const nativeScrollTo = window.scrollTo.bind(window);
-    (window as any).__safeScrollTo = nativeScrollTo;
-
-    let blockScroll = false;
-
-    // When iframe grabs focus, block scrollTo for one frame
-    document.addEventListener('focusin', (e) => {
-      if (e.target === iframe) {
-        blockScroll = true;
-        requestAnimationFrame(() => { blockScroll = false; });
-      }
-    }, true);
-
-    window.scrollTo = function (...args: any[]) {
-      if (blockScroll) return;
-      nativeScrollTo(...args);
-    } as typeof window.scrollTo;
-
-    // ── Layer 6: Blur iframe when it scrolls out of view ──
+    // ── Layer 5: Blur iframe when it scrolls out of view ──
     const wrapper = iframe.closest('[data-iframe-wrapper]');
     if (wrapper) {
       const observer = new IntersectionObserver(
