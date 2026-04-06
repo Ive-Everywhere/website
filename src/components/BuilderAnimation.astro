@@ -1,0 +1,335 @@
+---
+// Builder animation — scrolling dashboards built by colleagues
+---
+
+<div class="bd-wrap">
+  <img src="/images/cookbook-bg.png" alt="" class="bd-bg" />
+
+  <div class="bd-window">
+    <div class="bd-body" id="bd-body">
+
+      <!-- Each dashboard is its own absolutely-positioned scene -->
+      <div class="bd-scene" data-dash="0">
+        <div class="bd-dash">
+          <div class="bd-dash-header">
+            <div class="bd-dash-header-left">
+              <span class="bd-dash-title">Pipeline Analytics</span>
+              <span class="bd-dash-sub">Built by Rivera · Auto-updates daily</span>
+            </div>
+            <span class="bd-dash-badge">Live</span>
+          </div>
+          <div class="bd-kpis">
+            <div class="bd-kpi"><span class="bd-kpi-label">Total Pipeline</span><span class="bd-kpi-value">$1.24M</span><span class="bd-kpi-trend" style="color:#1fc16b;">+5.1%</span></div>
+            <div class="bd-kpi"><span class="bd-kpi-label">Win Rate</span><span class="bd-kpi-value">34%</span><span class="bd-kpi-trend" style="color:#1fc16b;">+6pp</span></div>
+            <div class="bd-kpi"><span class="bd-kpi-label">At Risk</span><span class="bd-kpi-value">3</span><span class="bd-kpi-trend" style="color:#dc2626;">+1</span></div>
+          </div>
+          <div class="bd-chart">
+            <div class="bd-chart-header">
+              <span class="bd-chart-title">Pipeline Value (6 months)</span>
+              <span class="bd-chart-metric" style="color:#1fc16b;">$1.24M current</span>
+            </div>
+            <div class="bd-chart-area">
+              <div class="bd-chart-y">
+                <span>$1.5M</span><span>$1.0M</span><span>$500K</span><span>$0</span>
+              </div>
+              <svg class="bd-chart-svg" viewBox="0 0 400 70" preserveAspectRatio="none">
+                <defs><linearGradient id="bd-g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#755a68" stop-opacity="0.12"/><stop offset="100%" stop-color="#755a68" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0,55 C33,50 66,45 100,42 C133,39 166,48 200,35 C233,22 266,28 300,20 C333,12 366,8 400,5 L400,70 L0,70 Z" fill="url(#bd-g1)"/>
+                <path d="M0,55 C33,50 66,45 100,42 C133,39 166,48 200,35 C233,22 266,28 300,20 C333,12 366,8 400,5" fill="none" stroke="#755a68" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="bd-chart-x">
+              <span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span>
+            </div>
+          </div>
+          <div class="bd-table">
+            <div class="bd-trow bd-thead"><span>Deal</span><span>Value</span><span>Close Date</span><span>Probability</span><span>Status</span></div>
+            <div class="bd-trow"><span>Beacon Labs</span><span>$65K</span><span>Apr 12</span><span>85%</span><span class="bd-s-green">On track</span></div>
+            <div class="bd-trow"><span>Nova Systems</span><span>$38K</span><span>Apr 28</span><span>40%</span><span class="bd-s-yellow">At risk</span></div>
+            <div class="bd-trow"><span>DataFlow Inc</span><span>$24K</span><span>May 5</span><span>15%</span><span class="bd-s-red">Stalled</span></div>
+            <div class="bd-trow"><span>Acme Corp</span><span>$145K</span><span>Apr 18</span><span>72%</span><span class="bd-s-green">On track</span></div>
+            <div class="bd-trow"><span>CloudScale</span><span>$52K</span><span>May 15</span><span>55%</span><span class="bd-s-yellow">Review</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bd-scene" data-dash="1">
+        <div class="bd-dash">
+          <div class="bd-dash-header">
+            <div class="bd-dash-header-left">
+              <span class="bd-dash-title">Revenue Forecast</span>
+              <span class="bd-dash-sub">Built by Lewis · Updates weekly</span>
+            </div>
+            <span class="bd-dash-badge">Live</span>
+          </div>
+          <div class="bd-kpis">
+            <div class="bd-kpi"><span class="bd-kpi-label">Q1 Actual</span><span class="bd-kpi-value">$2.44M</span><span class="bd-kpi-trend" style="color:#dc2626;">-0.8%</span></div>
+            <div class="bd-kpi"><span class="bd-kpi-label">Q2 Forecast</span><span class="bd-kpi-value">$2.81M</span><span class="bd-kpi-trend" style="color:#1fc16b;">+15%</span></div>
+            <div class="bd-kpi"><span class="bd-kpi-label">YoY Growth</span><span class="bd-kpi-value">23%</span><span class="bd-kpi-trend" style="color:#1fc16b;">+4pp</span></div>
+          </div>
+          <div class="bd-chart">
+            <div class="bd-chart-header">
+              <span class="bd-chart-title">Monthly Revenue (Q1–Q2)</span>
+              <span class="bd-chart-metric" style="color:#0070d2;">$2.81M forecast</span>
+            </div>
+            <div class="bd-chart-area">
+              <div class="bd-chart-y">
+                <span>$600K</span><span>$400K</span><span>$200K</span><span>$0</span>
+              </div>
+              <svg class="bd-chart-svg" viewBox="0 0 400 70" preserveAspectRatio="none">
+                <defs><linearGradient id="bd-g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0070d2" stop-opacity="0.12"/><stop offset="100%" stop-color="#0070d2" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0,55 C66,48 133,40 200,32 C266,24 333,15 400,8 L400,70 L0,70 Z" fill="url(#bd-g2)"/>
+                <path d="M0,55 C66,48 133,40 200,32 C266,24 333,15 400,8" fill="none" stroke="#0070d2" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="bd-chart-x">
+              <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+            </div>
+          </div>
+          <div class="bd-table">
+            <div class="bd-trow bd-thead"><span>Segment</span><span>Target</span><span>Actual</span><span>Variance</span><span>Status</span></div>
+            <div class="bd-trow"><span>Enterprise</span><span>$1.8M</span><span>$1.72M</span><span style="color:#dc2626;">-4.4%</span><span class="bd-s-green">On track</span></div>
+            <div class="bd-trow"><span>Mid-Market</span><span>$680K</span><span>$510K</span><span style="color:#dc2626;">-25%</span><span class="bd-s-yellow">Behind</span></div>
+            <div class="bd-trow"><span>SMB</span><span>$330K</span><span>$340K</span><span style="color:#1fc16b;">+3%</span><span class="bd-s-green">Ahead</span></div>
+            <div class="bd-trow"><span>Partners</span><span>$420K</span><span>$395K</span><span style="color:#dc2626;">-6%</span><span class="bd-s-yellow">Behind</span></div>
+            <div class="bd-trow"><span>Renewals</span><span>$510K</span><span>$530K</span><span style="color:#1fc16b;">+4%</span><span class="bd-s-green">Ahead</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bd-scene" data-dash="2">
+        <div class="bd-dash">
+          <div class="bd-dash-header">
+            <div class="bd-dash-header-left">
+              <span class="bd-dash-title">Contract Analyzer</span>
+              <span class="bd-dash-sub">Built by Iris · Scans on upload</span>
+            </div>
+            <span class="bd-dash-badge">Live</span>
+          </div>
+          <div class="bd-kpis">
+            <div class="bd-kpi"><span class="bd-kpi-label">Contracts</span><span class="bd-kpi-value">47</span><span class="bd-kpi-trend" style="color:#1fc16b;">Indexed</span></div>
+            <div class="bd-kpi"><span class="bd-kpi-label">Obligations</span><span class="bd-kpi-value">183</span><span class="bd-kpi-trend" style="color:#f6b51e;">12 due</span></div>
+            <div class="bd-kpi"><span class="bd-kpi-label">Risk Items</span><span class="bd-kpi-value">8</span><span class="bd-kpi-trend" style="color:#dc2626;">3 new</span></div>
+          </div>
+          <div class="bd-chart">
+            <div class="bd-chart-header">
+              <span class="bd-chart-title">Risk Items Over Time</span>
+              <span class="bd-chart-metric" style="color:#dc2626;">8 active risks</span>
+            </div>
+            <div class="bd-chart-area">
+              <div class="bd-chart-y">
+                <span>15</span><span>10</span><span>5</span><span>0</span>
+              </div>
+              <svg class="bd-chart-svg" viewBox="0 0 400 70" preserveAspectRatio="none">
+                <defs><linearGradient id="bd-g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dc2626" stop-opacity="0.10"/><stop offset="100%" stop-color="#dc2626" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0,15 C66,20 133,35 200,30 C266,25 333,40 400,45 L400,70 L0,70 Z" fill="url(#bd-g3)"/>
+                <path d="M0,15 C66,20 133,35 200,30 C266,25 333,40 400,45" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="bd-chart-x">
+              <span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span>
+            </div>
+          </div>
+          <div class="bd-table">
+            <div class="bd-trow bd-thead"><span>Contract</span><span>Type</span><span>Clauses</span><span>Expires</span><span>Status</span></div>
+            <div class="bd-trow"><span>Acme NDA</span><span>NDA</span><span>12</span><span>Dec 2026</span><span class="bd-s-green">Reviewed</span></div>
+            <div class="bd-trow"><span>Nova MSA</span><span>MSA</span><span>24</span><span>Jun 2026</span><span class="bd-s-yellow">Expiring</span></div>
+            <div class="bd-trow"><span>DataFlow SLA</span><span>SLA</span><span>8</span><span>Active</span><span class="bd-s-red">Flagged</span></div>
+            <div class="bd-trow"><span>Beacon DPA</span><span>DPA</span><span>16</span><span>Mar 2027</span><span class="bd-s-green">Reviewed</span></div>
+            <div class="bd-trow"><span>CloudScale SOW</span><span>SOW</span><span>19</span><span>Sep 2026</span><span class="bd-s-yellow">Pending</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .bd-wrap {
+    position: absolute; inset: 0; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px; box-sizing: border-box;
+  }
+  .bd-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: 0;
+  }
+  .bd-window {
+    position: relative; z-index: 1; width: 100%; max-width: 560px;
+    background: #ffffff; border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08);
+    overflow: hidden; font-family: 'Inter', sans-serif;
+    border: 1px solid #edede9;
+  }
+  .bd-body {
+    position: relative; height: 360px; min-height: 360px; max-height: 360px;
+    overflow: hidden;
+  }
+
+  /* ── Each scene is its own isolated layer ── */
+  .bd-scene {
+    position: absolute; inset: 0;
+    opacity: 0; overflow: hidden;
+    transition: opacity 0.5s ease;
+  }
+  .bd-scene.active { opacity: 1; }
+
+  /* ── Dashboard content — can be taller than viewport ── */
+  .bd-dash {
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 14px 16px 20px;
+  }
+
+  /* Header */
+  .bd-dash-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding-bottom: 10px; border-bottom: 1px solid #edede9;
+  }
+  .bd-dash-header-left { display: flex; flex-direction: column; gap: 2px; }
+  .bd-dash-title { font-size: 14px; font-weight: 600; color: #1e1c1e; letter-spacing: -0.01em; }
+  .bd-dash-sub { font-size: 10px; color: #aaa89e; font-weight: 500; }
+  .bd-dash-badge {
+    font-size: 9px; font-weight: 600; padding: 3px 8px;
+    border-radius: 4px; text-transform: uppercase; letter-spacing: 0.3px;
+    flex-shrink: 0; margin-top: 2px;
+    color: #1fc16b; background: rgba(31,193,107,0.08);
+  }
+
+  /* KPIs */
+  .bd-kpis { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .bd-kpi {
+    display: flex; flex-direction: column; gap: 2px;
+    background: #fafaf8; border: 1px solid #edede9;
+    border-radius: 10px; padding: 10px 12px;
+  }
+  .bd-kpi-label { font-size: 9px; font-weight: 500; color: #aaa89e; text-transform: uppercase; letter-spacing: 0.3px; }
+  .bd-kpi-value { font-size: 18px; font-weight: 700; color: #1e1c1e; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+  .bd-kpi-trend { font-size: 9px; font-weight: 600; }
+
+  /* Chart */
+  .bd-chart {
+    background: #fafaf8; border: 1px solid #edede9;
+    border-radius: 10px; padding: 10px 12px 6px;
+    flex-shrink: 0;
+  }
+  .bd-chart-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px;
+  }
+  .bd-chart-title { font-size: 9px; font-weight: 600; color: #58564d; text-transform: uppercase; letter-spacing: 0.3px; }
+  .bd-chart-metric { font-size: 9px; font-weight: 600; }
+  .bd-chart-area {
+    display: flex; gap: 4px; height: 60px;
+  }
+  .bd-chart-y {
+    display: flex; flex-direction: column; justify-content: space-between;
+    font-size: 7px; color: #aaa89e; font-weight: 500; font-variant-numeric: tabular-nums;
+    width: 28px; flex-shrink: 0; text-align: right; padding: 0 2px;
+  }
+  .bd-chart-svg { flex: 1; height: 100%; }
+  .bd-chart-x {
+    display: flex; justify-content: space-between;
+    font-size: 7px; color: #aaa89e; font-weight: 500;
+    padding: 4px 32px 0;
+  }
+
+  /* Table */
+  .bd-table {
+    display: flex; flex-direction: column;
+    border: 1px solid #edede9; border-radius: 10px; overflow: hidden;
+  }
+  .bd-trow {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    padding: 7px 12px; font-size: 10px; color: #1e1c1e;
+    border-bottom: 1px solid #f5f5f0;
+  }
+  .bd-trow:last-child { border-bottom: none; }
+  .bd-thead {
+    background: #fafaf8; font-weight: 600; color: #58564d;
+    font-size: 9px; text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .bd-s-green { color: #1fc16b; font-weight: 500; }
+  .bd-s-yellow { color: #f6b51e; font-weight: 500; }
+  .bd-s-red { color: #dc2626; font-weight: 500; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bd-scene { transition: none; }
+  }
+  @media (max-width: 480px) {
+    .bd-window { max-width: 100%; }
+    .bd-body { height: 300px; min-height: 300px; max-height: 300px; }
+    .bd-kpi-value { font-size: 14px; }
+    .bd-chart { height: 60px; }
+  }
+</style>
+
+<script>
+(function () {
+  const body = document.getElementById('bd-body');
+  if (!body) return;
+
+  const scenes = body.querySelectorAll('.bd-scene') as NodeListOf<HTMLElement>;
+  const dashes = body.querySelectorAll('.bd-dash') as NodeListOf<HTMLElement>;
+  if (!scenes.length) return;
+
+  const viewH = 360;
+
+  function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
+
+  async function showDash(idx: number) {
+    const scene = scenes[idx];
+    const dash = dashes[idx];
+    const dashH = dash.scrollHeight;
+    const overflow = dashH - viewH;
+
+    // Reset position
+    dash.style.transition = 'none';
+    dash.style.transform = 'translateY(0)';
+    void dash.offsetHeight;
+
+    // Show scene
+    scenes.forEach(s => s.classList.remove('active'));
+    scene.classList.add('active');
+    await sleep(500);
+
+    // Hold at top
+    await sleep(2500);
+
+    if (overflow > 0) {
+      // Slowly scroll down to reveal full content
+      dash.style.transition = `transform ${3000}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
+      dash.style.transform = `translateY(-${overflow}px)`;
+      await sleep(3000);
+
+      // Hold at bottom
+      await sleep(2500);
+    } else {
+      await sleep(2000);
+    }
+
+    // Fade out
+    scene.style.transition = 'opacity 0.5s ease';
+    scene.classList.remove('active');
+    await sleep(500);
+
+    // Reset for next time
+    scene.style.transition = '';
+    dash.style.transition = 'none';
+    dash.style.transform = 'translateY(0)';
+  }
+
+  async function run() {
+    let idx = 0;
+    while (true) {
+      await showDash(idx);
+      idx = (idx + 1) % scenes.length;
+    }
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) { io.disconnect(); run(); }
+  }, { threshold: 0.3 });
+  io.observe(body);
+})();
+</script>

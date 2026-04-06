@@ -1,97 +1,73 @@
 ---
-import MemoryAnimation from './MemoryAnimation.astro';
-import CookbookAnimation from './CookbookAnimation.astro';
-import JobsAnimation from './JobsAnimation.astro';
-import ParallelAnimation from './ParallelAnimation.astro';
+import ContextAnimation from './ContextAnimation.astro';
+import ExecuteAnimation from './ExecuteAnimation.astro';
+import BuilderAnimation from './BuilderAnimation.astro';
+import IndexAnimation from './IndexAnimation.astro';
 ---
 
 <!-- Why Eluu — sticky card stacking section -->
 <section class="we">
   <div class="we-wrap">
-    <div class="we-grid">
+    <!-- Header -->
+    <div class="we-head">
+      <h2 class="we-title reveal">Designed to get real work done.</h2>
+    </div>
 
-      <!-- Sidebar -->
-      <nav class="we-side" aria-label="Why Eluu sections">
-        <div class="we-side-inner">
-          <button type="button" class="we-nav active" data-i="0" aria-current="true">
-            <div class="we-pie"></div>
-            <span>Connect & Index</span>
-          </button>
-          <div class="we-divider"></div>
-          <button type="button" class="we-nav" data-i="1">
-            <div class="we-pie"></div>
-            <span>Execute</span>
-          </button>
-          <div class="we-divider"></div>
-          <button type="button" class="we-nav" data-i="2">
-            <div class="we-pie"></div>
-            <span>Save & Learn</span>
-          </button>
-          <div class="we-divider"></div>
-          <button type="button" class="we-nav" data-i="3">
-            <div class="we-pie"></div>
-            <span>Repeat</span>
-          </button>
+    <!-- Cards -->
+    <div class="we-cards">
+
+      <!-- Card 1 — Index -->
+      <section class="we-card" data-card="0"
+        style="--ct:128px; --ch:640px; --cm:0px; --cz:1;">
+        <div class="we-label">Index</div>
+        <div class="we-text">
+          <h3>Maps your tools. Understands your data.</h3>
+          <p>Connects to Salesforce, Stripe, Sheets, Slack, and 20+ tools. Learns your schema, maps relationships across systems, and builds a unified index — so it already knows where to look before you ask.</p>
         </div>
-      </nav>
+        <div class="we-media we-anim">
+          <IndexAnimation />
+        </div>
+      </section>
 
-      <!-- Header -->
-      <div class="we-head">
-        <h2 class="we-title reveal">Designed to get real work done.</h2>
-      </div>
+      <!-- Card 2 — Execute -->
+      <section class="we-card" data-card="1"
+        style="--ct:128px; --ch:640px; --cm:0px; --cz:2;">
+        <div class="we-label">Execute</div>
+        <div class="we-text">
+          <h3>Workflows that actually span tools.</h3>
+          <p>Pulls data from your CRM, creates invoices in Stripe, logs to a spreadsheet, messages your team in Slack. Runs end-to-end, in parallel, across your entire stack. One click. Zero babysitting.</p>
+        </div>
+        <div class="we-media we-anim">
+          <ExecuteAnimation />
+        </div>
+      </section>
 
-      <!-- Cards -->
-      <div class="we-cards">
+      <!-- Card 3 — Learn -->
+      <section class="we-card" data-card="2"
+        style="--ct:128px; --ch:640px; --cm:0px; --cz:3;">
+        <div class="we-label">Learn</div>
+        <div class="we-text">
+          <h3>Context that compounds.</h3>
+          <p>Remembers your preferences, past decisions, and how you like things done. Say "prep for the Acme call" — it pulls deal history, spots concerns, and builds talking points without being told where to look.</p>
+        </div>
+        <div class="we-media we-anim">
+          <ContextAnimation />
+        </div>
+      </section>
 
-        <!-- Card 1 — Connect & Index -->
-        <section class="we-card" data-card="0"
-          style="--ct:128px; --ch:640px; --cm:0px; --cz:1;">
-          <div class="we-text">
-            <h3>Multi-tool execution. Zero babysitting.</h3>
-            <p>Your AI colleagues connect to Salesforce, Stripe, Sheets, Slack and 20+ other tools — then run entire workflows across all of them at once. You set it up, they handle the rest.</p>
-          </div>
-          <div class="we-media we-anim">
-            <ParallelAnimation />
-          </div>
-        </section>
+      <!-- Card 4 — Build -->
+      <section class="we-card" data-card="3"
+        style="--ct:128px; --ch:640px; --cm:0px; --cz:4;">
+        <div class="we-label">Build</div>
+        <div class="we-text">
+          <h3>Creates tools you couldn't build yourself.</h3>
+          <p>Your colleagues don't just run workflows — they build operational tools. Analytics engines, contract analyzers, procurement systems, live dashboards. Work that would take engineering weeks, done in hours. No code, no tickets, no waiting.</p>
+        </div>
+        <div class="we-media we-anim">
+          <BuilderAnimation />
+        </div>
+      </section>
 
-        <!-- Card 2 — Execute -->
-        <section class="we-card" data-card="1"
-          style="--ct:128px; --ch:640px; --cm:0px; --cz:2;">
-          <div class="we-text">
-            <h3>Workflows that actually span tools.</h3>
-            <p>Build a recipe that pulls pipeline data from HubSpot, creates an invoice in Stripe, logs it to a spreadsheet, and messages your team in Slack. One click to activate — runs end-to-end without you touching it.</p>
-          </div>
-          <div class="we-media we-anim">
-            <CookbookAnimation />
-          </div>
-        </section>
-
-        <!-- Card 3 — Save & Learn -->
-        <section class="we-card" data-card="2"
-          style="--ct:128px; --ch:640px; --cm:0px; --cz:3;">
-          <div class="we-text">
-            <h3>Context that compounds.</h3>
-            <p>Your colleagues remember everything — your preferences, past decisions, and how you like things done. Say "prep for the Acme call" and they pull deal history, open concerns, and talking points without being told where to look.</p>
-          </div>
-          <div class="we-media we-anim">
-            <MemoryAnimation />
-          </div>
-        </section>
-
-        <!-- Card 4 — Repeat -->
-        <section class="we-card" data-card="3"
-          style="--ct:128px; --ch:640px; --cm:0px; --cz:4;">
-          <div class="we-text">
-            <h3>Fires from wherever you work.</h3>
-            <p>Schedule daily pipeline reviews, weekly revenue reports, or trigger workflows when something happens — a keyword in an email, a deal stage change, a Slack message. Works from Slack, web, or API. Set it once and forget about it.</p>
-          </div>
-          <div class="we-media we-anim">
-            <JobsAnimation />
-          </div>
-        </section>
-
-      </div>
     </div>
   </div>
 </section>
@@ -109,79 +85,13 @@ import ParallelAnimation from './ParallelAnimation.astro';
   @media (min-width: 768px)  { .we-wrap { padding: 64px 32px; } }
   @media (min-width: 1024px) { .we-wrap { padding: 96px 24px; } }
 
-  /* ── Grid ── */
-  .we-grid { display: grid; grid-template-columns: 1fr; }
-
-  @media (min-width: 1024px) {
-    .we-grid {
-      grid-template-columns: 200px 1fr;
-      column-gap: 48px;
-    }
-  }
-
-  /* ── Sidebar ── */
-  .we-side {
-    display: none;
-    grid-row: 2;
-    grid-column: 1;
-  }
-  @media (min-width: 1024px) { .we-side { display: block; } }
-
-  .we-side-inner {
-    position: sticky;
-    top: 160px;
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-
-  .we-nav {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    text-align: left;
-  }
-
-  .we-pie {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    background: rgba(23, 16, 14, 0.12);
-  }
-
-  .we-divider {
-    height: 1px;
-    background: #d4d3cb;
-  }
-
-  .we-nav span:last-child {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    line-height: 1;
-    color: rgba(23, 16, 14, 0.2);
-    transition: color 0.3s ease;
-  }
-
-  .we-nav.active span:last-child { color: #17100e; }
-
   /* ── Header ── */
   .we-head {
-    grid-column: 1;
-    grid-row: 1;
     padding-bottom: 24px;
   }
   @media (min-width: 640px)  { .we-head { padding-bottom: 32px; } }
   @media (min-width: 768px)  { .we-head { padding-bottom: 36px; } }
-  @media (min-width: 1024px) {
-    .we-head { grid-column: 2; grid-row: 1; padding-bottom: 0; }
-  }
+  @media (min-width: 1024px) { .we-head { padding-bottom: 40px; } }
 
   .we-title {
     font-family: 'Season Mix', sans-serif;
@@ -199,10 +109,7 @@ import ParallelAnimation from './ParallelAnimation.astro';
 
   /* ── Cards container ── */
   /* NEVER add overflow: hidden here — it breaks sticky card stacking */
-  .we-cards { grid-column: 1; grid-row: 2; }
-  @media (min-width: 1024px) {
-    .we-cards { grid-column: 2; grid-row: 2; min-width: 0; }
-  }
+  .we-cards { }
 
   /* ── Card ── */
   .we-card {
@@ -233,15 +140,32 @@ import ParallelAnimation from './ParallelAnimation.astro';
     }
   }
 
+  /* ── Card label ── */
+  .we-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #17100e;
+    letter-spacing: 0.5px;
+    padding: 16px 0;
+    flex-shrink: 0;
+  }
+  @media (min-width: 1024px) {
+    .we-label {
+      width: 160px;
+      padding: 32px 48px 32px 0;
+    }
+  }
+
   /* ── Card text ── */
   .we-text {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 16px 0;
+    padding: 0 0 16px;
   }
-  @media (min-width: 640px) { .we-text { gap: 12px; padding: 24px 0; } }
-  @media (min-width: 768px) { .we-text { gap: 14px; padding: 28px 0; } }
+  @media (min-width: 640px) { .we-text { gap: 12px; padding: 0 0 24px; } }
+  @media (min-width: 768px) { .we-text { gap: 14px; padding: 0 0 28px; } }
   @media (min-width: 1024px) {
     .we-text {
       width: 32%;
@@ -329,97 +253,3 @@ import ParallelAnimation from './ParallelAnimation.astro';
 
 </style>
 
-<script>
-  (function () {
-    const cards = document.querySelectorAll('.we-card') as NodeListOf<HTMLElement>;
-    const navs = document.querySelectorAll('.we-nav');
-    const pies = document.querySelectorAll('.we-pie') as NodeListOf<HTMLElement>;
-    if (!cards.length || !navs.length) return;
-
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let ticking = false;
-
-    function getStick(card: HTMLElement) {
-      return parseInt(getComputedStyle(card).getPropertyValue('--ct')) || 128;
-    }
-
-    function update() {
-      let active = 0;
-      const cardTops: number[] = [];
-
-      cards.forEach((card, i) => {
-        const top = card.getBoundingClientRect().top;
-        const stick = getStick(card);
-        cardTops.push(top);
-        if (top <= stick + 20) active = i;
-      });
-
-      navs.forEach((n, i) => {
-        const isActive = i === active;
-        n.classList.toggle('active', isActive);
-        n.setAttribute('aria-current', isActive ? 'true' : 'false');
-      });
-
-      // Pie progress: each card fills its dot while it's the active sticky card.
-      // We detect "active" by which card's top is at or above its sticky position.
-      // Progress = how far past sticky / distance until next card takes over.
-      pies.forEach((pie, i) => {
-        const stick = getStick(cards[i]);
-        const top = cardTops[i];
-        const isStuck = top <= stick + 20;
-
-        // Next card's sticky position (or a fallback for the last card)
-        const nextTop = i < cards.length - 1 ? cardTops[i + 1] : null;
-        const nextStick = i < cards.length - 1 ? getStick(cards[i + 1]) : stick + 300;
-
-        // Is the NEXT card also stuck? Then this card is fully scrolled past.
-        const nextIsStuck = nextTop !== null && nextTop <= nextStick + 20;
-
-        let pct = 0;
-        if (nextIsStuck) {
-          // This card has been fully scrolled past
-          pct = 100;
-        } else if (isStuck && i === active) {
-          // This card is currently active and stuck
-          // Progress = how far the next card is from reaching its sticky position
-          if (nextTop !== null) {
-            // Distance the next card still needs to travel to reach its sticky pos
-            const remaining = nextTop - nextStick;
-            // Total distance it started from (card height approximation)
-            const totalTravel = 400;
-            pct = Math.round(Math.max(0, Math.min(1, 1 - (remaining / totalTravel))) * 100);
-          } else {
-            // Last card — use own scroll distance
-            const scrolled = stick - top;
-            pct = Math.round(Math.max(0, Math.min(1, scrolled / 300)) * 100);
-          }
-        }
-
-        if (pct > 0) {
-          pie.style.background = `conic-gradient(from 0deg, #17100e ${pct}%, rgba(23,16,14,0.12) ${pct}%)`;
-        } else {
-          pie.style.background = 'rgba(23,16,14,0.12)';
-        }
-      });
-    }
-
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => { update(); ticking = false; });
-        ticking = true;
-      }
-    }, { passive: true });
-
-    navs.forEach((nav) => {
-      nav.addEventListener('click', () => {
-        const card = cards[parseInt((nav as HTMLElement).dataset.i || '0')];
-        if (!card) return;
-        const y = window.scrollY + card.getBoundingClientRect().top - getStick(card) + 1;
-        const safeFn = (window as any).__safeScrollTo || window.scrollTo.bind(window);
-        safeFn({ top: y, behavior: reducedMotion ? 'instant' : 'smooth' });
-      });
-    });
-
-    update();
-  })();
-</script>
