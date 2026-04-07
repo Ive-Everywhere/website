@@ -46,6 +46,18 @@
                 tabindex="-1"
                 class="hero-iframe"
               ></iframe>
+              <!-- Loader sits OVER the iframe; hidden when iframe.load fires
+                   (or after 10s timeout). Covers the "iframe loaded but white"
+                   case as well as slow loads. -->
+              <div class="iframe-loader" id="iframe-loader" aria-hidden="true">
+                <img
+                  src="/images/logo.svg"
+                  alt=""
+                  class="iframe-loader-logo"
+                  width="80"
+                  height="80"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -224,6 +236,64 @@
     background: #ffffff;
   }
 
+  /* Iframe loader — covers the iframe area ONLY in slow-load fallback.
+     Hidden by default (opacity 0). Fades in via .visible class added by JS
+     after a long delay if the iframe still hasn't fired its load event.
+     Most users never see this — it only appears if the demo iframe is
+     genuinely slow or stuck. White background matches the iframe's bg. */
+  .iframe-loader {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .iframe-loader.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .iframe-loader.loaded {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .iframe-loader-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    display: block;
+    animation: iframe-loader-pulse 1.8s ease-in-out infinite;
+  }
+  @media (max-width: 640px) {
+    .iframe-loader-logo { width: 52px; height: 52px; border-radius: 7px; }
+  }
+  @media (max-width: 360px) {
+    .iframe-loader-logo { width: 44px; height: 44px; border-radius: 6px; }
+  }
+  @keyframes iframe-loader-pulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50%      { opacity: 1;   transform: scale(1.06); }
+  }
+  /* On mobile, the iframe loader only ever appears in the slow-load fallback
+     case — exactly when the GPU is already strained. Drop the scale transform
+     and use opacity-only pulse to keep paint cost minimal. */
+  @media (max-width: 768px) {
+    .iframe-loader-logo {
+      animation: iframe-loader-pulse-mobile 1.8s ease-in-out infinite;
+    }
+    @keyframes iframe-loader-pulse-mobile {
+      0%, 100% { opacity: 0.55; }
+      50%      { opacity: 1; }
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .iframe-loader-logo { animation: none; opacity: 0.85; }
+  }
+
   /* Iframe element — scaled down on mobile to show full desktop layout */
   .hero-iframe {
     position: absolute;
@@ -291,6 +361,45 @@
   (function () {
     const iframe = document.getElementById('hero-iframe') as HTMLIFrameElement;
     if (!iframe) return;
+
+    // ── Loader: only show in the slow-load fallback case ──
+    // The loader is hidden by default. We only fade it in after a long delay
+    // (3500ms) IF the iframe still hasn't fired its load event by then. Most
+    // users see the iframe load fast enough that the loader never appears.
+    // Cross-origin iframes can't be inspected for content errors, so we
+    // also force-hide after a hard cap (15s) regardless.
+    const loader = document.getElementById('iframe-loader');
+    if (loader) {
+      const SHOW_DELAY = 3500;   // only show loader if loading takes longer than this
+      const HARD_CAP = 15000;    // give up after this regardless of load event
+      let loaderShown = false;
+      let loaderDone = false;
+
+      function showLoader() {
+        if (loaderDone || loaderShown) return;
+        loaderShown = true;
+        loader.classList.add('visible');
+      }
+
+      function hideLoader() {
+        if (loaderDone) return;
+        loaderDone = true;
+        clearTimeout(showTimer);
+        if (loaderShown) {
+          // Was visible — fade out gracefully
+          loader.classList.remove('visible');
+          loader.classList.add('loaded');
+          setTimeout(() => { loader.style.display = 'none'; }, 600);
+        } else {
+          // Never visible — just remove from DOM (no flash)
+          loader.style.display = 'none';
+        }
+      }
+
+      const showTimer = setTimeout(showLoader, SHOW_DELAY);
+      iframe.addEventListener('load', hideLoader);
+      setTimeout(hideLoader, HARD_CAP);
+    }
 
     // ── Saved scroll state ──
     let savedY = 0;

@@ -206,30 +206,71 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
       }
     }
 
-    /* ── Iframe slide-in: offset until pre-splash class is removed ── */
-    html.pre-splash [data-iframe-wrapper] .iframe-glow {
-      transform: translateY(110%);
-      opacity: 0;
-      /* Kill the soft halo during the slide. The glow's box-shadow extends
-         up to 120px above its top edge — and since the wrap's overflow:hidden
-         only clips at its outer boundary, that shadow becomes visible in the
-         empty area ABOVE the rising iframe, looking like it precedes it. */
-      box-shadow: none;
+    /* ── Mobile splash optimizations ──
+       Mobile GPUs can't handle the combo of (a) 40px blur on a 932KB bridge
+       image, (b) a 100-140px white box-shadow pulsing on the logo, and (c)
+       a concurrent scale pulse on the inner. The result on mid-range Android
+       and iPhones is heavy frame drops that read as "glitching".
+       Below: lighter blur, no pulse, no glow keyframe — same visual style,
+       but cheap enough to render at 60fps on mobile. */
+    @media (max-width: 768px) {
+      .splash::before {
+        /* 20px blur is still visually "fully blurred" but ~4x cheaper than 40px.
+           `contain: paint` tells the browser this element never paints outside
+           its box — extra headroom on low-end Android GPUs. */
+        filter: blur(20px) saturate(1.05);
+        contain: paint;
+      }
+      .splash-inner {
+        /* Drop the splash-pulse — keep only the entrance */
+        animation: splash-in 700ms cubic-bezier(0.16, 1, 0.3, 1) 200ms forwards;
+      }
+      .splash-logo {
+        /* Drop the pulsing glow keyframe and the 100px halo box-shadow.
+           Static shadow keeps depth without per-frame paint cost. */
+        animation: none;
+        box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.18),
+          0 8px 24px rgba(23, 16, 14, 0.22);
+      }
+      /* CRITICAL: keep the static box-shadow stable through the fade-out.
+         Without this, the desktop `.splash.fade-out .splash-logo { box-shadow: none }`
+         rule wins on mobile too and the shadow snaps off in a single frame BEFORE
+         the opacity has finished fading — visible as a pop. */
+      .splash.fade-out .splash-logo {
+        box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.18),
+          0 8px 24px rgba(23, 16, 14, 0.22);
+      }
     }
-    html.pre-splash [data-iframe-wrapper] .iframe-border {
-      /* Same reason — the border's drop-shadow extends ~28px upward and is
-         visible above the rising iframe during the slide. */
-      box-shadow: none;
-    }
-    /* Transitions run when pre-splash is removed by JS */
-    [data-iframe-wrapper] .iframe-glow {
-      transition: transform 1100ms cubic-bezier(0.16, 1, 0.3, 1) 100ms,
-                  opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 100ms,
-                  box-shadow 300ms ease 900ms;
-      will-change: transform, opacity;
-    }
-    [data-iframe-wrapper] .iframe-border {
-      transition: box-shadow 300ms ease 900ms;
+
+    /* ── Iframe slide-in: DESKTOP ONLY ──
+       On mobile, the iframe takes up most of the screen and a 110% slide
+       looks disproportionate and janky. Mobile users see the iframe in its
+       natural position immediately after splash dismiss. */
+    @media (min-width: 768px) {
+      html.pre-splash [data-iframe-wrapper] .iframe-glow {
+        transform: translateY(110%);
+        opacity: 0;
+        /* Kill the soft halo during the slide — the glow's box-shadow extends
+           up to 120px above its top edge and would become visible in the
+           empty area ABOVE the rising iframe, looking like it precedes it. */
+        box-shadow: none;
+      }
+      html.pre-splash [data-iframe-wrapper] .iframe-border {
+        /* Same reason — the border's drop-shadow extends ~28px upward. */
+        box-shadow: none;
+      }
+      /* Transitions run when pre-splash is removed by JS */
+      [data-iframe-wrapper] .iframe-glow {
+        transition: transform 1100ms cubic-bezier(0.16, 1, 0.3, 1) 100ms,
+                    opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 100ms,
+                    box-shadow 300ms ease 900ms;
+        will-change: transform, opacity;
+      }
+      [data-iframe-wrapper] .iframe-border {
+        transition: box-shadow 300ms ease 900ms;
+      }
     }
 
     /* Reduced motion: no pulse, no glow, no slide — just opacity fades */
