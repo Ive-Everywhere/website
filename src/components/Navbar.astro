@@ -12,7 +12,11 @@
     <!-- Right: Pricing + Get started -->
     <div style="display: flex; align-items: center; gap: 10px;">
       <a href="/pricing" class="nav-btn-pricing">Pricing</a>
-      <a href="https://app.eluu.ai" class="nav-btn">Log in</a>
+      <a
+        href="https://app.eluu.ai"
+        class="nav-btn"
+        onclick="window.posthog?.capture('log_in_clicked', { location: 'navbar' })"
+      >Log in</a>
     </div>
   </div>
 </nav>
