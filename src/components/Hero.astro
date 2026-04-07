@@ -257,10 +257,6 @@
     opacity: 1;
     pointer-events: auto;
   }
-  .iframe-loader.loaded {
-    opacity: 0;
-    pointer-events: none;
-  }
   .iframe-loader-logo {
     width: 80px;
     height: 80px;
@@ -385,10 +381,10 @@
         if (loaderDone) return;
         loaderDone = true;
         clearTimeout(showTimer);
+        clearTimeout(hardCapId);
         if (loaderShown) {
-          // Was visible — fade out gracefully
+          // Was visible — fade out via the same .visible class transition
           loader.classList.remove('visible');
-          loader.classList.add('loaded');
           setTimeout(() => { loader.style.display = 'none'; }, 600);
         } else {
           // Never visible — just remove from DOM (no flash)
@@ -397,8 +393,8 @@
       }
 
       const showTimer = setTimeout(showLoader, SHOW_DELAY);
+      const hardCapId = setTimeout(hideLoader, HARD_CAP);
       iframe.addEventListener('load', hideLoader);
-      setTimeout(hideLoader, HARD_CAP);
     }
 
     // ── Saved scroll state ──

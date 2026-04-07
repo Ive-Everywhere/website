@@ -71,7 +71,12 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
       transition: background-color 700ms cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    /* Bridge image background — blurred, fades in when image arrives */
+    /* Bridge image background — blurred. Fades in via the .bg-loaded class
+       (added by JS only when the image has fully downloaded). This prevents
+       the visible "pop" caused by the previous CSS-animation approach where
+       the animation ran while the image was still loading and the image
+       suddenly appeared mid-fade. The fade now always starts from a known
+       loaded state — no surprise repaints. */
     .splash::before {
       content: '';
       position: absolute;
@@ -79,12 +84,18 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
       background: url('/images/2683d4a4805b7192bd38dc39f0c5321f8c2b5696.png') center / cover no-repeat;
       filter: blur(40px) saturate(1.1);
       opacity: 0;
-      animation: splash-bg-in 900ms cubic-bezier(0.22, 1, 0.36, 1) 100ms forwards;
       will-change: opacity;
       /* GPU-promote so the fade is smooth */
       transform: translateZ(0);
       backface-visibility: hidden;
+      /* contain: paint tells the browser this element never paints outside
+         its layout box — small but free GPU win on every device */
+      contain: paint;
       transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    /* Set by JS once the bridge image has fully loaded. */
+    .splash.bg-loaded::before {
+      opacity: 0.7;
     }
 
     /* Subtle vignette for logo readability */
@@ -112,16 +123,19 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
     }
 
     .splash-logo {
-      width: 120px;
-      height: 120px;
+      /* Scales smoothly across viewports: 80px on phones up to 160px on 4K.
+         10vmin = 10% of the shorter viewport dimension, so it's consistent
+         across portrait/landscape and prevents oversize on tall displays. */
+      width: clamp(80px, 10vmin, 160px);
+      height: clamp(80px, 10vmin, 160px);
       display: block;
-      /* Matches the SVG's own corner radius (~12% of side) so the box-shadow halo
-         follows the logo's actual squared shape instead of looking more rounded */
+      /* Matches the SVG's own corner radius (~12% of side) so the box-shadow
+         halo follows the logo's actual squared shape. */
       border-radius: 14px;
       box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.18),
-        0 14px 48px rgba(23, 16, 14, 0.28),
-        0 0 100px rgba(255, 255, 255, 0.5);
+        0 12px 36px rgba(23, 16, 14, 0.26),
+        0 0 64px rgba(255, 255, 255, 0.42);
       animation: splash-glow 2.6s ease-in-out 900ms infinite;
     }
 
@@ -131,10 +145,12 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
       background-color: rgba(244, 243, 236, 0);
       pointer-events: none;
     }
-    /* Bridge image dissolves via a replacement animation (more reliable than
-       relying on a transition firing when the entrance animation is canceled) */
-    .splash.fade-out::before {
-      animation: splash-bg-out 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    /* Bridge image dissolves via the same transition used for fade-in.
+       Higher specificity than .bg-loaded::before via the dual selector form,
+       so this wins regardless of source order — robust to future refactors. */
+    .splash.fade-out::before,
+    .splash.fade-out.bg-loaded::before {
+      opacity: 0;
     }
     .splash.fade-out::after {
       opacity: 0;
@@ -150,11 +166,6 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
       box-shadow: none;
     }
 
-    @keyframes splash-bg-out {
-      0%   { opacity: 0.7; }
-      100% { opacity: 0; }
-    }
-
     /* Skip entirely on internal navigation */
     html.splash-skip .splash { display: none !important; }
 
@@ -162,26 +173,24 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
       0%   { opacity: 0; transform: scale(0.88); }
       100% { opacity: 1; transform: scale(1); }
     }
-    @keyframes splash-bg-in {
-      0%   { opacity: 0; }
-      100% { opacity: 0.7; }
-    }
     @keyframes splash-pulse {
       0%, 100% { transform: scale(1); }
       50%      { transform: scale(1.03); }
     }
     @keyframes splash-glow {
+      /* Halo radius shrunk from 100-140px to 64-80px — same visual feel,
+         significantly less per-frame paint cost (CPU-painted shadow). */
       0%, 100% {
         box-shadow:
           0 0 0 1px rgba(255, 255, 255, 0.18),
-          0 14px 48px rgba(23, 16, 14, 0.28),
-          0 0 100px rgba(255, 255, 255, 0.5);
+          0 12px 36px rgba(23, 16, 14, 0.26),
+          0 0 64px rgba(255, 255, 255, 0.42);
       }
       50% {
         box-shadow:
-          0 0 0 1px rgba(255, 255, 255, 0.3),
-          0 18px 64px rgba(23, 16, 14, 0.34),
-          0 0 140px rgba(255, 255, 255, 0.7);
+          0 0 0 1px rgba(255, 255, 255, 0.28),
+          0 14px 48px rgba(23, 16, 14, 0.32),
+          0 0 80px rgba(255, 255, 255, 0.58);
       }
     }
     @keyframes splash-auto-hide {
@@ -190,53 +199,36 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
       100% { opacity: 0; visibility: hidden; pointer-events: none; }
     }
 
-    /* Responsive sizing */
-    @media (max-width: 640px) {
-      .splash-logo {
-        width: 96px;
-        height: 96px;
-        border-radius: 12px;
-      }
-    }
-    @media (max-width: 360px) {
-      .splash-logo {
-        width: 80px;
-        height: 80px;
-        border-radius: 10px;
-      }
-    }
+    /* Logo sizing handled by clamp() on .splash-logo above — scales fluidly
+       from 80px (min) to 160px (max) based on viewport. No breakpoints needed. */
 
     /* ── Mobile splash optimizations ──
-       Mobile GPUs can't handle the combo of (a) 40px blur on a 932KB bridge
-       image, (b) a 100-140px white box-shadow pulsing on the logo, and (c)
-       a concurrent scale pulse on the inner. The result on mid-range Android
-       and iPhones is heavy frame drops that read as "glitching".
-       Below: lighter blur, no pulse, no glow keyframe — same visual style,
-       but cheap enough to render at 60fps on mobile. */
-    @media (max-width: 768px) {
+       Keep the bridge image (visual continuity with desktop), but optimize
+       the cost: lighter blur, no pulse animations, no glow halo. The image
+       pop issue is solved at a different layer — the .bg-loaded class is
+       only added by JS once the image has fully loaded, so the fade-in
+       transition always starts from a fully-loaded state. No mid-load pop.
+       Using max-width:767.98px (not 768px) to avoid colliding with the
+       desktop iframe slide-in block at exactly 768px. */
+    @media (max-width: 767.98px) {
       .splash::before {
         /* 20px blur is still visually "fully blurred" but ~4x cheaper than 40px.
-           `contain: paint` tells the browser this element never paints outside
-           its box — extra headroom on low-end Android GPUs. */
+           contain: paint is already on the base — no need to repeat. */
         filter: blur(20px) saturate(1.05);
-        contain: paint;
       }
+      /* Inner — drop the splash-pulse keyframe. Keep only the entrance. */
       .splash-inner {
-        /* Drop the splash-pulse — keep only the entrance */
         animation: splash-in 700ms cubic-bezier(0.16, 1, 0.3, 1) 200ms forwards;
       }
+      /* Logo — drop the pulsing glow. Static shadow only. */
       .splash-logo {
-        /* Drop the pulsing glow keyframe and the 100px halo box-shadow.
-           Static shadow keeps depth without per-frame paint cost. */
         animation: none;
         box-shadow:
           0 0 0 1px rgba(255, 255, 255, 0.18),
           0 8px 24px rgba(23, 16, 14, 0.22);
       }
-      /* CRITICAL: keep the static box-shadow stable through the fade-out.
-         Without this, the desktop `.splash.fade-out .splash-logo { box-shadow: none }`
-         rule wins on mobile too and the shadow snaps off in a single frame BEFORE
-         the opacity has finished fading — visible as a pop. */
+      /* Keep the static box-shadow stable through the fade-out so it doesn't
+         snap off in one frame (the desktop fade-out rule sets it to none). */
       .splash.fade-out .splash-logo {
         box-shadow:
           0 0 0 1px rgba(255, 255, 255, 0.18),
@@ -247,7 +239,9 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
     /* ── Iframe slide-in: DESKTOP ONLY ──
        On mobile, the iframe takes up most of the screen and a 110% slide
        looks disproportionate and janky. Mobile users see the iframe in its
-       natural position immediately after splash dismiss. */
+       natural position immediately after splash dismiss.
+       Using min-width:768px paired with the mobile block's max-width:767.98px
+       ensures NO viewport width fires both blocks (avoiding the 768px collision). */
     @media (min-width: 768px) {
       html.pre-splash [data-iframe-wrapper] .iframe-glow {
         transform: translateY(110%);
@@ -282,7 +276,6 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
         animation: none;
       }
       .splash::before {
-        animation: splash-bg-in 400ms ease forwards;
         transition: opacity 300ms ease;
       }
       .splash::after {
@@ -307,9 +300,13 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
   <PostHog />
 </head>
 <body>
-  <!-- ── Splash overlay — covers viewport on first paint, dismissed by JS ── -->
-  <div class="splash" id="splash" role="status" aria-busy="true" aria-label="Loading Eluu AI">
-    <div class="splash-inner" aria-hidden="true">
+  <!-- ── Splash overlay — covers viewport on first paint, dismissed by JS ──
+       aria-hidden because the splash is decorative; the actual page content
+       loads underneath and the user benefits from THAT being announced, not
+       a "loading" status. role="status" + aria-busy could cause some screen
+       readers to repeatedly announce the loading state. -->
+  <div class="splash" id="splash" aria-hidden="true">
+    <div class="splash-inner">
       <img src="/images/logo.svg" alt="" class="splash-logo" width="120" height="120" />
     </div>
   </div>
@@ -317,7 +314,7 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
   <!-- ── Splash dismissal: DOMContentLoaded + iframe slide-in ── -->
   <script is:inline>
     (function () {
-      var MIN_DURATION = 1100;  // entrance + first pulse beat
+      var MIN_DURATION = 900;   // entrance completes — snappier feel
       var MAX_DURATION = 2400;  // never block longer than this
       var FADE_DURATION = 1300; // matches longest CSS transition (1100ms slide + 100ms delay) + buffer
       var SAFETY_TIMEOUT = 4500; // absolute final safety net
@@ -325,7 +322,7 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
       var dismissed = false;
 
       // Absolute safety net — even if everything else fails, the splash is gone by 4.5s.
-      setTimeout(function () {
+      var safetyId = setTimeout(function () {
         var s = document.getElementById('splash');
         if (s) s.style.display = 'none';
         document.documentElement.classList.remove('pre-splash');
@@ -347,6 +344,27 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
         return;
       }
 
+      // ── Preload the bridge image, then trigger fade-in via .bg-loaded class.
+      // Without this, the previous CSS animation ran while the image was still
+      // downloading, causing the image to "pop" into view mid-fade once it
+      // finally arrived. Now the fade-in transition only fires after the
+      // image is fully loaded — no surprise repaints.
+      var bgImg = new Image();
+      function bgLoaded() {
+        // Guard: don't add the class to an already-fading splash —
+        // the .fade-out::before rule wins via source order, but adding
+        // a class to a hidden element is wasted work.
+        if (splash && !splash.classList.contains('fade-out')) {
+          splash.classList.add('bg-loaded');
+        }
+      }
+      bgImg.onload = bgLoaded;
+      bgImg.onerror = function () { /* graceful: just don't show bridge */ };
+      bgImg.src = '/images/2683d4a4805b7192bd38dc39f0c5321f8c2b5696.png';
+      // If the image is already cached (preload link hit), .complete is true
+      // immediately and onload may not fire — handle the sync case.
+      if (bgImg.complete && bgImg.naturalWidth > 0) bgLoaded();
+
       function dismiss() {
         if (dismissed) return;
         dismissed = true;
@@ -366,6 +384,10 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
         var s = splash || document.getElementById('splash');
         if (!s) return;
         var inner = s.querySelector('.splash-inner');
+
+        // Cleared safety + hardCap — the dismissal is now under JS control.
+        clearTimeout(safetyId);
+        clearTimeout(hardCapId);
 
         // Kill the CSS auto-hide fallback so it doesn't fight the JS fade
         s.style.animation = 'none';
@@ -394,9 +416,12 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
         // of where in the pulse cycle the user happens to be.
         if (inner) {
           if (reducedMotion()) {
-            // Cancel the running CSS animation FIRST — otherwise its forward-locked
-            // opacity (1) overrides the inline opacity we're about to set.
+            // Pin opacity at 1 BEFORE canceling the animation, then animate to 0.
+            // Without the pin, animation:none drops opacity to the cascade base (0)
+            // and the transition has no visible interpolation (0 → 0).
+            inner.style.opacity = '1';
             inner.style.animation = 'none';
+            void inner.offsetHeight;
             inner.style.transition = 'opacity 300ms ease';
             inner.style.opacity = '0';
           } else {
