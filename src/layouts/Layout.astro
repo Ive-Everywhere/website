@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css'
+import PostHog from '../components/PostHog.astro';
 const { title = "Eluu — AI Colleagues" } = Astro.props;
 ---
 <!DOCTYPE html>
@@ -35,9 +36,367 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" href="/fonts/jersey-10.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/images/logo.svg" as="image" />
+  <link rel="preload" href="/images/2683d4a4805b7192bd38dc39f0c5321f8c2b5696.png" as="image" fetchpriority="high" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- ── Splash skip / pre-splash: runs before paint to prevent flash ── -->
+  <script is:inline>
+    (function () {
+      var skip = false;
+      try {
+        skip = sessionStorage.getItem('eluu_splash_shown') === '1';
+      } catch (e) { /* private mode */ }
+      // First-time visitors get .pre-splash so the iframe + nav logo are pre-staged
+      // for the morph animation. Returning visitors get .splash-skip and see nothing.
+      document.documentElement.classList.add(skip ? 'splash-skip' : 'pre-splash');
+    })();
+  </script>
+
+  <!-- ── Critical splash CSS — inlined so it paints on first frame ── -->
+  <style is:inline>
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background-color: #f4f3ec;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      /* Pure-CSS auto-hide fallback for JS-disabled or stuck loads */
+      animation: splash-auto-hide 3s ease 2.5s forwards;
+      will-change: opacity;
+      /* SINGLE opacity transition fades the entire splash (bg + ::before +
+         ::after + .splash-inner) as ONE compositing layer. This avoids the
+         multi-element fade timing issues that were visible on mobile as
+         "glitching through" — when 4 separate transitions on different
+         pseudo-elements/children were running simultaneously, the underlying
+         iframe + hero would peek through the gaps in compositing.
+         One layer fades atomically — no gaps possible. */
+      transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Bridge image background — blurred. Fades in via the .bg-loaded class
+       (added by JS only when the image has fully downloaded). The fade-out
+       is handled by the parent's opacity transition — this child has no
+       fade-out logic of its own, so it never falls out of sync. */
+    .splash::before {
+      content: '';
+      position: absolute;
+      inset: -60px;          /* over-extend so blur edges don't show as cream */
+      background: url('/images/2683d4a4805b7192bd38dc39f0c5321f8c2b5696.png') center / cover no-repeat;
+      filter: blur(40px) saturate(1.1);
+      opacity: 0;
+      will-change: opacity;
+      /* GPU-promote so the fade is smooth */
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      /* contain: paint tells the browser this element never paints outside
+         its layout box — small but free GPU win on every device */
+      contain: paint;
+      transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    /* Set by JS once the bridge image has fully loaded. */
+    .splash.bg-loaded::before {
+      opacity: 0.7;
+    }
+
+    /* Subtle vignette for logo readability. No fade-out — parent opacity
+       handles dismissal. */
+    .splash::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center,
+                                   rgba(244, 243, 236, 0.15) 0%,
+                                   rgba(244, 243, 236, 0.55) 100%);
+      pointer-events: none;
+    }
+
+    .splash-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.88);
+      animation: splash-in 700ms cubic-bezier(0.16, 1, 0.3, 1) 200ms forwards,
+                 splash-pulse 2.6s ease-in-out 900ms infinite;
+    }
+
+    .splash-logo {
+      /* Scales smoothly across viewports: 80px on phones up to 160px on 4K.
+         10vmin = 10% of the shorter viewport dimension, so it's consistent
+         across portrait/landscape and prevents oversize on tall displays. */
+      width: clamp(80px, 10vmin, 160px);
+      height: clamp(80px, 10vmin, 160px);
+      display: block;
+      /* Matches the SVG's own corner radius (~12% of side) so the box-shadow
+         halo follows the logo's actual squared shape. */
+      border-radius: 14px;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.18),
+        0 12px 36px rgba(23, 16, 14, 0.26),
+        0 0 64px rgba(255, 255, 255, 0.42);
+      animation: splash-glow 2.6s ease-in-out 900ms infinite;
+    }
+
+    /* Fading out — single opacity transition on the parent. All children
+       (bg-color, ::before, ::after, .splash-inner with its pulse + glow)
+       fade together as one compositing layer. No multi-element timing
+       issues, no GPU layer thrashing, no "glitching through" gaps. */
+    .splash.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Skip entirely on internal navigation */
+    html.splash-skip .splash { display: none !important; }
+
+    @keyframes splash-in {
+      0%   { opacity: 0; transform: scale(0.88); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes splash-pulse {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.03); }
+    }
+    @keyframes splash-glow {
+      /* Halo radius shrunk from 100-140px to 64-80px — same visual feel,
+         significantly less per-frame paint cost (CPU-painted shadow). */
+      0%, 100% {
+        box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.18),
+          0 12px 36px rgba(23, 16, 14, 0.26),
+          0 0 64px rgba(255, 255, 255, 0.42);
+      }
+      50% {
+        box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.28),
+          0 14px 48px rgba(23, 16, 14, 0.32),
+          0 0 80px rgba(255, 255, 255, 0.58);
+      }
+    }
+    @keyframes splash-auto-hide {
+      0%   { opacity: 1; pointer-events: auto; }
+      99%  { opacity: 0; pointer-events: none; }
+      100% { opacity: 0; visibility: hidden; pointer-events: none; }
+    }
+
+    /* Logo sizing handled by clamp() on .splash-logo above — scales fluidly
+       from 80px (min) to 160px (max) based on viewport. No breakpoints needed. */
+
+    /* ── Mobile splash optimizations ──
+       Keep the bridge image (visual continuity with desktop), but optimize
+       the cost: lighter blur, no pulse animations, no glow halo. The image
+       pop issue is solved at a different layer — the .bg-loaded class is
+       only added by JS once the image has fully loaded, so the fade-in
+       transition always starts from a fully-loaded state. No mid-load pop.
+       Using max-width:767.98px (not 768px) to avoid colliding with the
+       desktop iframe slide-in block at exactly 768px. */
+    @media (max-width: 767.98px) {
+      .splash::before {
+        /* 20px blur is still visually "fully blurred" but ~4x cheaper than 40px.
+           contain: paint is already on the base — no need to repeat. */
+        filter: blur(20px) saturate(1.05);
+      }
+      /* Inner — drop the splash-pulse keyframe. Keep only the entrance. */
+      .splash-inner {
+        animation: splash-in 700ms cubic-bezier(0.16, 1, 0.3, 1) 200ms forwards;
+      }
+      /* Logo — drop the pulsing glow. Static shadow only. */
+      .splash-logo {
+        animation: none;
+        box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.18),
+          0 8px 24px rgba(23, 16, 14, 0.22);
+      }
+    }
+
+    /* ── Iframe slide-in: DESKTOP ONLY ──
+       On mobile, the iframe takes up most of the screen and a 110% slide
+       looks disproportionate and janky. Mobile users see the iframe in its
+       natural position immediately after splash dismiss.
+       Using min-width:768px paired with the mobile block's max-width:767.98px
+       ensures NO viewport width fires both blocks (avoiding the 768px collision). */
+    @media (min-width: 768px) {
+      html.pre-splash [data-iframe-wrapper] .iframe-glow {
+        transform: translateY(110%);
+        opacity: 0;
+        /* Kill the soft halo during the slide — the glow's box-shadow extends
+           up to 120px above its top edge and would become visible in the
+           empty area ABOVE the rising iframe, looking like it precedes it. */
+        box-shadow: none;
+      }
+      html.pre-splash [data-iframe-wrapper] .iframe-border {
+        /* Same reason — the border's drop-shadow extends ~28px upward. */
+        box-shadow: none;
+      }
+      /* Transitions run when pre-splash is removed by JS */
+      [data-iframe-wrapper] .iframe-glow {
+        transition: transform 1100ms cubic-bezier(0.16, 1, 0.3, 1) 100ms,
+                    opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 100ms,
+                    box-shadow 300ms ease 900ms;
+        will-change: transform, opacity;
+      }
+      [data-iframe-wrapper] .iframe-border {
+        transition: box-shadow 300ms ease 900ms;
+      }
+    }
+
+    /* Reduced motion: no pulse, no glow, no slide — just opacity fades */
+    @media (prefers-reduced-motion: reduce) {
+      .splash-inner {
+        animation: splash-in 300ms ease forwards;
+      }
+      .splash-logo {
+        animation: none;
+      }
+      .splash::before {
+        transition: opacity 300ms ease;
+      }
+      .splash::after {
+        transition: opacity 300ms ease;
+      }
+      .splash {
+        animation: splash-auto-hide 2s ease 1.5s forwards;
+        transition: background-color 300ms ease;
+      }
+      /* JS handles the reduced-motion fade-out (cancels animation + sets opacity).
+         No CSS rule needed here. */
+      /* Disable iframe slide-up — opacity only */
+      html.pre-splash [data-iframe-wrapper] .iframe-glow {
+        transform: none;
+      }
+      [data-iframe-wrapper] .iframe-glow {
+        transition: opacity 300ms ease;
+      }
+    }
+  </style>
+
+  <PostHog />
 </head>
 <body>
+  <!-- ── Splash overlay — covers viewport on first paint, dismissed by JS ──
+       aria-hidden because the splash is decorative; the actual page content
+       loads underneath and the user benefits from THAT being announced, not
+       a "loading" status. role="status" + aria-busy could cause some screen
+       readers to repeatedly announce the loading state. -->
+  <div class="splash" id="splash" aria-hidden="true">
+    <div class="splash-inner">
+      <img src="/images/logo.svg" alt="" class="splash-logo" width="120" height="120" />
+    </div>
+  </div>
+
+  <!-- ── Splash dismissal: DOMContentLoaded + iframe slide-in ── -->
+  <script is:inline>
+    (function () {
+      var MIN_DURATION = 900;   // entrance completes — snappier feel
+      var MAX_DURATION = 2400;  // never block longer than this
+      var FADE_DURATION = 1300; // matches longest CSS transition (1100ms slide + 100ms delay) + buffer
+      var SAFETY_TIMEOUT = 4500; // absolute final safety net
+      var startTime = Date.now();
+      var dismissed = false;
+
+      // Absolute safety net — even if everything else fails, the splash is gone by 4.5s.
+      var safetyId = setTimeout(function () {
+        var s = document.getElementById('splash');
+        if (s) s.style.display = 'none';
+        document.documentElement.classList.remove('pre-splash');
+      }, SAFETY_TIMEOUT);
+
+      var hardCapId = setTimeout(function () { dismiss(); }, MAX_DURATION);
+
+      var splash = document.getElementById('splash');
+      if (!splash) {
+        clearTimeout(hardCapId);
+        document.documentElement.classList.remove('pre-splash');
+        return;
+      }
+
+      // Returning visitor — pre-splash was never added; mark flag and bail
+      if (document.documentElement.classList.contains('splash-skip')) {
+        try { sessionStorage.setItem('eluu_splash_shown', '1'); } catch (e) {}
+        clearTimeout(hardCapId);
+        return;
+      }
+
+      // ── Preload the bridge image, then trigger fade-in via .bg-loaded class.
+      // Without this, the previous CSS animation ran while the image was still
+      // downloading, causing the image to "pop" into view mid-fade once it
+      // finally arrived. Now the fade-in transition only fires after the
+      // image is fully loaded — no surprise repaints.
+      var bgImg = new Image();
+      function bgLoaded() {
+        // Guard: don't add the class to an already-fading splash —
+        // the .fade-out::before rule wins via source order, but adding
+        // a class to a hidden element is wasted work.
+        if (splash && !splash.classList.contains('fade-out')) {
+          splash.classList.add('bg-loaded');
+        }
+      }
+      bgImg.onload = bgLoaded;
+      bgImg.onerror = function () { /* graceful: just don't show bridge */ };
+      bgImg.src = '/images/2683d4a4805b7192bd38dc39f0c5321f8c2b5696.png';
+      // If the image is already cached (preload link hit), .complete is true
+      // immediately and onload may not fire — handle the sync case.
+      if (bgImg.complete && bgImg.naturalWidth > 0) bgLoaded();
+
+      function dismiss() {
+        if (dismissed) return;
+        dismissed = true;
+        clearTimeout(hardCapId);
+
+        var elapsed = Date.now() - startTime;
+        var remaining = Math.max(0, MIN_DURATION - elapsed);
+        setTimeout(fadeAndSlide, remaining);
+      }
+
+      function fadeAndSlide() {
+        var s = splash || document.getElementById('splash');
+        if (!s) return;
+
+        // Cleared safety + hardCap — the dismissal is now under JS control.
+        clearTimeout(safetyId);
+        clearTimeout(hardCapId);
+
+        // Kill the CSS auto-hide fallback so it doesn't fight the JS fade
+        s.style.animation = 'none';
+
+        // Trigger iframe slide-in (desktop only — see CSS @media min-width 768px)
+        document.documentElement.classList.remove('pre-splash');
+
+        // Single class triggers a single opacity transition on the parent.
+        // The bridge image, vignette, logo, and pulsing glow all fade together
+        // as one compositing layer — atomic, no inter-element timing gaps.
+        s.classList.add('fade-out');
+
+        // After fade completes, hide and persist the flag. Also strip the
+        // iframe-glow + iframe-border transitions so future transform/
+        // box-shadow changes (e.g., hover effects) don't get the slow-mo treatment.
+        setTimeout(function () {
+          s.style.display = 'none';
+          var glow = document.querySelector('[data-iframe-wrapper] .iframe-glow');
+          var border = document.querySelector('[data-iframe-wrapper] .iframe-border');
+          if (glow) glow.style.transition = 'none';
+          if (border) border.style.transition = 'none';
+          try { sessionStorage.setItem('eluu_splash_shown', '1'); } catch (e) {}
+        }, FADE_DURATION);
+      }
+
+      // Dismiss as soon as the DOM is parsed. We deliberately don't wait for
+      // window.load because it waits for the hero iframe (demo.eluu.ai),
+      // which is the slow thing we're masking.
+      if (document.readyState === 'interactive' || document.readyState === 'complete') {
+        dismiss();
+      } else {
+        document.addEventListener('DOMContentLoaded', dismiss, { once: true });
+      }
+    })();
+  </script>
+
   <slot />
   <script>
     // Intersection Observer for scroll-reveal animations
