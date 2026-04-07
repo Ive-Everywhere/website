@@ -79,6 +79,9 @@ const plans = [
                 <span class="pr-price-value">{plan.price}</span>
                 {plan.period && <span class="pr-price-period">{plan.period}</span>}
               </div>
+              <a href={plan.price === 'Custom' ? 'https://cal.com/krishna-kaipa-wh7ao3/15min' : 'https://app.eluu.ai'} class={`pr-cta ${plan.price === 'Custom' ? 'pr-cta-outline' : 'pr-cta-dark'}`}>
+                {plan.price === 'Custom' ? 'Contact sales' : 'Get started'}
+              </a>
             </div>
             <div class="pr-divider"></div>
             <ul class="pr-features">
@@ -89,9 +92,6 @@ const plans = [
                 </li>
               ))}
             </ul>
-            <a href={plan.price === 'Custom' ? 'https://cal.com/krishna-kaipa-wh7ao3/15min' : 'https://app.eluu.ai'} class={`pr-cta ${plan.price === 'Custom' ? 'pr-cta-outline' : 'pr-cta-dark'}`}>
-              {plan.price === 'Custom' ? 'Contact sales' : 'Get started'}
-            </a>
           </div>
         ))}
       </div>
@@ -341,7 +341,7 @@ const plans = [
     border-radius: 10px;
     text-decoration: none;
     line-height: 1;
-    margin-top: 24px;
+    margin-top: 16px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   .pr-cta:hover { transform: translateY(-1px); }

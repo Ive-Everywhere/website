@@ -15,6 +15,13 @@ const { title, pageTitle, updatedDate = 'February 24, 2026' } = Astro.props;
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Radio+Canada+Big:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Seed splash skip flag — visiting any legal page suppresses splash on later home nav -->
+  <script is:inline>
+    (function () {
+      try { sessionStorage.setItem('eluu_splash_shown', '1'); } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <!-- Navbar -->

@@ -33,7 +33,7 @@
       </div>
 
       <!-- Iframe — in normal flow, large -->
-      <div class="reveal hero-iframe-wrap" data-iframe-wrapper>
+      <div class="hero-iframe-wrap" data-iframe-wrapper>
         <div class="iframe-glow">
           <div class="iframe-border">
             <div class="iframe-aspect-box">
@@ -179,6 +179,12 @@
     max-width: 1800px;
     margin-top: 16px;
     overflow: hidden;
+    /* Match the inner glow's radius so the slide-in clip + box-shadows
+       follow the same rounded shape (no square corner artifacts) */
+    border-radius: 22px;
+  }
+  @media (max-width: 480px) {
+    .hero-iframe-wrap { border-radius: 16px; }
   }
   @media (max-width: 480px) {
     .hero-iframe-wrap { margin-top: 8px; }
