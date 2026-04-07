@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 
 const plans = [
   {
+    slug: 'pro',
     name: 'Pro plan',
     description: 'Perfect for individuals or small teams getting started with AI colleagues.',
     price: '$50',
@@ -17,6 +18,7 @@ const plans = [
     ],
   },
   {
+    slug: 'max',
     name: 'Max plan',
     description: 'For power users and growing teams ready to deploy AI colleagues across their workflow.',
     price: '$200',
@@ -31,6 +33,7 @@ const plans = [
     ],
   },
   {
+    slug: 'enterprise',
     name: 'Enterprise plan',
     description: 'Built for organisations with advanced security, compliance, and scale requirements.',
     price: 'Custom',
@@ -79,8 +82,14 @@ const plans = [
                 <span class="pr-price-value">{plan.price}</span>
                 {plan.period && <span class="pr-price-period">{plan.period}</span>}
               </div>
-              <a href={plan.price === 'Custom' ? 'https://cal.com/krishna-kaipa-wh7ao3/15min' : 'https://app.eluu.ai'} class={`pr-cta ${plan.price === 'Custom' ? 'pr-cta-outline' : 'pr-cta-dark'}`}>
-                {plan.price === 'Custom' ? 'Contact sales' : 'Get started'}
+              <a
+                href={plan.slug === 'enterprise' ? 'https://cal.com/krishna-kaipa-wh7ao3/15min' : 'https://app.eluu.ai'}
+                class={`pr-cta ${plan.slug === 'enterprise' ? 'pr-cta-outline' : 'pr-cta-dark'}`}
+                onclick={plan.slug === 'enterprise'
+                  ? `window.posthog?.capture('enterprise_contact_clicked')`
+                  : `window.posthog?.capture('pricing_plan_selected', { plan: '${plan.slug}' })`}
+              >
+                {plan.slug === 'enterprise' ? 'Contact sales' : 'Get started'}
               </a>
             </div>
             <div class="pr-divider"></div>

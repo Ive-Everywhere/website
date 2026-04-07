@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css'
+import PostHog from '../components/PostHog.astro';
 const { title, pageTitle, updatedDate = 'February 24, 2026' } = Astro.props;
 ---
 <!DOCTYPE html>
@@ -22,6 +23,8 @@ const { title, pageTitle, updatedDate = 'February 24, 2026' } = Astro.props;
       try { sessionStorage.setItem('eluu_splash_shown', '1'); } catch (e) {}
     })();
   </script>
+
+  <PostHog />
 </head>
 <body>
   <!-- Navbar -->
@@ -31,7 +34,11 @@ const { title, pageTitle, updatedDate = 'February 24, 2026' } = Astro.props;
         <img src="/images/logo.svg" alt="Eluu" class="ln-nav-icon" />
         <span class="ln-nav-name">Eluu</span>
       </a>
-      <a href="https://app.eluu.ai" class="ln-nav-btn">Log in</a>
+      <a
+        href="https://app.eluu.ai"
+        class="ln-nav-btn"
+        onclick="window.posthog?.capture('log_in_clicked', { location: 'legal_navbar' })"
+      >Log in</a>
     </div>
   </nav>
 

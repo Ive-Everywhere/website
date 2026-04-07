@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css'
+import PostHog from '../components/PostHog.astro';
 const { title = "Eluu — AI Colleagues" } = Astro.props;
 ---
 <!DOCTYPE html>
@@ -261,6 +262,8 @@ const { title = "Eluu — AI Colleagues" } = Astro.props;
       }
     }
   </style>
+
+  <PostHog />
 </head>
 <body>
   <!-- ── Splash overlay — covers viewport on first paint, dismissed by JS ── -->

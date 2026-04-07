@@ -9,8 +9,16 @@
       <h2 class="cta-heading">Your tools are already connected. Start in minutes.</h2>
       <p class="cta-sub">Set up your first AI colleague today. Free to start — no credit card required.</p>
       <div class="cta-buttons">
-        <a href="https://app.eluu.ai" class="cta-btn cta-btn-dark">Get started</a>
-        <a href="https://app.eluu.ai" class="cta-btn cta-btn-light">Book a demo</a>
+        <a
+          href="https://app.eluu.ai"
+          class="cta-btn cta-btn-dark"
+          onclick="window.posthog?.capture('get_started_clicked', { location: 'cta_footer' })"
+        >Get started</a>
+        <a
+          href="https://cal.com/krishna-kaipa-wh7ao3/15min"
+          class="cta-btn cta-btn-light"
+          onclick="window.posthog?.capture('book_demo_clicked', { location: 'cta_footer' })"
+        >Book a demo</a>
       </div>
     </div>
   </div>
