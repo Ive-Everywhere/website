@@ -130,22 +130,28 @@
   .ex-col-role { font-size: 10px; color: #58564d; line-height: 1.2; }
   .ex-col-chevron { color: #aaa89e; width: 14px; height: 14px; margin-left: 4px; }
 
-  /* Input box */
+  /* Input box — pre-sized to fit the 2-line cycle-1 input so the box
+     doesn't grow when the text fades in. 2 lines × 13px × 1.5 line-height
+     = 39px text + 24px vertical padding = 63px base. Narrow viewports may
+     wrap to 3 lines (see mobile override below). */
   .ex-input-box {
     width: 100%; display: flex; align-items: flex-start; position: relative;
     padding: 12px 12px 12px 16px;
     border: 1px solid #edede9; border-radius: 16px; background: #fafaf8;
     box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-    min-height: 44px; box-sizing: border-box;
+    min-height: 63px; box-sizing: border-box;
   }
   .ex-input-text {
     font-size: 13px; color: #1e1c1e; line-height: 1.5; flex: 1;
-    min-height: 20px; white-space: pre-wrap; word-break: break-word;
+    white-space: pre-wrap; word-break: break-word;
+    opacity: 0;
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   }
+  .ex-input-text.visible { opacity: 1; }
   .ex-input-placeholder {
     position: absolute; left: 16px; top: 12px;
     font-size: 13px; color: #aaa89e; pointer-events: none;
-    transition: opacity 0.2s;
+    transition: opacity 0.15s;
   }
   .ex-input-placeholder.hidden { opacity: 0; }
   .ex-input-btns {
@@ -170,7 +176,7 @@
   .ex-msg {
     padding: 10px 14px; max-width: 88%;
     opacity: 0; transform: translateY(16px);
-    transition: opacity 0.45s cubic-bezier(0.16,1,0.3,1), transform 0.45s cubic-bezier(0.16,1,0.3,1);
+    transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1);
   }
   .ex-msg.visible { opacity: 1; transform: translateY(0); }
   .ex-msg p { margin: 0; font-size: 12px; line-height: 1.6; }
@@ -239,6 +245,10 @@
   @media (max-width: 480px) {
     .ex-window { max-width: 100%; }
     .ex-body { height: 300px; min-height: 300px; max-height: 300px; }
+    /* At narrow widths cycle 1's input wraps to 3 lines. Bump min-height
+       so the box is still pre-sized and doesn't grow when text appears.
+       3 lines × 13px × 1.5 = 58.5px + 24px padding = ~83px. */
+    .ex-input-box { min-height: 83px; }
   }
 </style>
 
@@ -270,9 +280,9 @@
       input: 'Review my pipeline, create invoices for closed deals, and email the summary',
       userMsg: 'Review my pipeline, create invoices for closed deals, and email the summary',
       tools: [
-        { icon: '/logos/integrations/hubspot.svg', name: 'search_deals', dur: '1.2s', wait: 1600 },
-        { icon: '/logos/integrations/stripe.svg', name: 'create_invoice', dur: '2.1s', wait: 2000 },
-        { icon: '/logos/integrations/gmail.svg', name: 'send_email', dur: '0.8s', wait: 900 },
+        { icon: '/logos/integrations/hubspot.svg', name: 'search_deals', dur: '1.2s', wait: 700 },
+        { icon: '/logos/integrations/stripe.svg', name: 'create_invoice', dur: '2.1s', wait: 850 },
+        { icon: '/logos/integrations/gmail.svg', name: 'send_email', dur: '0.8s', wait: 500 },
       ],
       response: 'Done. Found <strong>3 closed deals</strong> worth <strong>$127K</strong>. Created invoices in Stripe for Beacon Labs, Nova Systems, and DataFlow. Emailed the summary to the team.',
     },
@@ -280,9 +290,9 @@
       input: 'Enrich new leads from HubSpot and add them to our outreach sheet',
       userMsg: 'Enrich new leads from HubSpot and add them to our outreach sheet',
       tools: [
-        { icon: '/logos/integrations/hubspot.svg', name: 'get_contacts', dur: '1.8s', wait: 1800 },
-        { icon: '/logos/integrations/linear.svg', name: 'enrich_company', dur: '3.2s', wait: 3200 },
-        { icon: '/logos/integrations/googlesheets.svg', name: 'append_rows', dur: '0.6s', wait: 600 },
+        { icon: '/logos/integrations/hubspot.svg', name: 'get_contacts', dur: '1.8s', wait: 750 },
+        { icon: '/logos/integrations/linear.svg', name: 'enrich_company', dur: '3.2s', wait: 950 },
+        { icon: '/logos/integrations/googlesheets.svg', name: 'append_rows', dur: '0.6s', wait: 450 },
       ],
       response: 'Enriched <strong>24 new leads</strong> from HubSpot. Added company size, industry, and funding data. Updated the outreach sheet with all enriched records.',
     },
@@ -290,9 +300,9 @@
       input: 'Check overdue invoices in Stripe and send reminders via Gmail',
       userMsg: 'Check overdue invoices in Stripe and send reminders via Gmail',
       tools: [
-        { icon: '/logos/integrations/stripe.svg', name: 'list_invoices', dur: '1.4s', wait: 1400 },
-        { icon: '/logos/integrations/gmail.svg', name: 'send_email', dur: '2.8s', wait: 2800 },
-        { icon: '/logos/integrations/googlesheets.svg', name: 'log_activity', dur: '0.5s', wait: 500 },
+        { icon: '/logos/integrations/stripe.svg', name: 'list_invoices', dur: '1.4s', wait: 700 },
+        { icon: '/logos/integrations/gmail.svg', name: 'send_email', dur: '2.8s', wait: 900 },
+        { icon: '/logos/integrations/googlesheets.svg', name: 'log_activity', dur: '0.5s', wait: 450 },
       ],
       response: 'Found <strong>7 overdue invoices</strong> totaling <strong>$43K</strong>. Sent payment reminder emails to all contacts. Logged activity in the collections tracker.',
     },
@@ -307,6 +317,7 @@
 
   function reset() {
     typingEl.textContent = '';
+    typingEl.classList.remove('visible');
     userMsgEl.textContent = '';
     responseEl.innerHTML = '';
     placeholderEl.classList.remove('hidden');
@@ -333,24 +344,19 @@
     `).join('');
   }
 
-  async function typeText(text: string, el: HTMLElement, speed: number) {
-    for (let i = 0; i < text.length; i++) {
-      el.textContent = text.slice(0, i + 1);
-      await sleep(speed + Math.random() * 20);
-    }
-  }
-
   async function runFirstCycle(cycle: typeof CYCLES[0]) {
     reset();
 
-    // Greeting with typing
+    // Greeting — snappy intro, then text fades in, then send
     showScene(greetScene);
-    await sleep(2000);
+    await sleep(700);
     placeholderEl.classList.add('hidden');
-    await sleep(300);
-    await typeText(cycle.input, typingEl, 30);
+    await sleep(100);
+    typingEl.textContent = cycle.input;
+    typingEl.classList.add('visible');
+    await sleep(350);
     sendBtn.classList.add('active');
-    await sleep(600);
+    await sleep(350);
 
     // Switch to chat
     await runChat(cycle);
@@ -365,11 +371,11 @@
     buildToolCards(cycle.tools);
 
     showScene(chatScene);
-    await sleep(400);
+    await sleep(250);
 
     // User msg slides up from bottom
     userBubble.classList.add('visible');
-    await sleep(800);
+    await sleep(400);
 
     await runToolsAndResponse(cycle);
   }
@@ -380,22 +386,22 @@
     buildToolCards(cycle.tools);
 
     showScene(chatScene);
-    await sleep(300);
+    await sleep(200);
 
     userBubble.classList.add('visible');
-    await sleep(800);
+    await sleep(400);
 
     await runToolsAndResponse(cycle);
   }
 
   async function runToolsAndResponse(cycle: typeof CYCLES[0]) {
-    // Think
+    // Think — snappy
     thinking.classList.add('visible');
-    await sleep(1500);
+    await sleep(600);
     thinking.classList.remove('visible');
-    await sleep(200);
+    await sleep(100);
 
-    // Tools
+    // Tools — fast progression, each one fires quickly
     toolsWrap.classList.add('visible');
     const toolEls = toolsWrap.querySelectorAll('.ex-tool') as NodeListOf<HTMLElement>;
     for (let i = 0; i < cycle.tools.length; i++) {
@@ -404,18 +410,18 @@
       const durEl = toolEls[i].querySelector('.ex-tool-dur') as HTMLElement;
       if (durEl) durEl.textContent = cycle.tools[i].dur;
       toolEls[i].classList.add('done');
-      await sleep(300);
+      await sleep(150);
     }
 
-    // Response
-    await sleep(300);
+    // Response — THIS is the result, give it time to be read
+    await sleep(200);
     responseBubble.classList.add('visible');
-    await sleep(3500);
+    await sleep(2800);
 
     // Fade
-    chatScene.style.transition = 'opacity 0.5s ease';
+    chatScene.style.transition = 'opacity 0.4s ease';
     chatScene.style.opacity = '0';
-    await sleep(600);
+    await sleep(450);
   }
 
   async function run() {
