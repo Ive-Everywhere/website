@@ -1,0 +1,858 @@
+---
+import '../styles/global.css'
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import PostHog from '../components/PostHog.astro';
+
+interface FeatureData {
+  slug: string;
+  name: string;
+  color: string;
+  breadcrumb: string;
+  headline: string;
+  description: string;
+  valueProps: { title: string; features: { title: string; desc: string }[] }[];
+  stats: { heading: string; items: { value: string; label: string; desc: string }[] };
+  testimonial: { quote: string; attribution: string };
+  useCases: { heading: string; cases: { title: string; desc: string }[] };
+  ctaHeading: string;
+}
+
+const { feature: f } = Astro.props as { feature: FeatureData };
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{f.name} — Eluu</title>
+  <meta name="description" content={f.description} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preload" href="/fonts/season-mix-bold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/season-mix-regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Seed splash skip flag — visiting a feature page suppresses splash on later home nav -->
+  <script is:inline>
+    (function () {
+      try { sessionStorage.setItem('eluu_splash_shown', '1'); } catch (e) {}
+    })();
+  </script>
+
+  <PostHog />
+</head>
+<body>
+  <Navbar />
+
+  <main>
+    <!-- ════════════════════════════════════════════════════
+         Section 1: Hero
+         ════════════════════════════════════════════════════ -->
+    <section class="ft-hero">
+      <div class="ft-hero-inner">
+        <div class="ft-hero-text">
+          <span class="ft-breadcrumb">Platform &gt; {f.breadcrumb}</span>
+          <h1 class="ft-hero-headline">{f.headline}</h1>
+          <p class="ft-hero-desc">{f.description}</p>
+          <div class="ft-hero-ctas">
+            <a
+              href="https://app.eluu.ai"
+              class="ft-btn ft-btn-dark"
+              onclick={`window.posthog?.capture('feature_get_started_clicked', { feature: '${f.slug}', location: 'hero' })`}
+            >Get started</a>
+            <a
+              href="https://cal.com/krishna-kaipa-wh7ao3/15min"
+              class="ft-btn ft-btn-light"
+              onclick={`window.posthog?.capture('feature_demo_clicked', { feature: '${f.slug}', location: 'hero' })`}
+            >Book a demo</a>
+          </div>
+        </div>
+        <div class="ft-hero-image">
+          <div class="ft-placeholder" style={`--ft-color: ${f.color}`}></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════
+         Section 2: Value Props
+         ════════════════════════════════════════════════════ -->
+    <div class="ft-vp-wrapper">
+      {f.valueProps.map((block) => (
+        <section class="ft-vp-block">
+          <div class="ft-vp-inner">
+            <div class="ft-vp-image">
+              <div class="ft-placeholder" style={`--ft-color: ${f.color}`}></div>
+            </div>
+            <div class="ft-vp-text">
+              <h2 class="ft-vp-title reveal">{block.title}</h2>
+              <div class="ft-vp-features">
+                {block.features.map((feat) => (
+                  <div class="ft-vp-feature reveal">
+                    <h3 class="ft-vp-feature-title">{feat.title}</h3>
+                    <p class="ft-vp-feature-desc">{feat.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <!-- ════════════════════════════════════════════════════
+         Section 3: Stats
+         ════════════════════════════════════════════════════ -->
+    <section class="ft-stats">
+      <h2 class="ft-stats-heading reveal">{f.stats.heading}</h2>
+      <div class="ft-stats-row">
+        {f.stats.items.map((item) => (
+          <div class="ft-stats-card reveal">
+            <span class="ft-stats-value">{item.value}</span>
+            <span class="ft-stats-label">{item.label}</span>
+            <p class="ft-stats-desc">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════
+         Section 4: Testimonial
+         ════════════════════════════════════════════════════ -->
+    <section class="ft-testimonial">
+      <div class="ft-testimonial-inner reveal">
+        <blockquote class="ft-testimonial-quote">&ldquo;{f.testimonial.quote}&rdquo;</blockquote>
+        <p class="ft-testimonial-attribution">{f.testimonial.attribution}</p>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════
+         Section 5: Use Cases — Sticky Scroll
+         ════════════════════════════════════════════════════ -->
+    <section class="ft-uc" id="ft-uc-section">
+      <div class="ft-uc-sticky">
+        <h2 class="ft-uc-heading reveal">{f.useCases.heading}</h2>
+        <div class="ft-uc-layout">
+          <nav class="ft-uc-sidebar" aria-label="Use cases">
+            {f.useCases.cases.map((c, i) => (
+              <button
+                class={`ft-uc-item${i === 0 ? ' active' : ''}`}
+                data-uc-index={i}
+                style={`--ft-dot-color: ${f.color}`}
+              >
+                <span class="ft-uc-dot"></span>
+                <span class="ft-uc-item-label">{c.title}</span>
+              </button>
+            ))}
+          </nav>
+          <div class="ft-uc-panels">
+            {f.useCases.cases.map((c, i) => (
+              <div class={`ft-uc-panel${i === 0 ? ' active' : ''}`} data-uc-panel={i}>
+                <h3 class="ft-uc-panel-title">{c.title}</h3>
+                <p class="ft-uc-panel-desc">{c.desc}</p>
+                <div class="ft-placeholder ft-placeholder-wide" style={`--ft-color: ${f.color}`}></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════
+         Section 6: CTA Footer
+         ════════════════════════════════════════════════════ -->
+    <section style="background: #f4f3ec;">
+      <div class="ft-cta-container">
+        <img src="/images/cta-bg.jpg" alt="" aria-hidden="true" class="ft-cta-bg" loading="lazy" />
+        <div class="ft-cta-overlay"></div>
+        <div class="ft-cta-content">
+          <h2 class="ft-cta-heading">{f.ctaHeading}</h2>
+          <p class="ft-cta-sub">Set up your first AI colleague today. Free to start — no credit card required.</p>
+          <div class="ft-cta-buttons">
+            <a
+              href="https://app.eluu.ai"
+              class="ft-btn ft-btn-dark"
+              onclick={`window.posthog?.capture('feature_get_started_clicked', { feature: '${f.slug}', location: 'cta_footer' })`}
+            >Get started</a>
+            <a
+              href="https://cal.com/krishna-kaipa-wh7ao3/15min"
+              class="ft-btn ft-btn-light-white"
+              onclick={`window.posthog?.capture('feature_demo_clicked', { feature: '${f.slug}', location: 'cta_footer' })`}
+            >Book a demo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+
+  <!-- ════════════════════════════════════════════════════
+       Scroll-reveal IntersectionObserver
+       ════════════════════════════════════════════════════ -->
+  <script>
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.reveal').forEach((el) => {
+      revealObserver.observe(el);
+    });
+  </script>
+
+  <!-- ════════════════════════════════════════════════════
+       Sticky-scroll JS for Section 5
+       ════════════════════════════════════════════════════ -->
+  <script>
+    (function () {
+      const section = document.getElementById('ft-uc-section');
+      if (!section) return;
+
+      const sidebar = section.querySelector('.ft-uc-sidebar');
+      const items = section.querySelectorAll('.ft-uc-item');
+      const panels = section.querySelectorAll('.ft-uc-panel');
+      const caseCount = panels.length;
+      if (caseCount === 0) return;
+
+      let activeIndex = 0;
+      let ticking = false;
+      let listening = false;
+
+      function setActive(index: number) {
+        if (index === activeIndex) return;
+        items[activeIndex]?.classList.remove('active');
+        panels[activeIndex]?.classList.remove('active');
+        activeIndex = index;
+        items[activeIndex]?.classList.add('active');
+        panels[activeIndex]?.classList.add('active');
+      }
+
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const rect = section.getBoundingClientRect();
+          const sectionHeight = section.offsetHeight;
+          const viewportH = window.innerHeight;
+          // Progress: 0 when section top hits viewport top, 1 when section bottom leaves
+          const scrolled = -rect.top;
+          const totalScrollable = sectionHeight - viewportH;
+          if (totalScrollable <= 0) { ticking = false; return; }
+          const progress = Math.max(0, Math.min(1, scrolled / totalScrollable));
+          const newIndex = Math.min(caseCount - 1, Math.floor(progress * caseCount));
+          setActive(newIndex);
+          ticking = false;
+        });
+      }
+
+      // Only listen when section is in viewport
+      const sectionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && !listening) {
+              window.addEventListener('scroll', onScroll, { passive: true });
+              listening = true;
+            } else if (!entry.isIntersecting && listening) {
+              window.removeEventListener('scroll', onScroll);
+              listening = false;
+            }
+          });
+        },
+        { threshold: 0 }
+      );
+      sectionObserver.observe(section);
+
+      // Sidebar click -> scroll to corresponding case position
+      items.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const idx = Number(btn.getAttribute('data-uc-index'));
+          const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+          const sectionHeight = section.offsetHeight;
+          const viewportH = window.innerHeight;
+          const totalScrollable = sectionHeight - viewportH;
+          const targetScroll = sectionTop + (idx / caseCount) * totalScrollable;
+          window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+        });
+      });
+
+      // Skip sticky scroll on mobile
+      const mql = window.matchMedia('(max-width: 767.98px)');
+      function handleMobile(e: MediaQueryListEvent | MediaQueryList) {
+        if (e.matches && listening) {
+          window.removeEventListener('scroll', onScroll);
+          listening = false;
+        }
+      }
+      mql.addEventListener('change', handleMobile);
+      handleMobile(mql);
+    })();
+  </script>
+</body>
+</html>
+
+<style>
+  /* ══════════════════════════════════════════════════════
+     Placeholder images
+     ══════════════════════════════════════════════════════ */
+  .ft-placeholder {
+    position: relative;
+    aspect-ratio: 4/3;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .ft-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ft-color);
+    opacity: 0.7;
+  }
+  .ft-placeholder::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/images/cookbook-bg.png') center/cover no-repeat;
+    opacity: 0.12;
+    mix-blend-mode: overlay;
+  }
+  .ft-placeholder-wide {
+    aspect-ratio: 16/9;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     Buttons
+     ══════════════════════════════════════════════════════ */
+  .ft-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 12px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .ft-btn:hover {
+    transform: translateY(-1px);
+  }
+  .ft-btn-dark {
+    color: #fff;
+    background: #17100e;
+  }
+  .ft-btn-dark:hover {
+    box-shadow: 0 4px 16px rgba(23, 16, 14, 0.3);
+  }
+  .ft-btn-light {
+    color: #17100e;
+    background: #fff;
+    border: 1px solid rgba(23, 16, 14, 0.12);
+  }
+  .ft-btn-light:hover {
+    box-shadow: 0 4px 16px rgba(23, 16, 14, 0.08);
+  }
+  .ft-btn-light-white {
+    color: #17100e;
+    background: #fff;
+  }
+  .ft-btn-light-white:hover {
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.3);
+  }
+
+  /* ══════════════════════════════════════════════════════
+     Section 1: Hero
+     ══════════════════════════════════════════════════════ */
+  .ft-hero {
+    background: #fff;
+    padding: 140px 24px 60px;
+  }
+  .ft-hero-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+  }
+  .ft-hero-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .ft-hero-image {
+    flex: 1;
+    min-width: 0;
+  }
+  .ft-breadcrumb {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #888;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .ft-hero-headline {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(36px, 6vw, 72px);
+    color: #17100e;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 20px;
+  }
+  .ft-hero-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #5c5c5c;
+    line-height: 1.6;
+    margin: 0 0 32px;
+    max-width: 520px;
+  }
+  .ft-hero-ctas {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 900px) {
+    .ft-hero-inner {
+      flex-direction: column;
+      text-align: left;
+    }
+    .ft-hero-image {
+      width: 100%;
+    }
+  }
+  @media (max-width: 767.98px) {
+    .ft-hero {
+      padding: 120px 16px 40px;
+    }
+    .ft-hero-inner {
+      gap: 32px;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     Section 2: Value Props
+     ══════════════════════════════════════════════════════ */
+  .ft-vp-wrapper {
+    /* Container for all value prop blocks */
+  }
+  .ft-vp-block {
+    padding: 80px 24px;
+  }
+  .ft-vp-block:nth-child(odd) {
+    background: #fff;
+  }
+  .ft-vp-block:nth-child(even) {
+    background: #f4f3ec;
+  }
+  .ft-vp-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 64px;
+  }
+  .ft-vp-block:nth-child(even) .ft-vp-inner {
+    flex-direction: row-reverse;
+  }
+  .ft-vp-image {
+    flex: 1;
+    min-width: 0;
+  }
+  .ft-vp-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .ft-vp-title {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(24px, 4vw, 36px);
+    color: #17100e;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin: 0 0 32px;
+  }
+  .ft-vp-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .ft-vp-feature {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(23, 16, 14, 0.08);
+  }
+  .ft-vp-feature:last-child {
+    border-bottom: none;
+  }
+  .ft-vp-feature-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #17100e;
+    margin: 0 0 6px;
+    line-height: 1.4;
+  }
+  .ft-vp-feature-desc {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    color: #5c5c5c;
+    margin: 0;
+    line-height: 1.6;
+  }
+  @media (max-width: 767.98px) {
+    .ft-vp-block {
+      padding: 48px 16px;
+    }
+    .ft-vp-inner {
+      flex-direction: column;
+      gap: 32px;
+    }
+    .ft-vp-block:nth-child(even) .ft-vp-inner {
+      flex-direction: column;
+    }
+    .ft-vp-image {
+      order: -1;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     Section 3: Stats
+     ══════════════════════════════════════════════════════ */
+  .ft-stats {
+    background: #f4f3ec;
+    padding: 80px 24px;
+  }
+  .ft-stats-heading {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(24px, 4vw, 36px);
+    color: #17100e;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    text-align: center;
+    margin: 0 0 48px;
+  }
+  .ft-stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .ft-stats-card {
+    flex: 1;
+    text-align: center;
+  }
+  .ft-stats-value {
+    display: block;
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(36px, 5vw, 56px);
+    color: #17100e;
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+  .ft-stats-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #17100e;
+    margin-top: 8px;
+  }
+  .ft-stats-desc {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    color: #5c5c5c;
+    line-height: 1.5;
+    margin: 8px auto 0;
+    max-width: 280px;
+  }
+  @media (max-width: 767.98px) {
+    .ft-stats-row {
+      flex-direction: column;
+      gap: 32px;
+      align-items: center;
+    }
+    .ft-stats-card {
+      max-width: 320px;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     Section 4: Testimonial
+     ══════════════════════════════════════════════════════ */
+  .ft-testimonial {
+    background: #fff;
+    padding: 80px 24px;
+  }
+  .ft-testimonial-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .ft-testimonial-quote {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 400;
+    font-size: clamp(20px, 4vw, 36px);
+    color: #17100e;
+    line-height: 1.35;
+    margin: 0;
+    padding: 0;
+    border: none;
+    text-indent: -0.4em;
+  }
+  .ft-testimonial-attribution {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #5c5c5c;
+    margin: 24px 0 0;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     Section 5: Use Cases — Sticky Scroll
+     ══════════════════════════════════════════════════════ */
+  .ft-uc {
+    background: #f4f3ec;
+    padding: 0 24px;
+  }
+  .ft-uc-heading {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(24px, 4vw, 36px);
+    color: #17100e;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    text-align: center;
+    margin: 0 0 48px;
+    padding-top: 80px;
+  }
+  .ft-uc-sticky {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .ft-uc-layout {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+  }
+
+  /* Sidebar */
+  .ft-uc-sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: sticky;
+    top: 180px;
+  }
+  .ft-uc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #888;
+    text-align: left;
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .ft-uc-item:hover {
+    color: #17100e;
+    background: rgba(23, 16, 14, 0.04);
+  }
+  .ft-uc-item.active {
+    color: #17100e;
+    background: rgba(23, 16, 14, 0.06);
+  }
+  .ft-uc-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ccc;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+  }
+  .ft-uc-item.active .ft-uc-dot {
+    background: var(--ft-dot-color);
+  }
+  .ft-uc-item-label {
+    line-height: 1.3;
+  }
+
+  /* Panels */
+  .ft-uc-panels {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    min-height: 500px;
+  }
+  .ft-uc-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .ft-uc-panel.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .ft-uc-panel-title {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: #17100e;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+    margin: 0 0 12px;
+  }
+  .ft-uc-panel-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #5c5c5c;
+    line-height: 1.6;
+    margin: 0 0 24px;
+    max-width: 600px;
+  }
+
+  /* Desktop: 400vh tall section for scroll-driven animation */
+  @media (min-width: 768px) {
+    .ft-uc {
+      height: 400vh;
+    }
+    .ft-uc-sticky {
+      position: sticky;
+      top: 120px;
+      height: 80vh;
+    }
+  }
+
+  /* Mobile: no sticky, all visible */
+  @media (max-width: 767.98px) {
+    .ft-uc {
+      height: auto;
+      padding: 0 16px 48px;
+    }
+    .ft-uc-heading {
+      padding-top: 48px;
+      margin-bottom: 32px;
+    }
+    .ft-uc-sidebar {
+      display: none;
+    }
+    .ft-uc-layout {
+      flex-direction: column;
+      gap: 32px;
+    }
+    .ft-uc-panels {
+      position: static;
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .ft-uc-panel {
+      position: static;
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     Section 6: CTA Footer
+     ══════════════════════════════════════════════════════ */
+  .ft-cta-container {
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+  }
+  @media (min-width: 640px) { .ft-cta-container { min-height: 360px; } }
+  @media (min-width: 1024px) { .ft-cta-container { min-height: 500px; } }
+
+  .ft-cta-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ft-cta-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(23, 16, 14, 0.25) 0%,
+      rgba(23, 16, 14, 0.45) 100%
+    );
+  }
+  .ft-cta-content {
+    position: relative;
+    z-index: 2;
+    padding: 40px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: inherit;
+  }
+  @media (min-width: 640px) { .ft-cta-content { padding: 56px 40px; } }
+  @media (min-width: 1024px) { .ft-cta-content { padding: 80px 48px; } }
+
+  .ft-cta-heading {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(24px, 5vw, 48px);
+    letter-spacing: -1px;
+    color: #ffffff;
+    line-height: 1.1;
+    margin: 0;
+    max-width: 100%;
+  }
+  .ft-cta-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 3vw, 30px);
+    color: #ffffff;
+    line-height: 1.3;
+    margin: 12px 0 0;
+    opacity: 0.9;
+    max-width: 100%;
+  }
+  .ft-cta-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+
+  /* Very small screens */
+  @media (max-width: 400px) {
+    .ft-cta-content { padding: 32px 16px; }
+    .ft-cta-buttons { gap: 8px; }
+  }
+</style>
