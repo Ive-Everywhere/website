@@ -132,8 +132,8 @@ const { feature: f } = Astro.props as { feature: FeatureData };
          Section 5: Use Cases — Sticky Scroll
          ════════════════════════════════════════════════════ -->
     <section class="ft-uc" id="ft-uc-section">
+      <h2 class="ft-uc-heading reveal">{f.useCases.heading}</h2>
       <div class="ft-uc-sticky">
-        <h2 class="ft-uc-heading reveal">{f.useCases.heading}</h2>
         <div class="ft-uc-layout">
           <nav class="ft-uc-sidebar" aria-label="Use cases">
             {f.useCases.cases.map((c, i) => (
@@ -404,7 +404,7 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     font-weight: 700;
     font-size: clamp(36px, 6vw, 72px);
     color: #17100e;
-    letter-spacing: -1px;
+    letter-spacing: -2px;
     line-height: 1.05;
     margin: 0 0 20px;
   }
@@ -606,7 +606,7 @@ const { feature: f } = Astro.props as { feature: FeatureData };
   .ft-testimonial-quote {
     font-family: 'Season Mix', sans-serif;
     font-weight: 400;
-    font-size: clamp(20px, 4vw, 36px);
+    font-size: clamp(20px, 3vw, 36px);
     color: #17100e;
     line-height: 1.35;
     margin: 0;
@@ -618,7 +618,7 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     font-family: 'Inter', sans-serif;
     font-weight: 400;
     font-size: 16px;
-    color: #5c5c5c;
+    color: #17100e;
     margin: 24px 0 0;
   }
 
@@ -657,8 +657,6 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     display: flex;
     flex-direction: column;
     gap: 8px;
-    position: sticky;
-    top: 180px;
   }
   .ft-uc-item {
     display: flex;
@@ -834,9 +832,9 @@ const { feature: f } = Astro.props as { feature: FeatureData };
   }
   .ft-cta-sub {
     font-family: 'Inter', sans-serif;
-    font-size: clamp(14px, 3vw, 30px);
+    font-size: 16px;
     color: #ffffff;
-    line-height: 1.3;
+    line-height: 1.5;
     margin: 12px 0 0;
     opacity: 0.9;
     max-width: 100%;
