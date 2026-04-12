@@ -74,23 +74,25 @@ const { feature: f } = Astro.props as { feature: FeatureData };
           style={`--vp-z: ${blockIdx + 1}; --vp-bg: ${blockIdx % 2 === 0 ? '#ffffff' : '#f4f3ec'}`}
         >
           <div class="ft-vp-inner">
-            <!-- Top row: title left, description right -->
-            <div class="ft-vp-header">
-              <h2 class="ft-vp-title">{block.title}</h2>
-            </div>
-            <!-- Sub-features with images -->
-            <div class="ft-vp-features">
-              {block.features.map((feat) => (
-                <div class="ft-vp-feature">
-                  <div class="ft-vp-feature-text">
-                    <h3 class="ft-vp-feature-title">{feat.title}</h3>
-                    <p class="ft-vp-feature-desc">{feat.desc}</p>
-                  </div>
-                  <div class="ft-vp-feature-image">
-                    <div class="ft-placeholder ft-placeholder-wide" style={`--ft-color: ${f.color}`}></div>
-                  </div>
+            <!-- Two columns: left = title + image, right = desc + sub-features -->
+            <div class="ft-vp-cols">
+              <!-- Left: title + one large image -->
+              <div class="ft-vp-left">
+                <h2 class="ft-vp-title">{block.title}</h2>
+                <div class="ft-placeholder ft-placeholder-card" style={`--ft-color: ${f.color}`}></div>
+              </div>
+              <!-- Right: description + sub-features (text only, separated by lines) -->
+              <div class="ft-vp-right">
+                <p class="ft-vp-desc">{block.features[0]?.desc}</p>
+                <div class="ft-vp-features">
+                  {block.features.map((feat) => (
+                    <div class="ft-vp-feature">
+                      <h3 class="ft-vp-feature-title">{feat.title}</h3>
+                      <p class="ft-vp-feature-desc">{feat.desc}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>
@@ -345,18 +347,26 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     width: 100%;
   }
 
-  /* Header: title */
-  .ft-vp-header {
-    padding-bottom: 32px;
-    border-bottom: 1px solid rgba(23, 16, 14, 0.08);
-    margin-bottom: 40px;
+  /* Two-column layout: title+image left, desc+features right */
+  .ft-vp-cols {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
   }
-  @media (min-width: 768px) {
-    .ft-vp-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
+  @media (max-width: 767.98px) {
+    .ft-vp-cols { flex-direction: column; gap: 32px; }
+  }
+
+  .ft-vp-left {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .ft-vp-right {
+    flex: 1;
+    min-width: 0;
   }
 
   .ft-vp-title {
@@ -369,48 +379,42 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     margin: 0;
   }
 
-  /* Sub-features: each has text left + image right on desktop */
+  .ft-placeholder-card {
+    aspect-ratio: 4 / 5;
+    border-radius: 16px;
+  }
+
+  /* Right column: top description + sub-features below */
+  .ft-vp-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #5c5c5c;
+    line-height: 1.6;
+    margin: 0 0 40px;
+  }
+
   .ft-vp-features {
     display: flex;
     flex-direction: column;
-    gap: 48px;
   }
-  @media (max-width: 767.98px) { .ft-vp-features { gap: 32px; } }
 
   .ft-vp-feature {
-    display: flex;
-    gap: 48px;
-    align-items: flex-start;
-  }
-  @media (max-width: 767.98px) {
-    .ft-vp-feature { flex-direction: column; gap: 20px; }
-  }
-
-  .ft-vp-feature-text {
-    flex: 1;
-    min-width: 0;
-    padding-top: 8px;
-  }
-  .ft-vp-feature-image {
-    flex: 1.5;
-    min-width: 0;
-  }
-  @media (max-width: 767.98px) {
-    .ft-vp-feature-text, .ft-vp-feature-image { flex: none; width: 100%; }
+    padding: 24px 0;
+    border-top: 1px solid rgba(23, 16, 14, 0.08);
   }
 
   .ft-vp-feature-title {
     font-family: 'Inter', sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: #17100e;
-    margin: 0 0 8px;
+    margin: 0 0 6px;
   }
   .ft-vp-feature-desc {
     font-family: 'Inter', sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     color: #5c5c5c;
-    line-height: 1.6;
+    line-height: 1.55;
     margin: 0;
   }
 
