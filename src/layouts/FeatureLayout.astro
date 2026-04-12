@@ -64,28 +64,38 @@ const { feature: f } = Astro.props as { feature: FeatureData };
       </div>
     </section>
 
-    <!-- ══ Section 2: Value Props — sticky scroll (Harvey style)
-         Text stays sticky on the left, images/sub-features scroll on the right ══ -->
-    {f.valueProps.map((block, blockIdx) => (
-      <section class={`ft-vp ${blockIdx % 2 === 0 ? 'ft-vp-white' : 'ft-vp-cream'}`} data-vp-section>
-        <div class="ft-vp-inner">
-          <!-- Left: sticky text -->
-          <div class="ft-vp-sticky">
-            <h2 class="ft-vp-title">{block.title}</h2>
-          </div>
-          <!-- Right: scrolling features -->
-          <div class="ft-vp-scroll">
-            {block.features.map((feat) => (
-              <div class="ft-vp-feature reveal">
-                <h3 class="ft-vp-feature-title">{feat.title}</h3>
-                <p class="ft-vp-feature-desc">{feat.desc}</p>
-                <div class="ft-placeholder ft-placeholder-wide" style={`--ft-color: ${f.color}`}></div>
-              </div>
-            ))}
+    <!-- ══ Section 2: Value Props — stacking sticky cards (Harvey style)
+         Each block is a full-height sticky card. As you scroll, the NEXT block
+         slides up and covers the previous one. Same mechanic as WhyEluu. ══ -->
+    <section class="ft-vp-section">
+      {f.valueProps.map((block, blockIdx) => (
+        <div
+          class="ft-vp-card"
+          style={`--vp-z: ${blockIdx + 1}; --vp-bg: ${blockIdx % 2 === 0 ? '#ffffff' : '#f4f3ec'}`}
+        >
+          <div class="ft-vp-inner">
+            <!-- Top row: title left, description right -->
+            <div class="ft-vp-header">
+              <h2 class="ft-vp-title">{block.title}</h2>
+            </div>
+            <!-- Sub-features with images -->
+            <div class="ft-vp-features">
+              {block.features.map((feat) => (
+                <div class="ft-vp-feature">
+                  <div class="ft-vp-feature-text">
+                    <h3 class="ft-vp-feature-title">{feat.title}</h3>
+                    <p class="ft-vp-feature-desc">{feat.desc}</p>
+                  </div>
+                  <div class="ft-vp-feature-image">
+                    <div class="ft-placeholder ft-placeholder-wide" style={`--ft-color: ${f.color}`}></div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </section>
-    ))}
+      ))}
+    </section>
 
     <!-- ══ Section 3: Stats ══ -->
     <section class="ft-stats">
@@ -301,36 +311,52 @@ const { feature: f } = Astro.props as { feature: FeatureData };
   }
 
   /* ══════════════════════════════════════════════════════════
-     Section 2: Value Props — sticky scroll
-     Title stays sticky on the left, features scroll on the right
+     Section 2: Value Props — stacking sticky cards (Harvey style)
+     Each card is position:sticky and the next card scrolls up
+     to cover the previous one, like the WhyEluu section.
      ══════════════════════════════════════════════════════════ */
-  .ft-vp {
-    padding: 80px 24px;
+  .ft-vp-section {
+    /* No overflow:hidden — it breaks position:sticky */
   }
-  .ft-vp-white { background: #ffffff; }
-  .ft-vp-cream { background: #f4f3ec; }
-  @media (max-width: 767.98px) { .ft-vp { padding: 48px 16px; } }
+
+  .ft-vp-card {
+    background: var(--vp-bg);
+    border-top: 1px solid rgba(23, 16, 14, 0.06);
+    padding: 56px 24px 80px;
+  }
+  @media (min-width: 768px) {
+    .ft-vp-card {
+      position: sticky;
+      top: 80px;
+      z-index: var(--vp-z);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      padding: 56px 24px;
+    }
+  }
+  @media (max-width: 767.98px) {
+    .ft-vp-card { padding: 40px 16px; }
+  }
 
   .ft-vp-inner {
     max-width: 1320px;
     margin: 0 auto;
-    display: flex;
-    gap: 80px;
-    align-items: flex-start;
-  }
-  @media (max-width: 900px) {
-    .ft-vp-inner { flex-direction: column; gap: 32px; }
+    width: 100%;
   }
 
-  /* Sticky title column */
-  .ft-vp-sticky {
-    width: 340px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 140px;
+  /* Header: title */
+  .ft-vp-header {
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(23, 16, 14, 0.08);
+    margin-bottom: 40px;
   }
-  @media (max-width: 900px) {
-    .ft-vp-sticky { position: static; width: 100%; }
+  @media (min-width: 768px) {
+    .ft-vp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
   }
 
   .ft-vp-title {
@@ -343,27 +369,42 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     margin: 0;
   }
 
-  /* Scrolling features column */
-  .ft-vp-scroll {
-    flex: 1;
-    min-width: 0;
+  /* Sub-features: each has text left + image right on desktop */
+  .ft-vp-features {
     display: flex;
     flex-direction: column;
-    gap: 64px;
+    gap: 48px;
   }
-  @media (max-width: 767.98px) { .ft-vp-scroll { gap: 40px; } }
+  @media (max-width: 767.98px) { .ft-vp-features { gap: 32px; } }
 
   .ft-vp-feature {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
+    gap: 48px;
+    align-items: flex-start;
   }
+  @media (max-width: 767.98px) {
+    .ft-vp-feature { flex-direction: column; gap: 20px; }
+  }
+
+  .ft-vp-feature-text {
+    flex: 1;
+    min-width: 0;
+    padding-top: 8px;
+  }
+  .ft-vp-feature-image {
+    flex: 1.5;
+    min-width: 0;
+  }
+  @media (max-width: 767.98px) {
+    .ft-vp-feature-text, .ft-vp-feature-image { flex: none; width: 100%; }
+  }
+
   .ft-vp-feature-title {
     font-family: 'Inter', sans-serif;
     font-size: 18px;
     font-weight: 600;
     color: #17100e;
-    margin: 0;
+    margin: 0 0 8px;
   }
   .ft-vp-feature-desc {
     font-family: 'Inter', sans-serif;
@@ -371,7 +412,6 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     color: #5c5c5c;
     line-height: 1.6;
     margin: 0;
-    max-width: 560px;
   }
 
   /* ══════════════════════════════════════════════════════════
