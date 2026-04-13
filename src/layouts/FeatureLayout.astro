@@ -208,14 +208,12 @@ const { feature: f } = Astro.props as { feature: FeatureData };
   <script>
     (function () {
       const tabs = document.querySelectorAll('[data-uc-tab]') as NodeListOf<HTMLElement>;
-      const panels = document.querySelectorAll('[data-uc-panel]') as NodeListOf<HTMLElement>;
-      if (!tabs.length || !panels.length) return;
+      if (!tabs.length) return;
 
       tabs.forEach((tab) => {
         tab.addEventListener('click', () => {
           const idx = parseInt(tab.dataset.ucTab!, 10);
           tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
-          panels.forEach((p, i) => p.classList.toggle('active', i === idx));
         });
       });
     })();
