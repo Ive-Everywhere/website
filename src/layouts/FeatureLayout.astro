@@ -44,20 +44,15 @@ const { feature: f } = Astro.props as { feature: FeatureData };
   <Navbar />
   <main>
 
-    <!-- ══ Section 1: Hero — vertically stacked (Harvey style) ══ -->
+    <!-- ══ Section 1: Hero — Harvey style: breadcrumb, massive headline, full-width image ══ -->
     <section class="ft-hero">
       <div class="ft-hero-inner">
-        <span class="ft-breadcrumb">Platform &gt; {f.breadcrumb}</span>
-        <h1 class="ft-hero-headline">{f.headline}</h1>
-        <p class="ft-hero-desc">{f.description}</p>
-        <div class="ft-hero-ctas">
-          <a href="https://app.eluu.ai" class="ft-btn ft-btn-dark"
-            onclick={`window.posthog?.capture('feature_get_started_clicked', { feature: '${f.slug}', location: 'hero' })`}
-          >Get started</a>
-          <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="ft-btn ft-btn-light"
-            onclick={`window.posthog?.capture('feature_demo_clicked', { feature: '${f.slug}', location: 'hero' })`}
-          >Book a demo</a>
+        <div class="ft-breadcrumb">
+          <span class="ft-breadcrumb-muted">Platform Overview</span>
+          <span class="ft-breadcrumb-sep">/</span>
+          <span class="ft-breadcrumb-active">{f.breadcrumb}</span>
         </div>
+        <h1 class="ft-hero-headline">{f.headline}</h1>
         <div class="ft-hero-image">
           <div class="ft-placeholder ft-placeholder-hero" style={`--ft-color: ${f.color}`}></div>
         </div>
@@ -252,7 +247,7 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     opacity: 0.12;
     mix-blend-mode: overlay;
   }
-  .ft-placeholder-hero { aspect-ratio: 21 / 9; border-radius: 20px; }
+  .ft-placeholder-hero { aspect-ratio: 16 / 9; border-radius: 16px; }
   .ft-placeholder-wide { aspect-ratio: 16 / 9; border-radius: 14px; }
   .ft-placeholder-uc { aspect-ratio: 16 / 10; border-radius: 14px; min-height: 300px; }
   @media (max-width: 767.98px) {
@@ -263,51 +258,47 @@ const { feature: f } = Astro.props as { feature: FeatureData };
   /* ══════════════════════════════════════════════════════════
      Section 1: Hero — vertically stacked (Harvey style)
      ══════════════════════════════════════════════════════════ */
+  /* ══ Hero — Harvey style: breadcrumb, massive headline, full-width image ══ */
   .ft-hero {
     background: #ffffff;
   }
   .ft-hero-inner {
     max-width: 1320px;
     margin: 0 auto;
-    padding: 140px 20px 60px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 32px;
+    padding: 140px 20px 80px;
   }
   @media (max-width: 480px) {
-    .ft-hero-inner { padding: 120px 16px 32px; gap: 24px; }
+    .ft-hero-inner { padding: 120px 16px 40px; }
   }
 
+  /* Breadcrumb: "Platform Overview / Assistant" */
   .ft-breadcrumb {
     font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    color: #888;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
   }
+  .ft-breadcrumb-muted { color: #888; font-weight: 500; }
+  .ft-breadcrumb-sep { color: #888; }
+  .ft-breadcrumb-active { color: #17100e; font-weight: 600; }
+
+  /* Headline: massive, fills the width */
   .ft-hero-headline {
     font-family: 'Season Mix', sans-serif;
     font-weight: 700;
-    font-size: clamp(36px, 6vw, 72px);
+    font-size: clamp(48px, 8vw, 110px);
     color: #17100e;
-    letter-spacing: -2px;
-    line-height: 1.05;
-    margin: 0;
-    max-width: 700px;
+    letter-spacing: -3px;
+    line-height: 1.0;
+    margin: 0 0 64px;
   }
-  @media (max-width: 480px) { .ft-hero-headline { letter-spacing: -1px; } }
-  .ft-hero-desc {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    color: #5c5c5c;
-    line-height: 1.6;
-    margin: 0;
-    max-width: 560px;
+  @media (max-width: 768px) {
+    .ft-hero-headline { font-size: clamp(36px, 10vw, 72px); letter-spacing: -2px; margin-bottom: 40px; }
   }
-  .ft-hero-ctas {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
+
+  /* Full-width hero image */
   .ft-hero-image {
     width: 100%;
   }
@@ -380,7 +371,7 @@ const { feature: f } = Astro.props as { feature: FeatureData };
   }
 
   .ft-placeholder-card {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     border-radius: 16px;
   }
 
