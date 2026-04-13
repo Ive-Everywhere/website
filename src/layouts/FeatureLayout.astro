@@ -49,7 +49,7 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     <section class="ft-hero">
       <div class="ft-hero-inner">
         <div class="ft-breadcrumb">
-          <span class="ft-breadcrumb-muted">Platform Overview</span>
+          <a href="/" class="ft-breadcrumb-link">Home</a>
           <span class="ft-breadcrumb-sep">/</span>
           <span class="ft-breadcrumb-active">{f.breadcrumb}</span>
         </div>
@@ -128,33 +128,32 @@ const { feature: f } = Astro.props as { feature: FeatureData };
       </div>
     </section>
 
-    <!-- ══ Section 5: Use Cases — click-based tabs, big layout ══ -->
+    <!-- ══ Section 5: Use Cases — dark bg, Harvey style ══ -->
     <section class="ft-uc">
-      <h2 class="ft-uc-heading reveal">{f.useCases.heading}</h2>
-      <div class="ft-uc-layout">
-        <!-- Left: tab sidebar -->
-        <nav class="ft-uc-sidebar" aria-label="Use cases">
-          {f.useCases.cases.map((c, i) => (
-            <button
-              class={`ft-uc-tab${i === 0 ? ' active' : ''}`}
-              data-uc-tab={i}
-              style={`--ft-dot: ${f.color}`}
-              type="button"
-            >
-              <span class="ft-uc-dot"></span>
-              <span>{c.title}</span>
-            </button>
-          ))}
-        </nav>
-        <!-- Right: content panels -->
-        <div class="ft-uc-content">
-          {f.useCases.cases.map((c, i) => (
-            <div class={`ft-uc-panel${i === 0 ? ' active' : ''}`} data-uc-panel={i}>
-              <h3 class="ft-uc-panel-title">{c.title}</h3>
-              <p class="ft-uc-panel-desc">{c.desc}</p>
-              <div class="ft-placeholder ft-placeholder-uc" style={`--ft-color: ${f.color}`}></div>
-            </div>
-          ))}
+      <div class="ft-uc-inner">
+        <h2 class="ft-uc-heading">{f.useCases.heading}</h2>
+        <div class="ft-uc-layout">
+          <!-- Left: tab list with divider lines -->
+          <div class="ft-uc-tabs">
+            {f.useCases.cases.map((c, i) => (
+              <button
+                class={`ft-uc-tab${i === 0 ? ' active' : ''}`}
+                data-uc-tab={i}
+                type="button"
+              >
+                <h3 class="ft-uc-tab-title">{c.title}</h3>
+                <p class="ft-uc-tab-desc">{c.desc}</p>
+              </button>
+            ))}
+          </div>
+          <!-- Right: large image panel -->
+          <div class="ft-uc-image">
+            {f.useCases.cases.map((c, i) => (
+              <div class={`ft-uc-panel${i === 0 ? ' active' : ''}`} data-uc-panel={i}>
+                <div class="ft-placeholder ft-placeholder-uc" style={`--ft-color: ${f.color}`}></div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -292,7 +291,13 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     gap: 8px;
     margin-bottom: 24px;
   }
-  .ft-breadcrumb-muted { color: #888; font-weight: 500; }
+  .ft-breadcrumb-link {
+    color: #888;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .ft-breadcrumb-link:hover { color: #17100e; }
   .ft-breadcrumb-sep { color: #888; }
   .ft-breadcrumb-active { color: #17100e; font-weight: 600; }
 
@@ -533,130 +538,131 @@ const { feature: f } = Astro.props as { feature: FeatureData };
   }
 
   /* ══════════════════════════════════════════════════════════
-     Section 5: Use Cases — click-based tabs, big layout
+     Section 5: Use Cases — dark bg, Harvey style
      ══════════════════════════════════════════════════════════ */
   .ft-uc {
-    background: #f4f3ec;
+    background: #17100e;
+    color: #ffffff;
     padding: 80px 24px;
   }
   @media (max-width: 767.98px) { .ft-uc { padding: 48px 16px; } }
+
+  .ft-uc-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
 
   .ft-uc-heading {
     font-family: 'Season Mix', sans-serif;
     font-weight: 700;
     font-size: clamp(28px, 5vw, 44px);
-    color: #17100e;
+    color: #ffffff;
     letter-spacing: -1.5px;
-    text-align: center;
-    margin: 0 0 48px;
+    text-align: right;
+    margin: 0 0 56px;
+  }
+  @media (max-width: 767.98px) {
+    .ft-uc-heading { text-align: left; margin-bottom: 32px; }
   }
 
   .ft-uc-layout {
-    max-width: 1320px;
-    margin: 0 auto;
     display: flex;
     gap: 48px;
     align-items: flex-start;
   }
   @media (max-width: 767.98px) {
-    .ft-uc-layout { flex-direction: column; gap: 24px; }
+    .ft-uc-layout { flex-direction: column; gap: 32px; }
   }
 
-  /* Tab sidebar */
-  .ft-uc-sidebar {
-    width: 240px;
+  /* Left: tab list with border-top dividers */
+  .ft-uc-tabs {
+    width: 45%;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    gap: 4px;
   }
-  @media (max-width: 767.98px) {
-    .ft-uc-sidebar {
-      width: 100%;
-      flex-direction: row;
-      overflow-x: auto;
-      gap: 8px;
-      padding-bottom: 8px;
-    }
-  }
+  @media (max-width: 767.98px) { .ft-uc-tabs { width: 100%; } }
 
   .ft-uc-tab {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
+    flex-direction: column;
+    gap: 0;
+    padding: 20px 0;
     border: none;
+    border-top: 2px solid rgba(255, 255, 255, 0.15);
     background: transparent;
-    border-radius: 10px;
     cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    font-weight: 400;
-    color: #888;
     text-align: left;
-    white-space: nowrap;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-  .ft-uc-tab:hover {
-    background: rgba(23, 16, 14, 0.04);
-    color: #17100e;
+    transition: border-color 0.2s ease;
   }
   .ft-uc-tab.active {
-    background: rgba(23, 16, 14, 0.06);
-    color: #17100e;
+    border-top-color: #ffffff;
+  }
+
+  .ft-uc-tab-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+    transition: color 0.2s ease;
+  }
+  .ft-uc-tab.active .ft-uc-tab-title {
+    color: #ffffff;
     font-weight: 600;
   }
-
-  .ft-uc-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #d4d3cb;
-    flex-shrink: 0;
-    transition: background 0.2s ease;
-  }
-  .ft-uc-tab.active .ft-uc-dot {
-    background: var(--ft-dot);
+  .ft-uc-tab:hover .ft-uc-tab-title {
+    color: rgba(255, 255, 255, 0.7);
   }
 
-  /* Content panels */
-  .ft-uc-content {
+  /* Description only visible on active tab */
+  .ft-uc-tab-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.55;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s ease,
+                margin 0.35s ease;
+  }
+  .ft-uc-tab.active .ft-uc-tab-desc {
+    max-height: 120px;
+    opacity: 1;
+    margin-top: 10px;
+  }
+
+  /* Right: large image panel */
+  .ft-uc-image {
     flex: 1;
     min-width: 0;
     position: relative;
-    min-height: 500px;
+    min-height: 480px;
   }
-  @media (max-width: 767.98px) { .ft-uc-content { min-height: auto; } }
+  @media (max-width: 767.98px) { .ft-uc-image { min-height: 280px; } }
 
   .ft-uc-panel {
-    display: none;
-    flex-direction: column;
-    gap: 16px;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
   }
   .ft-uc-panel.active {
-    display: flex;
-    animation: ft-uc-fade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  @keyframes ft-uc-fade {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
+    opacity: 1;
+    pointer-events: auto;
   }
 
-  .ft-uc-panel-title {
-    font-family: 'Inter', sans-serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: #17100e;
-    margin: 0;
+  .ft-placeholder-uc {
+    aspect-ratio: auto;
+    border-radius: 14px;
+    height: 100%;
+    min-height: 480px;
   }
-  .ft-uc-panel-desc {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    color: #5c5c5c;
-    line-height: 1.6;
-    margin: 0;
-    max-width: 600px;
-  }
+  @media (max-width: 767.98px) { .ft-placeholder-uc { min-height: 280px; } }
 
   /* ══════════════════════════════════════════════════════════
      Section 6: CTA Footer
