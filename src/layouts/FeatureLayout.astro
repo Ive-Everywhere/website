@@ -11,11 +11,12 @@ interface FeatureData {
   breadcrumb: string;
   headline: string;
   description: string;
+  heroImage?: string;
   intro?: { bold: string; supporting: string };
-  valueProps: { title: string; features: { title: string; desc: string }[] }[];
+  valueProps: { title: string; image?: string; features: { title: string; desc: string }[] }[];
   stats: { heading: string; items: { value: string; label: string; desc: string }[] };
   testimonial: { quote: string; attribution: string };
-  useCases: { heading: string; cases: { title: string; desc: string }[] };
+  useCases: { heading: string; image?: string; cases: { title: string; desc: string }[] };
   ctaHeading: string;
 }
 
@@ -55,7 +56,11 @@ const { feature: f } = Astro.props as { feature: FeatureData };
         </div>
         <h1 class="ft-hero-headline">{f.headline}</h1>
         <div class="ft-hero-image">
-          <div class="ft-placeholder ft-placeholder-hero" style={`--ft-color: ${f.color}`}></div>
+          {f.heroImage ? (
+            <img src={f.heroImage} alt={f.headline} class="ft-hero-img" loading="eager" />
+          ) : (
+            <div class="ft-placeholder ft-placeholder-hero" style={`--ft-color: ${f.color}`}></div>
+          )}
         </div>
       </div>
     </section>
@@ -86,7 +91,11 @@ const { feature: f } = Astro.props as { feature: FeatureData };
               <!-- Left: title + one large image -->
               <div class="ft-vp-left">
                 <h2 class="ft-vp-title">{block.title}</h2>
-                <div class="ft-placeholder ft-placeholder-card" style={`--ft-color: ${f.color}`}></div>
+                {block.image ? (
+                  <img src={block.image} alt={block.title} class="ft-vp-img" loading="lazy" />
+                ) : (
+                  <div class="ft-placeholder ft-placeholder-card" style={`--ft-color: ${f.color}`}></div>
+                )}
               </div>
               <!-- Right: description + sub-features (text only, separated by lines) -->
               <div class="ft-vp-right">
@@ -146,13 +155,13 @@ const { feature: f } = Astro.props as { feature: FeatureData };
               </button>
             ))}
           </div>
-          <!-- Right: large image panel -->
+          <!-- Right: single constant image -->
           <div class="ft-uc-image">
-            {f.useCases.cases.map((c, i) => (
-              <div class={`ft-uc-panel${i === 0 ? ' active' : ''}`} data-uc-panel={i}>
-                <div class="ft-placeholder ft-placeholder-uc" style={`--ft-color: ${f.color}`}></div>
-              </div>
-            ))}
+            {f.useCases.image ? (
+              <img src={f.useCases.image} alt={f.useCases.heading} class="ft-uc-img" loading="lazy" />
+            ) : (
+              <div class="ft-placeholder ft-placeholder-uc" style={`--ft-color: ${f.color}`}></div>
+            )}
           </div>
         </div>
       </div>
@@ -259,6 +268,12 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     mix-blend-mode: overlay;
   }
   .ft-placeholder-hero { aspect-ratio: 16 / 9; border-radius: 16px; }
+  .ft-hero-img {
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+    display: block;
+  }
   .ft-placeholder-wide { aspect-ratio: 16 / 9; border-radius: 14px; }
   .ft-placeholder-uc { aspect-ratio: 16 / 10; border-radius: 14px; min-height: 300px; }
   @media (max-width: 767.98px) {
@@ -416,6 +431,14 @@ const { feature: f } = Astro.props as { feature: FeatureData };
   .ft-placeholder-card {
     aspect-ratio: 1 / 1;
     border-radius: 16px;
+  }
+  .ft-vp-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 16px;
+    display: block;
   }
 
   /* Right column: top description + sub-features below */
@@ -657,12 +680,23 @@ const { feature: f } = Astro.props as { feature: FeatureData };
   }
 
   .ft-placeholder-uc {
-    aspect-ratio: auto;
+    aspect-ratio: 1 / 1;
     border-radius: 14px;
     height: 100%;
     min-height: 480px;
   }
-  @media (max-width: 767.98px) { .ft-placeholder-uc { min-height: 280px; } }
+  .ft-uc-img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
+  }
+  @media (max-width: 767.98px) {
+    .ft-placeholder-uc { min-height: 280px; }
+    .ft-uc-img { height: auto; min-height: 280px; }
+  }
 
   /* ══════════════════════════════════════════════════════════
      Section 6: CTA Footer
