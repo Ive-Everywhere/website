@@ -3,54 +3,54 @@ import FeatureLayout from '../../layouts/FeatureLayout.astro';
 
 const feature = {
   slug: 'team-drive',
-  name: 'Team Drive',
+  name: 'Hard Drive',
   color: '#7a8b6e',
-  breadcrumb: 'Team Drive',
-  headline: "Your agents' shared brain",
-  description: 'A shared knowledge base that gives every AI colleague the same context.',
+  breadcrumb: 'Hard Drive',
+  headline: "Every colleague gets a brain.",
+  description: "Each AI colleague has its own Hard Drive — a personal knowledge store for files, context, and memory. Share a colleague with your team, and their Hard Drive becomes shared too.",
   intro: {
-    bold: 'Upload, organize, recall.',
-    supporting: 'A shared knowledge base that gives every AI colleague the same context — files, playbooks, SOPs, and institutional memory.',
+    bold: 'Personal storage. Shared when you are.',
+    supporting: "Every colleague gets its own Hard Drive to store files, reference docs, and accumulated context. When a colleague is shared with the team, their knowledge becomes everyone's knowledge.",
   },
   valueProps: [
     {
-      title: 'Everything in one place',
+      title: 'One brain per colleague',
       features: [
-        { title: 'Centralized uploads', desc: 'Drop files, playbooks, SOPs, and reference docs into a shared drive your colleagues can access instantly.' },
-        { title: 'Automatic indexing', desc: 'Team Drive reads and indexes every document so colleagues can search and recall information without being told where to look.' },
-        { title: 'Version control', desc: 'Every update is tracked. Colleagues always reference the latest version, never stale data.' },
+        { title: 'Personal knowledge store', desc: "Each colleague has its own Hard Drive. Upload files, playbooks, SOPs, and reference material — it's theirs to remember and recall." },
+        { title: 'Persistent memory', desc: "Everything a colleague learns, reads, or processes is stored in their Hard Drive. They never forget context, even across sessions." },
+        { title: 'Automatic indexing', desc: "Drop a file in and it's instantly indexed. Your colleague can search, cite, and reason over it without being told where to look." },
       ],
     },
     {
-      title: 'Context that compounds',
+      title: 'Shared when your colleague is',
       features: [
-        { title: 'Cross-colleague access', desc: 'Every colleague draws from the same knowledge base. What one learns, all can reference.' },
-        { title: 'Smart retrieval', desc: "Colleagues don't just keyword-search. They understand context, pull relevant sections, and cite their sources." },
-        { title: 'Org-wide memory', desc: "Institutional knowledge doesn't leave when people do. It lives in Team Drive, accessible to every current and future colleague." },
+        { title: 'Team-shared access', desc: "When a colleague is shared with the team, their Hard Drive becomes visible to everyone. One upload, everyone benefits." },
+        { title: 'Scoped visibility', desc: "Personal colleagues keep their Hard Drive private. Team colleagues share theirs. You control who sees what." },
+        { title: 'Compounding knowledge', desc: "As team colleagues accumulate context — deal history, playbooks, client notes — the shared Hard Drive becomes your team's institutional memory." },
       ],
     },
   ],
   stats: {
-    heading: 'Proven results with Team Drive',
+    heading: 'Proven results with Hard Drive',
     items: [
-      { value: '500+', label: 'docs indexed', desc: 'per team on average across all document types' },
+      { value: '500+', label: 'docs indexed', desc: 'per colleague across all file types and formats' },
       { value: '< 2s', label: 'retrieval time', desc: 'average time for a colleague to find and cite relevant information' },
-      { value: 'Zero', label: 'context re-explaining', desc: 'colleagues never ask you to repeat what they already know' },
+      { value: 'Zero', label: 'context lost', desc: 'colleagues never forget what they have read or been told' },
     ],
   },
   testimonial: {
-    quote: "We uploaded our entire sales playbook and three months of deal memos. By the next day, our AI colleague was prepping call briefs with context we'd forgotten we had.",
+    quote: "We uploaded our entire sales playbook to Steve's Hard Drive. By the next morning, he was prepping call briefs with context we'd forgotten we had — and the whole sales team could see it.",
     attribution: 'VP of Sales, Mid-Market SaaS',
   },
   useCases: {
-    heading: 'What teams build with Team Drive',
+    heading: 'What teams store in Hard Drive',
     cases: [
-      { title: 'Sales enablement', desc: 'Colleagues pull from your playbook, competitive intel, and deal history to prep for every call.' },
-      { title: 'Compliance documentation', desc: 'Upload policies and regulations. Colleagues reference them when reviewing contracts or flagging risks.' },
-      { title: 'Employee onboarding', desc: 'New hires get instant answers from your knowledge base. Colleagues surface the right docs at the right time.' },
+      { title: 'Sales playbooks', desc: "Upload your playbook, competitive intel, and deal templates to your sales colleague's Hard Drive. Every call prep is informed by your best material." },
+      { title: 'Compliance & policy docs', desc: "Give your legal colleague access to regulations, internal policies, and audit requirements. They reference them automatically when reviewing contracts." },
+      { title: 'Client history', desc: "Past proposals, meeting notes, and account context — all in the colleague's Hard Drive. They walk into every conversation fully briefed." },
     ],
   },
-  ctaHeading: 'Give your colleagues a shared brain.',
+  ctaHeading: "Give every colleague a memory.",
 };
 ---
 <FeatureLayout feature={feature} />
