@@ -1,0 +1,95 @@
+---
+import FeatureLayout from '../../layouts/FeatureLayout.astro';
+import SlackDemo from '../../components/SlackDemo.astro';
+
+const feature = {
+  slug: 'slack',
+  name: 'Slack',
+  color: '#4A154B',
+  breadcrumb: 'Slack',
+  headline: 'Talk to your colleagues in Slack',
+  description: 'Your AI colleagues live in Slack. Assign tasks, ask questions, get updates.',
+  intro: {
+    bold: 'Just @ them.',
+    supporting: 'Your AI colleagues live in Slack. Assign tasks, ask questions, get updates — all in the channels where your team already works.',
+  },
+  valueProps: [
+    {
+      title: 'AI colleagues, native to Slack',
+      image: '/images/features/slack-feature-1.png',
+      features: [
+        { title: 'Mention to activate', desc: '@ your colleague in any channel. They read the context, understand the task, and get to work.' },
+        { title: 'Thread-aware', desc: 'Colleagues follow conversation threads. They know what was discussed, who asked what, and where things stand.' },
+        { title: 'Push updates', desc: 'Colleagues proactively message you with completed tasks, flagged risks, and scheduled summaries. No polling.' },
+      ],
+    },
+  ],
+  stats: {
+    heading: 'Proven results with Slack',
+    items: [
+      { value: 'Instant', label: 'task assignment', desc: 'via @ mention in any channel or thread' },
+      { value: 'Thread-aware', label: 'context', desc: 'colleagues understand full conversation history' },
+      { value: '24/7', label: 'availability', desc: 'in every channel, every time zone' },
+    ],
+  },
+  testimonial: {
+    quote: "I just type '@Ruby review this week's pipeline' in our revenue channel and get a full analysis in under a minute. It's like having a team member who never sleeps.",
+    attribution: 'VP of Revenue, Growth-Stage Startup',
+  },
+  useCases: {
+    heading: 'What teams do with Slack',
+    image: '/images/features/slack-bottom.png',
+    cases: [
+      { title: 'Pipeline check-ins', desc: 'Ask your colleague for a pipeline summary directly in your sales channel. Get an answer in seconds.' },
+      { title: 'Daily standup summaries', desc: 'Your colleague posts a morning summary of what happened overnight — deals moved, tasks completed, risks flagged.' },
+      { title: 'Ad-hoc research', desc: 'Drop a question in any channel. Your colleague searches your data, pulls context, and responds with citations.' },
+    ],
+  },
+  ctaHeading: 'Put your colleagues where your team already works.',
+};
+---
+<FeatureLayout feature={feature}>
+  <div class="sk-hero-wrap" slot="hero-content">
+    <img src="/images/features/slack-hero-bg.png" alt="" class="sk-bg" aria-hidden="true" />
+    <div class="sk-bg-overlay"></div>
+    <div class="sk-demo">
+      <SlackDemo />
+    </div>
+  </div>
+</FeatureLayout>
+
+<style>
+  .sk-hero-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sk-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  .sk-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  .sk-demo {
+    position: relative;
+    z-index: 2;
+    width: 75%;
+  }
+  @media (max-width: 767px) {
+    .sk-hero-wrap { aspect-ratio: 4 / 3; border-radius: 14px; }
+    .sk-demo { width: 92%; }
+  }
+</style>

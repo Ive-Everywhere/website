@@ -1,0 +1,60 @@
+---
+import FeatureLayout from '../../layouts/FeatureLayout.astro';
+
+const feature = {
+  slug: 'jobs',
+  name: 'Jobs',
+  color: '#c49a6a',
+  breadcrumb: 'Jobs',
+  headline: 'Ops on autopilot.',
+  heroImage: '/images/features/jobs-hero.png',
+  description: 'Run tasks on a schedule, trigger from emails, events, or APIs — or fire one-off jobs from anywhere. Your colleagues handle the execution.',
+  intro: {
+    bold: 'Schedule it. Trigger it. Forget it.',
+    supporting: 'Run tasks on a schedule, trigger from incoming emails by detecting keywords, fire on events from any tool, or launch one-off jobs from anywhere. Your colleagues handle the rest.',
+  },
+  valueProps: [
+    {
+      title: 'Trigger from anywhere',
+      image: '/images/features/jobs-feature-1.png',
+      features: [
+        { title: 'Scheduled tasks', desc: 'Run any task on a cron schedule. Daily pipeline reviews, weekly reports, monthly reconciliations — all hands-free.' },
+        { title: 'Email triggers', desc: 'Detect keywords, senders, or patterns in incoming emails and automatically kick off a job. A client emails about an invoice? Your colleague handles it.' },
+        { title: 'Event triggers', desc: 'Fire a job when a deal closes, a ticket escalates, a form is submitted, or any threshold is crossed. Zero manual intervention.' },
+      ],
+    },
+    {
+      title: 'Orchestrate at scale',
+      image: '/images/features/jobs-feature-2.png',
+      features: [
+        { title: 'Multi-step workflows', desc: "Chain tasks together. One job's output feeds the next. Build pipelines that span tools, colleagues, and departments." },
+        { title: 'Parallel execution', desc: 'Run multiple jobs simultaneously across different colleagues and projects. Weeks of work done in hours.' },
+        { title: 'Full audit trail', desc: 'Every job is logged with what ran, when, what it produced, how long it took, and what triggered it.' },
+      ],
+    },
+  ],
+  stats: {
+    heading: 'Proven results with Jobs',
+    items: [
+      { value: '1000s', label: 'jobs per month', desc: 'run per team across scheduled and triggered workflows' },
+      { value: '< 1s', label: 'trigger latency', desc: 'from event to execution start' },
+      { value: '99.9%', label: 'completion rate', desc: 'with automatic retry and error handling' },
+    ],
+  },
+  testimonial: {
+    quote: "We set up a scheduled job that reviews our pipeline every morning at 7am and posts a summary to Slack. It's been running for three months without a single miss.",
+    attribution: 'Operations Lead, B2B Platform',
+  },
+  useCases: {
+    heading: 'What teams automate with Jobs',
+    image: '/images/features/jobs-usecases.png',
+    cases: [
+      { title: 'Morning pipeline briefings', desc: 'A scheduled job reviews every deal overnight and posts a summary to your team channel before 8am.' },
+      { title: 'Invoice generation on deal close', desc: 'When a deal marks as closed-won, a job creates the invoice in Stripe and logs it in your spreadsheet.' },
+      { title: 'Weekly board report drafts', desc: 'Every Friday, a job pulls data from every revenue system and drafts a board-ready report.' },
+    ],
+  },
+  ctaHeading: 'Put your operations on autopilot.',
+};
+---
+<FeatureLayout feature={feature} />

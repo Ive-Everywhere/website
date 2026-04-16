@@ -1,0 +1,759 @@
+---
+import '../styles/global.css'
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import PostHog from '../components/PostHog.astro';
+
+interface FeatureData {
+  slug: string;
+  name: string;
+  color: string;
+  breadcrumb: string;
+  headline: string;
+  description: string;
+  heroImage?: string;
+  intro?: { bold: string; supporting: string };
+  valueProps: { title: string; image?: string; features: { title: string; desc: string }[] }[];
+  stats: { heading: string; items: { value: string; label: string; desc: string }[] };
+  testimonial: { quote: string; attribution: string };
+  useCases: { heading: string; image?: string; cases: { title: string; desc: string }[] };
+  ctaHeading: string;
+}
+
+const { feature: f } = Astro.props as { feature: FeatureData };
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{f.name} — Eluu</title>
+  <meta name="description" content={f.description} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preload" href="/fonts/season-mix-bold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/season-mix-regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="/fonts/jersey-10.woff2" as="font" type="font/woff2" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script is:inline>
+    try { sessionStorage.setItem('eluu_splash_shown', '1'); } catch (e) {}
+  </script>
+  <PostHog />
+</head>
+<body>
+  <Navbar />
+  <main>
+
+    <!-- ══ Section 1: Hero — Harvey style: breadcrumb, massive headline, full-width image ══ -->
+    <section class="ft-hero">
+      <div class="ft-hero-inner">
+        <div class="ft-breadcrumb">
+          <a href="/" class="ft-breadcrumb-link">Home</a>
+          <span class="ft-breadcrumb-sep">/</span>
+          <span class="ft-breadcrumb-active">{f.breadcrumb}</span>
+        </div>
+        <h1 class="ft-hero-headline">{f.headline}</h1>
+        <div class="ft-hero-image">
+          {f.heroImage ? (
+            <img src={f.heroImage} alt={f.headline} class="ft-hero-img" loading="eager" />
+          ) : (
+            <slot name="hero-content">
+              <div class="ft-placeholder ft-placeholder-hero" style={`--ft-color: ${f.color}`}></div>
+            </slot>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ Intro block — bold statement + supporting line ══ -->
+    {f.intro && (
+      <section class="ft-intro">
+        <div class="ft-intro-inner">
+          <h2 class="ft-intro-text">
+            <strong>{f.intro.bold}</strong> {f.intro.supporting}
+          </h2>
+        </div>
+      </section>
+    )}
+
+    <!-- ══ Section 2: Value Props — stacking sticky cards (Harvey style)
+         Each block is a full-height sticky card. As you scroll, the NEXT block
+         slides up and covers the previous one. Same mechanic as WhyEluu. ══ -->
+    <section class="ft-vp-section">
+      {f.valueProps.map((block, blockIdx) => (
+        <div
+          class="ft-vp-card"
+          style={`--vp-z: ${blockIdx + 1}; --vp-bg: ${blockIdx % 2 === 0 ? '#ffffff' : '#f4f3ec'}`}
+        >
+          <div class="ft-vp-inner">
+            <!-- Two columns: left = title + image, right = desc + sub-features -->
+            <div class="ft-vp-cols">
+              <!-- Left: title + one large image -->
+              <div class="ft-vp-left">
+                <h2 class="ft-vp-title">{block.title}</h2>
+                {block.image ? (
+                  <img src={block.image} alt={block.title} class="ft-vp-img" loading="lazy" />
+                ) : (
+                  <div class="ft-placeholder ft-placeholder-card" style={`--ft-color: ${f.color}`}></div>
+                )}
+              </div>
+              <!-- Right: description + sub-features (text only, separated by lines) -->
+              <div class="ft-vp-right">
+                <p class="ft-vp-desc">{block.features[0]?.desc}</p>
+                <div class="ft-vp-features">
+                  {block.features.map((feat) => (
+                    <div class="ft-vp-feature">
+                      <h3 class="ft-vp-feature-title">{feat.title}</h3>
+                      <p class="ft-vp-feature-desc">{feat.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <!-- ══ Section 3: Stats ══ -->
+    <section class="ft-stats">
+      <h2 class="ft-stats-heading reveal">{f.stats.heading}</h2>
+      <div class="ft-stats-row">
+        {f.stats.items.map((item) => (
+          <div class="ft-stats-card reveal">
+            <span class="ft-stats-value">{item.value}</span>
+            <span class="ft-stats-label">{item.label}</span>
+            <p class="ft-stats-desc">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ══ Section 4: Testimonial ══ -->
+    <section class="ft-testimonial">
+      <div class="ft-testimonial-inner reveal">
+        <blockquote class="ft-testimonial-quote">&ldquo;{f.testimonial.quote}&rdquo;</blockquote>
+        <p class="ft-testimonial-attribution">&mdash; {f.testimonial.attribution}</p>
+      </div>
+    </section>
+
+    <!-- ══ Section 5: Use Cases — dark bg, Harvey style ══ -->
+    <section class="ft-uc">
+      <div class="ft-uc-inner">
+        <h2 class="ft-uc-heading">{f.useCases.heading}</h2>
+        <div class="ft-uc-layout">
+          <!-- Left: tab list with divider lines -->
+          <div class="ft-uc-tabs">
+            {f.useCases.cases.map((c, i) => (
+              <button
+                class={`ft-uc-tab${i === 0 ? ' active' : ''}`}
+                data-uc-tab={i}
+                type="button"
+              >
+                <h3 class="ft-uc-tab-title">{c.title}</h3>
+                <p class="ft-uc-tab-desc">{c.desc}</p>
+              </button>
+            ))}
+          </div>
+          <!-- Right: single constant image -->
+          <div class="ft-uc-image">
+            {f.useCases.image ? (
+              <img src={f.useCases.image} alt={f.useCases.heading} class="ft-uc-img" loading="lazy" />
+            ) : (
+              <div class="ft-placeholder ft-placeholder-uc" style={`--ft-color: ${f.color}`}></div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ Section 6: CTA Footer ══ -->
+    <section style="background: #f4f3ec;">
+      <div class="ft-cta-container">
+        <img src="/images/cta-bg.jpg" alt="" aria-hidden="true" class="ft-cta-bg" loading="lazy" />
+        <div class="ft-cta-overlay"></div>
+        <div class="ft-cta-content">
+          <h2 class="ft-cta-heading">{f.ctaHeading}</h2>
+          <div class="ft-cta-buttons">
+            <a href="https://app.eluu.ai" class="ft-btn ft-btn-dark"
+              onclick={`window.posthog?.capture('feature_get_started_clicked', { feature: '${f.slug}', location: 'cta_footer' })`}
+            >Get started</a>
+            <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="ft-btn ft-btn-light-white"
+              onclick={`window.posthog?.capture('feature_demo_clicked', { feature: '${f.slug}', location: 'cta_footer' })`}
+            >Book a demo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+
+  <!-- Reveal observer -->
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  </script>
+
+  <!-- Use-cases tab switching (click-based) -->
+  <script>
+    (function () {
+      const tabs = document.querySelectorAll('[data-uc-tab]') as NodeListOf<HTMLElement>;
+      if (!tabs.length) return;
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const idx = parseInt(tab.dataset.ucTab!, 10);
+          tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+        });
+      });
+    })();
+  </script>
+
+<style>
+  /* ══════════════════════════════════════════════════════════
+     Shared
+     ══════════════════════════════════════════════════════════ */
+  .ft-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 12px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .ft-btn:hover { transform: translateY(-1px); }
+  .ft-btn-dark { color: #fff; background: #17100e; }
+  .ft-btn-dark:hover { box-shadow: 0 4px 12px rgba(23,16,14,0.2); }
+  .ft-btn-light { color: #17100e; background: #fff; border: 1px solid rgba(23,16,14,0.12); }
+  .ft-btn-light:hover { box-shadow: 0 4px 12px rgba(23,16,14,0.08); }
+  .ft-btn-light-white { color: #17100e; background: #fff; }
+  .ft-btn-light-white:hover { box-shadow: 0 4px 16px rgba(255,255,255,0.3); }
+
+  /* Placeholder images */
+  .ft-placeholder {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .ft-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ft-color);
+    opacity: 0.7;
+  }
+  .ft-placeholder::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/images/cookbook-bg.png') center / cover no-repeat;
+    opacity: 0.12;
+    mix-blend-mode: overlay;
+  }
+  .ft-placeholder-hero { aspect-ratio: 16 / 9; border-radius: 16px; }
+  .ft-hero-img {
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+    display: block;
+  }
+  .ft-placeholder-wide { aspect-ratio: 16 / 9; border-radius: 14px; }
+  .ft-placeholder-uc { aspect-ratio: 16 / 10; border-radius: 14px; min-height: 300px; }
+  @media (max-width: 767.98px) {
+    .ft-placeholder-hero { aspect-ratio: 16 / 9; border-radius: 14px; }
+    .ft-placeholder-uc { min-height: 200px; }
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     Section 1: Hero — vertically stacked (Harvey style)
+     ══════════════════════════════════════════════════════════ */
+  /* ══ Hero — Harvey style: breadcrumb, massive headline, full-width image ══ */
+  .ft-hero {
+    background: #ffffff;
+  }
+  .ft-hero-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 140px 20px 80px;
+  }
+  @media (max-width: 480px) {
+    .ft-hero-inner { padding: 120px 16px 40px; }
+  }
+
+  /* Breadcrumb: "Platform Overview / Assistant" */
+  .ft-breadcrumb {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .ft-breadcrumb-link {
+    color: #888;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .ft-breadcrumb-link:hover { color: #17100e; }
+  .ft-breadcrumb-sep { color: #888; }
+  .ft-breadcrumb-active { color: #17100e; font-weight: 600; }
+
+  /* Headline: massive, fills the width */
+  .ft-hero-headline {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(48px, 8vw, 110px);
+    color: #17100e;
+    letter-spacing: -3px;
+    line-height: 1.0;
+    margin: 0 0 64px;
+  }
+  @media (max-width: 768px) {
+    .ft-hero-headline { font-size: clamp(36px, 10vw, 72px); letter-spacing: -2px; margin-bottom: 40px; }
+  }
+
+  /* Full-width hero image */
+  .ft-hero-image {
+    width: 100%;
+  }
+
+  /* ══ Intro block ══ */
+  .ft-intro {
+    background: #ffffff;
+    padding: 0 24px 80px;
+  }
+  @media (max-width: 767.98px) { .ft-intro { padding: 0 16px 48px; } }
+
+  .ft-intro-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+  .ft-intro-text {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 400;
+    font-size: clamp(24px, 3.5vw, 40px);
+    color: #888;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+    margin: 0;
+    max-width: 720px;
+  }
+  .ft-intro-text strong {
+    color: #17100e;
+    font-weight: 700;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     Section 2: Value Props — stacking sticky cards (Harvey style)
+     Each card is position:sticky and the next card scrolls up
+     to cover the previous one, like the WhyEluu section.
+     ══════════════════════════════════════════════════════════ */
+  .ft-vp-section {
+    /* No overflow:hidden — it breaks position:sticky */
+  }
+
+  .ft-vp-card {
+    background: var(--vp-bg);
+    border-top: 1px solid rgba(23, 16, 14, 0.06);
+    padding: 56px 24px 80px;
+  }
+  @media (min-width: 768px) {
+    .ft-vp-card {
+      position: sticky;
+      top: 0;
+      z-index: var(--vp-z);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      padding: 100px 24px 56px;
+    }
+  }
+  @media (max-width: 767.98px) {
+    .ft-vp-card { padding: 40px 16px; }
+  }
+
+  .ft-vp-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* Two-column layout: title+image left, desc+features right */
+  .ft-vp-cols {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  @media (max-width: 767.98px) {
+    .ft-vp-cols { flex-direction: column; gap: 32px; }
+  }
+
+  .ft-vp-left {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .ft-vp-right {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ft-vp-title {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 4vw, 40px);
+    color: #17100e;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin: 0;
+  }
+
+  .ft-placeholder-card {
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+  }
+  .ft-vp-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 16px;
+    display: block;
+  }
+
+  /* Right column: top description + sub-features below */
+  .ft-vp-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #5c5c5c;
+    line-height: 1.6;
+    margin: 0 0 40px;
+  }
+
+  .ft-vp-features {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ft-vp-feature {
+    padding: 24px 0;
+    border-top: 1px solid rgba(23, 16, 14, 0.08);
+  }
+
+  .ft-vp-feature-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #17100e;
+    margin: 0 0 6px;
+  }
+  .ft-vp-feature-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #5c5c5c;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     Section 3: Stats
+     ══════════════════════════════════════════════════════════ */
+  .ft-stats {
+    background: #f4f3ec;
+    padding: 80px 24px;
+    text-align: center;
+  }
+  @media (max-width: 767.98px) { .ft-stats { padding: 48px 16px; } }
+
+  .ft-stats-heading {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(24px, 4vw, 36px);
+    color: #17100e;
+    letter-spacing: -1px;
+    margin: 0 0 48px;
+  }
+  .ft-stats-row {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 48px;
+    justify-content: center;
+  }
+  @media (max-width: 767.98px) { .ft-stats-row { flex-direction: column; gap: 32px; } }
+
+  .ft-stats-card { flex: 1; text-align: center; }
+  .ft-stats-value {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(36px, 5vw, 56px);
+    color: #17100e;
+    display: block;
+  }
+  .ft-stats-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #17100e;
+    display: block;
+    margin-top: 8px;
+  }
+  .ft-stats-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #5c5c5c;
+    margin: 6px auto 0;
+    max-width: 280px;
+    line-height: 1.5;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     Section 4: Testimonial
+     ══════════════════════════════════════════════════════════ */
+  .ft-testimonial {
+    background: #ffffff;
+    padding: 80px 24px;
+  }
+  @media (max-width: 767.98px) { .ft-testimonial { padding: 48px 16px; } }
+
+  .ft-testimonial-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .ft-testimonial-quote {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 400;
+    font-size: clamp(20px, 3vw, 36px);
+    color: #17100e;
+    line-height: 1.35;
+    margin: 0;
+    padding: 0;
+    border: none;
+    text-indent: -0.4em;
+  }
+  .ft-testimonial-attribution {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #17100e;
+    margin: 24px 0 0;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     Section 5: Use Cases — dark bg, Harvey style
+     ══════════════════════════════════════════════════════════ */
+  .ft-uc {
+    background: #17100e;
+    color: #ffffff;
+    padding: 80px 24px;
+  }
+  @media (max-width: 767.98px) { .ft-uc { padding: 48px 16px; } }
+
+  .ft-uc-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .ft-uc-heading {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 5vw, 44px);
+    color: #ffffff;
+    letter-spacing: -1.5px;
+    text-align: right;
+    margin: 0 0 56px;
+  }
+  @media (max-width: 767.98px) {
+    .ft-uc-heading { text-align: left; margin-bottom: 32px; }
+  }
+
+  .ft-uc-layout {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  @media (max-width: 767.98px) {
+    .ft-uc-layout { flex-direction: column; gap: 32px; }
+  }
+
+  /* Left: tab list with border-top dividers */
+  .ft-uc-tabs {
+    width: 45%;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  @media (max-width: 767.98px) { .ft-uc-tabs { width: 100%; } }
+
+  .ft-uc-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 20px 0;
+    border: none;
+    border-top: 2px solid rgba(255, 255, 255, 0.15);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.2s ease;
+  }
+  .ft-uc-tab.active {
+    border-top-color: #ffffff;
+  }
+
+  .ft-uc-tab-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+    transition: color 0.2s ease;
+  }
+  .ft-uc-tab.active .ft-uc-tab-title {
+    color: #ffffff;
+    font-weight: 600;
+  }
+  .ft-uc-tab:hover .ft-uc-tab-title {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* Description only visible on active tab */
+  .ft-uc-tab-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.55;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s ease,
+                margin 0.35s ease;
+  }
+  .ft-uc-tab.active .ft-uc-tab-desc {
+    max-height: 120px;
+    opacity: 1;
+    margin-top: 10px;
+  }
+
+  /* Right: large image panel */
+  .ft-uc-image {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    min-height: 480px;
+  }
+  @media (max-width: 767.98px) { .ft-uc-image { min-height: 280px; } }
+
+  .ft-uc-panel {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+  .ft-uc-panel.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .ft-placeholder-uc {
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    height: 100%;
+    min-height: 480px;
+  }
+  .ft-uc-img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
+  }
+  @media (max-width: 767.98px) {
+    .ft-placeholder-uc { min-height: 280px; }
+    .ft-uc-img { height: auto; min-height: 280px; }
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     Section 6: CTA Footer
+     ══════════════════════════════════════════════════════════ */
+  .ft-cta-container {
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+  }
+  @media (min-width: 640px) { .ft-cta-container { min-height: 360px; } }
+  @media (min-width: 1024px) { .ft-cta-container { min-height: 500px; } }
+
+  .ft-cta-bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .ft-cta-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(23,16,14,0.25) 0%, rgba(23,16,14,0.45) 100%);
+  }
+  .ft-cta-content {
+    position: relative;
+    z-index: 2;
+    padding: 56px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: inherit;
+  }
+  .ft-cta-heading {
+    font-family: 'Season Mix', sans-serif;
+    font-weight: 700;
+    font-size: clamp(24px, 5vw, 48px);
+    letter-spacing: -1px;
+    color: #ffffff;
+    line-height: 1.1;
+    margin: 0 0 28px;
+  }
+  .ft-cta-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     Reduced motion
+     ══════════════════════════════════════════════════════════ */
+  @media (prefers-reduced-motion: reduce) {
+    .ft-uc-panel.active { animation: none; }
+  }
+</style>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+---
+import FeatureLayout from '../../layouts/FeatureLayout.astro';
+
+const feature = {
+  slug: 'integrations',
+  name: 'Integrations',
+  color: '#6a8ec4',
+  breadcrumb: 'Integrations',
+  headline: 'Connect everything',
+  heroImage: '/images/features/integrations-hero.png',
+  description: 'Connect your AI colleagues to any tool, data source, or API your team uses.',
+  intro: {
+    bold: 'Plug in, light up.',
+    supporting: 'Connect your AI colleagues to any tool, data source, or API your team uses — and watch them work across your entire stack.',
+  },
+  valueProps: [
+    {
+      title: 'Native connections, zero glue code',
+      image: '/images/features/integrations-feature-1.png',
+      features: [
+        { title: '20+ pre-built connectors', desc: 'Salesforce, HubSpot, Stripe, Google Sheets, Slack, Gmail, and more. One-click setup.' },
+        { title: 'Scoped permissions', desc: 'Each colleague gets exactly the access it needs — read, write, or both. Revoke anytime.' },
+        { title: 'Real-time sync', desc: 'Data flows in and out in real time. No batch jobs, no stale data, no manual refresh.' },
+      ],
+    },
+    {
+      title: 'Your stack, unified',
+      image: '/images/features/integrations-feature-2.png',
+      features: [
+        { title: 'Cross-tool workflows', desc: 'A single task can span CRM, billing, spreadsheets, and messaging. Colleagues handle the orchestration.' },
+        { title: 'Custom API connections', desc: 'Connect any REST API your team uses. No engineering tickets required.' },
+        { title: 'Data never leaves your environment', desc: 'All integrations run through your own infrastructure. SOC 2 compliant.' },
+      ],
+    },
+  ],
+  stats: {
+    heading: 'Proven results with Integrations',
+    items: [
+      { value: '20+', label: 'native integrations', desc: 'across CRM, billing, communication, and productivity tools' },
+      { value: '< 60s', label: 'to connect', desc: 'average time to set up a new tool connection' },
+      { value: '100%', label: 'data stays local', desc: 'all data stays in your environment — zero external retention' },
+    ],
+  },
+  testimonial: {
+    quote: "We connected Salesforce, Stripe, and Google Sheets in under five minutes. Our colleague was reconciling revenue data across all three before lunch.",
+    attribution: 'Head of RevOps, Series A Startup',
+  },
+  useCases: {
+    heading: 'What teams build with Integrations',
+    image: '/images/features/integrations-usecases.png',
+    cases: [
+      { title: 'CRM enrichment', desc: 'Colleagues pull data from LinkedIn, email, and support tools to keep your CRM records complete and current.' },
+      { title: 'Invoice reconciliation', desc: 'Match Stripe charges to Salesforce deals and log discrepancies in Google Sheets — automatically.' },
+      { title: 'Cross-platform reporting', desc: 'Colleagues aggregate data from every tool into unified dashboards and weekly summaries.' },
+    ],
+  },
+  ctaHeading: 'Connect your entire stack.',
+};
+---
+<FeatureLayout feature={feature} />
