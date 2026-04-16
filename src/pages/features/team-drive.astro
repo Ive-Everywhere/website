@@ -1,0 +1,48 @@
+---
+import FeatureLayout from '../../layouts/FeatureLayout.astro';
+
+const feature = {
+  slug: 'team-drive',
+  name: 'Hard Drive',
+  color: '#7a8b6e',
+  breadcrumb: 'Hard Drive',
+  headline: "Every colleague gets a brain.",
+  description: "Each AI colleague has its own Hard Drive — a personal knowledge store for files, context, and memory. Share a colleague with your team, and their Hard Drive becomes shared too.",
+  intro: {
+    bold: 'Personal storage. Shared when you are.',
+    supporting: "Every colleague gets its own Hard Drive to store files, reference docs, and accumulated context. When a colleague is shared with the team, their knowledge becomes everyone's knowledge.",
+  },
+  valueProps: [
+    {
+      title: 'Memory that compounds',
+      features: [
+        { title: 'Personal knowledge store', desc: "Each colleague has its own Hard Drive. Upload files, playbooks, SOPs, and reference material — it's theirs to remember and recall." },
+        { title: 'Shared when your colleague is', desc: "When a colleague is shared with the team, their Hard Drive becomes visible to everyone. Personal colleagues stay private. You control who sees what." },
+        { title: 'Compounding knowledge', desc: "As colleagues accumulate context — deal history, playbooks, client notes — the Hard Drive becomes your team's institutional memory that never forgets." },
+      ],
+    },
+  ],
+  stats: {
+    heading: 'Proven results with Hard Drive',
+    items: [
+      { value: '500+', label: 'docs indexed', desc: 'per colleague across all file types and formats' },
+      { value: '< 2s', label: 'retrieval time', desc: 'average time for a colleague to find and cite relevant information' },
+      { value: 'Zero', label: 'context lost', desc: 'colleagues never forget what they have read or been told' },
+    ],
+  },
+  testimonial: {
+    quote: "We uploaded our entire sales playbook to Steve's Hard Drive. By the next morning, he was prepping call briefs with context we'd forgotten we had — and the whole sales team could see it.",
+    attribution: 'VP of Sales, Mid-Market SaaS',
+  },
+  useCases: {
+    heading: 'What teams store in Hard Drive',
+    cases: [
+      { title: 'Sales playbooks', desc: "Upload your playbook, competitive intel, and deal templates to your sales colleague's Hard Drive. Every call prep is informed by your best material." },
+      { title: 'Compliance & policy docs', desc: "Give your legal colleague access to regulations, internal policies, and audit requirements. They reference them automatically when reviewing contracts." },
+      { title: 'Client history', desc: "Past proposals, meeting notes, and account context — all in the colleague's Hard Drive. They walk into every conversation fully briefed." },
+    ],
+  },
+  ctaHeading: "Give every colleague a memory.",
+};
+---
+<FeatureLayout feature={feature} />

@@ -2,47 +2,148 @@
 ---
 
 <nav id="main-nav" class="site-nav">
-  <div style="max-width: 1800px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
-    <!-- Left: Logo + Name -->
-    <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-      <img src="/images/logo.svg" alt="Eluu" class="nav-logo" />
-      <span class="nav-wordmark">Eluu AI</span>
-    </a>
+  <div class="nav-bar">
+    <div class="nav-container">
+      <!-- Left: Logo + Name -->
+      <a href="/" class="nav-brand">
+        <img src="/images/logo.svg" alt="Eluu" class="nav-logo" />
+        <span class="nav-wordmark">Eluu AI</span>
+      </a>
 
-    <!-- Right: Pricing + Get started -->
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <a href="/pricing" class="nav-btn-pricing">Pricing</a>
-      <a
-        href="https://app.eluu.ai"
-        class="nav-btn"
-        onclick="window.posthog?.capture('log_in_clicked', { location: 'navbar' })"
-      >Log in</a>
+      <!-- Center: Features (with dropdown), Resources, Pricing -->
+      <div class="nav-links">
+        <div class="nav-link-wrap" data-dropdown-wrap>
+          <a href="#" class="nav-link nav-link-trigger">
+            <span>Features</span>
+            <svg class="nav-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
+          </a>
+        </div>
+        <div class="nav-link-wrap" data-dropdown-wrap>
+          <a href="#" class="nav-link nav-link-trigger">
+            <span>Resources</span>
+            <svg class="nav-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
+          </a>
+        </div>
+        <a href="/pricing" class="nav-link">Pricing</a>
+      </div>
+
+      <!-- Right: Log in -->
+      <div class="nav-actions">
+        <a
+          href="https://app.eluu.ai"
+          class="nav-btn"
+          onclick="window.posthog?.capture('log_in_clicked', { location: 'navbar' })"
+        >Log in</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features dropdown -->
+  <div class="nav-dropdown" id="nav-dropdown-features" data-dropdown-panel="features">
+    <div class="nav-dropdown-inner">
+      <div class="nav-dropdown-grid">
+        <a href="/features/colleagues" class="nav-dd-item">
+          <h4>Colleagues</h4>
+          <p>Build an AI-native workforce with specialized colleagues that have real skills.</p>
+        </a>
+        <a href="/features/team-drive" class="nav-dd-item">
+          <h4>Hard Drive</h4>
+          <p>Each colleague gets its own storage for files, context, and memory — shared when the colleague is.</p>
+        </a>
+        <a href="/features/integrations" class="nav-dd-item">
+          <h4>Integrations</h4>
+          <p>Connect your AI colleagues to any tool, data source, or API your team uses.</p>
+        </a>
+        <a href="/features/views" class="nav-dd-item">
+          <h4>Views</h4>
+          <p>Build your agentic command center — live dashboards for pipeline, revenue, and activity.</p>
+        </a>
+        <a href="/features/slack" class="nav-dd-item">
+          <h4>Slack</h4>
+          <p>Talk to your AI colleagues directly in Slack — assign tasks, get updates, ask questions.</p>
+        </a>
+        <a href="/features/jobs" class="nav-dd-item">
+          <h4>Jobs</h4>
+          <p>Run scheduled tasks and trigger workflows from anywhere — on repeat, on demand.</p>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resources dropdown -->
+  <div class="nav-dropdown" id="nav-dropdown-resources" data-dropdown-panel="resources">
+    <div class="nav-dropdown-inner">
+      <div class="nav-dropdown-grid nav-dropdown-grid-sm">
+        <a href="#" class="nav-dd-item">
+          <h4>Docs</h4>
+          <p>Guides, API references, and everything you need to get started with Eluu.</p>
+        </a>
+        <a href="#" class="nav-dd-item">
+          <h4>Blog</h4>
+          <p>Product updates, company news, and insights on AI-native operations.</p>
+        </a>
+      </div>
     </div>
   </div>
 </nav>
 
 <style>
+  /* ── The nav is the glass panel. It expands to include the dropdown.
+     backdrop-filter on .site-nav blurs only what's behind it — exactly
+     the nav bar + dropdown area, not the full page. ── */
   .site-nav {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 50;
-    padding: 12px 16px;
-    background: transparent;
     transform: translateY(0);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
                 background 0.3s ease,
-                backdrop-filter 0.3s ease;
+                backdrop-filter 0.3s ease,
+                -webkit-backdrop-filter 0.3s ease;
   }
   .site-nav.hidden {
     transform: translateY(-100%);
   }
+
+  /* Normal scrolled state */
   .site-nav.scrolled {
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(23, 16, 14, 0.06);
+  }
+
+  /* ── Dropdown-open state: the SAME blur style on the entire nav
+     (which now includes the dropdown panel). One unified glass. ── */
+  .site-nav.dropdown-open {
+    background: rgba(255, 255, 255, 0.60);
+    backdrop-filter: blur(40px) saturate(1.15);
+    -webkit-backdrop-filter: blur(40px) saturate(1.15);
+    border-bottom: 1px solid rgba(23, 16, 14, 0.06);
+  }
+
+  /* ── Nav bar row ── */
+  .nav-bar {
+    padding: 12px 16px;
+  }
+  @media (min-width: 640px) { .nav-bar { padding: 16px 24px; } }
+  @media (min-width: 1024px) { .nav-bar { padding: 20px 36px; } }
+
+  .nav-container {
+    max-width: 1800px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
   }
   .nav-logo { width: 40px; height: 40px; }
   @media (min-width: 640px) { .nav-logo { width: 48px; height: 48px; } }
@@ -55,21 +156,117 @@
   }
   @media (min-width: 640px) { .nav-wordmark { font-size: 40px; } }
 
-  .nav-btn-pricing {
+  /* ── Center nav links ── */
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  .nav-link {
     font-family: 'Inter', sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
     color: #17100e;
-    background: #ffffff;
     text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 10px;
     line-height: 1;
-    border: 1px solid rgba(23, 16, 14, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: opacity 0.2s ease;
   }
-  .nav-btn-pricing:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(23, 16, 14, 0.08); }
+  .nav-link:hover { opacity: 0.6; }
 
+  .nav-link-wrap { position: relative; }
+  .nav-link-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .nav-chevron {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 12px; height: 12px;
+  }
+  .site-nav.dropdown-open .nav-chevron {
+    transform: rotate(180deg);
+  }
+  .site-nav.dropdown-open .nav-link-trigger {
+    opacity: 1;
+  }
+
+  /* ── Dropdown panel — inside .site-nav, below .nav-bar ── */
+  .nav-dropdown {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+  }
+  .nav-dropdown.active {
+    grid-template-rows: 1fr;
+  }
+
+  .nav-dropdown-inner {
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 36px;
+    transition: padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .nav-dropdown.active .nav-dropdown-inner {
+    padding: 24px 36px 40px;
+  }
+
+  /* ── 3×2 grid ── */
+  .nav-dropdown-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px 48px;
+  }
+  .nav-dropdown-grid-sm {
+    grid-template-columns: 1fr 1fr;
+    max-width: 700px;
+  }
+
+  .nav-dd-item {
+    text-decoration: none;
+    padding: 16px;
+    border-radius: 12px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.15s ease;
+  }
+  .nav-dd-item:nth-child(1) { transition-delay: 0.02s; }
+  .nav-dd-item:nth-child(2) { transition-delay: 0.05s; }
+  .nav-dd-item:nth-child(3) { transition-delay: 0.08s; }
+  .nav-dd-item:nth-child(4) { transition-delay: 0.11s; }
+  .nav-dd-item:nth-child(5) { transition-delay: 0.14s; }
+  .nav-dd-item:nth-child(6) { transition-delay: 0.17s; }
+
+  .nav-dropdown.active .nav-dd-item {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .nav-dd-item:hover {
+    background: rgba(23, 16, 14, 0.05);
+  }
+
+  .nav-dd-item h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #17100e;
+    margin: 0 0 6px;
+  }
+  .nav-dd-item p {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #5c5c5c;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* ── Right: Log in ── */
+  .nav-actions { display: flex; align-items: center; }
   .nav-btn {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
@@ -86,51 +283,107 @@
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(23, 16, 14, 0.15);
   }
-  /* Very small screens (360px and below) */
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-dropdown { display: none; }
+  }
   @media (max-width: 400px) {
     .nav-wordmark { font-size: 28px; white-space: nowrap; }
     .nav-logo { width: 34px; height: 34px; }
-    .nav-btn-pricing { padding: 8px 14px; font-size: 13px; }
     .nav-btn { padding: 8px 16px; font-size: 13px; }
   }
-  /* Extreme zoom / ultra-narrow */
   @media (max-width: 320px) {
     .nav-wordmark { font-size: 22px; }
     .nav-logo { width: 28px; height: 28px; }
-    .nav-btn-pricing { padding: 6px 10px; font-size: 12px; }
     .nav-btn { padding: 6px 12px; font-size: 12px; }
   }
 
-  @media (min-width: 640px) {
-    .site-nav { padding: 16px 24px; }
+  /* ── Dark theme variant (for /beta page) ── */
+  [data-theme="dark"] .nav-wordmark { color: #ffffff; }
+  [data-theme="dark"] .nav-link { color: rgba(255, 255, 255, 0.7); }
+  [data-theme="dark"] .nav-link:hover { color: #ffffff; opacity: 1; }
+  [data-theme="dark"] .nav-chevron { color: rgba(255, 255, 255, 0.7); }
+  [data-theme="dark"] .nav-btn { color: #0a0908; background: #ffffff; }
+  [data-theme="dark"] .nav-btn:hover { box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15); }
+  [data-theme="dark"] .site-nav.scrolled {
+    background: rgba(10, 9, 8, 0.85);
+    border-bottom-color: rgba(255, 255, 255, 0.06);
   }
-  @media (min-width: 1024px) {
-    .site-nav { padding: 20px 36px; }
+  [data-theme="dark"] .site-nav.dropdown-open {
+    background: rgba(10, 9, 8, 0.75);
+  }
+  [data-theme="dark"] .nav-dropdown-inner { border-top-color: rgba(255, 255, 255, 0.06); }
+  [data-theme="dark"] .nav-dd-item h4 { color: #ffffff; }
+  [data-theme="dark"] .nav-dd-item p { color: rgba(255, 255, 255, 0.5); }
+  [data-theme="dark"] .nav-dd-item:hover { background: rgba(255, 255, 255, 0.06); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-dropdown, .nav-dd-item, .nav-chevron, .nav-dropdown-inner { transition: none; }
   }
 </style>
 
 <script>
+  const nav = document.getElementById('main-nav');
+  const triggers = document.querySelectorAll('[data-dropdown-wrap]') as NodeListOf<HTMLElement>;
+  const panels = document.querySelectorAll('[data-dropdown-panel]') as NodeListOf<HTMLElement>;
+
+  // ── Dropdown hover toggle — supports multiple triggers + panels ──
+  if (nav && triggers.length && panels.length) {
+    let closeTimeout: ReturnType<typeof setTimeout> | null = null;
+    let activePanel: HTMLElement | null = null;
+
+    function openDropdown(panel: HTMLElement) {
+      if (closeTimeout) { clearTimeout(closeTimeout); closeTimeout = null; }
+      // Hide any other open panel
+      panels.forEach(p => { if (p !== panel) p.classList.remove('active'); });
+      panel.classList.add('active');
+      activePanel = panel;
+      nav!.classList.add('dropdown-open');
+    }
+
+    function closeDropdown() {
+      closeTimeout = setTimeout(() => {
+        panels.forEach(p => p.classList.remove('active'));
+        nav!.classList.remove('dropdown-open');
+        activePanel = null;
+      }, 80);
+    }
+
+    function cancelClose() {
+      if (closeTimeout) { clearTimeout(closeTimeout); closeTimeout = null; }
+    }
+
+    // Map triggers to panels by index (Features=0, Resources=1)
+    const panelMap = ['features', 'resources'];
+    triggers.forEach((trigger, i) => {
+      const panel = document.querySelector(`[data-dropdown-panel="${panelMap[i]}"]`) as HTMLElement;
+      if (!panel) return;
+
+      trigger.addEventListener('mouseenter', () => openDropdown(panel));
+      trigger.addEventListener('mouseleave', closeDropdown);
+      panel.addEventListener('mouseenter', cancelClose);
+      panel.addEventListener('mouseleave', closeDropdown);
+    });
+  }
+
+  // ── Scroll behavior ──
   let lastScrollY = 0;
   let ticking = false;
-  const nav = document.getElementById('main-nav');
 
   function updateNav() {
     const currentY = window.scrollY;
-
-    // Show/hide based on scroll direction
     if (currentY > lastScrollY && currentY > 100) {
       nav?.classList.add('hidden');
     } else {
       nav?.classList.remove('hidden');
     }
-
-    // Add background blur when scrolled
     if (currentY > 50) {
       nav?.classList.add('scrolled');
     } else {
       nav?.classList.remove('scrolled');
     }
-
     lastScrollY = currentY;
     ticking = false;
   }

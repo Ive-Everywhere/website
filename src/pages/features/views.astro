@@ -1,0 +1,60 @@
+---
+import FeatureLayout from '../../layouts/FeatureLayout.astro';
+
+const feature = {
+  slug: 'views',
+  name: 'Views',
+  color: '#8a6ec4',
+  breadcrumb: 'Views',
+  headline: 'Agentic Dashboards',
+  heroImage: '/images/features/views-hero.png',
+  description: 'Build live dashboards that show pipeline health, revenue metrics, and colleague activity.',
+  intro: {
+    bold: 'See everything, miss nothing.',
+    supporting: 'Build live dashboards that show pipeline health, revenue metrics, colleague activity, and operational signals — all updated by your AI colleagues in real time.',
+  },
+  valueProps: [
+    {
+      title: 'Dashboards that build themselves',
+      image: '/images/features/views-feature-1.png',
+      features: [
+        { title: 'Auto-generated views', desc: 'Colleagues create dashboards from the data they already process. No manual setup.' },
+        { title: 'Real-time data', desc: 'Views update as colleagues work. Pipeline moves, deals close, tasks complete — you see it live.' },
+        { title: 'Custom layouts', desc: 'Drag, resize, and configure. Pin the metrics that matter to your team.' },
+      ],
+    },
+    {
+      title: 'From data to decisions',
+      image: '/images/features/views-feature-2.png',
+      features: [
+        { title: 'Cross-source aggregation', desc: 'Pull from CRM, billing, spreadsheets, and support tools into a single view.' },
+        { title: 'Alert thresholds', desc: 'Set conditions. When a metric crosses a threshold, Views flags it and your colleague takes action.' },
+        { title: 'Shareable', desc: 'Send a view to your team, embed it in Slack, or export to a slide deck for leadership.' },
+      ],
+    },
+  ],
+  stats: {
+    heading: 'Proven results with Views',
+    items: [
+      { value: 'Real-time', label: 'data updates', desc: 'dashboards refresh as colleagues process new information' },
+      { value: '< 5 min', label: 'to build', desc: 'average time to create a custom dashboard from scratch' },
+      { value: 'Zero', label: 'manual data entry', desc: 'colleagues populate every metric automatically' },
+    ],
+  },
+  testimonial: {
+    quote: "I used to spend two hours every Monday building pipeline reports. Now Views has it ready before I open my laptop. The data is always current and always right.",
+    attribution: 'Sales Director, Enterprise SaaS',
+  },
+  useCases: {
+    heading: 'What teams build with Views',
+    image: '/images/features/views-usecases.png',
+    cases: [
+      { title: 'Pipeline dashboards', desc: 'Live pipeline view with deal stages, revenue projections, and risk flags — updated by your colleagues in real time.' },
+      { title: 'Revenue forecasting', desc: 'Forecast dashboards that cross-reference CRM data, billing actuals, and historical patterns.' },
+      { title: 'Team activity monitoring', desc: 'See what every colleague is working on, what they have completed, and what is queued next.' },
+    ],
+  },
+  ctaHeading: 'See your business in real time.',
+};
+---
+<FeatureLayout feature={feature} />
