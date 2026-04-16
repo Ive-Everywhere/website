@@ -10,17 +10,11 @@
         <span class="nav-wordmark">Eluu AI</span>
       </a>
 
-      <!-- Center: Features (with dropdown), Resources, Pricing -->
+      <!-- Center: Platform (with dropdown), Pricing -->
       <div class="nav-links">
         <div class="nav-link-wrap" data-dropdown-wrap>
           <a href="#" class="nav-link nav-link-trigger">
-            <span>Features</span>
-            <svg class="nav-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
-          </a>
-        </div>
-        <div class="nav-link-wrap" data-dropdown-wrap>
-          <a href="#" class="nav-link nav-link-trigger">
-            <span>Resources</span>
+            <span>Platform</span>
             <svg class="nav-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
           </a>
         </div>
@@ -70,21 +64,6 @@
     </div>
   </div>
 
-  <!-- Resources dropdown -->
-  <div class="nav-dropdown" id="nav-dropdown-resources" data-dropdown-panel="resources">
-    <div class="nav-dropdown-inner">
-      <div class="nav-dropdown-grid nav-dropdown-grid-sm">
-        <a href="#" class="nav-dd-item">
-          <h4>Docs</h4>
-          <p>Guides, API references, and everything you need to get started with Eluu.</p>
-        </a>
-        <a href="#" class="nav-dd-item">
-          <h4>Blog</h4>
-          <p>Product updates, company news, and insights on AI-native operations.</p>
-        </a>
-      </div>
-    </div>
-  </div>
 </nav>
 
 <style>
@@ -356,7 +335,7 @@
     }
 
     // Map triggers to panels by index (Features=0, Resources=1)
-    const panelMap = ['features', 'resources'];
+    const panelMap = ['features'];
     triggers.forEach((trigger, i) => {
       const panel = document.querySelector(`[data-dropdown-panel="${panelMap[i]}"]`) as HTMLElement;
       if (!panel) return;
