@@ -59,7 +59,9 @@ const { feature: f } = Astro.props as { feature: FeatureData };
           {f.heroImage ? (
             <img src={f.heroImage} alt={f.headline} class="ft-hero-img" loading="eager" />
           ) : (
-            <div class="ft-placeholder ft-placeholder-hero" style={`--ft-color: ${f.color}`}></div>
+            <slot name="hero-content">
+              <div class="ft-placeholder ft-placeholder-hero" style={`--ft-color: ${f.color}`}></div>
+            </slot>
           )}
         </div>
       </div>
