@@ -1,0 +1,186 @@
+/* Footer styles — separate file to bypass Tailwind v4 processing */
+.sftr {
+  background: #1e1d1b;
+  padding: 0 0 48px;
+}
+
+/* ── CTA band at top of footer ── */
+.sftr-cta-band {
+  text-align: center;
+  padding: 96px 20px 80px;
+  border-bottom: 1px solid rgba(237, 233, 227, 0.06);
+  margin-bottom: 64px;
+}
+.sftr-cta-heading {
+  font-family: 'Söhne', sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 4vw, 44px);
+  letter-spacing: -0.02em;
+  color: #ede9e3;
+  line-height: 1.1;
+  margin: 0;
+}
+.sftr-cta-sub {
+  font-family: 'Söhne', sans-serif;
+  font-size: clamp(14px, 1.5vw, 16px);
+  color: rgba(237, 233, 227, 0.5);
+  line-height: 1.5;
+  margin: 14px 0 0;
+}
+.sftr-cta-actions {
+  margin-top: 28px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.sftr-container {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+.sftr-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px 24px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid rgba(237, 233, 227, 0.06);
+}
+@media (min-width: 768px) {
+  .sftr-columns { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+}
+@media (min-width: 1024px) {
+  .sftr-columns { grid-template-columns: 1.2fr 0.8fr 1fr; gap: 48px; }
+}
+.sftr-col-label {
+  font-family: 'Söhne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(237, 233, 227, 0.35);
+  margin: 0 0 20px;
+}
+.sftr-col-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sftr-col-list a {
+  font-family: 'Söhne', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(237, 233, 227, 0.55);
+  text-decoration: none;
+  letter-spacing: -0.005em;
+  transition: color 0.2s ease;
+}
+.sftr-col-list a:hover { color: #ede9e3; }
+.sftr-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.sftr-cta {
+  font-family: 'Söhne', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.sftr-cta-primary {
+  background: #ede9e3;
+  color: #14120b;
+  border: 1px solid #ede9e3;
+}
+.sftr-cta-primary:hover { background: #d7d3cd; border-color: #d7d3cd; }
+.sftr-cta-secondary {
+  background: transparent;
+  color: rgba(237, 233, 227, 0.7);
+  border: 1px solid rgba(237, 233, 227, 0.15);
+}
+.sftr-cta-secondary:hover { border-color: rgba(237, 233, 227, 0.3); color: #ede9e3; }
+.sftr-social {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.sftr-social a {
+  color: rgba(237, 233, 227, 0.4);
+  display: flex;
+  padding: 8px; /* 16px icon + 16px padding = 32px touch target */
+  margin: -8px; /* offset padding so visual position stays same */
+  transition: color 0.2s ease;
+}
+.sftr-social a:hover { color: #ede9e3; }
+.sftr-legal {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sftr-legal a {
+  font-family: 'Söhne', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(237, 233, 227, 0.3);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.sftr-legal a:hover { color: rgba(237, 233, 227, 0.6); }
+.sftr-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-top: 48px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.sftr-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.sftr-wm-logo {
+  width: 52px;
+  height: 52px;
+  opacity: 0.2;
+}
+@media (min-width: 768px) {
+  .sftr-wm-logo { width: 72px; height: 72px; }
+}
+.sftr-wm-text {
+  font-family: 'Jersey 10', cursive;
+  font-size: clamp(56px, 10vw, 120px);
+  color: rgba(237, 233, 227, 0.12);
+  line-height: 1;
+  letter-spacing: -2px;
+  user-select: none;
+}
+.sftr-wordmark {
+  transition: transform 0.15s ease-out;
+}
+.sftr-copy {
+  font-family: 'Söhne', sans-serif;
+  font-size: 12px;
+  color: rgba(237, 233, 227, 0.25);
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+}
+@media (max-width: 400px) {
+  .sftr { padding: 56px 0 36px; }
+  .sftr-col-label { margin-bottom: 14px; }
+  .sftr-wm-text { font-size: 40px; }
+  .sftr-wm-logo { width: 36px; height: 36px; }
+}

@@ -1,123 +1,113 @@
 ---
+import '../styles/footer.css';
+
+const columns = [
+  {
+    label: 'Platform',
+    links: [
+      { text: 'Colleagues', href: '/features/colleagues' },
+      { text: 'Integrations', href: '/features/integrations' },
+      { text: 'Hard Drive', href: '/features/team-drive' },
+      { text: 'Views', href: '/features/views' },
+      { text: 'Jobs', href: '/features/jobs' },
+      { text: 'Slack', href: '/features/slack' },
+    ],
+  },
+  {
+    label: 'Resources',
+    links: [
+      { text: 'Documentation', href: '#' },
+      { text: 'Blog', href: '#' },
+      { text: 'Changelog', href: '#' },
+    ],
+  },
+];
+
+const legal = [
+  { text: 'Terms of Service', href: '/terms' },
+  { text: 'Privacy Policy', href: '/privacy' },
+  { text: 'Security', href: '/security' },
+];
 ---
 
-<footer class="site-footer">
-  <div class="footer-inner">
-    <!-- Left side -->
-    <div class="footer-left">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <img src="/images/logo.svg" alt="Eluu" class="footer-logo-img" />
-        <span class="footer-logo-text">Eluu AI</span>
+<footer class="sftr">
+  <div class="sftr-container">
+
+    <!-- ── CTA band ── -->
+    <div class="sftr-cta-band">
+      <h2 class="sftr-cta-heading">Your tools are already connected. Start in minutes.</h2>
+      <p class="sftr-cta-sub">Set up your first AI colleague today. Free to start — no credit card required.</p>
+      <div class="sftr-cta-actions">
+        <a
+          href="https://app.eluu.ai"
+          class="sftr-cta sftr-cta-primary"
+          onclick="window.posthog?.capture('get_started_clicked', { location: 'footer_cta' })"
+        >Get started</a>
+        <a
+          href="https://cal.com/krishna-kaipa-wh7ao3/15min"
+          class="sftr-cta sftr-cta-secondary"
+          onclick="window.posthog?.capture('book_demo_clicked', { location: 'footer_cta' })"
+        >Book a demo</a>
       </div>
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <a href="https://x.com/EluuAI" aria-label="X" style="color: #a3a3a3; display: flex;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        </a>
-        <a href="https://www.linkedin.com/company/eluu/" aria-label="LinkedIn" style="color: #a3a3a3; display: flex;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        </a>
-      </div>
-      <p class="footer-tagline">AI colleagues that work alongside your team.</p>
-      <span class="footer-copy">&copy; {new Date().getFullYear()} Eluu AI — All rights reserved</span>
     </div>
 
-    <!-- Right side -->
-    <div class="footer-links">
-      <a href="/terms">Terms of Service</a>
-      <span class="footer-dot"></span>
-      <a href="/privacy">Privacy Policy</a>
-      <span class="footer-dot"></span>
-      <a href="/security">Security</a>
-      <span class="footer-dot"></span>
-      <a href="#">Docs</a>
+    <!-- ── Link columns ── -->
+    <div class="sftr-columns">
+      {columns.map((col) => (
+        <div class="sftr-col">
+          <h4 class="sftr-col-label">{col.label}</h4>
+          <ul class="sftr-col-list">
+            {col.links.map((link) => (
+              <li><a href={link.href}>{link.text}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <div class="sftr-col sftr-col-right">
+        <div class="sftr-social">
+          <a href="https://x.com/EluuAI" aria-label="X">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/company/eluu/" aria-label="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+        <ul class="sftr-legal">
+          {legal.map((link) => (
+            <li><a href={link.href}>{link.text}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+    <div class="sftr-bottom">
+      <div class="sftr-wordmark" data-parallax-wordmark>
+        <img src="/images/logo.svg" alt="" class="sftr-wm-logo" />
+        <span class="sftr-wm-text">Eluu AI</span>
+      </div>
+      <span class="sftr-copy">&copy; {new Date().getFullYear()} Eluu AI</span>
     </div>
   </div>
 </footer>
 
-<style>
-  .site-footer {
-    background: #ffffff;
-    padding: 36px 16px;
-  }
-  @media (min-width: 640px) { .site-footer { padding: 48px 24px; } }
-  @media (min-width: 768px) { .site-footer { padding: 48px 40px; } }
-  @media (min-width: 1024px) { .site-footer { padding: 48px 48px; } }
+<script>
+  (function () {
+    const wm = document.querySelector('[data-parallax-wordmark]') as HTMLElement;
+    if (!wm || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  .footer-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    max-width: 1440px;
-    margin: 0 auto;
-  }
-  @media (min-width: 768px) {
-    .footer-inner {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
-  }
-
-  .footer-left {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .footer-logo-img {
-    width: 36px;
-    height: 36px;
-  }
-
-  .footer-logo-text {
-    font-family: 'Jersey 10', cursive;
-    font-size: clamp(26px, 4vw, 34px);
-    color: #17100e;
-    line-height: 1;
-    letter-spacing: -0.3px;
-  }
-
-  .footer-tagline {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    color: #7d7d7d;
-    line-height: 1.5;
-    margin: 0;
-  }
-
-  .footer-copy {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: #a3a3a3;
-  }
-
-  .footer-links {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .footer-links a {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: #a3a3a3;
-    text-decoration: none;
-  }
-  .footer-links a:hover { color: #17100e; }
-  .footer-dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: #7c7c7c;
-    display: inline-block;
-  }
-
-  /* Very small screens (360px) */
-  @media (max-width: 400px) {
-    .footer-logo-img { width: 30px; height: 30px; }
-    .footer-links { gap: 8px; }
-    .footer-links a { font-size: 13px; }
-    .footer-tagline { font-size: 14px; }
-    .footer-copy { font-size: 13px; }
-  }
-</style>
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const rect = wm.getBoundingClientRect();
+        const vh = window.innerHeight;
+        if (rect.top < vh && rect.bottom > 0) {
+          const progress = (vh - rect.top) / (vh + rect.height);
+          const shift = (progress - 0.5) * 30; // ±15px range
+          wm.style.transform = `translateY(${shift}px)`;
+        }
+        ticking = false;
+      });
+    }, { passive: true });
+  })();
+</script>
