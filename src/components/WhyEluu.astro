@@ -1,255 +1,396 @@
 ---
-import ContextAnimation from './ContextAnimation.astro';
-import ExecuteAnimation from './ExecuteAnimation.astro';
-import BuilderAnimation from './BuilderAnimation.astro';
-import IndexAnimation from './IndexAnimation.astro';
 ---
 
-<!-- Why Eluu — sticky card stacking section -->
+<!-- Why Eluu — Cursor-style feature cards (exact layout from cursor.com CSS) -->
 <section class="we">
-  <div class="we-wrap">
-    <!-- Header -->
-    <div class="we-head">
-      <h2 class="we-title reveal">Designed to get real work done.</h2>
+  <div class="we-container">
+
+    <!-- Card 1 — Colleagues -->
+    <div class="we-card reveal">
+      <div class="we-card-inner">
+        <div class="we-text-col">
+          <div class="we-text-wrap">
+            <div class="we-text-block">
+              <h3 class="we-heading">Specialized colleagues, real skills</h3>
+              <p class="we-desc">Build an AI-native workforce. Each colleague is purpose-built for a role — onboard them like new hires.</p>
+            </div>
+            <div class="we-cta">
+              <a href="/features/colleagues" class="we-link">Learn about colleagues <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="we-media-col">
+          <div class="we-media-wrap">
+            <img src="/images/features/colleague-main.png" alt="Colleagues" class="we-media-img" />
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Cards -->
-    <div class="we-cards">
-
-      <!-- Card 1 — Index -->
-      <section class="we-card" data-card="0"
-        style="--ct:128px; --ch:640px; --cm:0px; --cz:1;">
-        <div class="we-label">Index</div>
-        <div class="we-text">
-          <h3>Maps your tools. Understands your data.</h3>
-          <p>Connects to Salesforce, Stripe, Sheets, Slack, and 20+ tools. Learns your schema, maps relationships across systems, and builds a unified index — so it already knows where to look before you ask.</p>
+    <!-- Card 2 — Integrations -->
+    <div class="we-card reveal">
+      <div class="we-card-inner we-card-inner--reverse">
+        <div class="we-text-col">
+          <div class="we-text-wrap">
+            <div class="we-text-block">
+              <h3 class="we-heading">Your whole stack, one brain</h3>
+              <p class="we-desc">Native connectors to CRMs, billing, spreadsheets, and communication tools. Your colleagues read, write, and cross-reference across all of them.</p>
+            </div>
+            <div class="we-cta">
+              <a href="/features/integrations" class="we-link">Learn about integrations <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+            </div>
+          </div>
         </div>
-        <div class="we-media we-anim">
-          <IndexAnimation />
+        <div class="we-media-col">
+          <div class="we-media-wrap">
+            <img src="/images/features/integration-main.png" alt="Integrations" class="we-media-img" />
+          </div>
         </div>
-      </section>
-
-      <!-- Card 2 — Execute -->
-      <section class="we-card" data-card="1"
-        style="--ct:128px; --ch:640px; --cm:0px; --cz:2;">
-        <div class="we-label">Execute</div>
-        <div class="we-text">
-          <h3>Workflows that actually span tools.</h3>
-          <p>Pulls data from your CRM, creates invoices in Stripe, logs to a spreadsheet, messages your team in Slack. Runs end-to-end, in parallel, across your entire stack. One click. Zero babysitting.</p>
-        </div>
-        <div class="we-media we-anim">
-          <ExecuteAnimation />
-        </div>
-      </section>
-
-      <!-- Card 3 — Learn -->
-      <section class="we-card" data-card="2"
-        style="--ct:128px; --ch:640px; --cm:0px; --cz:3;">
-        <div class="we-label">Learn</div>
-        <div class="we-text">
-          <h3>Context that compounds.</h3>
-          <p>Remembers your preferences, past decisions, and how you like things done. Say "prep for the Acme call" — it pulls deal history, spots concerns, and builds talking points without being told where to look.</p>
-        </div>
-        <div class="we-media we-anim">
-          <ContextAnimation />
-        </div>
-      </section>
-
-      <!-- Card 4 — Build -->
-      <section class="we-card" data-card="3"
-        style="--ct:128px; --ch:640px; --cm:0px; --cz:4;">
-        <div class="we-label">Build</div>
-        <div class="we-text">
-          <h3>Creates tools you couldn't build yourself.</h3>
-          <p>Your colleagues don't just run workflows — they build operational tools. Analytics engines, contract analyzers, procurement systems, live dashboards. Work that would take engineering weeks, done in hours. No code, no tickets, no waiting.</p>
-        </div>
-        <div class="we-media we-anim">
-          <BuilderAnimation />
-        </div>
-      </section>
-
+      </div>
     </div>
+
+    <!-- Card 3 — Hard Drive -->
+    <div class="we-card reveal">
+      <div class="we-card-inner">
+        <div class="we-text-col">
+          <div class="we-text-wrap">
+            <div class="we-text-block">
+              <h3 class="we-heading">Memory that compounds</h3>
+              <p class="we-desc">Each colleague gets its own Hard Drive — a personal store for files, context, and memory. Shared when the colleague is, private when they're not.</p>
+            </div>
+            <div class="we-cta">
+              <a href="/features/team-drive" class="we-link">Learn about Hard Drive <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="we-media-col">
+          <div class="we-media-wrap">
+            <img src="/images/features/hard-drive-main.png" alt="Hard Drive" class="we-media-img" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 — Views -->
+    <div class="we-card reveal">
+      <div class="we-card-inner we-card-inner--reverse">
+        <div class="we-text-col">
+          <div class="we-text-wrap">
+            <div class="we-text-block">
+              <h3 class="we-heading">Dashboards built for your business</h3>
+              <p class="we-desc">Agentic command centers tailored to how your team actually works — pipeline, revenue, support, or whatever you need to see at a glance.</p>
+            </div>
+            <div class="we-cta">
+              <a href="/features/views" class="we-link">Learn about views <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="we-media-col">
+          <div class="we-media-wrap">
+            <img src="/images/features/views-main.png" alt="Views" class="we-media-img" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row — Jobs + Slack (two smaller cards side by side) — HIDDEN FOR NOW
+    <div class="we-row">
+      <div class="we-small-card reveal">
+        <div class="we-small-inner">
+          <div class="we-small-text">
+            <h3 class="we-heading">Scheduled, never babysat</h3>
+            <p class="we-desc">Recurring jobs across your stack — daily reports, weekly briefings, on-repeat automations. No pings required.</p>
+            <div class="we-cta">
+              <a href="/features/jobs" class="we-link">Learn about jobs <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+            </div>
+          </div>
+          <div class="we-small-media">
+            <img src="/images/features/jobs-feature-1.png" alt="Jobs" class="we-media-img" />
+          </div>
+        </div>
+      </div>
+
+      <div class="we-small-card reveal">
+        <div class="we-small-inner">
+          <div class="we-small-text">
+            <h3 class="we-heading">Right in your Slack</h3>
+            <p class="we-desc">Your colleagues live where your team works. @-mention, assign tasks, get updates — all inside your channels.</p>
+            <div class="we-cta">
+              <a href="/features/slack" class="we-link">Learn about Slack <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+            </div>
+          </div>
+          <div class="we-small-media">
+            <img src="/images/features/slack-feature-1.png" alt="Slack" class="we-media-img" />
+          </div>
+        </div>
+      </div>
+    </div>
+    -->
+
   </div>
 </section>
 
 <style>
-  /* ── Section ── */
-  .we { background: #f4f3ec; }
+  /*
+    Cursor exact values (from their production CSS):
+    --g: 0.625rem (10px)
+    --v: 1.4rem (22.4px)
+    --spacing-g1: 10px
+    --spacing-g1.75: 17.5px
+    --spacing-v4: 89.6px (card margin-bottom)
+    --radius-xs: 4px
+    --text-base: 1rem (16px), line-height 1.5, weight 400, tracking 0.005em
+    --text-md: 1.375rem (22px), line-height 1.3, weight 400, tracking -0.005em
+    --color-theme-card-hex: #1e1d1b
+    --color-theme-border-01: ~2.5% of fg = nearly invisible
+    --color-theme-accent: #f54e00
+    Grid: 24 columns, gap 10px
+    Text: col 1-8 (33.3%), Media: col 9-24 (66.7%)
+    Card: padding g1.75 (17.5px), border-radius 4px
+    Product mockup: border-radius 10px (rounded-[10px])
+  */
 
-  .we-wrap {
-    max-width: 1440px;
+  .we {
+    background: #13100a;
+  }
+
+  .we-container {
+    max-width: 1380px;
     margin: 0 auto;
-    padding: 48px 16px;
+    padding: 0 20px;
   }
-  @media (min-width: 640px)  { .we-wrap { padding: 60px 24px; } }
-  @media (min-width: 768px)  { .we-wrap { padding: 64px 32px; } }
-  @media (min-width: 1024px) { .we-wrap { padding: 96px 24px; } }
 
-  /* ── Header ── */
-  .we-head {
-    padding-bottom: 24px;
-  }
-  @media (min-width: 640px)  { .we-head { padding-bottom: 32px; } }
-  @media (min-width: 768px)  { .we-head { padding-bottom: 36px; } }
-  @media (min-width: 1024px) { .we-head { padding-bottom: 40px; } }
-
-  .we-title {
-    font-family: 'Season Mix', sans-serif;
-    font-weight: 700;
-    font-size: clamp(28px, 5vw + 4px, 56px);
-    color: #17100e;
-    line-height: 1.1;
-    letter-spacing: -1px;
-    margin: 0;
-    padding-bottom: 20px;
-  }
-  @media (min-width: 640px)  { .we-title { padding-bottom: 28px; letter-spacing: -1.5px; } }
-  @media (min-width: 768px)  { .we-title { padding-bottom: 32px; } }
-  @media (min-width: 1024px) { .we-title { padding-bottom: 40px; letter-spacing: -2px; } }
-
-  /* ── Cards container ── */
-  /* NEVER add overflow: hidden here — it breaks sticky card stacking */
-  .we-cards { }
-
-  /* ── Card ── */
+  /* ── Card — 112px spacing between cards for generous breathing room ── */
   .we-card {
-    border-top: 1px solid #d4d3cb;
-    background: #f4f3ec;
-    width: 100%;
-    margin-bottom: 32px;
+    margin-bottom: 112px;
   }
-  .we-card:last-child { margin-bottom: 0; }
-
-  @media (min-width: 640px) {
-    .we-card { margin-bottom: 40px; }
-  }
-  @media (min-width: 768px) {
-    .we-card { margin-bottom: 48px; }
+  .we-card:last-child {
+    margin-bottom: 0;
   }
 
-  @media (min-width: 1024px) {
-    .we-card {
-      position: sticky;
-      top: var(--ct);
-      height: var(--ch);
-      margin-top: var(--cm);
-      margin-bottom: 0;
-      display: flex;
-      overflow: hidden;
-      z-index: var(--cz);
-    }
-  }
-
-  /* ── Card label ── */
-  .we-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: #17100e;
-    letter-spacing: 0.5px;
-    padding: 16px 0;
-    flex-shrink: 0;
-  }
-  @media (min-width: 1024px) {
-    .we-label {
-      width: 160px;
-      padding: 32px 48px 32px 0;
-    }
-  }
-
-  /* ── Card text ── */
-  .we-text {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 0 0 16px;
-  }
-  @media (min-width: 640px) { .we-text { gap: 12px; padding: 0 0 24px; } }
-  @media (min-width: 768px) { .we-text { gap: 14px; padding: 0 0 28px; } }
-  @media (min-width: 1024px) {
-    .we-text {
-      width: 32%;
-      gap: 16px;
-      padding: 32px 48px 32px 0;
-      flex-shrink: 0;
-    }
-  }
-
-  .we-text h3 {
-    font-family: 'Season Mix', sans-serif;
-    font-size: clamp(20px, 2.5vw + 4px, 32px);
-    font-weight: 700;
-    color: #17100e;
-    line-height: 1.15;
-    letter-spacing: -0.5px;
-    margin: 0;
-  }
-  @media (min-width: 1024px) {
-    .we-text h3 { letter-spacing: -1px; }
-  }
-
-  .we-text p {
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(14px, 1vw + 6px, 16px);
-    color: #5c5c5c;
-    line-height: 1.6;
-    margin: 0;
-  }
-
-  /* ── Card media ── */
-  .we-media {
+  /* ── Card inner — the actual card surface ──
+     Cursor: .card with padding g1.75, bg card-hex, radius-xs, border border-01
+     Uses 24-column grid inside */
+  .we-card-inner {
     position: relative;
+    background: #1e1d1b;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow: hidden;
+  }
+  .we-card-inner::before {
+    content: "";
+    pointer-events: none;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    z-index: 30;
+    position: absolute;
+    inset: 0;
+  }
+
+  @media (min-width: 900px) {
+    .we-card-inner {
+      grid-template-columns: repeat(24, 1fr);
+      gap: 10px;
+    }
+  }
+
+  /* ── Reverse layout (text right, media left) ── */
+  @media (min-width: 900px) {
+    .we-card-inner--reverse .we-text-col {
+      grid-column: 16 / 25;
+      grid-row: 1 / -1;
+      padding: 36px 36px 36px 30px;
+    }
+    .we-card-inner--reverse .we-media-col {
+      grid-column: 1 / 16;
+      grid-row: 1 / -1;
+    }
+  }
+
+  /* ── Text column ──
+     Cursor: lg:col-start-1 lg:col-end-9 lg:items-center lg:pl-g0.25 lg:pr-g3 */
+  .we-text-col {
     display: flex;
     align-items: center;
-    justify-content: center;
-    aspect-ratio: 1;
-    border: 1px solid #d4d3cb;
-    border-radius: 0;
-    overflow: hidden;
+    padding: 24px;
   }
-  @media (min-width: 640px) { .we-media { aspect-ratio: 4/3; } }
-  @media (min-width: 768px) { .we-media { aspect-ratio: 16/10; } }
-  @media (min-width: 1024px) {
-    .we-media {
-      flex: 1;
-      min-width: 0;
-      min-height: 300px;
-      aspect-ratio: auto;
-      border-radius: 0;
-      border-top: none;
+  @media (min-width: 900px) {
+    .we-text-col {
+      grid-column: 1 / 10;
+      grid-row: 1 / -1;
+      padding: 36px 30px 36px 36px;
     }
   }
 
-  /* ── Animation media ── */
-  .we-anim {
-    border: none;
-    background: none;
-    padding: 0;
+  .we-text-wrap {
+    width: 100%;
+    max-width: 42ch; /* tighter measure for Söhne heading — reads better */
+  }
+
+  .we-text-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* small breath between heading and description */
+  }
+
+  /* Heading — Söhne Halbfett (600). Bold statement, tight letter-spacing.
+     Size scales: 20px mobile → 26px desktop. */
+  .we-heading {
+    font-family: 'Söhne', sans-serif;
+    font-size: 1.25rem; /* 20px mobile */
+    font-weight: 600;
+    color: #ede9e3;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  @media (min-width: 768px) {
+    .we-heading {
+      font-size: 1.625rem; /* 26px */
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+  }
+
+  /* Description — Söhne Buch (400). 60% opacity, relaxed line-height. */
+  .we-desc {
+    font-family: 'Söhne', sans-serif;
+    font-size: 1rem; /* 16px mobile */
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.6);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+    margin: 0;
+    text-wrap: pretty;
+  }
+  @media (min-width: 768px) {
+    .we-desc {
+      font-size: 1.125rem; /* 18px */
+      line-height: 1.55;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  /* Breathing room before the CTA link */
+  .we-cta {
+    margin-top: 24px;
+  }
+  @media (min-width: 768px) {
+    .we-cta {
+      margin-top: 28px;
+    }
+  }
+
+  /* CTA link — pill with subtle peach border, 4px radius to match card language */
+  .we-link {
+    font-family: 'Söhne', sans-serif;
+    font-size: 0.875rem; /* 14px */
+    font-weight: 400;
+    color: #f54e00;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid rgba(245, 78, 0, 0.2);
+    border-radius: 4px;
+    padding: 7px 14px;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+  .we-link:hover {
+    background: rgba(245, 78, 0, 0.06);
+    border-color: rgba(245, 78, 0, 0.35);
+  }
+
+  /* ── Media column ──
+     Cursor: lg:col-start-9 lg:col-end-25 lg:items-center
+     Contains the media-border-container with rounded-xs, overflow hidden */
+  .we-media-col {
     position: relative;
+    min-height: 350px;
+  }
+  @media (min-width: 900px) {
+    .we-media-col {
+      grid-column: 10 / 25;
+      grid-row: 1 / -1;
+      min-height: 680px;
+    }
+  }
+
+  /* Cursor: media-border-container — z-index 1, rounded-xs (4px), overflow hidden, relative
+     Has ::after border pseudo */
+  .we-media-wrap {
+    position: absolute;
+    inset: 0;
     overflow: hidden;
   }
 
-  /* ── Video media ── */
-  .we-vid {
-    border: none;
-    background: none;
-    padding: 0;
-    overflow: hidden;
-  }
-  .we-vid video {
+  .we-media-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    border-radius: 12px;
-  }
-  @media (min-width: 768px) {
-    .we-vid video { border-radius: 16px; }
-  }
-  @media (min-width: 1024px) {
-    .we-vid video { border-radius: 0; }
   }
 
 
+  /* ── Row of 2 smaller cards (Jobs + Slack) ── */
+  .we-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 0;
+  }
+  @media (min-width: 900px) {
+    .we-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .we-small-card {
+    background: #1e1d1b;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .we-small-card::before {
+    content: "";
+    pointer-events: none;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    z-index: 30;
+    position: absolute;
+    inset: 0;
+  }
+  .we-small-inner {
+    display: flex;
+    flex-direction: column;
+  }
+  .we-small-text {
+    padding: 24px 24px 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .we-small-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    margin: 0 24px 24px;
+    border-radius: 4px;
+  }
+  .we-small-media .we-media-img {
+    object-fit: cover;
+  }
+
+  @media (max-width: 899px) {
+    .we-media-col {
+      min-height: 350px;
+    }
+    .we-card {
+      margin-bottom: 80px;
+    }
+  }
 </style>
-

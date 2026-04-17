@@ -8,52 +8,44 @@
   font-display: block;
 }
 
+/* Söhne — body font (Buch = Book, ~400) */
 @font-face {
-  font-family: 'Season Mix';
-  src: url('/fonts/season-mix-regular.woff2') format('woff2');
+  font-family: 'Söhne';
+  src: url('/fonts/sohne-buch.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+/* Söhne — heading font (Halbfett = Semi-bold, ~600) */
 @font-face {
-  font-family: 'Season Mix';
-  src: url('/fonts/season-mix-medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Season Mix';
-  src: url('/fonts/season-mix-semibold.woff2') format('woff2');
+  font-family: 'Söhne';
+  src: url('/fonts/sohne-halbfett.otf') format('opentype');
   font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Season Mix';
-  src: url('/fonts/season-mix-bold.woff2') format('woff2');
-  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 @theme inline {
-  --font-sans: "Inter", sans-serif;
-  --font-heading: "Season Mix", sans-serif;
-  --font-serif: "Crimson Text", serif;
-  --font-mono: "Roboto Mono", monospace;
+  --font-sans: "Söhne", sans-serif;
+  --font-heading: "Söhne", sans-serif;
+  --font-serif: serif;
+  --font-mono: monospace;
 
-  --color-bg: #ffffff;
-  --color-bg-warm: #f4f3ec;
-  --color-bg-dark: #17100e;
-  --color-tx: #171717;
-  --color-tx-2: #5c5c5c;
-  --color-tx-3: #7d7d7d;
-  --color-tx-4: #a3a3a3;
-  --color-border: #ebebeb;
-  --color-dark: #343636;
-  --color-dark-2: #262626;
-  --color-dark-3: #313130;
+  --color-bg: #13100a;
+  --color-bg-card: #1e1d1b;
+  --color-bg-warm: #1e1d1b;
+  --color-bg-dark: #13100a;
+  --color-tx: #ede9e3;
+  --color-tx-2: rgba(237, 233, 227, 0.6);
+  --color-tx-3: rgba(237, 233, 227, 0.4);
+  --color-tx-4: rgba(237, 233, 227, 0.25);
+  --color-border: rgba(237, 233, 227, 0.06);
+  --color-border-mid: rgba(237, 233, 227, 0.1);
+  --color-dark: #ede9e3;
+  --color-dark-2: #d7d3cd;
+  --color-dark-3: #b5b1ab;
+  --color-accent: #ED733B;
+  --max-w: 1380px;
 }
 
 html {
@@ -68,14 +60,19 @@ html {
 }
 
 body {
-  background: #ffffff;
-  color: #171717;
+  background: #13100a;
+  color: #ede9e3;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Inter", sans-serif;
+  font-family: "Söhne", sans-serif;
 }
 
-::selection { background: rgba(23, 16, 14, 0.15); }
+/* All headings default to Söhne Halbfett (600) — semi-bold */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Söhne", sans-serif;
+}
+
+::selection { background: rgba(237, 233, 227, 0.15); }
 
 /* --- Scroll reveal animations --- */
 .reveal {
@@ -95,12 +92,4 @@ a[href], button {
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
-/* Subtle scale on card hover */
-.card-hover {
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-}
+

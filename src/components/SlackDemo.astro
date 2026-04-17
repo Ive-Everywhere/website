@@ -1,0 +1,599 @@
+---
+---
+
+<div class="sd-window">
+  <div class="sd-titlebar">
+    <span class="sd-dot sd-dot-red"></span>
+    <span class="sd-dot sd-dot-yellow"></span>
+    <span class="sd-dot sd-dot-green"></span>
+  </div>
+
+  <div class="sd-body">
+    <!-- ── Sidebar: icon rail + channel panel ── -->
+    <div class="sd-sidebar">
+      <!-- Icon rail -->
+      <div class="sd-rail">
+        <div class="sd-rail-logo">
+          <img src="/images/logo.svg" alt="" class="sd-rail-icon" />
+        </div>
+        <div class="sd-rail-item sd-rail-active">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9.5L12 3l9 6.5V20a2 2 0 01-2 2H5a2 2 0 01-2-2V9.5z"/></svg>
+          <span>Home</span>
+        </div>
+        <div class="sd-rail-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          <span>DMs</span>
+        </div>
+        <div class="sd-rail-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span>Activity</span>
+        </div>
+        <div class="sd-rail-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+          <span>More</span>
+        </div>
+      </div>
+
+      <!-- Channel panel -->
+      <div class="sd-channels">
+        <div class="sd-ws-name">Eluu AI <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 4l2 2.5L7 4" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="sd-ch-label">Channels</div>
+        <div class="sd-ch-row"><span class="sd-hash">#</span><span class="sd-bar sd-bar-sm"></span></div>
+        <div class="sd-ch-row"><span class="sd-hash">#</span> general</div>
+        <div class="sd-ch-row sd-ch-active"><span class="sd-hash">#</span> strategy</div>
+        <div class="sd-ch-row"><span class="sd-hash">#</span> sales</div>
+        <div class="sd-ch-row"><span class="sd-hash">#</span><span class="sd-bar sd-bar-sm"></span></div>
+      </div>
+    </div>
+
+    <!-- ── Main channel area ── -->
+    <div class="sd-main">
+      <!-- Channel header -->
+      <div class="sd-header">
+        <span class="sd-header-name"># strategy</span>
+        <div class="sd-header-icons">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#616061" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="sd-msgs" id="sd-msgs">
+        <!-- Faded placeholder message 1 -->
+        <div class="sd-msg sd-msg-dim">
+          <div class="sd-avatar sd-avatar-purple"></div>
+          <div class="sd-msg-content">
+            <div class="sd-bar sd-bar-name"></div>
+            <div class="sd-bar sd-bar-text-lg"></div>
+            <div class="sd-bar sd-bar-text-md"></div>
+          </div>
+        </div>
+
+        <!-- Faded placeholder message 2 -->
+        <div class="sd-msg sd-msg-dim">
+          <div class="sd-avatar sd-avatar-teal"></div>
+          <div class="sd-msg-content">
+            <div class="sd-bar sd-bar-name"></div>
+            <div class="sd-bar sd-bar-text-md"></div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="sd-divider"><span>Today</span></div>
+
+        <!-- Devind's real message -->
+        <div class="sd-msg sd-anim" data-anim="user-msg">
+          <img src="/images/devind-dp.png" alt="" class="sd-avatar" />
+          <div class="sd-msg-content">
+            <div class="sd-msg-meta"><strong>Devind</strong> <span class="sd-time">3:04 PM</span></div>
+            <div class="sd-msg-text"><span class="sd-mention">@Eluu</span> What strategy do you recommend to get our first 1000 users?</div>
+            <div class="sd-reactions">
+              <span class="sd-emoji">💡 1</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Eluu thinking -->
+        <div class="sd-msg sd-anim" data-anim="thinking">
+          <img src="/images/logo.svg" alt="" class="sd-avatar sd-avatar-bot" />
+          <div class="sd-msg-content">
+            <div class="sd-msg-meta"><strong>Eluu</strong> <span class="sd-badge">APP</span> <span class="sd-time">3:04 PM</span></div>
+            <div class="sd-msg-text sd-thinking">Extracting key points<span class="sd-dots"><span>.</span><span>.</span><span>.</span></span></div>
+          </div>
+        </div>
+
+        <!-- Eluu response -->
+        <div class="sd-msg sd-anim" data-anim="response">
+          <img src="/images/logo.svg" alt="" class="sd-avatar sd-avatar-bot" />
+          <div class="sd-msg-content">
+            <div class="sd-msg-meta"><strong>Eluu</strong> <span class="sd-badge">APP</span> <span class="sd-time">3:05 PM</span></div>
+            <div class="sd-msg-text sd-resp">
+              <p class="sd-line" data-line="0"><span class="sd-mention">@Devind</span> Here's the short version:</p>
+              <p class="sd-line" data-line="1"><strong>4 engines, in priority order:</strong></p>
+              <p class="sd-line sd-indent" data-line="2">1. <em>Cookbook</em> — ready-to-deploy colleague recipes. Compounds over time.</p>
+              <p class="sd-line sd-indent" data-line="3">2. <em>Agent outbound</em> — personalized deliverables to prospects. High close rate.</p>
+              <p class="sd-line sd-indent" data-line="4">3. <em>PLG/viral</em> — team invites + "Built with Eluu" on outputs.</p>
+              <p class="sd-line sd-indent" data-line="5">4. <em>Content/SEO</em> — outcome-first posts + programmatic pages.</p>
+              <p class="sd-line" data-line="6"><strong>Next action items:</strong></p>
+              <p class="sd-line sd-indent" data-line="7">1. Ship 5 cookbook recipes targeting top ICP personas</p>
+              <p class="sd-line sd-indent" data-line="8">2. Run first agent outbound batch — 20 prospects</p>
+              <p class="sd-line sd-indent" data-line="9">3. Add "Built with Eluu" to all dashboard outputs</p>
+              <p class="sd-line" data-line="10">Want me to dig into any of these?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status bar -->
+      <div class="sd-status sd-anim" data-anim="status">
+        <span>Eluu is summarizing your request...</span>
+      </div>
+
+      <!-- Input bar -->
+      <div class="sd-input">
+        <div class="sd-input-box">
+          <span class="sd-input-ph">Message # strategy</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b5b5b5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ══ Window ══ */
+  .sd-window {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.2);
+    font-family: 'Söhne', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.46;
+    color: #d1d2d3;
+    background: #1a1d21;
+  }
+
+  .sd-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #3F0E40;
+  }
+  .sd-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .sd-dot-red { background: #ff5f57; }
+  .sd-dot-yellow { background: #febc2e; }
+  .sd-dot-green { background: #28c840; }
+
+  /* ══ Body grid ══ */
+  .sd-body {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    height: 620px;
+  }
+
+  /* ══ Sidebar = rail + channels ══ */
+  .sd-sidebar {
+    display: flex;
+    background: #4A154B;
+  }
+
+  /* Icon rail */
+  .sd-rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 6px;
+    width: 60px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .sd-rail-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #1264a3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  .sd-rail-icon {
+    width: 22px;
+    height: 22px;
+  }
+  .sd-rail-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 4px;
+    border-radius: 8px;
+    color: rgba(255,255,255,0.6);
+    font-size: 10px;
+    cursor: default;
+    width: 48px;
+    text-align: center;
+  }
+  .sd-rail-active {
+    color: #ffffff;
+    background: rgba(255,255,255,0.12);
+  }
+
+  /* Channel panel */
+  .sd-channels {
+    width: 160px;
+    padding: 10px 0;
+    overflow: hidden;
+  }
+  .sd-ws-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+    padding: 4px 14px 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .sd-ch-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    padding: 4px 14px;
+    text-transform: none;
+  }
+  .sd-ch-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 14px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    cursor: default;
+  }
+  .sd-hash {
+    font-size: 15px;
+    color: rgba(255,255,255,0.4);
+    flex-shrink: 0;
+  }
+  .sd-ch-active {
+    background: #1a1d21;
+    color: #d1d2d3;
+    font-weight: 700;
+    border-radius: 6px;
+    margin: 1px 8px;
+    padding: 4px 8px;
+  }
+  .sd-ch-active .sd-hash {
+    color: #d1d2d3;
+  }
+
+  /* Placeholder bars */
+  .sd-bar {
+    display: inline-block;
+    height: 8px;
+    border-radius: 4px;
+    vertical-align: middle;
+  }
+  /* Sidebar bars (translucent white) */
+  .sd-sidebar .sd-bar {
+    background: rgba(255,255,255,0.25);
+  }
+  .sd-bar-sm { width: 60px; }
+  .sd-bar-md { width: 85px; }
+  .sd-bar-lg { width: 100px; }
+  /* Main area bars (gray) */
+  .sd-main .sd-bar {
+    background: #393943;
+  }
+  .sd-bar-name { width: 70px; height: 10px; margin-bottom: 6px; }
+  .sd-bar-text-lg { width: 90%; height: 8px; margin-bottom: 4px; }
+  .sd-bar-text-md { width: 65%; height: 8px; }
+
+  /* ══ Main channel area ══ */
+  .sd-main {
+    display: flex;
+    flex-direction: column;
+    background: #1a1d21;
+    overflow: hidden;
+  }
+
+  .sd-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-bottom: 1px solid #393943;
+  }
+  .sd-header-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #d1d2d3;
+  }
+  .sd-header-icons {
+    display: flex;
+    gap: 12px;
+  }
+
+  /* ══ Messages ══ */
+  .sd-msgs {
+    flex: 1;
+    padding: 12px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .sd-msg {
+    display: flex;
+    gap: 10px;
+  }
+  .sd-msg-dim { opacity: 0.45; }
+
+  .sd-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    object-fit: cover;
+  }
+  .sd-avatar-purple { background: #7c3aed; }
+  .sd-avatar-teal { background: #0d9488; }
+  .sd-avatar-bot {
+    background: #232529;
+    padding: 4px;
+    border-radius: 4px;
+  }
+
+  .sd-msg-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .sd-msg-meta {
+    font-size: 14px;
+    color: #d1d2d3;
+    margin-bottom: 2px;
+  }
+  .sd-msg-meta strong {
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .sd-time {
+    font-size: 11px;
+    color: #ababad;
+    font-weight: 400;
+    margin-left: 6px;
+  }
+  .sd-badge {
+    font-size: 10px;
+    font-weight: 700;
+    background: #ecdeec;
+    color: #4A154B;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+
+  .sd-msg-text {
+    font-size: 14px;
+    color: #d1d2d3;
+    line-height: 1.46;
+  }
+
+  .sd-mention {
+    background: #1b4a66;
+    color: #62b0e8;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .sd-reactions {
+    margin-top: 4px;
+  }
+  .sd-emoji {
+    font-size: 12px;
+    background: #232529;
+    border: 1px solid #565856;
+    border-radius: 12px;
+    padding: 2px 8px;
+  }
+
+  .sd-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #d1d2d3;
+    margin: 4px 0;
+  }
+  .sd-divider::before,
+  .sd-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #393943;
+  }
+
+  /* Thinking state */
+  .sd-thinking { color: #ababad; }
+  .sd-dots span {
+    animation: sd-pulse 1.4s infinite;
+    opacity: 0.3;
+  }
+  .sd-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .sd-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes sd-pulse {
+    0%, 80%, 100% { opacity: 0.3; }
+    40% { opacity: 1; }
+  }
+
+  /* Response lines */
+  .sd-resp { margin: 0; }
+  .sd-line {
+    margin: 0 0 2px;
+    opacity: 0;
+    transform: translateY(3px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .sd-line.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .sd-indent { padding-left: 6px; }
+  .sd-line em { font-style: italic; }
+
+  /* Status bar */
+  .sd-status {
+    padding: 6px 20px;
+    font-size: 12px;
+    color: #ababad;
+    border-top: 1px solid #393943;
+    animation: sd-fade-pulse 2s ease-in-out infinite;
+  }
+  @keyframes sd-fade-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* Input */
+  .sd-input {
+    padding: 6px 20px 14px;
+    margin-top: auto;
+  }
+  .sd-input-box {
+    background: #1a1d21;
+    border: 1px solid #565856;
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .sd-input-ph {
+    font-size: 13px;
+    color: #b5b5b5;
+  }
+
+  /* ══ Animation states ══ */
+  .sd-anim {
+    display: none;
+  }
+  .sd-anim.sd-show {
+    display: flex;
+    animation: sd-slide-in 0.3s ease both;
+  }
+  .sd-anim[data-anim="status"].sd-show {
+    display: block;
+  }
+  .sd-anim.sd-show.sd-fade {
+    animation: sd-fade-out 0.5s ease both;
+  }
+  @keyframes sd-slide-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes sd-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  /* ══ Responsive ══ */
+  @media (max-width: 900px) {
+    .sd-sidebar { display: none; }
+    .sd-body { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 767px) {
+    .sd-body { height: 500px; }
+    .sd-window { border-radius: 10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sd-anim.sd-show { animation: none; opacity: 1; }
+    .sd-line { transition: none; }
+    .sd-dots span { animation: none; opacity: 1; }
+    .sd-status { animation: none; }
+  }
+</style>
+
+<script is:inline>
+(function() {
+  var el = document.getElementById('sd-msgs');
+  if (!el) return;
+  var root = el.closest('.sd-window');
+  if (!root) return;
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function q(sel) { return root.querySelectorAll(sel); }
+  function show(anim) {
+    q('[data-anim="' + anim + '"]').forEach(function(e) { e.classList.add('sd-show'); });
+  }
+  function hide(anim) {
+    q('[data-anim="' + anim + '"]').forEach(function(e) { e.classList.remove('sd-show'); });
+  }
+  function hideAll() {
+    q('.sd-anim').forEach(function(e) { e.classList.remove('sd-show', 'sd-fade'); });
+    q('.sd-line').forEach(function(e) { e.classList.remove('visible'); });
+  }
+
+  function revealLines(cb) {
+    var lines = root.querySelectorAll('.sd-line');
+    var d = 0;
+    lines.forEach(function(ln, i) {
+      setTimeout(function() {
+        ln.classList.add('visible');
+        if (i === lines.length - 1 && cb) setTimeout(cb, 300);
+      }, d);
+      d += 250;
+    });
+  }
+
+  function cycle() {
+    hideAll();
+
+    if (reduced) {
+      show('user-msg');
+      show('response');
+      root.querySelectorAll('.sd-line').forEach(function(e) { e.classList.add('visible'); });
+      return;
+    }
+
+    setTimeout(function() {
+      show('user-msg');
+
+      setTimeout(function() {
+        show('thinking');
+        show('status');
+
+        setTimeout(function() {
+          hide('thinking');
+          hide('status');
+          show('response');
+
+          revealLines(function() {
+            setTimeout(function() {
+              q('.sd-anim.sd-show').forEach(function(e) { e.classList.add('sd-fade'); });
+
+              setTimeout(function() {
+                hideAll();
+                setTimeout(cycle, 600);
+              }, 500);
+            }, 4000);
+          });
+        }, 2000);
+      }, 1500);
+    }, 400);
+  }
+
+  setTimeout(cycle, 800);
+})();
+</script>
