@@ -1,377 +1,64 @@
 ---
-import '../styles/global.css'
+import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
-import PostHog from '../components/PostHog.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/beta.css';
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eluu — Closed Beta Waitlist</title>
-  <meta name="description" content="Join the Eluu closed beta. AI colleagues that connect to your tools, learn your workflows, and execute real tasks." />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="preload" href="/fonts/sohne-buch.otf" as="font" type="font/otf" crossorigin />
-  <link rel="preload" href="/fonts/sohne-halbfett.otf" as="font" type="font/otf" crossorigin />
-  <link rel="preconnect" href="https://demo.eluu.ai" />
-  <link rel="dns-prefetch" href="https://demo.eluu.ai" />
-
-
-
-  <PostHog />
-</head>
-<body>
+<Layout title="Eluu — Closed Beta Waitlist">
   <Navbar />
 
-  <div class="beta-page">
-    <div class="beta-container">
-      <div class="beta-left">
-        <div class="beta-badge">Closed Beta</div>
+  <section class="bta">
+    <video class="bta-vid" autoplay loop muted playsinline preload="auto">
+      <source src="/videos/beta-bg.mp4" type="video/mp4" />
+    </video>
+    <div class="bta-dim"></div>
 
-        <h1 class="beta-headline">The future of work is agentic.</h1>
+    <div class="bta-wrap">
+      <!-- Logo icon -->
+      <img src="/images/logo.svg" alt="Eluu" class="bta-logo" />
 
-        <p class="beta-description">
-          We're building AI colleagues that actually get work done — they connect to your tools, learn your workflows, and execute real tasks on repeat. Eluu is currently in closed beta. Join the waitlist to get early access.
-        </p>
+      <!-- Heading -->
+      <h1 class="bta-h">The future of work<br />is agentic.</h1>
 
-        <form class="beta-form">
-          <input
-            type="email"
-            required
-            placeholder="Enter your email"
-            class="beta-input"
-            autocomplete="email"
-          />
-          <button type="submit" class="beta-button">Join waitlist</button>
-        </form>
+      <!-- Description -->
+      <p class="bta-p">We're building AI colleagues that connect to your tools, learn your workflows, and execute real tasks on repeat. Eluu is currently in closed beta — join the waitlist to get early access.</p>
 
-        <p class="beta-confirmation">You're on the list! We'll be in touch.</p>
+      <!-- Email form -->
+      <form class="bta-form" id="bta-form">
+        <input type="email" required placeholder="Enter your email" class="bta-email" autocomplete="email" />
+        <button type="submit" class="bta-go">Join waitlist</button>
+      </form>
+      <p class="bta-done" id="bta-done">You're on the list. We'll be in touch.</p>
 
-        <div class="beta-community">
-          <span class="beta-community-label">Join our community</span>
-          <div class="beta-community-links">
-            <a href="#" class="beta-pill" onclick="window.posthog?.capture('community_slack_clicked')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zm1.271 0a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zm0 1.271a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zm-1.27 0a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.163 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.163 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.163 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zm0-1.27a2.527 2.527 0 0 1-2.52-2.523 2.527 2.527 0 0 1 2.52-2.52h6.315A2.528 2.528 0 0 1 24 15.163a2.528 2.528 0 0 1-2.522 2.523h-6.315z"/></svg>
-              Slack
-            </a>
-            <a href="#" class="beta-pill" onclick="window.posthog?.capture('community_discord_clicked')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-              Discord
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="beta-right" data-beta-iframe-wrapper>
-        <div class="beta-iframe-glow">
-          <div class="beta-iframe-border">
-            <div class="beta-iframe-aspect">
-              <iframe
-                id="beta-iframe"
-                src="https://demo.eluu.ai/?autoplay=1&embed=1"
-                title="Eluu product demo"
-                allow="autoplay"
-                sandbox="allow-scripts allow-same-origin"
-                tabindex="-1"
-                class="beta-iframe"
-              ></iframe>
-            </div>
-          </div>
+      <!-- Community -->
+      <div class="bta-community">
+        <h2 class="bta-ch">Join the community</h2>
+        <p class="bta-cp">Connect with the team and other early users building with Eluu.</p>
+        <div class="bta-links">
+          <a href="#" class="bta-a" onclick="window.posthog?.capture('community_slack_clicked')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zm1.271 0a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zm0 1.271a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zm-1.27 0a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.163 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.163 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.163 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zm0-1.27a2.527 2.527 0 0 1-2.52-2.523 2.527 2.527 0 0 1 2.52-2.52h6.315A2.528 2.528 0 0 1 24 15.163a2.528 2.528 0 0 1-2.522 2.523h-6.315z"/></svg>
+            Slack
+          </a>
+          <a href="#" class="bta-a" onclick="window.posthog?.capture('community_discord_clicked')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+            Discord
+          </a>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <script is:inline>
-    document.querySelector('.beta-form')?.addEventListener('submit', function(e) {
-      e.preventDefault();
-      this.style.display = 'none';
-      document.querySelector('.beta-confirmation').style.display = 'block';
-      window.posthog?.capture('waitlist_submitted');
-    });
-  </script>
+  <Footer />
+</Layout>
 
-  <script is:inline>
-    (function () {
-      var iframe = document.getElementById('beta-iframe');
-      if (!iframe) return;
-      var wrapper = iframe.closest('[data-beta-iframe-wrapper]');
-      if (!wrapper) return;
-
-      var MAX_ZOOM = 2;
-      var baseDPR = window.devicePixelRatio || 1;
-
-      function checkZoom() {
-        var desktopZoom = window.outerWidth / window.innerWidth;
-        var pinchZoom = window.visualViewport ? window.visualViewport.scale : 1;
-        var viewportZoom = screen.width / window.innerWidth;
-        var dprZoom = (window.devicePixelRatio || 1) / baseDPR;
-        var maxZoom = Math.max(desktopZoom, pinchZoom, viewportZoom, dprZoom);
-        wrapper.style.display = maxZoom > MAX_ZOOM ? 'none' : '';
-      }
-
-      window.addEventListener('resize', checkZoom);
-
-      (function watchDPR() {
-        var mq = matchMedia('(resolution: ' + devicePixelRatio + 'dppx)');
-        mq.addEventListener('change', function () { checkZoom(); watchDPR(); }, { once: true });
-      })();
-
-      if (window.visualViewport) {
-        var pollId = setInterval(checkZoom, 400);
-        document.addEventListener('visibilitychange', function () {
-          if (document.hidden) { clearInterval(pollId); }
-          else { checkZoom(); pollId = setInterval(checkZoom, 400); }
-        });
-      }
-
-      checkZoom();
-    })();
-  </script>
-</body>
-</html>
-
-<style>
-  .beta-page {
-    min-height: 100vh;
-    background: #13100a;
-    position: relative;
-  }
-
-  .beta-page::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url('/images/2683d4a4805b7192bd38dc39f0c5321f8c2b5696.png') center / cover no-repeat;
-    filter: blur(60px);
-    opacity: 0.08;
-    pointer-events: none;
-  }
-
-  .beta-container {
-    position: relative;
-    max-width: 1380px;
-    margin: 0 auto;
-    padding: 140px 20px 80px;
-    display: flex;
-    align-items: center;
-    gap: 60px;
-    min-height: 100vh;
-    box-sizing: border-box;
-  }
-
-  .beta-left {
-    flex: 0 0 45%;
-    max-width: 45%;
-  }
-
-  .beta-right {
-    flex: 0 0 55%;
-    max-width: 55%;
-  }
-
-  /* Badge */
-  .beta-badge {
-    display: inline-block;
-    border: 1px solid rgba(237, 115, 59, 0.4);
-    color: #ED733B;
-    font-family: 'Söhne', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 6px 16px;
-    border-radius: 100px;
-  }
-
-  /* Headline */
-  .beta-headline {
-    font-family: 'Söhne', sans-serif;
-    font-weight: 700;
-    font-size: clamp(36px, 6vw, 64px);
-    color: #ede9e3;
-    letter-spacing: -2px;
-    margin-top: 24px;
-    margin-bottom: 0;
-    line-height: 1.1;
-  }
-
-  /* Description */
-  .beta-description {
-    font-family: 'Söhne', sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    color: rgba(237, 233, 227, 0.6);
-    line-height: 1.6;
-    max-width: 480px;
-    margin-top: 20px;
-    margin-bottom: 0;
-  }
-
-  /* Form */
-  .beta-form {
-    display: flex;
-    gap: 12px;
-    margin-top: 32px;
-  }
-
-  .beta-input {
-    flex: 1;
-    background: rgba(237, 233, 227, 0.05);
-    border: 1px solid rgba(237, 233, 227, 0.1);
-    border-radius: 4px;
-    padding: 14px 16px;
-    color: #ede9e3;
-    font-family: 'Söhne', sans-serif;
-    font-size: 15px;
-    outline: none;
-  }
-
-  .beta-input::placeholder {
-    color: rgba(237, 233, 227, 0.35);
-  }
-
-  .beta-button {
-    background: #ED733B;
-    color: #ede9e3;
-    border: none;
-    border-radius: 4px;
-    padding: 14px 24px;
-    font-family: 'Söhne', sans-serif;
-    font-weight: 500;
-    font-size: 15px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: box-shadow 0.2s ease;
-  }
-
-  .beta-button:hover {
-    box-shadow: 0 0 20px rgba(237, 115, 59, 0.4);
-  }
-
-  /* Confirmation */
-  .beta-confirmation {
-    display: none;
-    color: #ED733B;
-    font-family: 'Söhne', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    margin-top: 32px;
-  }
-
-  /* Community */
-  .beta-community {
-    margin-top: 32px;
-  }
-
-  .beta-community-label {
-    font-family: 'Söhne', sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    color: rgba(237, 233, 227, 0.4);
-    display: block;
-    margin-bottom: 12px;
-  }
-
-  .beta-community-links {
-    display: flex;
-    gap: 12px;
-  }
-
-  .beta-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    border: 1px solid rgba(237, 233, 227, 0.12);
-    border-radius: 100px;
-    padding: 10px 20px;
-    color: rgba(237, 233, 227, 0.65);
-    background: transparent;
-    font-family: 'Söhne', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    text-decoration: none;
-    transition: background 0.2s ease;
-  }
-
-  .beta-pill:hover {
-    background: rgba(237, 233, 227, 0.05);
-  }
-
-  /* Iframe wrappers */
-  .beta-iframe-glow {
-    border-radius: 22px;
-    padding: 4px;
-    background: linear-gradient(135deg, rgba(237, 233, 227, 0.04) 0%, rgba(237, 233, 227, 0.02) 50%, rgba(237, 233, 227, 0.03) 100%);
-  }
-
-  .beta-iframe-border {
-    border-radius: 18px;
-    border: 1px solid rgba(237, 233, 227, 0.06);
-    overflow: hidden;
-    background: #1e1d1b;
-    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
-  }
-
-  .beta-iframe-aspect {
-    aspect-ratio: 16 / 9.5;
-    border-radius: 14px;
-    overflow: hidden;
-    position: relative;
-    background: #1e1d1b;
-  }
-
-  .beta-iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 111.11%;
-    height: 111.11%;
-    transform: scale(0.9);
-    transform-origin: top left;
-    border: none;
-  }
-
-  /* Responsive: stacking */
-  @media (max-width: 900px) {
-    .beta-container {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 40px;
-    }
-
-    .beta-left {
-      flex: none;
-      max-width: 100%;
-    }
-
-    .beta-right {
-      flex: none;
-      max-width: 100%;
-    }
-  }
-
-  /* Mobile form stacking */
-  @media (max-width: 767.98px) {
-    .beta-form {
-      flex-direction: column;
-    }
-  }
-
-  /* Iframe responsive scaling */
-  @media (max-width: 767.98px) {
-    .beta-iframe {
-      width: 200%;
-      height: 200%;
-      transform: scale(0.5);
-    }
-  }
-
-  @media (max-width: 479.98px) {
-    .beta-iframe {
-      width: 250%;
-      height: 250%;
-      transform: scale(0.4);
-    }
-  }
-</style>
+<script is:inline>
+  var v = document.querySelector('.bta-vid');
+  if (v) v.playbackRate = 0.8;
+  document.getElementById('bta-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('bta-done').style.display = 'block';
+    window.posthog?.capture('waitlist_submitted');
+  });
+</script>

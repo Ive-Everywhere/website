@@ -184,10 +184,20 @@ import MemoryMini from './MemoryMini.astro';
   /* Mini animations are position:absolute inset:0 inside their own stages
      and size to their parent — no internal window overrides needed. */
 
+  /* Tablet: 2-col grid */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .fr-grid { grid-template-columns: 1fr 1fr; }
+    .fr-card:last-child { grid-column: 1 / -1; max-width: 50%; margin: 0 auto; }
+  }
+
   /* Small screens */
-  @media (max-width: 480px) {
+  @media (max-width: 639px) {
     .fr { padding: 48px 0 0; }
     .fr-heading { font-size: 20px; }
-    .fr-media-box { aspect-ratio: 5 / 4; } /* taller on mobile so mini animations have room */
+    .fr-card { padding: 14px; }
+    .fr-title { font-size: 14px; }
+    .fr-desc { font-size: 13px; }
+    .fr-media-box { aspect-ratio: 1 / 1; }
+    .fr-media { padding-top: 12px; }
   }
 </style>

@@ -36,10 +36,12 @@ const navLinks = [
       ))}
     </div>
 
-    <!-- ── Interactive dot grid with "Eluu AI" ── -->
-    <div class="sftr-dotgrid-wrap">
-      <canvas id="sftr-dotgrid" class="sftr-dotgrid"></canvas>
-    </div>
+  </div>
+  <!-- ── Interactive dot grid — full viewport width ── -->
+  <div class="sftr-dotgrid-wrap">
+    <canvas id="sftr-dotgrid" class="sftr-dotgrid"></canvas>
+  </div>
+  <div class="sftr-container">
 
     <!-- ── Bottom bar: logo + legal + social + copyright ── -->
     <div class="sftr-bottom-bar">
@@ -61,7 +63,7 @@ const navLinks = [
           <button type="button" class="sftr-whois-trigger" id="sftr-whois-btn">Who is Eluu?</button>
           <div class="sftr-whois-popup" id="sftr-whois-popup">
             <div class="sftr-whois-content">
-              <img src="/images/the-boys.png" alt="The Eluu crew" class="sftr-whois-img" />
+              <img src="/images/the-boys.webp" alt="The Eluu crew" class="sftr-whois-img" />
               <p class="sftr-whois-text">A research-obsessed crew. Four people building AI colleagues because we couldn't stop ourselves. Always looking for new ideas — hit us up.</p>
               <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="sftr-whois-cta">Contact us</a>
             </div>
@@ -171,13 +173,37 @@ const navLinks = [
   function draw() {
     ctx!.clearRect(0, 0, canvasW, canvasH);
 
-    // Draw "Eluu AI" text centered
+    // Draw "Eluu AI" — each character individually, lights up when cursor is near it
     const fontSize = Math.min(canvasW * 0.22, 200);
     ctx!.font = `${fontSize}px ${FONT_FAMILY}`;
-    ctx!.textAlign = 'center';
     ctx!.textBaseline = 'middle';
-    ctx!.fillStyle = 'rgba(200, 195, 185, 0.3)';
-    ctx!.fillText(TEXT, canvasW / 2, canvasH / 2);
+
+    // Measure total width to center the text
+    const totalWidth = ctx!.measureText(TEXT).width;
+    let charX = canvasW / 2 - totalWidth / 2;
+    const charY = canvasH / 2;
+
+    for (let i = 0; i < TEXT.length; i++) {
+      const ch = TEXT[i];
+      const charWidth = ctx!.measureText(ch).width;
+      const centerX = charX + charWidth / 2;
+
+      let alpha = 0.12;
+      if (isHovering) {
+        const dx = mouseX - centerX;
+        const dy = mouseY - charY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const hitRadius = charWidth * 1.2 + 30;
+        if (dist < hitRadius) {
+          const t = 1 - dist / hitRadius;
+          alpha = 0.12 + t * 0.6;
+        }
+      }
+
+      ctx!.fillStyle = `rgba(237, 233, 227, ${alpha})`;
+      ctx!.fillText(ch, charX, charY);
+      charX += charWidth;
+    }
 
     // Update + draw dots
     for (let i = 0; i < dots.length; i++) {
@@ -251,21 +277,38 @@ const navLinks = [
   draw();
 })();
 
-// Who is Eluu? popover — hover activated
+// Who is Eluu? popover — hover on desktop, tap on mobile
 (function () {
   const wrap = document.getElementById('sftr-whois');
+  const btn = document.getElementById('sftr-whois-btn');
   const popup = document.getElementById('sftr-whois-popup');
-  if (!wrap || !popup) return;
+  if (!wrap || !btn || !popup) return;
 
   let closeTimer: ReturnType<typeof setTimeout> | null = null;
+  const isTouch = 'ontouchstart' in window;
 
-  wrap.addEventListener('mouseenter', () => {
-    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
-    popup.classList.add('open');
+  if (!isTouch) {
+    // Desktop: hover
+    wrap.addEventListener('mouseenter', () => {
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+      popup.classList.add('open');
+    });
+    wrap.addEventListener('mouseleave', () => {
+      closeTimer = setTimeout(() => popup.classList.remove('open'), 200);
+    });
+  }
+
+  // Both: tap/click toggle (primary on mobile, backup on desktop)
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    popup.classList.toggle('open');
   });
 
-  wrap.addEventListener('mouseleave', () => {
-    closeTimer = setTimeout(() => popup.classList.remove('open'), 200);
+  // Close on outside tap
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('#sftr-whois')) {
+      popup.classList.remove('open');
+    }
   });
 
   document.addEventListener('keydown', (e) => {
