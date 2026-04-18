@@ -82,7 +82,7 @@
 
         <!-- Devind's real message -->
         <div class="sd-msg sd-anim" data-anim="user-msg">
-          <img src="/images/devind-dp.png" alt="" class="sd-avatar" />
+          <img src="/images/devind-dp.webp" alt="" class="sd-avatar" />
           <div class="sd-msg-content">
             <div class="sd-msg-meta"><strong>Devind</strong> <span class="sd-time">3:04 PM</span></div>
             <div class="sd-msg-text"><span class="sd-mention">@Eluu</span> What strategy do you recommend to get our first 1000 users?</div>
@@ -547,10 +547,13 @@
 
   function revealLines(cb) {
     var lines = root.querySelectorAll('.sd-line');
+    var msgs = root.querySelector('.sd-msgs');
     var d = 0;
     lines.forEach(function(ln, i) {
       setTimeout(function() {
         ln.classList.add('visible');
+        // Auto-scroll messages to bottom as lines appear
+        if (msgs) msgs.scrollTop = msgs.scrollHeight;
         if (i === lines.length - 1 && cb) setTimeout(cb, 300);
       }, d);
       d += 250;

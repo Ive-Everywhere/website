@@ -2,39 +2,68 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import Testimonials from '../components/Testimonials.astro';
 
 const plans = [
   {
-    slug: 'pro',
-    name: 'Pro plan',
-    description: 'Perfect for individuals or small teams getting started with AI colleagues.',
-    price: '$50',
+    slug: 'team',
+    name: 'Team',
+    description: 'For small teams getting productive.',
+    price: '$17',
     period: '/mo',
     features: [
-      '2 AI colleagues',
-      'Generous usage',
-      'Web app access',
-      'Basic memory & learning',
+      '2 colleagues',
+      '$20 usage budget /month',
+      '1,000 integration credits',
+      '25 active jobs',
+      '6 parallel sessions',
+      '10 action views',
+      '5 GB file storage',
+      'Team Hard Drive, shared integrations',
+      'Up to 3 users',
     ],
   },
   {
     slug: 'max',
-    name: 'Max plan',
-    description: 'For power users and growing teams ready to deploy AI colleagues across their workflow.',
-    price: '$200',
+    name: 'Max',
+    description: 'For growing teams with heavy usage.',
+    price: '$99',
     period: '/mo',
     features: [
-      'Unlimited AI colleagues',
-      'Extended usage and peak time availability',
-      'Slack, web & API access',
-      'Scheduled tasks & commands',
-      'Parallel execution',
-      'Persistent memory & learning',
+      'Unlimited colleagues',
+      '$150 usage budget /month',
+      '25K integration credits',
+      '25 active jobs',
+      '20 parallel sessions',
+      '10 action views',
+      '5 GB file storage',
+      'Talk to AI colleagues on Slack',
+      'Team Hard Drive, shared integrations',
+      'Up to 5 users',
+    ],
+  },
+  {
+    slug: 'maxpro',
+    name: 'Max Pro',
+    description: 'Maximum power for demanding teams.',
+    price: '$199',
+    period: '/mo',
+    features: [
+      'Unlimited colleagues',
+      '$330 usage budget /month',
+      '100K integration credits',
+      'Unlimited active jobs',
+      '40 parallel sessions',
+      'Unlimited action views',
+      '25 GB file storage',
+      'Talk to AI colleagues on Slack',
+      'Team Hard Drive, shared integrations',
+      'Up to 5 users',
     ],
   },
   {
     slug: 'enterprise',
-    name: 'Enterprise plan',
+    name: 'Enterprise',
     description: 'Built for organisations with advanced security, compliance, and scale requirements.',
     price: 'Custom',
     period: '',
@@ -58,7 +87,7 @@ const plans = [
       <!-- Header -->
       <div class="pr-header">
         <span class="pr-badge reveal">Pricing</span>
-        <h1 class="pr-title reveal">Simple plans, no surprises.</h1>
+        <h1 class="pr-title reveal">Power your team at any scale.</h1>
         <p class="pr-sub reveal">Start free. Scale when you're ready.</p>
       </div>
 
@@ -95,6 +124,48 @@ const plans = [
           </div>
         ))}
       </div>
+
+    </div>
+
+    <!-- Testimonials — reuse homepage component -->
+    <Testimonials />
+
+    <div class="pr-content" style="padding-top: 0;">
+
+      <!-- FAQ -->
+      <div class="pr-faq reveal">
+        <h2 class="pr-faq-heading">Questions & Answers</h2>
+        <div class="pr-faq-list">
+          <details class="pr-faq-item">
+            <summary class="pr-faq-q">Is there a free trial?</summary>
+            <p class="pr-faq-a">There's no traditional free trial, but every new account comes with a small amount of free usage so you can explore the platform, set up colleagues, and see how it works. Once you've used your free allocation, you'll need to purchase a plan to continue.</p>
+          </details>
+          <details class="pr-faq-item">
+            <summary class="pr-faq-q">How does usage work?</summary>
+            <p class="pr-faq-a">Usage is budget-based. Every action your colleagues take — reading data, executing tasks, generating outputs — consumes from your usage budget. Team includes $20/month, Max gives you $150/month, and Max Pro includes $330/month. Enterprise gets custom budgets sized to your workload.</p>
+          </details>
+          <details class="pr-faq-item">
+            <summary class="pr-faq-q">Can I switch plans later?</summary>
+            <p class="pr-faq-a">Yes — upgrade or downgrade anytime. Changes take effect at the start of your next billing cycle. Your colleagues, configurations, and Hard Drive data carry over seamlessly. Unused tokens don't roll over between cycles.</p>
+          </details>
+          <details class="pr-faq-item">
+            <summary class="pr-faq-q">Is my data secure?</summary>
+            <p class="pr-faq-a">Every connection is scoped with OAuth and per-workspace keys. Your data never leaves your environment. All integrations run through your own infrastructure with full audit logging. Enterprise customers get custom data residency and SLA guarantees.</p>
+          </details>
+          <details class="pr-faq-item">
+            <summary class="pr-faq-q">What integrations are supported?</summary>
+            <p class="pr-faq-a">All integrations are supported on every plan — Salesforce, HubSpot, Stripe, Google Sheets, Slack, Gmail, and 20+ more. You also get custom API connections to plug in any tool your team uses. No integration is locked behind a higher tier.</p>
+          </details>
+          <details class="pr-faq-item">
+            <summary class="pr-faq-q">How is billing handled?</summary>
+            <p class="pr-faq-a">All payments are processed securely through Paddle. You can pay monthly or annually. Enterprise customers can request invoice/PO billing. Cancel anytime — no lock-in contracts.</p>
+          </details>
+          <details class="pr-faq-item">
+            <summary class="pr-faq-q">What happens if I run out of tokens?</summary>
+            <p class="pr-faq-a">Your colleagues will pause until the next billing cycle, when your token allocation replenishes automatically. You can also upgrade your plan at any time for an immediate top-up. Enterprise customers can configure auto-scaling so colleagues never stop.</p>
+          </details>
+        </div>
+      </div>
     </div>
   </main>
   <Footer />
@@ -108,9 +179,10 @@ const plans = [
 
   /* ── Content ── */
   .pr-content {
-    max-width: 1200px;
+    max-width: 1380px;
     margin: 0 auto;
-    padding: 140px 24px 112px;
+    padding: 140px 20px 112px;
+    box-sizing: border-box;
   }
   @media (max-width: 480px) {
     .pr-content { padding: 100px 16px 56px; }
@@ -129,7 +201,7 @@ const plans = [
     color: rgba(237, 233, 227, 0.6);
     background: rgba(237, 233, 227, 0.06);
     padding: 6px 16px;
-    border-radius: 100px;
+    border-radius: 4px;
     border: 1px solid rgba(237, 233, 227, 0.08);
     margin-bottom: 16px;
   }
@@ -159,11 +231,9 @@ const plans = [
   }
   @media (min-width: 640px) {
     .pr-cards { grid-template-columns: 1fr 1fr; }
-    .pr-card:last-child { grid-column: 1 / -1; }
   }
-  @media (min-width: 960px) {
-    .pr-cards { grid-template-columns: 1fr 1fr 1fr; }
-    .pr-card:last-child { grid-column: auto; }
+  @media (min-width: 1080px) {
+    .pr-cards { grid-template-columns: 1fr 1fr 1fr 1fr; }
   }
 
   .pr-card {
@@ -288,5 +358,72 @@ const plans = [
   .pr-cta-outline:hover {
     border-color: rgba(237, 233, 227, 0.3);
     color: #ede9e3;
+  }
+
+  /* ── FAQ ── */
+  .pr-faq {
+    padding: 96px 0 0;
+  }
+  .pr-faq-heading {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 600;
+    color: #ede9e3;
+    letter-spacing: -0.02em;
+    margin: 0 0 40px;
+  }
+  .pr-faq-list {
+    max-width: 100%;
+  }
+  .pr-faq-item {
+    border-top: 1px solid rgba(237, 233, 227, 0.06);
+  }
+  .pr-faq-item:last-child {
+    border-bottom: 1px solid rgba(237, 233, 227, 0.06);
+  }
+  .pr-faq-q {
+    font-family: 'Söhne', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(237, 233, 227, 0.7);
+    padding: 20px 0;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.2s ease;
+  }
+  .pr-faq-q:hover { color: #ede9e3; }
+  .pr-faq-q::-webkit-details-marker { display: none; }
+  .pr-faq-q::after {
+    content: '+';
+    font-family: 'Söhne', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(237, 233, 227, 0.35);
+    flex-shrink: 0;
+    margin-left: 16px;
+    transition: transform 0.25s ease;
+  }
+  .pr-faq-item[open] .pr-faq-q::after {
+    transform: rotate(45deg);
+  }
+  .pr-faq-item[open] .pr-faq-q {
+    color: #ede9e3;
+  }
+  .pr-faq-a {
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.5);
+    line-height: 1.65;
+    margin: 0;
+    padding: 0 0 20px;
+    max-width: 100%;
+  }
+  @media (max-width: 480px) {
+    .pr-faq { padding: 56px 0 0; }
+    .pr-faq-heading { margin-bottom: 24px; }
   }
 </style>

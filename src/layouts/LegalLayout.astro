@@ -60,9 +60,10 @@ const { title, pageTitle, updatedDate = 'February 24, 2026' } = Astro.props;
   .ln-main {
     background: #13100a;
     min-height: 100vh;
-    padding: 140px 20px 112px;
+    padding: 100px 16px 56px;
   }
-  @media (min-width: 640px) { .ln-main { padding: 160px 40px 112px; } }
+  @media (min-width: 640px) { .ln-main { padding: 140px 40px 80px; } }
+  @media (min-width: 1024px) { .ln-main { padding: 160px 40px 112px; } }
 
   .ln-article {
     max-width: 720px;

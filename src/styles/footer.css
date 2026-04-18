@@ -69,8 +69,9 @@
 
 /* ── Dot grid canvas ── */
 .sftr-dotgrid-wrap {
-  width: 100%;
-  aspect-ratio: 3 / 1;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  aspect-ratio: 4 / 1;
   position: relative;
   overflow: hidden;
 }
@@ -170,7 +171,7 @@
   bottom: calc(100% + 12px);
   right: 0;
   width: 360px;
-  max-width: calc(100vw - 40px);
+  max-width: calc(100vw - 48px);
   background: #1e1d1b;
   border-radius: 8px;
   border: 1px solid rgba(237, 233, 227, 0.06);

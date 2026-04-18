@@ -28,11 +28,11 @@ const rowVariants: [string, string, string][] = [0, 1, 2].map(
 ---
 
 <div class="em-stage" data-em-stage>
-  <img src="/images/cookbook-bg.png" alt="" class="em-bg" aria-hidden="true" />
+  <img src="/images/cookbook-bg.webp" alt="" class="em-bg" aria-hidden="true" />
 
   <!-- Persistent prompt card -->
   <div class="em-card">
-    <img src="/images/avatar-rivera.png" alt="" class="em-avatar" />
+    <img src="/images/avatar-rivera.webp" alt="" class="em-avatar" />
     <div class="em-slot">
       {slides.map((slide, idx) => (
         <span class={`em-text${idx === 0 ? ' active' : ''}`} data-idx={idx}>{slide.prompt}</span>
@@ -239,7 +239,8 @@ const rowVariants: [string, string, string][] = [0, 1, 2].map(
     }
   }
   @media (max-width: 480px) {
-    .em-stage { padding: 36px 12px 12px; }
+    .em-stage { padding: 28px 10px 10px; }
+    .em-card { max-width: 220px; padding: 8px 10px; font-size: 11px; }
   }
 </style>
 

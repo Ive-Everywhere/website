@@ -28,7 +28,7 @@ const chipVariants: [string, string, string][] = [0, 1, 2].map(
 ---
 
 <div class="mm-stage" data-mm-stage>
-  <img src="/images/cookbook-bg.png" alt="" class="mm-bg" aria-hidden="true" />
+  <img src="/images/cookbook-bg.webp" alt="" class="mm-bg" aria-hidden="true" />
 
   <!-- Persistent prompt card -->
   <div class="mm-card">
@@ -183,7 +183,8 @@ const chipVariants: [string, string, string][] = [0, 1, 2].map(
     }
   }
   @media (max-width: 480px) {
-    .mm-stage { padding: 36px 12px 12px; }
+    .mm-stage { padding: 28px 10px 10px; }
+    .mm-card { max-width: 220px; padding: 8px 10px; font-size: 11px; }
   }
 </style>
 

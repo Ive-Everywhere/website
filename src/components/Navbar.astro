@@ -187,30 +187,40 @@
     gap: 28px;
   }
   .nav-link {
+    display: flex;
+    align-items: center;
     font-family: 'Söhne', sans-serif;
     font-size: 14px;
     font-weight: 400;
     color: rgba(237, 233, 227, 0.7);
     text-decoration: none;
     line-height: 1;
+    height: 100%;
     transition: color 0.2s ease;
   }
   .nav-link:hover { color: #ede9e3; }
 
-  .nav-link-wrap { position: relative; }
+  .nav-link-wrap { position: relative; display: flex; align-items: center; }
   .nav-link-trigger {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 4px;
     background: none;
     border: none;
+    margin: 0;
     cursor: pointer;
     padding: 0;
-    font: inherit;
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: inherit;
+    line-height: 1;
+    height: 100%;
   }
   .nav-chevron {
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     width: 12px; height: 12px;
+    flex-shrink: 0;
   }
   .site-nav.dropdown-open .nav-chevron {
     transform: rotate(180deg);
@@ -355,6 +365,7 @@
     z-index: 49;
     background: rgba(19, 16, 10, 0.97);
     backdrop-filter: blur(24px);
+    overscroll-behavior: contain;
     -webkit-backdrop-filter: blur(24px);
     padding: 80px 24px 40px;
     opacity: 0;
