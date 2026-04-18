@@ -57,9 +57,9 @@ const plans = [
     <div class="pr-content">
       <!-- Header -->
       <div class="pr-header">
-        <span class="pr-badge reveal">Flexible plans for every stage</span>
-        <h1 class="pr-title reveal">Smart pricing for AI colleagues</h1>
-        <p class="pr-sub reveal">Scalable pricing designed for fast-moving individuals and teams.</p>
+        <span class="pr-badge reveal">Pricing</span>
+        <h1 class="pr-title reveal">Simple plans, no surprises.</h1>
+        <p class="pr-sub reveal">Start free. Scale when you're ready.</p>
       </div>
 
       <!-- Cards -->
@@ -112,6 +112,9 @@ const plans = [
     margin: 0 auto;
     padding: 140px 24px 112px;
   }
+  @media (max-width: 480px) {
+    .pr-content { padding: 100px 16px 56px; }
+  }
 
   /* ── Header ── */
   .pr-header {
@@ -133,6 +136,7 @@ const plans = [
   .pr-title {
     font-family: 'Söhne', sans-serif;
     font-weight: 600;
+    font-style: normal;
     font-size: clamp(32px, 5vw, 52px);
     color: #ede9e3;
     line-height: 1.1;

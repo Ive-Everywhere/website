@@ -14,10 +14,10 @@ interface FeatureData {
   description: string;
   heroImage?: string;
   intro?: { bold: string; supporting: string };
-  valueProps: { title: string; image?: string; features: { title: string; desc: string }[] }[];
+  valueProps: { title: string; description?: string; image?: string; features: { title: string; desc: string }[] }[];
   stats: { heading: string; items: { value: string; label: string; desc: string }[] };
-  testimonial: { quote: string; attribution: string };
-  useCases: { heading: string; image?: string; cases: { title: string; desc: string }[] };
+  testimonial: { quote: string; attribution: string; logo?: string };
+  useCases: { heading: string; description?: string; image?: string; cases: { title: string; desc: string }[] };
   ctaHeading: string;
 }
 
@@ -82,15 +82,17 @@ const { feature: f } = Astro.props as { feature: FeatureData };
               <div class="fp-text-col">
                 <div class="fp-text-wrap">
                   <div class="fp-text-block">
-                    <h3 class="fp-card-heading">{block.title}</h3>
-                    <div class="fp-card-features">
-                      {block.features.map((feat) => (
-                        <div class="fp-feat">
-                          <h4 class="fp-feat-title">{feat.title}</h4>
-                          <p class="fp-feat-desc">{feat.desc}</p>
-                        </div>
-                      ))}
+                    <div class="fp-card-top">
+                      <h3 class="fp-card-heading">{block.title}</h3>
+                      {block.description && (
+                        <p class="fp-card-desc">{block.description}</p>
+                      )}
                     </div>
+                    <ul class="fp-card-points">
+                      {block.features.map((feat) => (
+                        <li class="fp-card-point">{feat.title}</li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -125,34 +127,22 @@ const { feature: f } = Astro.props as { feature: FeatureData };
       </div>
     </section>
 
-    <!-- ══ Testimonial ══ -->
-    <section class="fp-testimonial">
+    <!-- ══ Testimonial + Image — merged card ══ -->
+    <section class="fp-testi">
       <div class="fp-container">
-        <div class="fp-testimonial-inner reveal">
-          <blockquote>&ldquo;{f.testimonial.quote}&rdquo;</blockquote>
-          <p class="fp-testimonial-attr">&mdash; {f.testimonial.attribution}</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ Use Cases — dark accent section ══ -->
-    <section class="fp-uc">
-      <div class="fp-container">
-        <h2 class="fp-uc-heading">{f.useCases.heading}</h2>
-        <div class="fp-uc-layout">
-          <div class="fp-uc-tabs">
-            {f.useCases.cases.map((c, i) => (
-              <button class={`fp-uc-tab${i === 0 ? ' active' : ''}`} data-uc-tab={i} type="button">
-                <h3 class="fp-uc-tab-title">{c.title}</h3>
-                <p class="fp-uc-tab-desc">{c.desc}</p>
-              </button>
-            ))}
+        <div class="fp-testi-card reveal">
+          <div class="fp-testi-text">
+            {f.testimonial.logo && (
+              <img src={f.testimonial.logo} alt="" class="fp-testi-logo" />
+            )}
+            <blockquote class="fp-testi-quote">&ldquo;{f.testimonial.quote}&rdquo;</blockquote>
+            <p class="fp-testi-attr">{f.testimonial.attribution}</p>
           </div>
-          <div class="fp-uc-image">
+          <div class="fp-testi-image">
             {f.useCases.image ? (
-              <img src={f.useCases.image} alt={f.useCases.heading} class="fp-uc-img" loading="lazy" />
+              <img src={f.useCases.image} alt="" class="fp-testi-img" />
             ) : (
-              <div class="fp-placeholder fp-placeholder-uc" style={`--ft-color: ${f.color}`}></div>
+              <div class="fp-placeholder" style={`--ft-color: ${f.color}`}></div>
             )}
           </div>
         </div>
@@ -177,17 +167,6 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     );
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
-    // Use-cases tab switching
-    (function () {
-      const tabs = document.querySelectorAll('[data-uc-tab]') as NodeListOf<HTMLElement>;
-      if (!tabs.length) return;
-      tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-          const idx = parseInt(tab.dataset.ucTab!, 10);
-          tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
-        });
-      });
-    })();
   </script>
 
 <style>
@@ -249,7 +228,7 @@ const { feature: f } = Astro.props as { feature: FeatureData };
 
   .fp-headline {
     font-family: 'Söhne', sans-serif;
-    font-weight: 600;
+    font-weight: 400;
     font-size: clamp(36px, 6vw, 72px);
     letter-spacing: -0.03em;
     line-height: 1.05;
@@ -273,20 +252,20 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     position: relative;
   }
 
-  /* ══ Intro ══ */
+  /* ══ Intro — matches homepage hp-intro block ══ */
   .fp-intro {
     background: #13100a;
-    padding: 0 0 112px;
+    padding: 48px 0 64px;
   }
   .fp-intro-text {
     font-family: 'Söhne', sans-serif;
     font-weight: 400;
-    font-size: clamp(20px, 2.8vw, 32px);
-    color: rgba(237, 233, 227, 0.45);
-    line-height: 1.35;
+    font-size: clamp(18px, 2.2vw, 26px);
+    color: rgba(237, 233, 227, 0.4);
+    line-height: 1.45;
     letter-spacing: -0.01em;
     margin: 0;
-    max-width: 720px;
+    max-width: 900px;
   }
   .fp-intro-text strong {
     color: #ede9e3;
@@ -340,16 +319,17 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     }
   }
 
+  /* ── Text column — matches WhyEluu homepage cards exactly ── */
   .fp-text-col {
     display: flex;
     align-items: center;
-    padding: 28px 24px;
+    padding: 24px;
   }
   @media (min-width: 900px) {
     .fp-text-col {
       grid-column: 1 / 10;
       grid-row: 1 / -1;
-      padding: 40px 36px;
+      padding: 36px 30px 36px 36px;
     }
   }
 
@@ -357,54 +337,68 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     width: 100%;
     max-width: 42ch;
   }
+  /* ── Card text: heading + desc at top, points at bottom ── */
   .fp-text-block {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    justify-content: space-between;
+    min-height: 320px;
+  }
+  @media (max-width: 899px) {
+    .fp-text-block { min-height: auto; gap: 32px; }
+  }
+
+  .fp-card-top {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .fp-card-heading {
     font-family: 'Söhne', sans-serif;
-    font-size: 1.375rem;
+    font-size: 1.25rem;
     font-weight: 600;
     color: #ede9e3;
     line-height: 1.2;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.015em;
     margin: 0;
     text-wrap: balance;
   }
   @media (min-width: 768px) {
     .fp-card-heading {
-      font-size: 1.75rem;
-      letter-spacing: -0.025em;
+      font-size: 1.625rem;
+      letter-spacing: -0.02em;
     }
   }
 
-  .fp-card-features {
+  .fp-card-desc {
+    font-family: 'Söhne', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.5);
+    line-height: 1.6;
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+
+  /* Points — title-only list at bottom */
+  .fp-card-points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
   }
-  .fp-feat {
-    padding: 16px 0;
+  .fp-card-point {
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(237, 233, 227, 0.55);
+    letter-spacing: -0.005em;
+    padding: 11px 0;
     border-top: 1px solid rgba(237, 233, 227, 0.06);
   }
-  .fp-feat:first-child { border-top: none; padding-top: 0; }
-  .fp-feat-title {
-    font-family: 'Söhne', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: #ede9e3;
-    margin: 0 0 5px;
-    letter-spacing: -0.01em;
-  }
-  .fp-feat-desc {
-    font-family: 'Söhne', sans-serif;
-    font-size: 14.5px;
-    font-weight: 400;
-    color: rgba(237, 233, 227, 0.55);
-    line-height: 1.55;
-    margin: 0;
-  }
+  .fp-card-point:first-child { border-top: none; }
 
   .fp-media-col {
     position: relative;
@@ -430,14 +424,18 @@ const { feature: f } = Astro.props as { feature: FeatureData };
   }
 
   @media (max-width: 899px) {
-    .fp-media-col { min-height: 350px; }
-    .fp-card { margin-bottom: 80px; }
+    .fp-media-col { min-height: 300px; }
+    .fp-card { margin-bottom: 72px; }
+  }
+  @media (max-width: 480px) {
+    .fp-media-col { min-height: 220px; }
+    .fp-card { margin-bottom: 48px; }
   }
 
   /* ══ Stats ══ */
   .fp-stats {
     background: #13100a;
-    padding: 112px 0;
+    padding: 64px 0;
   }
   .fp-stats-heading {
     font-family: 'Söhne', sans-serif;
@@ -445,14 +443,14 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     font-size: clamp(22px, 3vw, 32px);
     color: #ede9e3;
     letter-spacing: -0.02em;
-    margin: 0 0 48px;
+    margin: 0 0 32px;
     text-align: center;
   }
   .fp-stats-row {
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
-    max-width: 1200px;
+    max-width: 1380px;
     margin: 0 auto;
   }
   @media (min-width: 640px) {
@@ -497,128 +495,101 @@ const { feature: f } = Astro.props as { feature: FeatureData };
     line-height: 1.5;
   }
 
-  /* ══ Testimonial ══ */
-  .fp-testimonial {
+  /* ══ Testimonial + Image — merged card ══ */
+  .fp-testi {
     background: #13100a;
-    padding: 64px 0;
+    padding: 48px 0 72px;
   }
-  .fp-testimonial-inner {
-    max-width: 840px;
-    margin: 0 auto;
-    text-align: center;
+
+  .fp-testi-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    background: #1e1d1b;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
   }
-  .fp-testimonial-inner blockquote {
+  .fp-testi-card::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    z-index: 2;
+  }
+  @media (min-width: 900px) {
+    .fp-testi-card {
+      grid-template-columns: 5fr 6fr;
+    }
+  }
+
+  /* Left: logo top, quote middle, attribution bottom */
+  .fp-testi-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 36px 28px;
+    min-height: 400px;
+  }
+  @media (min-width: 900px) {
+    .fp-testi-text { padding: 48px 44px; }
+  }
+
+  .fp-testi-logo {
+    display: block;
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    object-position: left;
+    filter: brightness(0) invert(1);
+    opacity: 0.7;
+    align-self: flex-start;
+  }
+
+  .fp-testi-quote {
     font-family: 'Söhne', sans-serif;
     font-weight: 400;
-    font-size: clamp(17px, 2vw, 24px);
-    color: rgba(237, 233, 227, 0.7);
+    font-size: clamp(18px, 2vw, 24px);
+    color: #ede9e3;
     line-height: 1.5;
+    letter-spacing: -0.015em;
     margin: 0;
     padding: 0;
     border: none;
   }
-  .fp-testimonial-attr {
-    font-family: 'Söhne', sans-serif;
-    font-size: 14px;
-    color: rgba(237, 233, 227, 0.35);
-    margin: 18px 0 0;
-  }
 
-  /* ══ Use Cases — dark accent ══ */
-  .fp-uc {
-    background: #1e1d1b;
-    padding: 112px 0;
-  }
-  .fp-uc-heading {
-    font-family: 'Söhne', sans-serif;
-    font-weight: 600;
-    font-size: clamp(22px, 3vw, 32px);
-    color: #ede9e3;
-    letter-spacing: -0.02em;
-    margin: 0 0 48px;
-  }
-  .fp-uc-layout {
-    display: flex;
-    gap: 48px;
-    align-items: flex-start;
-  }
-  @media (max-width: 767.98px) {
-    .fp-uc-layout { flex-direction: column; gap: 32px; }
-  }
-
-  .fp-uc-tabs {
-    width: 45%;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-  }
-  @media (max-width: 767.98px) { .fp-uc-tabs { width: 100%; } }
-
-  .fp-uc-tab {
-    display: flex;
-    flex-direction: column;
-    padding: 18px 0;
-    border: none;
-    border-top: 2px solid rgba(237, 233, 227, 0.08);
-    background: transparent;
-    cursor: pointer;
-    text-align: left;
-    transition: border-color 0.2s ease;
-  }
-  .fp-uc-tab.active { border-top-color: #ede9e3; }
-
-  .fp-uc-tab-title {
-    font-family: 'Söhne', sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    color: rgba(237, 233, 227, 0.35);
-    margin: 0;
-    transition: color 0.2s ease;
-  }
-  .fp-uc-tab.active .fp-uc-tab-title { color: #ede9e3; font-weight: 600; }
-  .fp-uc-tab:hover .fp-uc-tab-title { color: rgba(237, 233, 227, 0.6); }
-
-  .fp-uc-tab-desc {
+  .fp-testi-attr {
     font-family: 'Söhne', sans-serif;
     font-size: 13px;
-    color: rgba(237, 233, 227, 0.45);
-    line-height: 1.5;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.4);
     margin: 0;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.25s ease,
-                margin 0.35s ease;
-  }
-  .fp-uc-tab.active .fp-uc-tab-desc {
-    max-height: 120px;
-    opacity: 1;
-    margin-top: 8px;
   }
 
-  .fp-uc-image {
-    flex: 1;
-    min-width: 0;
+  /* Right: image — square, covers full panel */
+  .fp-testi-image {
     position: relative;
-    min-height: 400px;
+    min-height: 320px;
   }
-  @media (max-width: 767.98px) { .fp-uc-image { min-height: 240px; } }
+  @media (min-width: 900px) {
+    .fp-testi-image {
+      aspect-ratio: 1 / 1;
+      min-height: auto;
+    }
+  }
 
-  .fp-uc-img {
+  .fp-testi-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 4px;
     display: block;
   }
-  .fp-placeholder-uc {
-    border-radius: 4px;
-    min-height: 400px;
-  }
-  @media (max-width: 767.98px) {
-    .fp-placeholder-uc { min-height: 240px; }
-  }
+
+  /* ══ Use Cases — heading+desc top, points bottom, image right ══ */
+  /* Old use cases section removed — merged into testimonial card */
 </style>
 
 </body>

@@ -45,6 +45,7 @@ const testimonials = [
     background: #13100a;
     padding: 112px 0;
   }
+  @media (max-width: 480px) { .ts-section { padding: 56px 0; } }
 
   .ts-container {
     max-width: 1380px;
@@ -59,10 +60,11 @@ const testimonials = [
     grid-template-columns: 1fr;
     gap: 10px;
   }
-  @media (min-width: 768px) {
-    .ts-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
+  @media (min-width: 640px) {
+    .ts-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 1024px) {
+    .ts-grid { grid-template-columns: repeat(3, 1fr); }
   }
 
   /* ── Card ── */
