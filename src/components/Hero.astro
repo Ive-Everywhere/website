@@ -6,8 +6,8 @@
     <!-- Cursor-style: heading + CTAs stacked left, no right block -->
     <div class="hero-top reveal">
       <h1 class="hero-heading">
-        <span class="hero-line-1">Built to make your team extraordinarily productive.</span>
-        <span class="hero-line-2">Eluu is the best way to run your business with AI.</span>
+        <span class="hero-line-1">Your tools, your workflows, your AI team.</span>
+        <span class="hero-line-2">Colleagues that connect, learn, and execute on repeat.</span>
       </h1>
       <div class="hero-ctas">
         <a href="/beta" class="hero-btn hero-btn-dark hero-btn-icon" onclick="window.posthog?.capture('get_started_clicked', { location: 'hero' })">Try Eluu Beta <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
@@ -94,8 +94,14 @@
     gap: 48px;
     box-sizing: border-box;
   }
+  @media (max-width: 768px) {
+    .hero-inner { padding: 100px 16px 48px; gap: 32px; }
+    .hero-media-frame { min-height: min(480px, 60vh); height: min(600px, 70vh); }
+    .hero-iframe-wrap { width: min(1180px, calc(100% - 32px)); height: min(720px, calc(100% - 32px)); }
+  }
   @media (max-width: 480px) {
-    .hero-inner { padding: 90px 16px 40px; gap: 28px; }
+    .hero-inner { padding: 90px 16px 32px; gap: 24px; }
+    .hero-media-frame { min-height: min(360px, 55vh); height: min(480px, 65vh); }
   }
 
   /* ── Mirai-style hero heading ──
@@ -104,7 +110,8 @@
      the hierarchy. */
   .hero-heading {
     font-family: 'Söhne', sans-serif;
-    font-weight: 600;
+    font-weight: 400;
+    font-style: normal;
     font-size: clamp(26px, 3.2vw, 44px);
     letter-spacing: -0.025em;
     color: #ede9e3;

@@ -184,9 +184,10 @@ import MemoryMini from './MemoryMini.astro';
   /* Mini animations are position:absolute inset:0 inside their own stages
      and size to their parent — no internal window overrides needed. */
 
-  /* Small screens: tighter section padding */
+  /* Small screens */
   @media (max-width: 480px) {
-    .fr { padding: 72px 0 0; }
+    .fr { padding: 48px 0 0; }
     .fr-heading { font-size: 20px; }
+    .fr-media-box { aspect-ratio: 5 / 4; } /* taller on mobile so mini animations have room */
   }
 </style>

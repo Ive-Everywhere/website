@@ -15,21 +15,23 @@ const feature = {
   },
   valueProps: [
     {
-      title: 'Native connections, zero glue code',
-      image: '/images/features/integrations-feature-1.png',
-      features: [
-        { title: '20+ pre-built connectors', desc: 'Salesforce, HubSpot, Stripe, Google Sheets, Slack, Gmail, and more. One-click setup.' },
-        { title: 'Scoped permissions', desc: 'Each colleague gets exactly the access it needs — read, write, or both. Revoke anytime.' },
-        { title: 'Real-time sync', desc: 'Data flows in and out in real time. No batch jobs, no stale data, no manual refresh.' },
-      ],
-    },
-    {
       title: 'Your stack, unified',
       image: '/images/features/integrations-feature-2.png',
+      description: 'A single task can span your CRM, billing system, spreadsheets, and messaging tools. Colleagues handle the orchestration — reading, writing, and cross-referencing across every connected platform.',
       features: [
         { title: 'Cross-tool workflows', desc: 'A single task can span CRM, billing, spreadsheets, and messaging. Colleagues handle the orchestration.' },
         { title: 'Custom API connections', desc: 'Connect any REST API your team uses. No engineering tickets required.' },
         { title: 'Data never leaves your environment', desc: 'All integrations run through your own infrastructure. SOC 2 compliant.' },
+      ],
+    },
+    {
+      title: 'Native connections, zero glue code',
+      image: '/images/features/integrations-feature-1.png',
+      description: 'Connect Salesforce, HubSpot, Stripe, Google Sheets, Slack, and 20+ other tools with one click. Each connection is scoped with the exact permissions your colleague needs — nothing more.',
+      features: [
+        { title: '20+ pre-built connectors', desc: 'Salesforce, HubSpot, Stripe, Google Sheets, Slack, Gmail, and more. One-click setup.' },
+        { title: 'Scoped permissions', desc: 'Each colleague gets exactly the access it needs — read, write, or both. Revoke anytime.' },
+        { title: 'Real-time sync', desc: 'Data flows in and out in real time. No batch jobs, no stale data, no manual refresh.' },
       ],
     },
   ],
@@ -44,9 +46,11 @@ const feature = {
   testimonial: {
     quote: "We connected Salesforce, Stripe, and Google Sheets in under five minutes. Our colleague was reconciling revenue data across all three before lunch.",
     attribution: 'Head of RevOps, Series A Startup',
+    logo: '/logos/testimonials/ameriprise.png',
   },
   useCases: {
     heading: 'What teams build with Integrations',
+    description: 'Connected tools mean connected workflows. Teams use integrations to let their AI colleagues move data, trigger actions, and cross-reference across every platform — without manual handoffs or custom middleware.',
     image: '/images/features/integrations-usecases.png',
     cases: [
       { title: 'CRM enrichment', desc: 'Colleagues pull data from LinkedIn, email, and support tools to keep your CRM records complete and current.' },
