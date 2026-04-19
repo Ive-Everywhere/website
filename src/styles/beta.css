@@ -1,0 +1,175 @@
+/* ── Beta page ── */
+.bta {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.bta-vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+  pointer-events: none;
+}
+.bta-dim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(19,16,10,0.4) 0%, rgba(19,16,10,0.85) 100%);
+  pointer-events: none;
+}
+
+/* ── Content wrapper ── */
+.bta-wrap {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 20px;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* ── Logo ── */
+.bta-logo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 36px;
+  display: block;
+  opacity: 0.7;
+}
+
+/* ── Heading ──
+   Söhne Halbfett (600), tight tracking, warm white.
+   Two lines via <br>. Moderate size — not hero-scale,
+   this is a waitlist not a homepage. */
+.bta-h {
+  font-family: 'Söhne', sans-serif;
+  font-weight: 600;
+  font-size: clamp(36px, 5.5vw, 64px);
+  color: #ede9e3;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+/* ── Description ──
+   Söhne Buch (400), subdued, comfortable reading width.
+   16px base — one step up from body for emphasis. */
+.bta-p {
+  font-family: 'Söhne', sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: rgba(237,233,227,0.45);
+  line-height: 1.6;
+  margin: 20px auto 0;
+  max-width: 580px;
+}
+
+/* ── CTA button ── */
+.bta-cta {
+  display: inline-block;
+  margin: 32px auto 0;
+  padding: 18px 72px;
+  background: #ede9e3;
+  color: #14120b;
+  font-family: 'Söhne', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.bta-cta:hover {
+  background: #d7d3cd;
+  transform: translateY(-1px);
+}
+
+/* ── Community section ──
+   Visually separated from the form by spacing alone.
+   Own heading + description gives it equal weight. */
+.bta-community {
+  margin-top: 48px;
+}
+
+/* Subheading — Söhne Halbfett, 15px.
+   Smaller than the main heading but still semibold
+   to signal this is a distinct section. */
+.bta-ch {
+  font-family: 'Söhne', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(237,233,227,0.7);
+  margin: 0;
+}
+
+/* Community description — Söhne Buch, 14px.
+   One step below the main description (16→14).
+   Quieter color (35% vs 45%). */
+.bta-cp {
+  font-family: 'Söhne', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(237,233,227,0.35);
+  line-height: 1.5;
+  margin: 6px 0 0;
+}
+
+/* ── Slack / Discord buttons ──
+   Two equal-width buttons, same max-width as the form.
+   14px semibold labels — same weight as the "Join waitlist"
+   button so they read as equally important CTAs. */
+.bta-links {
+  display: flex;
+  gap: 8px;
+  margin: 16px auto 0;
+  max-width: 420px;
+}
+
+.bta-a {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 16px;
+  background: rgba(237,233,227,0.04);
+  border: 1px solid rgba(237,233,227,0.08);
+  border-radius: 4px;
+  text-decoration: none;
+  font-family: 'Söhne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(237,233,227,0.7);
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.bta-a:hover {
+  border-color: rgba(237,233,227,0.2);
+  background: rgba(237,233,227,0.07);
+  color: #ede9e3;
+}
+.bta-a svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+.bta-a:hover svg { opacity: 0.9; }
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .bta-logo { width: 40px; height: 40px; margin-bottom: 24px; }
+  .bta-form {
+    flex-direction: column;
+    border: none;
+    background: none;
+    gap: 8px;
+  }
+  .bta-email {
+    border: 1px solid rgba(237,233,227,0.1);
+    border-radius: 4px;
+    background: rgba(237,233,227,0.03);
+  }
+  .bta-go { border-radius: 4px; }
+}

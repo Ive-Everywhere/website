@@ -3,7 +3,7 @@
 ---
 
 <div class="cx-wrap">
-  <img src="/images/cookbook-bg.png" alt="" class="cx-bg" />
+  <img src="/images/cookbook-bg.webp" alt="" class="cx-bg" />
 
   <div class="cx-window">
     <div class="cx-body" id="cx-body">
@@ -47,10 +47,10 @@
   }
   .cx-window {
     position: relative; z-index: 1; width: 100%; max-width: 560px;
-    background: #ffffff; border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08);
-    overflow: hidden; font-family: 'Inter', sans-serif;
-    border: 1px solid #edede9;
+    background: #1e1c1e; border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.2);
+    overflow: hidden; font-family: 'Söhne', sans-serif;
+    border: 1px solid rgba(237, 233, 227,0.08);
   }
   .cx-body { position: relative; height: 360px; min-height: 360px; max-height: 360px; overflow: hidden; }
 
@@ -69,11 +69,11 @@
   .cx-msg.visible { opacity: 1; transform: translateY(0); }
   .cx-msg p { margin: 0; font-size: 12px; line-height: 1.5; }
   .cx-msg-user {
-    background: #edede9; align-self: flex-end;
-    border-radius: 14px 14px 6px 14px; color: #1e1c1e;
+    background: rgba(237, 233, 227,0.08); align-self: flex-end;
+    border-radius: 14px 14px 6px 14px; color: #ede9e3;
   }
   .cx-msg-ai {
-    align-self: flex-start; color: #1e1c1e; padding-left: 0; padding-right: 0;
+    align-self: flex-start; color: #ede9e3; padding-left: 0; padding-right: 0;
   }
   .cx-msg-ai strong { font-weight: 600; }
 
@@ -83,7 +83,7 @@
   .cx-think-row { display: flex; align-items: center; gap: 6px; }
   .cx-brain { animation: cx-pulse 1.5s ease-in-out infinite; }
   @keyframes cx-pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
-  .cx-think-label { font-size: 11px; font-weight: 500; color: #58564d; }
+  .cx-think-label { font-size: 11px; font-weight: 500; color: #aaa89e; }
   .cx-dots-pulse { display: flex; gap: 3px; align-items: center; }
   .cx-dots-pulse span {
     width: 4px; height: 4px; border-radius: 50%; background: #755a68;
@@ -103,8 +103,8 @@
 
   .cx-ref {
     display: flex; align-items: center; gap: 10px;
-    border: 1px solid #edede9; border-radius: 10px;
-    background: #ffffff; padding: 8px 12px;
+    border: 1px solid rgba(237, 233, 227,0.08); border-radius: 10px;
+    background: #1e1c1e; padding: 8px 12px;
     opacity: 0; transform: translateY(6px);
     transition: opacity 0.3s cubic-bezier(0.16,1,0.3,1), transform 0.3s cubic-bezier(0.16,1,0.3,1);
   }
@@ -119,11 +119,11 @@
 
   .cx-ref-text { flex: 1; min-width: 0; }
   .cx-ref-name {
-    font-size: 11px; font-weight: 600; color: #1e1c1e;
+    font-size: 11px; font-weight: 600; color: #ede9e3;
     display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .cx-ref-meta {
-    font-size: 9px; color: #aaa89e; display: block; margin-top: 1px;
+    font-size: 9px; color: #7c7a71; display: block; margin-top: 1px;
   }
   .cx-ref-badge {
     font-size: 9px; font-weight: 500; padding: 2px 6px;
@@ -158,27 +158,27 @@
     {
       userMsg: 'Prep me for the Acme Corp call tomorrow',
       refs: [
-        { icon: 'pdf', color: '#dc2626', bg: '#fef2f2', name: 'Q4 Pipeline Report.pdf', meta: 'Generated 3 days ago', badge: 'Report', badgeBg: '#fef2f2', badgeColor: '#dc2626' },
-        { icon: 'doc', color: '#0070d2', bg: '#ebf1ff', name: 'Acme Corp — Meeting Notes', meta: 'Updated last week', badge: 'Notes', badgeBg: '#ebf1ff', badgeColor: '#0070d2' },
-        { icon: 'sheet', color: '#0f9d58', bg: '#e0faec', name: 'Deal History & Pricing', meta: 'From HubSpot', badge: 'CRM', badgeBg: '#e0faec', badgeColor: '#0f9d58' },
+        { icon: 'pdf', color: '#f87171', bg: 'rgba(239,68,68,0.16)', name: 'Q4 Pipeline Report.pdf', meta: 'Generated 3 days ago', badge: 'Report', badgeBg: 'rgba(239,68,68,0.16)', badgeColor: '#f87171' },
+        { icon: 'doc', color: '#6895ff', bg: 'rgba(51,92,255,0.16)', name: 'Acme Corp — Meeting Notes', meta: 'Updated last week', badge: 'Notes', badgeBg: 'rgba(51,92,255,0.16)', badgeColor: '#6895ff' },
+        { icon: 'sheet', color: '#3ee089', bg: 'rgba(31,193,107,0.16)', name: 'Deal History & Pricing', meta: 'From HubSpot', badge: 'CRM', badgeBg: 'rgba(31,193,107,0.16)', badgeColor: '#3ee089' },
       ],
       response: 'Here\'s your prep. Acme is at <strong>$145K</strong>, moved to Negotiation last Tuesday. Open concerns: <strong>SOC 2</strong> and <strong>API rate limits</strong>. Sarah prefers bullet-points — I\'ve pulled the latest pricing.',
     },
     {
       userMsg: 'What happened with the Beacon Labs deal?',
       refs: [
-        { icon: 'doc', color: '#0070d2', bg: '#ebf1ff', name: 'Beacon Labs — Deal Timeline', meta: 'Auto-generated', badge: 'Timeline', badgeBg: '#ebf1ff', badgeColor: '#0070d2' },
-        { icon: 'sheet', color: '#0f9d58', bg: '#e0faec', name: 'Revenue Forecast Q1', meta: 'From Google Sheets', badge: 'Forecast', badgeBg: '#e0faec', badgeColor: '#0f9d58' },
-        { icon: 'pdf', color: '#dc2626', bg: '#fef2f2', name: 'Beacon Labs Proposal v3.pdf', meta: 'Sent 2 weeks ago', badge: 'Proposal', badgeBg: '#fef2f2', badgeColor: '#dc2626' },
+        { icon: 'doc', color: '#6895ff', bg: 'rgba(51,92,255,0.16)', name: 'Beacon Labs — Deal Timeline', meta: 'Auto-generated', badge: 'Timeline', badgeBg: 'rgba(51,92,255,0.16)', badgeColor: '#6895ff' },
+        { icon: 'sheet', color: '#3ee089', bg: 'rgba(31,193,107,0.16)', name: 'Revenue Forecast Q1', meta: 'From Google Sheets', badge: 'Forecast', badgeBg: 'rgba(31,193,107,0.16)', badgeColor: '#3ee089' },
+        { icon: 'pdf', color: '#f87171', bg: 'rgba(239,68,68,0.16)', name: 'Beacon Labs Proposal v3.pdf', meta: 'Sent 2 weeks ago', badge: 'Proposal', badgeBg: 'rgba(239,68,68,0.16)', badgeColor: '#f87171' },
       ],
       response: 'Beacon Labs (<strong>$65K</strong>) closed won last Friday. Stalled 2 weeks over <strong>contract terms</strong> — agreed on 60-day clause. Invoice created in Stripe.',
     },
     {
       userMsg: 'Draft a follow-up for the stalled Nova deal',
       refs: [
-        { icon: 'doc', color: '#0070d2', bg: '#ebf1ff', name: 'Nova Systems — Last Touchpoint', meta: '12 days ago', badge: 'Activity', badgeBg: '#ebf1ff', badgeColor: '#0070d2' },
-        { icon: 'file', color: '#755a68', bg: '#f9f2f6', name: 'Email Templates — Stalled Deals', meta: 'From Team Drive', badge: 'Template', badgeBg: '#f9f2f6', badgeColor: '#755a68' },
-        { icon: 'sheet', color: '#0f9d58', bg: '#e0faec', name: 'Nova — Pricing & Competitors', meta: 'From Salesforce', badge: 'Intel', badgeBg: '#e0faec', badgeColor: '#0f9d58' },
+        { icon: 'doc', color: '#6895ff', bg: 'rgba(51,92,255,0.16)', name: 'Nova Systems — Last Touchpoint', meta: '12 days ago', badge: 'Activity', badgeBg: 'rgba(51,92,255,0.16)', badgeColor: '#6895ff' },
+        { icon: 'file', color: '#af9aa5', bg: 'rgba(117,90,104,0.16)', name: 'Email Templates — Stalled Deals', meta: 'From Team Drive', badge: 'Template', badgeBg: 'rgba(117,90,104,0.16)', badgeColor: '#af9aa5' },
+        { icon: 'sheet', color: '#3ee089', bg: 'rgba(31,193,107,0.16)', name: 'Nova — Pricing & Competitors', meta: 'From Salesforce', badge: 'Intel', badgeBg: 'rgba(31,193,107,0.16)', badgeColor: '#3ee089' },
       ],
       response: 'Drafted. Nova\'s been quiet since <strong>March 18</strong>. Used your preferred tone — mentioned the <strong>15% discount</strong> and competitor context. Ready to send.',
     },

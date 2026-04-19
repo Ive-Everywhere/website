@@ -1,43 +1,38 @@
 ---
 const testimonials = [
   {
-    quote: "What used to take our team a full day of pulling reports and cross-referencing spreadsheets now happens automatically before I even open my laptop. Eluu has fundamentally changed how we handle pipeline reviews and client prep — it knows our data better than most people on the team.",
-    name: 'Senior Product Owner',
-    role: 'Ameriprise Financial',
-    company: 'Ameriprise',
+    quote: "I tried ChatGPT, Claude, Zapier — none of them connect to my tools natively. Eluu checks my entire pipeline every morning, cross-references three systems, and DMs me anomalies before my first meeting.",
+    name: 'Chief Operating Officer',
+    company: 'TestMu AI',
+    logo: '/logos/testimonials/testmu.png',
   },
   {
-    quote: "We needed something that could work across our internal tools without engineering overhead. Eluu connected to our systems, indexed everything, and started delivering insights in hours. It runs autonomously now — monitoring, reporting, flagging issues — no babysitting required.",
+    quote: "What used to take a full day of pulling reports and cross-referencing spreadsheets now happens automatically before I even open my laptop. Eluu knows our data better than most people on the team.",
+    name: 'Senior Product Owner',
+    company: 'Ameriprise Financial',
+    logo: '/logos/testimonials/ameriprise.png',
+  },
+  {
+    quote: "We needed something that could work across our internal tools without engineering overhead. Eluu connected, indexed everything, and started delivering insights in hours — no babysitting required.",
     name: 'Database Support Engineer',
-    role: 'AWS',
     company: 'AWS',
+    logo: '/logos/testimonials/aws.webp',
   },
 ];
 ---
 
 <section class="ts-section">
-  <div style="max-width: 1440px; margin: 0 auto; padding: 0 0;">
-    <!-- Company tabs -->
-    <div class="ts-tabs reveal">
-      <button type="button" class="ts-tab active" data-ts="0">
-        <img src="/logos/testimonials/ameriprise.png" alt="Ameriprise Financial" class="ts-logo ts-logo-ameriprise" />
-      </button>
-      <button type="button" class="ts-tab" data-ts="1">
-        <img src="/logos/testimonials/aws.webp" alt="AWS" class="ts-logo ts-logo-aws" />
-      </button>
-    </div>
-
-    <!-- Quotes container -->
-    <div class="ts-quotes">
-      {testimonials.map((t, i) => (
-        <div class={`ts-quote ${i === 0 ? 'active' : ''}`} data-tq={i}>
-          <blockquote>
-            &ldquo;{t.quote}&rdquo;
-          </blockquote>
+  <div class="ts-container">
+    <div class="ts-grid">
+      {testimonials.map((t) => (
+        <div class="ts-card reveal">
+          <div class="ts-card-top">
+            <img src={t.logo} alt={t.company} class="ts-logo" />
+          </div>
+          <blockquote class="ts-quote">&ldquo;{t.quote}&rdquo;</blockquote>
           <div class="ts-attr">
-            <p>
-              <span class="ts-name">{t.name}</span>{t.role ? `, ${t.role}` : ''}
-            </p>
+            <span class="ts-name">{t.name}</span>
+            <span class="ts-company">{t.company}</span>
           </div>
         </div>
       ))}
@@ -46,163 +41,103 @@ const testimonials = [
 </section>
 
 <style>
-  /* ── Section ── */
   .ts-section {
-    background: #f4f3ec;
-    padding: 48px 16px;
+    background: #13100a;
+    padding: 112px 0;
   }
-  @media (min-width: 640px) { .ts-section { padding: 60px 24px; } }
-  @media (min-width: 1024px) { .ts-section { padding: 80px 24px; } }
+  @media (max-width: 480px) { .ts-section { padding: 56px 0; } }
 
-  /* ── Tabs ── */
-  .ts-tabs {
+  .ts-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  /* ── 3-card grid — matches WhyEluu/Frontier card language ── */
+  .ts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  @media (min-width: 640px) {
+    .ts-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 1024px) {
+    .ts-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  /* ── Card ── */
+  .ts-card {
+    position: relative;
+    background: #1e1d1b;
+    border-radius: 4px;
+    padding: 24px;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 40px;
+    flex-direction: column;
+    gap: 0;
+    box-sizing: border-box;
   }
-  @media (min-width: 360px) { .ts-tabs { gap: 36px; } }
-  @media (min-width: 640px) { .ts-tabs { gap: 56px; margin-bottom: 56px; } }
-  @media (min-width: 1024px) { .ts-tabs { gap: 72px; } }
+  .ts-card::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    z-index: 1;
+  }
 
-  .ts-tab {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    transition: opacity 0.3s ease;
-    opacity: 0.3;
+  /* ── Logo ── */
+  .ts-card-top {
+    margin-bottom: 20px;
   }
-  .ts-tab:hover { opacity: 0.55; }
-  .ts-tab.active { opacity: 1; }
 
   .ts-logo {
     display: block;
-    filter: brightness(0);
+    height: 20px;
+    width: auto;
     object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.5;
   }
 
-  /* Each logo gets its own width so the TEXT portion aligns visually */
-  .ts-logo-testmu { width: 100px; }
-  .ts-logo-ameriprise { width: 120px; }
-  .ts-logo-aws { width: 60px; }
-  @media (min-width: 360px) {
-    .ts-logo-testmu { width: 140px; }
-    .ts-logo-ameriprise { width: 160px; }
-    .ts-logo-aws { width: 80px; }
-  }
-
-  @media (min-width: 640px) {
-    .ts-logo-testmu { width: 170px; }
-    .ts-logo-ameriprise { width: 200px; }
-    .ts-logo-aws { width: 100px; }
-  }
-  @media (min-width: 1024px) {
-    .ts-logo-testmu { width: 200px; }
-    .ts-logo-ameriprise { width: 240px; }
-    .ts-logo-aws { width: 120px; }
-  }
-
-  /* ── Quotes container ── */
-  .ts-quotes {
-    position: relative;
-    min-height: 280px;
-    text-align: center;
-    max-width: 1060px;
-    margin: 0 auto;
-  }
-  @media (min-width: 640px) { .ts-quotes { min-height: 300px; } }
-  @media (min-width: 768px) { .ts-quotes { min-height: 320px; } }
-  @media (min-width: 1024px) { .ts-quotes { min-height: 340px; } }
-
-  /* ── Single quote ── */
+  /* ── Quote ── */
   .ts-quote {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.6s ease;
-  }
-  .ts-quote.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  blockquote {
-    font-family: 'Season Mix', sans-serif;
+    font-family: 'Söhne', sans-serif;
     font-weight: 400;
-    font-size: 18px;
-    line-height: 1.35;
-    letter-spacing: -0.2px;
-    color: #17100e;
+    font-size: 15px;
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    color: rgba(237, 233, 227, 0.85);
     margin: 0;
-    padding-bottom: 24px;
-    text-indent: -0.4em;
-  }
-  @media (min-width: 640px) {
-    blockquote { font-size: 24px; letter-spacing: -0.3px; padding-bottom: 32px; }
-  }
-  @media (min-width: 768px) {
-    blockquote { font-size: 30px; letter-spacing: -0.5px; }
-  }
-  @media (min-width: 1024px) {
-    blockquote { font-size: 36px; letter-spacing: -0.8px; }
+    text-wrap: pretty;
+    flex: 1;
   }
 
-  /* ── Attribution ── */
+  /* ── Attribution — pushed to bottom via flex ── */
   .ts-attr {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .ts-attr p {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    color: #17100e;
-    margin: 0;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(237, 233, 227, 0.06);
   }
 
   .ts-name {
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
     font-weight: 600;
+    color: #ede9e3;
+    letter-spacing: -0.01em;
+  }
+
+  .ts-company {
+    font-family: 'Söhne', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.35);
+    letter-spacing: -0.005em;
   }
 </style>
-
-<script>
-  (function () {
-    const tabs = document.querySelectorAll('.ts-tab');
-    const quotes = document.querySelectorAll('.ts-quote');
-    if (!tabs.length) return;
-
-    function show(idx) {
-      tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
-      quotes.forEach((q, i) => q.classList.toggle('active', i === idx));
-    }
-
-    tabs.forEach((tab) => {
-      tab.addEventListener('click', () => show(parseInt(tab.dataset.ts)));
-    });
-
-    // Auto-rotate every 6 seconds
-    let current = 0;
-    let timer = setInterval(() => {
-      current = (current + 1) % tabs.length;
-      show(current);
-    }, 6000);
-
-    // Reset timer on manual click
-    tabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        current = parseInt(tab.dataset.ts);
-        clearInterval(timer);
-        timer = setInterval(() => {
-          current = (current + 1) % tabs.length;
-          show(current);
-        }, 6000);
-      });
-    });
-  })();
-</script>

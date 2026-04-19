@@ -1,0 +1,348 @@
+---
+// Execute animation — persistent prompt card + 3 persistent status rows.
+// Only the text inside each slot swaps when cycling to the next chat.
+// Tick-mark (spinner → green check) animates on each cycle.
+interface Slide {
+  prompt: string;
+  steps: [string, string, string];
+}
+const slides: Slide[] = [
+  {
+    prompt: 'Send weekly pipeline brief',
+    steps: ['Reading pipeline data', 'Drafting summary', 'Posting to #leadership'],
+  },
+  {
+    prompt: 'Follow up with Acme Corp',
+    steps: ['Checking last contact', 'Drafting email', 'Sent to james@acme.com'],
+  },
+  {
+    prompt: 'Update Q2 forecast',
+    steps: ['Pulling deal data', 'Running projections', 'Saved to forecast sheet'],
+  },
+];
+
+// For each row 0..2, collect the three variants across slides.
+const rowVariants: [string, string, string][] = [0, 1, 2].map(
+  (row) => [slides[0].steps[row], slides[1].steps[row], slides[2].steps[row]]
+) as [string, string, string][];
+---
+
+<div class="em-stage" data-em-stage>
+  <img src="/images/cookbook-bg.webp" alt="" class="em-bg" aria-hidden="true" />
+
+  <!-- Persistent prompt card -->
+  <div class="em-card">
+    <img src="/images/avatar-rivera.webp" alt="" class="em-avatar" />
+    <div class="em-slot">
+      {slides.map((slide, idx) => (
+        <span class={`em-text${idx === 0 ? ' active' : ''}`} data-idx={idx}>{slide.prompt}</span>
+      ))}
+    </div>
+  </div>
+
+  <!-- Persistent step rows -->
+  <div class="em-steps">
+    {rowVariants.map((variants, row) => (
+      <div class="em-step" data-row={row}>
+        <span class="em-step-dot">
+          <span class="em-step-spinner"></span>
+          <svg class="em-step-check" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <div class="em-slot" style={`--stagger:${(row + 1) * 60}ms`}>
+          {variants.map((text, idx) => (
+            <span class={`em-text${idx === 0 ? ' active' : ''}`} data-idx={idx}>{text}</span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .em-stage {
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    font-family: 'Söhne', sans-serif;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 70px 18px 18px 18px;
+  }
+
+  .em-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  .em-stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center,
+                                 rgba(19, 16, 10, 0.15) 0%,
+                                 rgba(19, 16, 10, 0.55) 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ── Prompt card — static shell ── */
+  .em-card {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 280px;
+    background: #1e1d1b;
+    border: 1px solid rgba(237, 233, 227, 0.08);
+    border-radius: 6px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25),
+                0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  .em-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  /* ── Text slot — named grid area forces all variants into a single cell.
+     height: 1.3em locks the slot to one line so the card can't grow. ── */
+  .em-slot {
+    position: relative;
+    display: grid;
+    grid-template-areas: "content";
+    overflow: hidden;
+    line-height: 1.3;
+    height: 1.3em;
+    flex: 1;
+    min-width: 0;
+  }
+  .em-text {
+    grid-area: content;
+    opacity: 0;
+    transform: translateY(100%);
+    /* Smooth quart ease-out, staggered via --stagger */
+    transition: opacity 0.42s ease,
+                transform 0.62s cubic-bezier(0.25, 1, 0.5, 1);
+    transition-delay: var(--stagger, 0ms);
+    font-size: 13px;
+    letter-spacing: -0.01em;
+    color: #ede9e3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    will-change: transform, opacity;
+    min-width: 0;
+  }
+  .em-text.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .em-text.post {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  /* ── Status rows — static shells, persistent dots ── */
+  .em-steps {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 260px;
+  }
+
+  .em-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+    letter-spacing: -0.005em;
+    color: rgba(237, 233, 227, 0.75);
+    transition: color 0.35s ease;
+  }
+  .em-step .em-text {
+    font-size: 12.5px;
+    color: inherit;
+  }
+  .em-step.done {
+    color: rgba(237, 233, 227, 0.9);
+  }
+
+  .em-step-dot {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgba(237, 233, 227, 0.08);
+    border: 1px solid rgba(237, 233, 227, 0.12);
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #4ecd6a;
+    transition: background 0.45s ease, border-color 0.45s ease;
+  }
+  .em-step.done .em-step-dot {
+    background: rgba(78, 205, 106, 0.15);
+    border-color: rgba(78, 205, 106, 0.4);
+  }
+
+  .em-step-spinner {
+    width: 8px;
+    height: 8px;
+    border: 1.25px solid rgba(237, 233, 227, 0.2);
+    border-top-color: rgba(237, 233, 227, 0.8);
+    border-radius: 50%;
+    opacity: 0;
+    animation: em-spin 0.7s linear infinite;
+    transition: opacity 0.25s ease;
+    position: absolute;
+  }
+  .em-step.active:not(.done) .em-step-spinner {
+    opacity: 1;
+  }
+
+  .em-step-check {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    position: absolute;
+  }
+  .em-step.done .em-step-check {
+    opacity: 1;
+  }
+
+  @keyframes em-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .em-text, .em-step-dot, .em-step-spinner, .em-step-check {
+      transition: none;
+      animation: none;
+    }
+  }
+  @media (max-width: 480px) {
+    .em-stage { padding: 28px 10px 10px; }
+    .em-card { max-width: 220px; padding: 8px 10px; font-size: 11px; }
+  }
+</style>
+
+<script>
+  (function () {
+    const stages = document.querySelectorAll<HTMLElement>('[data-em-stage]');
+    stages.forEach((stage) => {
+      const slots = Array.from(stage.querySelectorAll<HTMLElement>('.em-slot'));
+      const stepRows = Array.from(stage.querySelectorAll<HTMLElement>('.em-step'));
+      if (slots.length === 0) return;
+
+      // Build per-slot variant arrays: [promptTexts, step0Texts, step1Texts, step2Texts]
+      const slotVariants = slots.map((slot) =>
+        Array.from(slot.querySelectorAll<HTMLElement>('.em-text'))
+      );
+      const slideCount = slotVariants[0].length;
+
+      const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
+      // runToken pattern: every loop() invocation takes a unique token at
+      // start; any older in-flight loop checking token !== myToken exits.
+      // This prevents two concurrent loops racing on the same classList
+      // (the root cause of text overlap when scrolling in/out quickly).
+      let token = 0;
+
+      function resetSteps() {
+        stepRows.forEach((row) => row.classList.remove('active', 'done'));
+      }
+
+      // Force all text slots to pristine state: variant[0] active, others
+      // with no .active/.post class. Ensures every loop() start is consistent
+      // even if a previous run was cancelled mid-transition.
+      function resetVariants() {
+        slotVariants.forEach((variants) => {
+          variants.forEach((v, i) => {
+            v.classList.remove('active', 'post');
+            if (i === 0) v.classList.add('active');
+          });
+        });
+      }
+
+      async function runTicks(myToken: number) {
+        for (let i = 0; i < stepRows.length; i++) {
+          if (myToken !== token) return;
+          stepRows[i].classList.add('active');
+          await sleep(620);
+          if (myToken !== token) return;
+          stepRows[i].classList.add('done');
+          await sleep(260);
+        }
+      }
+
+      async function loop() {
+        const myToken = ++token;
+        resetVariants();
+        resetSteps();
+        await sleep(400);
+        if (myToken !== token) return;
+
+        let idx = 0;
+        while (myToken === token) {
+          await runTicks(myToken);
+          if (myToken !== token) return;
+
+          await sleep(1500);
+          if (myToken !== token) return;
+
+          const nextIdx = (idx + 1) % slideCount;
+
+          slotVariants.forEach((variants) => {
+            variants[idx].classList.remove('active');
+            variants[idx].classList.add('post');
+            variants[nextIdx].classList.add('active');
+          });
+
+          resetSteps();
+
+          await sleep(820);
+          if (myToken !== token) return;
+
+          slotVariants.forEach((variants) => {
+            variants[idx].classList.remove('post');
+          });
+
+          idx = nextIdx;
+        }
+      }
+
+      function stopLoop() {
+        token++; // bump — any running loop self-terminates on next check
+      }
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            loop(); // safe to call — any previous loop self-terminates
+          } else {
+            stopLoop();
+          }
+        });
+      }, { threshold: 0.1 });
+      io.observe(stage);
+    });
+  })();
+</script>

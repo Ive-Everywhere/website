@@ -4,22 +4,65 @@ import Navbar from '../components/Navbar.astro';
 import Hero from '../components/Hero.astro';
 import Features from '../components/Features.astro';
 import WhyEluu from '../components/WhyEluu.astro';
+import Frontier from '../components/Frontier.astro';
 import Integrations from '../components/Integrations.astro';
 import Testimonials from '../components/Testimonials.astro';
-import CTAFooter from '../components/CTAFooter.astro';
+import Channels from '../components/Channels.astro';
 import Footer from '../components/Footer.astro';
 ---
 
 <Layout>
   <Navbar />
+<style>
+  .hp-intro {
+    background: #13100a;
+    padding: 48px 0 64px;
+  }
+  .hp-intro-inner {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .hp-intro-text {
+    font-family: 'Söhne', sans-serif;
+    font-weight: 400;
+    font-size: clamp(18px, 2.2vw, 26px);
+    color: rgba(237, 233, 227, 0.4);
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    margin: 0;
+    max-width: 900px;
+  }
+  .hp-intro-text strong {
+    color: #ede9e3;
+    font-weight: 600;
+  }
+  @media (max-width: 480px) {
+    .hp-intro { padding: 32px 0 40px; }
+  }
+
+</style>
   <main>
     <Hero />
+
+    <!-- Intro statement -->
+    <section class="hp-intro">
+      <div class="hp-intro-inner">
+        <h2 class="hp-intro-text reveal">
+          <strong>One platform for your entire AI workforce.</strong> Deploy specialized colleagues across sales, operations, and support — each one connects to your tools, learns your processes, and works autonomously.
+        </h2>
+      </div>
+    </section>
+
     <WhyEluu />
+    <Frontier />
     <Features>
       <Integrations />
     </Features>
     <Testimonials />
-    <CTAFooter />
+    <Channels />
+
   </main>
   <Footer />
 </Layout>

@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css'
+import '../styles/footer.css'
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import PostHog from '../components/PostHog.astro';
@@ -13,10 +14,10 @@ interface FeatureData {
   description: string;
   heroImage?: string;
   intro?: { bold: string; supporting: string };
-  valueProps: { title: string; image?: string; features: { title: string; desc: string }[] }[];
+  valueProps: { title: string; description?: string; image?: string; features: { title: string; desc: string }[] }[];
   stats: { heading: string; items: { value: string; label: string; desc: string }[] };
-  testimonial: { quote: string; attribution: string };
-  useCases: { heading: string; image?: string; cases: { title: string; desc: string }[] };
+  testimonial: { quote: string; attribution: string; logo?: string };
+  useCases: { heading: string; description?: string; image?: string; cases: { title: string; desc: string }[] };
   ctaHeading: string;
 }
 
@@ -31,167 +32,128 @@ const { feature: f } = Astro.props as { feature: FeatureData };
   <meta name="description" content={f.description} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" href="/favicon.ico" />
-  <link rel="preload" href="/fonts/season-mix-bold.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/fonts/season-mix-regular.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="/fonts/sohne-buch.otf" as="font" type="font/otf" crossorigin />
+  <link rel="preload" href="/fonts/sohne-halbfett.otf" as="font" type="font/otf" crossorigin />
   <link rel="preload" href="/fonts/jersey-10.woff2" as="font" type="font/woff2" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <script is:inline>
-    try { sessionStorage.setItem('eluu_splash_shown', '1'); } catch (e) {}
-  </script>
   <PostHog />
 </head>
 <body>
   <Navbar />
   <main>
 
-    <!-- ══ Section 1: Hero — Harvey style: breadcrumb, massive headline, full-width image ══ -->
-    <section class="ft-hero">
-      <div class="ft-hero-inner">
-        <div class="ft-breadcrumb">
-          <a href="/" class="ft-breadcrumb-link">Home</a>
-          <span class="ft-breadcrumb-sep">/</span>
-          <span class="ft-breadcrumb-active">{f.breadcrumb}</span>
+    <!-- ══ Hero — short tagline + full-width image ══ -->
+    <section class="fp-hero">
+      <div class="fp-container">
+        <div class="fp-breadcrumb">
+          <a href="/" class="fp-bc-link">Home</a>
+          <span class="fp-bc-sep">/</span>
+          <span class="fp-bc-active">{f.breadcrumb}</span>
         </div>
-        <h1 class="ft-hero-headline">{f.headline}</h1>
-        <div class="ft-hero-image">
+        <h1 class="fp-headline">{f.headline}</h1>
+        <div class="fp-hero-image">
           {f.heroImage ? (
-            <img src={f.heroImage} alt={f.headline} class="ft-hero-img" loading="eager" />
+            <img src={f.heroImage} alt={f.headline} class="fp-hero-img" loading="eager" />
           ) : (
             <slot name="hero-content">
-              <div class="ft-placeholder ft-placeholder-hero" style={`--ft-color: ${f.color}`}></div>
+              <div class="fp-placeholder fp-placeholder-hero" style={`--ft-color: ${f.color}`}></div>
             </slot>
           )}
         </div>
       </div>
     </section>
 
-    <!-- ══ Intro block — bold statement + supporting line ══ -->
+    <!-- ══ Intro block ══ -->
     {f.intro && (
-      <section class="ft-intro">
-        <div class="ft-intro-inner">
-          <h2 class="ft-intro-text">
+      <section class="fp-intro">
+        <div class="fp-container">
+          <h2 class="fp-intro-text">
             <strong>{f.intro.bold}</strong> {f.intro.supporting}
           </h2>
         </div>
       </section>
     )}
 
-    <!-- ══ Section 2: Value Props — stacking sticky cards (Harvey style)
-         Each block is a full-height sticky card. As you scroll, the NEXT block
-         slides up and covers the previous one. Same mechanic as WhyEluu. ══ -->
-    <section class="ft-vp-section">
-      {f.valueProps.map((block, blockIdx) => (
-        <div
-          class="ft-vp-card"
-          style={`--vp-z: ${blockIdx + 1}; --vp-bg: ${blockIdx % 2 === 0 ? '#ffffff' : '#f4f3ec'}`}
-        >
-          <div class="ft-vp-inner">
-            <!-- Two columns: left = title + image, right = desc + sub-features -->
-            <div class="ft-vp-cols">
-              <!-- Left: title + one large image -->
-              <div class="ft-vp-left">
-                <h2 class="ft-vp-title">{block.title}</h2>
-                {block.image ? (
-                  <img src={block.image} alt={block.title} class="ft-vp-img" loading="lazy" />
-                ) : (
-                  <div class="ft-placeholder ft-placeholder-card" style={`--ft-color: ${f.color}`}></div>
-                )}
-              </div>
-              <!-- Right: description + sub-features (text only, separated by lines) -->
-              <div class="ft-vp-right">
-                <p class="ft-vp-desc">{block.features[0]?.desc}</p>
-                <div class="ft-vp-features">
-                  {block.features.map((feat) => (
-                    <div class="ft-vp-feature">
-                      <h3 class="ft-vp-feature-title">{feat.title}</h3>
-                      <p class="ft-vp-feature-desc">{feat.desc}</p>
+    <!-- ══ Value Props — WhyEluu-style dark cards (24-col grid, alternating) ══ -->
+    <section class="fp-cards-section">
+      <div class="fp-container">
+        {f.valueProps.map((block, i) => (
+          <div class="fp-card reveal">
+            <div class={`fp-card-inner${i % 2 !== 0 ? ' fp-card-inner--reverse' : ''}`}>
+              <div class="fp-text-col">
+                <div class="fp-text-wrap">
+                  <div class="fp-text-block">
+                    <div class="fp-card-top">
+                      <h3 class="fp-card-heading">{block.title}</h3>
+                      {block.description && (
+                        <p class="fp-card-desc">{block.description}</p>
+                      )}
                     </div>
-                  ))}
+                    <ul class="fp-card-points">
+                      {block.features.map((feat) => (
+                        <li class="fp-card-point">{feat.title}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="fp-media-col">
+                <div class="fp-media-wrap">
+                  {block.image ? (
+                    <img src={block.image} alt={block.title} class="fp-media-img" loading="lazy" />
+                  ) : (
+                    <div class="fp-placeholder" style={`--ft-color: ${f.color}`}></div>
+                  )}
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      ))}
-    </section>
-
-    <!-- ══ Section 3: Stats ══ -->
-    <section class="ft-stats">
-      <h2 class="ft-stats-heading reveal">{f.stats.heading}</h2>
-      <div class="ft-stats-row">
-        {f.stats.items.map((item) => (
-          <div class="ft-stats-card reveal">
-            <span class="ft-stats-value">{item.value}</span>
-            <span class="ft-stats-label">{item.label}</span>
-            <p class="ft-stats-desc">{item.desc}</p>
           </div>
         ))}
       </div>
     </section>
 
-    <!-- ══ Section 4: Testimonial ══ -->
-    <section class="ft-testimonial">
-      <div class="ft-testimonial-inner reveal">
-        <blockquote class="ft-testimonial-quote">&ldquo;{f.testimonial.quote}&rdquo;</blockquote>
-        <p class="ft-testimonial-attribution">&mdash; {f.testimonial.attribution}</p>
+    <!-- ══ Stats ══ -->
+    <section class="fp-stats">
+      <div class="fp-container">
+        <h2 class="fp-stats-heading reveal">{f.stats.heading}</h2>
+        <div class="fp-stats-row">
+          {f.stats.items.map((item) => (
+            <div class="fp-stats-card reveal">
+              <span class="fp-stats-value">{item.value}</span>
+              <span class="fp-stats-label">{item.label}</span>
+              <p class="fp-stats-desc">{item.desc}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
 
-    <!-- ══ Section 5: Use Cases — dark bg, Harvey style ══ -->
-    <section class="ft-uc">
-      <div class="ft-uc-inner">
-        <h2 class="ft-uc-heading">{f.useCases.heading}</h2>
-        <div class="ft-uc-layout">
-          <!-- Left: tab list with divider lines -->
-          <div class="ft-uc-tabs">
-            {f.useCases.cases.map((c, i) => (
-              <button
-                class={`ft-uc-tab${i === 0 ? ' active' : ''}`}
-                data-uc-tab={i}
-                type="button"
-              >
-                <h3 class="ft-uc-tab-title">{c.title}</h3>
-                <p class="ft-uc-tab-desc">{c.desc}</p>
-              </button>
-            ))}
+    <!-- ══ Testimonial + Image — merged card ══ -->
+    <section class="fp-testi">
+      <div class="fp-container">
+        <div class="fp-testi-card reveal">
+          <div class="fp-testi-text">
+            {f.testimonial.logo && (
+              <img src={f.testimonial.logo} alt="" class="fp-testi-logo" />
+            )}
+            <blockquote class="fp-testi-quote">&ldquo;{f.testimonial.quote}&rdquo;</blockquote>
+            <p class="fp-testi-attr">{f.testimonial.attribution}</p>
           </div>
-          <!-- Right: single constant image -->
-          <div class="ft-uc-image">
+          <div class="fp-testi-image">
             {f.useCases.image ? (
-              <img src={f.useCases.image} alt={f.useCases.heading} class="ft-uc-img" loading="lazy" />
+              <img src={f.useCases.image} alt="" class="fp-testi-img" />
             ) : (
-              <div class="ft-placeholder ft-placeholder-uc" style={`--ft-color: ${f.color}`}></div>
+              <div class="fp-placeholder" style={`--ft-color: ${f.color}`}></div>
             )}
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ══ Section 6: CTA Footer ══ -->
-    <section style="background: #f4f3ec;">
-      <div class="ft-cta-container">
-        <img src="/images/cta-bg.jpg" alt="" aria-hidden="true" class="ft-cta-bg" loading="lazy" />
-        <div class="ft-cta-overlay"></div>
-        <div class="ft-cta-content">
-          <h2 class="ft-cta-heading">{f.ctaHeading}</h2>
-          <div class="ft-cta-buttons">
-            <a href="https://app.eluu.ai" class="ft-btn ft-btn-dark"
-              onclick={`window.posthog?.capture('feature_get_started_clicked', { feature: '${f.slug}', location: 'cta_footer' })`}
-            >Get started</a>
-            <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="ft-btn ft-btn-light-white"
-              onclick={`window.posthog?.capture('feature_demo_clicked', { feature: '${f.slug}', location: 'cta_footer' })`}
-            >Book a demo</a>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
   <Footer />
 
-  <!-- Reveal observer -->
   <script>
+    // Reveal animations
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -204,555 +166,430 @@ const { feature: f } = Astro.props as { feature: FeatureData };
       { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
     );
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-  </script>
 
-  <!-- Use-cases tab switching (click-based) -->
-  <script>
-    (function () {
-      const tabs = document.querySelectorAll('[data-uc-tab]') as NodeListOf<HTMLElement>;
-      if (!tabs.length) return;
-
-      tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-          const idx = parseInt(tab.dataset.ucTab!, 10);
-          tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
-        });
-      });
-    })();
   </script>
 
 <style>
-  /* ══════════════════════════════════════════════════════════
-     Shared
-     ══════════════════════════════════════════════════════════ */
-  .ft-btn {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    padding: 12px 28px;
-    border-radius: 10px;
-    text-decoration: none;
-    line-height: 1;
-    display: inline-flex;
-    align-items: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  /* ══ Shared ══ */
+  .fp-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
   }
-  .ft-btn:hover { transform: translateY(-1px); }
-  .ft-btn-dark { color: #fff; background: #17100e; }
-  .ft-btn-dark:hover { box-shadow: 0 4px 12px rgba(23,16,14,0.2); }
-  .ft-btn-light { color: #17100e; background: #fff; border: 1px solid rgba(23,16,14,0.12); }
-  .ft-btn-light:hover { box-shadow: 0 4px 12px rgba(23,16,14,0.08); }
-  .ft-btn-light-white { color: #17100e; background: #fff; }
-  .ft-btn-light-white:hover { box-shadow: 0 4px 16px rgba(255,255,255,0.3); }
 
   /* Placeholder images */
-  .ft-placeholder {
-    position: relative;
-    aspect-ratio: 4 / 3;
-    border-radius: 16px;
+  .fp-placeholder {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
     overflow: hidden;
   }
-  .ft-placeholder::before {
+  .fp-placeholder::before {
     content: '';
     position: absolute;
     inset: 0;
     background: var(--ft-color);
-    opacity: 0.7;
+    opacity: 0.5;
   }
-  .ft-placeholder::after {
+  .fp-placeholder::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: url('/images/cookbook-bg.png') center / cover no-repeat;
+    background: url('/images/cookbook-bg.webp') center / cover no-repeat;
     opacity: 0.12;
     mix-blend-mode: overlay;
   }
-  .ft-placeholder-hero { aspect-ratio: 16 / 9; border-radius: 16px; }
-  .ft-hero-img {
-    width: 100%;
-    height: auto;
-    border-radius: 16px;
-    display: block;
-  }
-  .ft-placeholder-wide { aspect-ratio: 16 / 9; border-radius: 14px; }
-  .ft-placeholder-uc { aspect-ratio: 16 / 10; border-radius: 14px; min-height: 300px; }
-  @media (max-width: 767.98px) {
-    .ft-placeholder-hero { aspect-ratio: 16 / 9; border-radius: 14px; }
-    .ft-placeholder-uc { min-height: 200px; }
-  }
 
-  /* ══════════════════════════════════════════════════════════
-     Section 1: Hero — vertically stacked (Harvey style)
-     ══════════════════════════════════════════════════════════ */
-  /* ══ Hero — Harvey style: breadcrumb, massive headline, full-width image ══ */
-  .ft-hero {
-    background: #ffffff;
+  /* ══ Hero — short tagline + full-width image ══ */
+  .fp-hero {
+    background: #13100a;
+    padding: 140px 0 80px;
   }
-  .ft-hero-inner {
-    max-width: 1320px;
-    margin: 0 auto;
-    padding: 140px 20px 80px;
-  }
-  @media (max-width: 480px) {
-    .ft-hero-inner { padding: 120px 16px 40px; }
-  }
+  @media (max-width: 480px) { .fp-hero { padding: 100px 0 48px; } }
 
-  /* Breadcrumb: "Platform Overview / Assistant" */
-  .ft-breadcrumb {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
+  .fp-breadcrumb {
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
-  .ft-breadcrumb-link {
-    color: #888;
-    font-weight: 500;
+  .fp-bc-link {
+    color: rgba(237, 233, 227, 0.4);
+    font-weight: 400;
     text-decoration: none;
     transition: color 0.2s ease;
   }
-  .ft-breadcrumb-link:hover { color: #17100e; }
-  .ft-breadcrumb-sep { color: #888; }
-  .ft-breadcrumb-active { color: #17100e; font-weight: 600; }
+  .fp-bc-link:hover { color: #ede9e3; }
+  .fp-bc-sep { color: rgba(237, 233, 227, 0.25); }
+  .fp-bc-active { color: rgba(237, 233, 227, 0.7); font-weight: 500; }
 
-  /* Headline: massive, fills the width */
-  .ft-hero-headline {
-    font-family: 'Season Mix', sans-serif;
-    font-weight: 700;
-    font-size: clamp(48px, 8vw, 110px);
-    color: #17100e;
-    letter-spacing: -3px;
-    line-height: 1.0;
-    margin: 0 0 64px;
-  }
-  @media (max-width: 768px) {
-    .ft-hero-headline { font-size: clamp(36px, 10vw, 72px); letter-spacing: -2px; margin-bottom: 40px; }
-  }
-
-  /* Full-width hero image */
-  .ft-hero-image {
-    width: 100%;
-  }
-
-  /* ══ Intro block ══ */
-  .ft-intro {
-    background: #ffffff;
-    padding: 0 24px 80px;
-  }
-  @media (max-width: 767.98px) { .ft-intro { padding: 0 16px 48px; } }
-
-  .ft-intro-inner {
-    max-width: 1320px;
-    margin: 0 auto;
-  }
-  .ft-intro-text {
-    font-family: 'Season Mix', sans-serif;
+  .fp-headline {
+    font-family: 'Söhne', sans-serif;
     font-weight: 400;
-    font-size: clamp(24px, 3.5vw, 40px);
-    color: #888;
-    line-height: 1.3;
-    letter-spacing: -0.5px;
-    margin: 0;
-    max-width: 720px;
-  }
-  .ft-intro-text strong {
-    color: #17100e;
-    font-weight: 700;
-  }
-
-  /* ══════════════════════════════════════════════════════════
-     Section 2: Value Props — stacking sticky cards (Harvey style)
-     Each card is position:sticky and the next card scrolls up
-     to cover the previous one, like the WhyEluu section.
-     ══════════════════════════════════════════════════════════ */
-  .ft-vp-section {
-    /* No overflow:hidden — it breaks position:sticky */
-  }
-
-  .ft-vp-card {
-    background: var(--vp-bg);
-    border-top: 1px solid rgba(23, 16, 14, 0.06);
-    padding: 56px 24px 80px;
-  }
-  @media (min-width: 768px) {
-    .ft-vp-card {
-      position: sticky;
-      top: 0;
-      z-index: var(--vp-z);
-      min-height: 100vh;
-      display: flex;
-      align-items: flex-start;
-      padding: 100px 24px 56px;
-    }
-  }
-  @media (max-width: 767.98px) {
-    .ft-vp-card { padding: 40px 16px; }
-  }
-
-  .ft-vp-inner {
-    max-width: 1320px;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  /* Two-column layout: title+image left, desc+features right */
-  .ft-vp-cols {
-    display: flex;
-    gap: 48px;
-    align-items: flex-start;
-  }
-  @media (max-width: 767.98px) {
-    .ft-vp-cols { flex-direction: column; gap: 32px; }
-  }
-
-  .ft-vp-left {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-  .ft-vp-right {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .ft-vp-title {
-    font-family: 'Season Mix', sans-serif;
-    font-weight: 700;
-    font-size: clamp(28px, 4vw, 40px);
-    color: #17100e;
-    letter-spacing: -1px;
-    line-height: 1.15;
-    margin: 0;
-  }
-
-  .ft-placeholder-card {
-    aspect-ratio: 1 / 1;
-    border-radius: 16px;
-  }
-  .ft-vp-img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 16px;
-    display: block;
-  }
-
-  /* Right column: top description + sub-features below */
-  .ft-vp-desc {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    color: #5c5c5c;
-    line-height: 1.6;
-    margin: 0 0 40px;
-  }
-
-  .ft-vp-features {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .ft-vp-feature {
-    padding: 24px 0;
-    border-top: 1px solid rgba(23, 16, 14, 0.08);
-  }
-
-  .ft-vp-feature-title {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: #17100e;
-    margin: 0 0 6px;
-  }
-  .ft-vp-feature-desc {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: #5c5c5c;
-    line-height: 1.55;
-    margin: 0;
-  }
-
-  /* ══════════════════════════════════════════════════════════
-     Section 3: Stats
-     ══════════════════════════════════════════════════════════ */
-  .ft-stats {
-    background: #f4f3ec;
-    padding: 80px 24px;
-    text-align: center;
-  }
-  @media (max-width: 767.98px) { .ft-stats { padding: 48px 16px; } }
-
-  .ft-stats-heading {
-    font-family: 'Season Mix', sans-serif;
-    font-weight: 700;
-    font-size: clamp(24px, 4vw, 36px);
-    color: #17100e;
-    letter-spacing: -1px;
+    font-size: clamp(36px, 6vw, 72px);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: #ede9e3;
     margin: 0 0 48px;
   }
-  .ft-stats-row {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    gap: 48px;
-    justify-content: center;
+  @media (max-width: 768px) {
+    .fp-headline { margin-bottom: 32px; }
   }
-  @media (max-width: 767.98px) { .ft-stats-row { flex-direction: column; gap: 32px; } }
 
-  .ft-stats-card { flex: 1; text-align: center; }
-  .ft-stats-value {
-    font-family: 'Season Mix', sans-serif;
-    font-weight: 700;
-    font-size: clamp(36px, 5vw, 56px);
-    color: #17100e;
+  .fp-hero-image { width: 100%; }
+  .fp-hero-img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
     display: block;
   }
-  .ft-stats-label {
-    font-family: 'Inter', sans-serif;
+  .fp-placeholder-hero {
+    aspect-ratio: 16 / 9;
+    border-radius: 4px;
+    position: relative;
+  }
+
+  /* ══ Intro — matches homepage hp-intro block ══ */
+  .fp-intro {
+    background: #13100a;
+    padding: 48px 0 64px;
+  }
+  .fp-intro-text {
+    font-family: 'Söhne', sans-serif;
+    font-weight: 400;
+    font-size: clamp(18px, 2.2vw, 26px);
+    color: rgba(237, 233, 227, 0.4);
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    margin: 0;
+    max-width: 900px;
+  }
+  .fp-intro-text strong {
+    color: #ede9e3;
     font-weight: 600;
+  }
+
+  /* ══ Value Props — WhyEluu card pattern ══ */
+  .fp-cards-section {
+    background: #13100a;
+  }
+
+  .fp-card {
+    margin-bottom: 112px;
+  }
+  .fp-card:last-child { margin-bottom: 0; }
+
+  .fp-card-inner {
+    position: relative;
+    background: #1e1d1b;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow: hidden;
+  }
+  .fp-card-inner::before {
+    content: "";
+    pointer-events: none;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    z-index: 30;
+    position: absolute;
+    inset: 0;
+  }
+  @media (min-width: 900px) {
+    .fp-card-inner {
+      grid-template-columns: repeat(24, 1fr);
+      gap: 10px;
+    }
+  }
+
+  /* Reverse layout (text right, media left) */
+  @media (min-width: 900px) {
+    .fp-card-inner--reverse .fp-text-col {
+      grid-column: 16 / 25;
+      grid-row: 1 / -1;
+      padding: 36px 36px 36px 30px;
+    }
+    .fp-card-inner--reverse .fp-media-col {
+      grid-column: 1 / 16;
+      grid-row: 1 / -1;
+    }
+  }
+
+  /* ── Text column — matches WhyEluu homepage cards exactly ── */
+  .fp-text-col {
+    display: flex;
+    align-items: center;
+    padding: 24px;
+  }
+  @media (min-width: 900px) {
+    .fp-text-col {
+      grid-column: 1 / 10;
+      grid-row: 1 / -1;
+      padding: 36px 30px 36px 36px;
+    }
+  }
+
+  .fp-text-wrap {
+    width: 100%;
+    max-width: 42ch;
+  }
+  /* ── Card text: heading + desc at top, points at bottom ── */
+  .fp-text-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 320px;
+  }
+  @media (max-width: 899px) {
+    .fp-text-block { min-height: auto; gap: 32px; }
+  }
+
+  .fp-card-top {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .fp-card-heading {
+    font-family: 'Söhne', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ede9e3;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  @media (min-width: 768px) {
+    .fp-card-heading {
+      font-size: 1.625rem;
+      letter-spacing: -0.02em;
+    }
+  }
+
+  .fp-card-desc {
+    font-family: 'Söhne', sans-serif;
     font-size: 15px;
-    color: #17100e;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.5);
+    line-height: 1.6;
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+
+  /* Points — title-only list at bottom */
+  .fp-card-points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .fp-card-point {
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(237, 233, 227, 0.55);
+    letter-spacing: -0.005em;
+    padding: 11px 0;
+    border-top: 1px solid rgba(237, 233, 227, 0.06);
+  }
+  .fp-card-point:first-child { border-top: none; }
+
+  .fp-media-col {
+    position: relative;
+    min-height: 350px;
+  }
+  @media (min-width: 900px) {
+    .fp-media-col {
+      grid-column: 10 / 25;
+      grid-row: 1 / -1;
+      min-height: 680px;
+    }
+  }
+  .fp-media-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .fp-media-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (max-width: 899px) {
+    .fp-media-col { min-height: 300px; }
+    .fp-card { margin-bottom: 72px; }
+  }
+  @media (max-width: 480px) {
+    .fp-media-col { min-height: 220px; }
+    .fp-card { margin-bottom: 48px; }
+  }
+
+  /* ══ Stats ══ */
+  .fp-stats {
+    background: #13100a;
+    padding: 64px 0;
+  }
+  .fp-stats-heading {
+    font-family: 'Söhne', sans-serif;
+    font-weight: 600;
+    font-size: clamp(22px, 3vw, 32px);
+    color: #ede9e3;
+    letter-spacing: -0.02em;
+    margin: 0 0 32px;
+    text-align: center;
+  }
+  .fp-stats-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    max-width: 1380px;
+    margin: 0 auto;
+  }
+  @media (min-width: 640px) {
+    .fp-stats-row { grid-template-columns: repeat(3, 1fr); }
+  }
+  .fp-stats-card {
+    background: #1e1d1b;
+    border-radius: 4px;
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+  }
+  .fp-stats-card::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+  }
+  .fp-stats-value {
+    font-family: 'Söhne', sans-serif;
+    font-weight: 600;
+    font-size: clamp(32px, 4vw, 48px);
+    color: #ede9e3;
+    display: block;
+  }
+  .fp-stats-label {
+    font-family: 'Söhne', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: rgba(237, 233, 227, 0.7);
     display: block;
     margin-top: 8px;
   }
-  .ft-stats-desc {
-    font-family: 'Inter', sans-serif;
+  .fp-stats-desc {
+    font-family: 'Söhne', sans-serif;
     font-size: 13px;
-    color: #5c5c5c;
-    margin: 6px auto 0;
+    color: rgba(237, 233, 227, 0.4);
+    margin: 8px auto 0;
     max-width: 280px;
     line-height: 1.5;
   }
 
-  /* ══════════════════════════════════════════════════════════
-     Section 4: Testimonial
-     ══════════════════════════════════════════════════════════ */
-  .ft-testimonial {
-    background: #ffffff;
-    padding: 80px 24px;
+  /* ══ Testimonial + Image — merged card ══ */
+  .fp-testi {
+    background: #13100a;
+    padding: 48px 0 72px;
   }
-  @media (max-width: 767.98px) { .ft-testimonial { padding: 48px 16px; } }
 
-  .ft-testimonial-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
+  .fp-testi-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    background: #1e1d1b;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
   }
-  .ft-testimonial-quote {
-    font-family: 'Season Mix', sans-serif;
+  .fp-testi-card::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    z-index: 2;
+  }
+  @media (min-width: 900px) {
+    .fp-testi-card {
+      grid-template-columns: 5fr 6fr;
+    }
+  }
+
+  /* Left: logo top, quote middle, attribution bottom */
+  .fp-testi-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 36px 28px;
+    min-height: 400px;
+  }
+  @media (min-width: 900px) {
+    .fp-testi-text { padding: 48px 44px; }
+  }
+
+  .fp-testi-logo {
+    display: block;
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    object-position: left;
+    filter: brightness(0) invert(1);
+    opacity: 0.7;
+    align-self: flex-start;
+  }
+
+  .fp-testi-quote {
+    font-family: 'Söhne', sans-serif;
     font-weight: 400;
-    font-size: clamp(20px, 3vw, 36px);
-    color: #17100e;
-    line-height: 1.35;
+    font-size: clamp(18px, 2vw, 24px);
+    color: #ede9e3;
+    line-height: 1.5;
+    letter-spacing: -0.015em;
     margin: 0;
     padding: 0;
     border: none;
-    text-indent: -0.4em;
   }
-  .ft-testimonial-attribution {
-    font-family: 'Inter', sans-serif;
+
+  .fp-testi-attr {
+    font-family: 'Söhne', sans-serif;
+    font-size: 13px;
     font-weight: 400;
-    font-size: 16px;
-    color: #17100e;
-    margin: 24px 0 0;
-  }
-
-  /* ══════════════════════════════════════════════════════════
-     Section 5: Use Cases — dark bg, Harvey style
-     ══════════════════════════════════════════════════════════ */
-  .ft-uc {
-    background: #17100e;
-    color: #ffffff;
-    padding: 80px 24px;
-  }
-  @media (max-width: 767.98px) { .ft-uc { padding: 48px 16px; } }
-
-  .ft-uc-inner {
-    max-width: 1320px;
-    margin: 0 auto;
-  }
-
-  .ft-uc-heading {
-    font-family: 'Season Mix', sans-serif;
-    font-weight: 700;
-    font-size: clamp(28px, 5vw, 44px);
-    color: #ffffff;
-    letter-spacing: -1.5px;
-    text-align: right;
-    margin: 0 0 56px;
-  }
-  @media (max-width: 767.98px) {
-    .ft-uc-heading { text-align: left; margin-bottom: 32px; }
-  }
-
-  .ft-uc-layout {
-    display: flex;
-    gap: 48px;
-    align-items: flex-start;
-  }
-  @media (max-width: 767.98px) {
-    .ft-uc-layout { flex-direction: column; gap: 32px; }
-  }
-
-  /* Left: tab list with border-top dividers */
-  .ft-uc-tabs {
-    width: 45%;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-  }
-  @media (max-width: 767.98px) { .ft-uc-tabs { width: 100%; } }
-
-  .ft-uc-tab {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    padding: 20px 0;
-    border: none;
-    border-top: 2px solid rgba(255, 255, 255, 0.15);
-    background: transparent;
-    cursor: pointer;
-    text-align: left;
-    transition: border-color 0.2s ease;
-  }
-  .ft-uc-tab.active {
-    border-top-color: #ffffff;
-  }
-
-  .ft-uc-tab-title {
-    font-family: 'Inter', sans-serif;
-    font-size: 18px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(237, 233, 227, 0.4);
     margin: 0;
-    transition: color 0.2s ease;
-  }
-  .ft-uc-tab.active .ft-uc-tab-title {
-    color: #ffffff;
-    font-weight: 600;
-  }
-  .ft-uc-tab:hover .ft-uc-tab-title {
-    color: rgba(255, 255, 255, 0.7);
   }
 
-  /* Description only visible on active tab */
-  .ft-uc-tab-desc {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.55);
-    line-height: 1.55;
-    margin: 0;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.25s ease,
-                margin 0.35s ease;
-  }
-  .ft-uc-tab.active .ft-uc-tab-desc {
-    max-height: 120px;
-    opacity: 1;
-    margin-top: 10px;
-  }
-
-  /* Right: large image panel */
-  .ft-uc-image {
-    flex: 1;
-    min-width: 0;
+  /* Right: image — square, covers full panel */
+  .fp-testi-image {
     position: relative;
-    min-height: 480px;
+    min-height: 320px;
   }
-  @media (max-width: 767.98px) { .ft-uc-image { min-height: 280px; } }
+  @media (min-width: 900px) {
+    .fp-testi-image {
+      aspect-ratio: 1 / 1;
+      min-height: auto;
+    }
+  }
 
-  .ft-uc-panel {
+  .fp-testi-img {
     position: absolute;
     inset: 0;
-    opacity: 0;
-    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    pointer-events: none;
-  }
-  .ft-uc-panel.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .ft-placeholder-uc {
-    aspect-ratio: 1 / 1;
-    border-radius: 14px;
-    height: 100%;
-    min-height: 480px;
-  }
-  .ft-uc-img {
     width: 100%;
     height: 100%;
-    aspect-ratio: 1 / 1;
     object-fit: cover;
-    border-radius: 14px;
     display: block;
   }
-  @media (max-width: 767.98px) {
-    .ft-placeholder-uc { min-height: 280px; }
-    .ft-uc-img { height: auto; min-height: 280px; }
-  }
 
-  /* ══════════════════════════════════════════════════════════
-     Section 6: CTA Footer
-     ══════════════════════════════════════════════════════════ */
-  .ft-cta-container {
-    position: relative;
-    overflow: hidden;
-    min-height: 280px;
-  }
-  @media (min-width: 640px) { .ft-cta-container { min-height: 360px; } }
-  @media (min-width: 1024px) { .ft-cta-container { min-height: 500px; } }
-
-  .ft-cta-bg {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-  }
-  .ft-cta-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(23,16,14,0.25) 0%, rgba(23,16,14,0.45) 100%);
-  }
-  .ft-cta-content {
-    position: relative;
-    z-index: 2;
-    padding: 56px 20px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: inherit;
-  }
-  .ft-cta-heading {
-    font-family: 'Season Mix', sans-serif;
-    font-weight: 700;
-    font-size: clamp(24px, 5vw, 48px);
-    letter-spacing: -1px;
-    color: #ffffff;
-    line-height: 1.1;
-    margin: 0 0 28px;
-  }
-  .ft-cta-buttons {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  /* ══════════════════════════════════════════════════════════
-     Reduced motion
-     ══════════════════════════════════════════════════════════ */
-  @media (prefers-reduced-motion: reduce) {
-    .ft-uc-panel.active { animation: none; }
-  }
+  /* ══ Use Cases — heading+desc top, points bottom, image right ══ */
+  /* Old use cases section removed — merged into testimonial card */
 </style>
 
 </body>

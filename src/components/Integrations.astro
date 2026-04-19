@@ -8,13 +8,13 @@ const icons = [
 ---
 
 <section class="ig-section">
-  <div style="max-width: 1440px; margin: 0 auto;">
+  <div class="ig-wrap">
     <div class="ig-header">
-      <h2 class="reveal" style="font-family: 'Season Mix', sans-serif; font-weight: 700; font-size: clamp(26px, 5vw, 56px); letter-spacing: -1.5px; color: #17100e; line-height: 1.1; margin: 0;">
+      <h2 class="ig-heading reveal">
         Plug into the tools you already use.
       </h2>
-      <p class="reveal" style="font-family: 'Inter', sans-serif; font-size: 16px; color: #5c5c5c; line-height: 1.7; margin: 20px 0 0;">
-        Your AI colleagues connect natively to CRMs, billing systems, spreadsheets, communication tools, and more. They read, write, and cross-reference across all of them — and your <strong style="color: #17100e;">data never leaves your environment</strong>. Every connection is scoped, encrypted, and fully under your control.
+      <p class="ig-desc reveal">
+        Your AI colleagues connect natively to CRMs, billing systems, spreadsheets, communication tools, and more. They read, write, and cross-reference across all of them — and your <strong>data never leaves your environment</strong>. Every connection is scoped, encrypted, and fully under your control.
       </p>
     </div>
 
@@ -40,11 +40,43 @@ const icons = [
 
 <style>
   .ig-section {
-    background: #f4f3ec;
-    padding: 32px 16px;
+    background: #13100a;
+    padding: 112px 0 0;
   }
-  @media (min-width: 640px) { .ig-section { padding: 40px 24px; } }
-  @media (min-width: 1024px) { .ig-section { padding: 48px 24px; } }
+  @media (max-width: 480px) { .ig-section { padding: 56px 0 0; } }
+
+  .ig-wrap {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  .ig-heading {
+    font-family: 'Söhne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(22px, 4vw, 36px);
+    letter-spacing: -1px;
+    color: #ede9e3;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  .ig-desc {
+    font-family: 'Söhne', sans-serif;
+    font-size: 16px;
+    color: rgba(237, 233, 227, 0.6);
+    line-height: 1.7;
+    margin: 20px 0 0;
+  }
+  .ig-desc strong {
+    color: #ede9e3;
+    font-weight: 600;
+  }
+  @media (max-width: 480px) {
+    .ig-heading { font-size: 22px; }
+    .ig-desc { font-size: 15px; }
+  }
 
   .ig-header {
     padding: 0 0 24px;
@@ -55,26 +87,16 @@ const icons = [
   .ig-container {
     position: relative;
     background:
-      radial-gradient(ellipse at 20% 50%, rgba(255, 210, 80, 0.35) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 30%, rgba(255, 180, 50, 0.25) 0%, transparent 45%),
-      radial-gradient(ellipse at 50% 80%, rgba(240, 200, 100, 0.2) 0%, transparent 50%),
-      radial-gradient(ellipse at 65% 20%, rgba(255, 220, 120, 0.18) 0%, transparent 40%),
-      linear-gradient(135deg, #f5e6c8 0%, #f0ddb5 30%, #edd5a0 60%, #f2dfb8 100%);
-    border-radius: 36px;
+      radial-gradient(ellipse at 20% 50%, rgba(237, 115, 59, 0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 30%, rgba(237, 115, 59, 0.08) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 80%, rgba(237, 115, 59, 0.06) 0%, transparent 50%),
+      #1e1d1b;
+    border-radius: 4px;
     height: 160px;
     overflow: hidden;
     display: flex;
     align-items: center;
-  }
-  .ig-container::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url('/images/products-bg.webp') center / cover no-repeat;
-    opacity: 0.08;
-    border-radius: 36px;
-    pointer-events: none;
-    mix-blend-mode: multiply;
+    border: 1px solid rgba(237, 233, 227, 0.06);
   }
 
   .ig-mask-l,
@@ -88,11 +110,11 @@ const icons = [
   }
   .ig-mask-l {
     left: 0;
-    background: linear-gradient(to right, #f0ddb5, transparent);
+    background: linear-gradient(to right, #1e1d1b, transparent);
   }
   .ig-mask-r {
     right: 0;
-    background: linear-gradient(to left, #f2dfb8, transparent);
+    background: linear-gradient(to left, #1e1d1b, transparent);
   }
 
   .ig-center {
@@ -101,22 +123,24 @@ const icons = [
     top: 50%;
     transform: translate(-50%, -50%);
     z-index: 4;
-    width: 90px;
-    height: 90px;
+    width: 92px;
+    height: 92px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 32px;
-    background: #f4f3ec;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #2b272c;
     box-shadow:
-      0 0 0 5px rgba(210, 140, 100, 0.25),
-      0 0 30px rgba(210, 140, 100, 0.15);
+      0 0 0 5px rgba(237, 115, 59, 0.2),
+      0 0 30px rgba(237, 115, 59, 0.1);
     animation: ig-glow 3s ease-in-out infinite;
   }
   .ig-center img {
-    width: 90px;
-    height: 90px;
-    border-radius: 20px;
+    width: 100%;
+    height: 100%;
+    display: block;
+    transform: scale(1.08);
   }
 
   .ig-track {
@@ -136,36 +160,37 @@ const icons = [
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f4f3ec;
-    border-radius: 16px;
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    background: #2b272c;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.06);
   }
   .ig-icon img {
     width: 36px;
     height: 36px;
     display: block;
+    opacity: 0.9;
   }
 
   @keyframes ig-glow {
     0%, 100% {
       box-shadow:
-        0 0 0 5px rgba(210, 140, 100, 0.2),
-        0 0 24px rgba(210, 140, 100, 0.1);
+        0 0 0 5px rgba(237, 115, 59, 0.15),
+        0 0 24px rgba(237, 115, 59, 0.08);
     }
     50% {
       box-shadow:
-        0 0 0 8px rgba(210, 140, 100, 0.35),
-        0 0 40px rgba(210, 140, 100, 0.2);
+        0 0 0 8px rgba(237, 115, 59, 0.25),
+        0 0 40px rgba(237, 115, 59, 0.12);
     }
   }
 
   /* Very small screens (360px) */
   @media (max-width: 400px) {
-    .ig-container { height: 130px; border-radius: 20px; }
-    .ig-container::before { border-radius: 20px; }
-    .ig-center { width: 70px; height: 70px; border-radius: 20px; }
-    .ig-center img { width: 70px; height: 70px; border-radius: 16px; }
-    .ig-icon { width: 56px; height: 56px; border-radius: 12px; }
+    .ig-container { height: 130px; border-radius: 4px; }
+    .ig-container::before { border-radius: 4px; }
+    .ig-center { width: 72px; height: 72px; border-radius: 4px; }
+    .ig-center img { width: 100%; height: 100%; }
+    .ig-icon { width: 56px; height: 56px; border-radius: 4px; }
     .ig-icon img { width: 28px; height: 28px; }
     .ig-track { gap: 12px; padding: 0 12px; }
     .ig-mask-l, .ig-mask-r { width: 32px; }
@@ -173,19 +198,19 @@ const icons = [
 
   @media (min-width: 640px) {
     .ig-container { height: 200px; }
-    .ig-center { width: 110px; height: 110px; border-radius: 28px; }
-    .ig-center img { width: 70px; height: 70px; }
-    .ig-icon { width: 90px; height: 90px; border-radius: 20px; }
+    .ig-center { width: 112px; height: 112px; border-radius: 4px; }
+    .ig-center img { width: 100%; height: 100%; }
+    .ig-icon { width: 90px; height: 90px; border-radius: 4px; }
     .ig-icon img { width: 45px; height: 45px; }
     .ig-track { gap: 28px; padding: 0 28px; }
     .ig-mask-l, .ig-mask-r { width: 160px; }
   }
 
   @media (min-width: 1024px) {
-    .ig-container { height: 260px; border-radius: 42px; }
-    .ig-center { width: 135px; height: 135px; border-radius: 32px; }
-    .ig-center img { width: 90px; height: 90px; border-radius: 20px; }
-    .ig-icon { width: 110px; height: 110px; border-radius: 24px; }
+    .ig-container { height: 260px; border-radius: 4px; }
+    .ig-center { width: 137px; height: 137px; border-radius: 4px; }
+    .ig-center img { width: 100%; height: 100%; }
+    .ig-icon { width: 110px; height: 110px; border-radius: 4px; }
     .ig-icon img { width: 55px; height: 55px; }
     .ig-track { gap: 36px; padding: 0 36px; }
     .ig-mask-l, .ig-mask-r { width: 220px; }

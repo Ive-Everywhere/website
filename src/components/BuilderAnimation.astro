@@ -3,7 +3,7 @@
 ---
 
 <div class="bd-wrap">
-  <img src="/images/cookbook-bg.png" alt="" class="bd-bg" />
+  <img src="/images/cookbook-bg.webp" alt="" class="bd-bg" />
 
   <div class="bd-window">
     <div class="bd-body" id="bd-body">
@@ -157,10 +157,10 @@
   }
   .bd-window {
     position: relative; z-index: 1; width: 100%; max-width: 560px;
-    background: #ffffff; border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08);
-    overflow: hidden; font-family: 'Inter', sans-serif;
-    border: 1px solid #edede9;
+    background: #1e1c1e; border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.2);
+    overflow: hidden; font-family: 'Söhne', sans-serif;
+    border: 1px solid rgba(237, 233, 227,0.08);
   }
   .bd-body {
     position: relative; height: 360px; min-height: 360px; max-height: 360px;
@@ -184,11 +184,11 @@
   /* Header */
   .bd-dash-header {
     display: flex; align-items: flex-start; justify-content: space-between;
-    padding-bottom: 10px; border-bottom: 1px solid #edede9;
+    padding-bottom: 10px; border-bottom: 1px solid rgba(237, 233, 227,0.08);
   }
   .bd-dash-header-left { display: flex; flex-direction: column; gap: 2px; }
-  .bd-dash-title { font-size: 14px; font-weight: 600; color: #1e1c1e; letter-spacing: -0.01em; }
-  .bd-dash-sub { font-size: 10px; color: #aaa89e; font-weight: 500; }
+  .bd-dash-title { font-size: 14px; font-weight: 600; color: #ede9e3; letter-spacing: -0.01em; }
+  .bd-dash-sub { font-size: 10px; color: #7c7a71; font-weight: 500; }
   .bd-dash-badge {
     font-size: 9px; font-weight: 600; padding: 3px 8px;
     border-radius: 4px; text-transform: uppercase; letter-spacing: 0.3px;
@@ -200,16 +200,16 @@
   .bd-kpis { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
   .bd-kpi {
     display: flex; flex-direction: column; gap: 2px;
-    background: #fafaf8; border: 1px solid #edede9;
+    background: #2b272c; border: 1px solid rgba(237, 233, 227,0.08);
     border-radius: 10px; padding: 10px 12px;
   }
-  .bd-kpi-label { font-size: 9px; font-weight: 500; color: #aaa89e; text-transform: uppercase; letter-spacing: 0.3px; }
-  .bd-kpi-value { font-size: 18px; font-weight: 700; color: #1e1c1e; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+  .bd-kpi-label { font-size: 9px; font-weight: 500; color: #7c7a71; text-transform: uppercase; letter-spacing: 0.3px; }
+  .bd-kpi-value { font-size: 18px; font-weight: 700; color: #ede9e3; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
   .bd-kpi-trend { font-size: 9px; font-weight: 600; }
 
   /* Chart */
   .bd-chart {
-    background: #fafaf8; border: 1px solid #edede9;
+    background: #2b272c; border: 1px solid rgba(237, 233, 227,0.08);
     border-radius: 10px; padding: 10px 12px 6px;
     flex-shrink: 0;
   }
@@ -217,36 +217,36 @@
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 6px;
   }
-  .bd-chart-title { font-size: 9px; font-weight: 600; color: #58564d; text-transform: uppercase; letter-spacing: 0.3px; }
+  .bd-chart-title { font-size: 9px; font-weight: 600; color: #aaa89e; text-transform: uppercase; letter-spacing: 0.3px; }
   .bd-chart-metric { font-size: 9px; font-weight: 600; }
   .bd-chart-area {
     display: flex; gap: 4px; height: 60px;
   }
   .bd-chart-y {
     display: flex; flex-direction: column; justify-content: space-between;
-    font-size: 7px; color: #aaa89e; font-weight: 500; font-variant-numeric: tabular-nums;
+    font-size: 7px; color: #7c7a71; font-weight: 500; font-variant-numeric: tabular-nums;
     width: 28px; flex-shrink: 0; text-align: right; padding: 0 2px;
   }
   .bd-chart-svg { flex: 1; height: 100%; }
   .bd-chart-x {
     display: flex; justify-content: space-between;
-    font-size: 7px; color: #aaa89e; font-weight: 500;
+    font-size: 7px; color: #7c7a71; font-weight: 500;
     padding: 4px 32px 0;
   }
 
   /* Table */
   .bd-table {
     display: flex; flex-direction: column;
-    border: 1px solid #edede9; border-radius: 10px; overflow: hidden;
+    border: 1px solid rgba(237, 233, 227,0.08); border-radius: 10px; overflow: hidden;
   }
   .bd-trow {
     display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-    padding: 7px 12px; font-size: 10px; color: #1e1c1e;
-    border-bottom: 1px solid #f5f5f0;
+    padding: 7px 12px; font-size: 10px; color: #ede9e3;
+    border-bottom: 1px solid #29232b;
   }
   .bd-trow:last-child { border-bottom: none; }
   .bd-thead {
-    background: #fafaf8; font-weight: 600; color: #58564d;
+    background: #2b272c; font-weight: 600; color: #aaa89e;
     font-size: 9px; text-transform: uppercase; letter-spacing: 0.3px;
   }
   .bd-s-green { color: #1fc16b; font-weight: 500; }

@@ -1,108 +1,45 @@
 ---
-const products = [
-  {
-    title: 'Hard Drive',
-    description: 'Each colleague gets its own storage for files, context, and memory.',
-    icon: 'teamdrive',
-  },
-  {
-    title: 'Recipes',
-    description: 'Pre-built workflows that chain tools into multi-step automations. Activate in one click.',
-    icon: 'recipes',
-  },
-  {
-    title: 'Views',
-    description: 'Real-time dashboards of pipeline health, revenue metrics, and colleague activity.',
-    icon: 'views',
-  },
-  {
-    title: 'Multitasking',
-    description: 'Run multiple colleagues in parallel across projects. Weeks of work done in hours.',
-    icon: 'parallel',
-  },
-  {
-    title: 'Integrations',
-    description: '20+ native connectors — CRM, billing, spreadsheets, Slack, and more.',
-    icon: 'integrations',
-  },
-  {
-    title: 'Abilities',
-    description: 'Plug-in tool bundles — scrapers, enrichment, outreach. One-click equip.',
-    icon: 'abilities',
-  },
-];
-
 const platform = [
   {
     title: 'Integration security',
-    description: 'Scoped permissions per tool. Each colleague gets the minimum access it needs — read, write, or both. Revoke anytime.',
+    description: 'Scoped OAuth and per-workspace keys. Colleagues only see what they should.',
     icon: 'security',
   },
   {
     title: 'Skill security',
-    description: 'Every ability and recipe runs in a sandboxed environment. No cross-tenant data leakage, no unscoped actions.',
+    description: 'Every recipe runs in a sandbox with explicit permissions, reviewed before touching data.',
     icon: 'parallel',
   },
   {
-    title: 'Data exfiltration protection',
-    description: 'Real-time monitoring of all data movement. Alerts on anomalous transfers, blocked exports, and unauthorized access attempts.',
+    title: 'Data protection',
+    description: 'Outbound traffic is inspected and blocked at the boundary. Sensitive data never leaves.',
     icon: 'memory',
   },
   {
     title: 'Continuous monitoring',
-    description: 'Audit logs for every action, every tool call, every data access. Full visibility into what your colleagues do and when.',
+    description: 'Every action is logged and streamed in real time, with alerts on anomalies.',
     icon: 'configure',
   },
 ];
 ---
 
-<!-- Products + Platform -->
-<section class="ft-section">
-  <div style="max-width: 1440px; margin: 0 auto;">
-    <div class="ft-header">
-      <h2 class="ft-heading reveal">Everything runs on a powerful foundation.</h2>
+<!-- Security -->
+<section class="ft-section ft-security-section">
+  <div class="ft-container">
+    <div class="ft-sec-intro">
+      <h2 class="ft-sec-heading reveal">Enterprise-grade security.</h2>
     </div>
-
-    <div class="ft-cards">
-      {products.map((p) => (
-        <div class="ft-card group reveal">
-          <div class="ft-card-hover"></div>
-          <div class="ft-card-icon">
-            {p.icon === 'teamdrive' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/>
-              </svg>
-            )}
-            {p.icon === 'recipes' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/><polyline points="9 9 9.5 10 11 8"/>
-              </svg>
-            )}
-            {p.icon === 'views' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
-              </svg>
-            )}
-            {p.icon === 'parallel' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
-              </svg>
-            )}
-            {p.icon === 'integrations' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-              </svg>
-            )}
-            {p.icon === 'abilities' && (
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-              </svg>
-            )}
+    <div class="ft-sec-grid">
+      {platform.map((f) => (
+        <div class="ft-sec-item reveal">
+          <div class="ft-sec-icon">
+            {f.icon === 'security' && (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>)}
+            {f.icon === 'parallel' && (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>)}
+            {f.icon === 'memory' && (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>)}
+            {f.icon === 'configure' && (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>)}
           </div>
-          <div class="ft-card-text">
-            <h3>{p.title}</h3>
-            <p>{p.description}</p>
-          </div>
+          <h3 class="ft-sec-title">{f.title}</h3>
+          <p class="ft-sec-desc">{f.description}</p>
         </div>
       ))}
     </div>
@@ -111,307 +48,67 @@ const platform = [
 
 <slot />
 
-<section class="ft-section ft-security-section">
-  <div style="max-width: 1440px; margin: 0 auto;">
-    <div class="ft-platform">
-    <!-- Left: text -->
-    <div class="ft-plat-text">
-      <h2 class="ft-heading reveal">Enterprise-grade security, built in.</h2>
-      <p class="reveal" style="font-family: 'Inter', sans-serif; font-size: 16px; color: #5c5c5c; line-height: 1.6; margin: 12px 0 0;">
-        Your AI colleagues handle sensitive data across tools. Every layer is locked down — from integrations to execution.
-      </p>
-    </div>
-
-    <!-- Right: feature grid -->
-    <div class="ft-plat-grid">
-      {platform.map((f) => (
-        <div class="ft-plat-item reveal">
-          <div class="ft-plat-head">
-            <div class="ft-plat-icon">
-              {f.icon === 'security' && (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
-                </svg>
-              )}
-              {f.icon === 'parallel' && (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>
-                </svg>
-              )}
-              {f.icon === 'memory' && (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                </svg>
-              )}
-              {f.icon === 'configure' && (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-                </svg>
-              )}
-            </div>
-            <h4>{f.title}</h4>
-          </div>
-          <p>{f.description}</p>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
-
 <style>
-  /* ── Section wrapper ── */
-  .ft-section {
-    background: #f4f3ec;
-    padding: 48px 16px;
-  }
-  @media (min-width: 640px) {
-    .ft-section { padding: 48px 24px; }
-  }
-  @media (min-width: 768px) {
-    .ft-section { padding: 48px 32px; }
-  }
-  @media (min-width: 1024px) {
-    .ft-section { padding: 56px 24px; }
-  }
-  .ft-security-section {
-    padding-top: 32px;
-  }
-  @media (min-width: 1024px) {
-    .ft-security-section { padding-top: 40px; }
-  }
+  .ft-section { background: #13100a; padding: 112px 0 0; }
+  @media (max-width: 480px) { .ft-section { padding: 56px 0 0; } }
+  .ft-container { max-width: 1380px; margin: 0 auto; padding: 0 20px; }
 
-  /* ── Shared ── */
-  .ft-heading {
-    font-family: 'Season Mix', sans-serif;
+  /* Security */
+  /* Security — Cursor-style stacked layout, flat cards */
+  .ft-sec-intro {
+    margin-bottom: 32px;
+  }
+  .ft-sec-heading {
+    font-family: 'Söhne', sans-serif;
     font-weight: 700;
-    font-size: clamp(32px, 6vw, 56px);
-    letter-spacing: -1.5px;
-    color: #17100e;
-    line-height: 1.1;
+    font-size: clamp(22px, 4vw, 36px);
+    letter-spacing: -1px;
+    color: #ede9e3;
+    line-height: 1.2;
     margin: 0;
+    white-space: nowrap;
   }
-  @media (min-width: 640px) { .ft-heading { letter-spacing: -2px; } }
+  @media (max-width: 640px) {
+    .ft-sec-heading { white-space: normal; }
+  }
 
-  .ft-header { margin-bottom: 40px; }
-
-  /* ── Product cards ── */
-  .ft-cards {
+  .ft-sec-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 40px 24px;
   }
-  @media (min-width: 480px) {
-    .ft-cards {
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-  }
-  @media (min-width: 640px) {
-    .ft-cards { gap: 20px; }
-  }
-  @media (min-width: 768px) {
-    .ft-cards {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-  }
-  @media (min-width: 1024px) {
-    .ft-cards {
-      grid-template-columns: repeat(6, 1fr);
-      gap: 24px;
-    }
-  }
+  @media (min-width: 640px) { .ft-sec-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) { .ft-sec-grid { grid-template-columns: repeat(4, 1fr); } }
 
-  /* ── Single card ── */
-  .ft-card {
-    position: relative;
-    z-index: 0;
+  .ft-sec-item {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
+    gap: 12px;
+    background: #1e1d1b;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    border-radius: 4px;
+    padding: 24px;
   }
-
-  /* Hover background — Modal style */
-  .ft-card-hover {
-    pointer-events: none;
-    position: absolute;
-    inset: -12px;
-    z-index: -1;
-    background: #d4d3c8;
-    opacity: 0;
-    transition: opacity 0.15s ease;
-    border-radius: 12px;
+  .ft-sec-icon {
+    color: #ede9e3;
+    opacity: 0.7;
+    margin-bottom: 4px;
   }
-  /* Contain the hover overflow */
-  .ft-cards {
-    overflow: hidden;
-    padding: 12px;
-    margin: -12px;
-  }
-  .ft-card:hover .ft-card-hover,
-  .ft-card:active .ft-card-hover {
-    opacity: 1;
-  }
-
-  /* ── Icon block — window into shared bg image with overlay for icon contrast ── */
-  .ft-card-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    aspect-ratio: 1;
-    padding: 30%;
-    position: relative;
-    overflow: hidden;
-  }
-  .ft-card-icon::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url('/images/products-bg.webp') center / 600% no-repeat;
-    background-attachment: local;
-    z-index: 0;
-  }
-  .ft-card-icon::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.25);
-    z-index: 1;
-  }
-  .ft-card-icon svg {
-    position: relative;
-    z-index: 2;
-  }
-
-  /* On single-column mobile, constrain icon block — use fixed padding not % */
-  @media (max-width: 479px) {
-    .ft-card-icon {
-      max-width: 140px;
-      padding: 30px;
-    }
-    .ft-card-icon::before {
-      background-size: 300%;
-    }
-  }
-
-  /* Each card shows a different slice of the background */
-  .ft-card:nth-child(1) .ft-card-icon::before { background-position: 0% 50%; }
-  .ft-card:nth-child(2) .ft-card-icon::before { background-position: 20% 50%; }
-  .ft-card:nth-child(3) .ft-card-icon::before { background-position: 40% 50%; }
-  .ft-card:nth-child(4) .ft-card-icon::before { background-position: 60% 50%; }
-  .ft-card:nth-child(5) .ft-card-icon::before { background-position: 80% 50%; }
-  .ft-card:nth-child(6) .ft-card-icon::before { background-position: 100% 50%; }
-
-  .ft-card-icon svg {
-    width: 100%;
-    height: 100%;
-  }
-
-  /* ── Card text ── */
-  .ft-card-text h3 {
-    font-family: 'Season Mix', sans-serif;
-    font-size: clamp(18px, 2.5vw, 20px);
-    font-weight: 700;
-    color: #17100e;
-    margin: 0 0 6px;
-    letter-spacing: -0.3px;
-  }
-  .ft-card-text p {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: #5c5c5c;
-    line-height: 1.5;
-    margin: 0;
-  }
-
-  /* ── Platform section ── */
-  .ft-platform {
-    display: flex;
-    flex-direction: column;
-    gap: 48px;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-  @media (min-width: 768px) {
-    .ft-platform {
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 80px;
-      padding-top: 0;
-      padding-bottom: 72px;
-    }
-  }
-
-  .ft-plat-text {
-    flex-shrink: 0;
-  }
-  @media (min-width: 768px) {
-    .ft-plat-text { width: 33.33%; }
-  }
-
-  .ft-plat-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-  @media (min-width: 640px) {
-    .ft-plat-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 56px 56px;
-    }
-  }
-  @media (min-width: 768px) {
-    .ft-plat-grid { width: 66.66%; }
-  }
-
-  /* On mobile single-column, add dividers between platform items */
-  @media (max-width: 639px) {
-    .ft-plat-item {
-      padding-bottom: 24px;
-      border-bottom: 1px solid #d4d3c8;
-    }
-    .ft-plat-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-  }
-
-  .ft-plat-item {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .ft-plat-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .ft-plat-icon {
-    color: #17100e;
-    flex-shrink: 0;
-  }
-
-  .ft-plat-item h4 {
-    font-family: 'Season Mix', sans-serif;
-    font-size: clamp(18px, 2.5vw, 20px);
-    font-weight: 700;
-    color: #17100e;
-    margin: 0;
-    letter-spacing: -0.2px;
+  .ft-sec-title {
+    font-family: 'Söhne', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ede9e3;
     line-height: 1.4;
+    margin: 0;
+    letter-spacing: -0.005em;
   }
-
-  .ft-plat-item p {
-    font-family: 'Inter', sans-serif;
+  .ft-sec-desc {
+    font-family: 'Söhne', sans-serif;
     font-size: 15px;
-    color: #5c5c5c;
+    color: rgba(237, 233, 227, 0.55);
     line-height: 1.55;
     margin: 0;
+    text-wrap: pretty;
   }
 </style>

@@ -2,62 +2,46 @@
 ---
 
 <section class="hero-section">
-  <!-- Bridge landscape background — fills from top edge -->
-  <img
-    src="/images/2683d4a4805b7192bd38dc39f0c5321f8c2b5696.png"
-    alt=""
-    aria-hidden="true"
-    class="hero-bg-img"
-  />
-
-  <!-- Content area — all in normal flow so section height is correct -->
-  <div class="hero-content">
-    <div class="hero-inner">
-      <!-- Top row: title left, subtext+CTAs right -->
-      <div class="hero-top">
-        <div class="hero-left reveal">
-          <h1 class="hero-heading">
-            <span class="rotate-clip"><span class="rotate-track"><span class="rotate-word">Revenue operations</span><span class="rotate-word">Sales operations</span><span class="rotate-word">Marketing operations</span><span class="rotate-word">Engineering operations</span><span class="rotate-word" aria-hidden="true">Revenue operations</span></span></span><br />
-            Run by AI agents
-          </h1>
-        </div>
-        <div class="hero-right reveal">
-          <p class="hero-subheading">
-            Eluu colleagues connect to your tools, learn your workflows, and execute real work — on repeat, 24/7, without reminders.
-          </p>
-          <div class="hero-ctas">
-            <a href="/beta" class="hero-btn hero-btn-dark" style="display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;" onclick="window.posthog?.capture('get_started_clicked', { location: 'hero' })">Try Eluu Beta <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-            <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="hero-btn hero-btn-light" onclick="window.posthog?.capture('book_demo_clicked', { location: 'hero' })">Book a demo</a>
-          </div>
-        </div>
+  <div class="hero-inner">
+    <!-- Cursor-style: heading + CTAs stacked left, no right block -->
+    <div class="hero-top reveal">
+      <h1 class="hero-heading">
+        <span class="hero-line-1">Your tools, your workflows, your AI team.</span>
+        <span class="hero-line-2">Colleagues that connect, learn, and execute on repeat.</span>
+      </h1>
+      <div class="hero-ctas">
+        <a href="/beta" class="hero-btn hero-btn-dark hero-btn-icon" onclick="window.posthog?.capture('get_started_clicked', { location: 'hero' })">Try Eluu Beta <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="hero-btn hero-btn-light" onclick="window.posthog?.capture('book_demo_clicked', { location: 'hero' })">Book a demo</a>
       </div>
+    </div>
 
-      <!-- Iframe — in normal flow, large -->
-      <div class="hero-iframe-wrap" data-iframe-wrapper>
-        <div class="iframe-glow">
-          <div class="iframe-border">
-            <div class="iframe-aspect-box">
-              <iframe
-                id="hero-iframe"
-                src="https://demo.eluu.ai/?autoplay=1&embed=1"
-                title="Eluu product demo"
-                allow="autoplay"
-                sandbox="allow-scripts allow-same-origin"
-                tabindex="-1"
-                class="hero-iframe"
-              ></iframe>
-              <!-- Loader sits OVER the iframe; hidden when iframe.load fires
-                   (or after 10s timeout). Covers the "iframe loaded but white"
-                   case as well as slow loads. -->
-              <div class="iframe-loader" id="iframe-loader" aria-hidden="true">
-                <img
-                  src="/images/logo.svg"
-                  alt=""
-                  class="iframe-loader-logo"
-                  width="80"
-                  height="80"
-                />
-              </div>
+    <!-- Hero media: painting background + iframe mockup (Cursor pattern) -->
+    <div class="hero-media reveal">
+      <div class="hero-media-bg">
+        <img src="/images/hero-bg-painting.webp" alt="" class="hero-media-img" />
+      </div>
+      <div class="hero-media-frame">
+        <div class="hero-iframe-wrap" data-iframe-wrapper>
+          <div class="iframe-chrome">
+            <div class="iframe-traffic">
+              <span class="iframe-dot"></span>
+              <span class="iframe-dot"></span>
+              <span class="iframe-dot"></span>
+            </div>
+            <div class="iframe-title">Eluu AI</div>
+          </div>
+          <div class="iframe-body">
+            <iframe
+              id="hero-iframe"
+              src="https://demo.eluu.ai/?autoplay=1&embed=1&darkMode=1"
+              title="Eluu product demo"
+              allow="autoplay"
+              sandbox="allow-scripts allow-same-origin"
+              tabindex="-1"
+              class="hero-iframe"
+            ></iframe>
+            <div class="iframe-loader" id="iframe-loader" aria-hidden="true">
+              <img src="/images/logo.svg" alt="" class="iframe-loader-logo" width="80" height="80" />
             </div>
           </div>
         </div>
@@ -68,172 +52,183 @@
 
 <style>
   .hero-section {
-    background: #ffffff;
+    background: #13100a;
     position: relative;
     overflow: hidden;
   }
   .hero-top {
     display: flex;
-    align-items: flex-end;
-    gap: 40px;
-  }
-  @media (max-width: 900px) {
-    .hero-top { flex-direction: column; align-items: flex-start; gap: 24px; }
-  }
-  .hero-left {
-    display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 24px;
-    flex-shrink: 0;
-  }
-  .hero-right {
-    flex-shrink: 0;
-    max-width: 380px;
-    padding-bottom: 6px;
-  }
-  @media (max-width: 900px) {
-    .hero-right { max-width: 100%; }
+    gap: 36px;
   }
   .hero-ctas {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: 20px;
     flex-wrap: wrap;
   }
   .hero-btn {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    padding: 12px 28px;
-    border-radius: 10px;
+    font-family: 'Söhne', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 0.89em 1.45em;
+    border-radius: 9999px;
     text-decoration: none;
     line-height: 1;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   .hero-btn:hover { transform: translateY(-1px); }
-  .hero-btn-dark { color: #ffffff; background: #17100e; }
-  .hero-btn-dark:hover { box-shadow: 0 4px 12px rgba(23, 16, 14, 0.2); }
-  .hero-btn-light { color: #17100e; background: #ffffff; border: 1px solid rgba(23, 16, 14, 0.12); }
-  .hero-btn-light:hover { box-shadow: 0 4px 12px rgba(23, 16, 14, 0.08); }
+  .hero-btn-dark { color: #14120b; background: #ede9e3; border: 1px solid #ede9e3; }
+  .hero-btn-icon { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
+  .hero-btn-dark:hover { box-shadow: 0 4px 12px rgba(237, 233, 227, 0.15); }
+  .hero-btn-light { color: #ede9e3; background: transparent; border: 1px solid rgba(237, 233, 227, 0.2); }
+  .hero-btn-light:hover { border-color: rgba(237, 233, 227, 0.4); box-shadow: 0 4px 12px rgba(237, 233, 227, 0.08); }
 
   .hero-inner {
-    max-width: 1320px;
+    max-width: 1380px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 140px 20px 120px;
     display: flex;
     flex-direction: column;
     gap: 48px;
     box-sizing: border-box;
   }
+  @media (max-width: 768px) {
+    .hero-inner { padding: 100px 16px 48px; gap: 32px; }
+    .hero-media-frame { min-height: min(480px, 60vh); height: min(600px, 70vh); }
+    .hero-iframe-wrap { width: min(1180px, calc(100% - 32px)); height: min(720px, calc(100% - 32px)); }
+  }
   @media (max-width: 480px) {
-    .hero-inner { padding: 0 16px; gap: 16px; }
+    .hero-inner { padding: 90px 16px 32px; gap: 24px; }
+    .hero-media-frame { min-height: min(360px, 55vh); height: min(480px, 65vh); }
   }
 
+  /* ── Mirai-style hero heading ──
+     Two lines, same large size. Line 1 is full brightness (the claim),
+     line 2 is dimmed (the context). Size does the impact, opacity does
+     the hierarchy. */
   .hero-heading {
-    font-family: 'Season Mix', sans-serif;
-    font-weight: 700;
-    font-size: clamp(32px, 6vw, 72px);
-    letter-spacing: -2px;
-    color: #17100e;
-    line-height: 1.1;
-    margin: 0;
-    text-align: left;
-  }
-  @media (max-width: 480px) {
-    .hero-heading { letter-spacing: -1px; }
-  }
-
-  .hero-subheading {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Söhne', sans-serif;
     font-weight: 400;
-    font-size: 16px;
-    letter-spacing: -0.2px;
-    color: #888;
-    line-height: 1.6;
+    font-style: normal;
+    font-size: clamp(26px, 3.2vw, 44px);
+    letter-spacing: -0.025em;
+    color: #ede9e3;
+    line-height: 1.15;
     margin: 0;
     text-align: left;
   }
-
-  /* ── Rotating words ── */
-  .rotate-clip {
-    display: inline-flex;
-    flex-direction: column;
-    height: 1.1em;
-    overflow: hidden;
-    vertical-align: bottom;
-    color: #ED733B;
+  .hero-line-1,
+  .hero-line-2 {
+    display: block;
   }
-  .rotate-track {
+  .hero-line-2 {
+    color: rgba(237, 233, 227, 0.4);
+  }
+  @media (max-width: 720px) {
+    .hero-heading { max-width: none; }
+  }
+
+  /* ── Cursor-style hero media: painting bg + centered iframe mockup ── */
+  .hero-media {
+    position: relative;
+    display: grid;
+    grid-template: 1fr / 1fr;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .hero-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border: 1px solid rgba(237, 233, 227, 0.06);
+    border-radius: 4px;
+    z-index: 30;
+  }
+  .hero-media-bg,
+  .hero-media-frame {
+    grid-area: 1 / 1;
+  }
+  .hero-media-bg {
+    z-index: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  .hero-media-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.85);
+  }
+  .hero-media-frame {
+    z-index: 20;
+    height: min(880px, 80vh);
+    min-height: min(760px, 70vh); /* don't overflow viewport on small screens */
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-iframe-wrap {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(1180px, calc(100% - 64px));
+    height: min(720px, calc(100% - 64px));
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1e1d1b;
     display: flex;
     flex-direction: column;
-    animation: text-slide 15s cubic-bezier(0.83, 0, 0.17, 1) infinite;
-    text-align: left;
-  }
-  .rotate-word {
-    display: block;
-    height: 1.1em;
-    line-height: 1.1;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  @keyframes text-slide {
-    0%, 20%        { transform: translateY(0); }
-    25%, 45%       { transform: translateY(-20%); }
-    50%, 70%       { transform: translateY(-40%); }
-    75%, 95%       { transform: translateY(-60%); }
-    100%           { transform: translateY(-80%); }
+    isolation: isolate;
+    box-shadow:
+      0 28px 70px rgba(0, 0, 0, 0.4),
+      0 14px 32px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(237, 233, 227, 0.08),
+      inset 0 0 0 1px rgba(237, 233, 227, 0.04);
   }
 
-  .hero-iframe-wrap {
-    width: 100%;
-    max-width: 1800px;
-    margin-top: 16px;
-    overflow: hidden;
-    /* Match the inner glow's radius so the slide-in clip + box-shadows
-       follow the same rounded shape (no square corner artifacts) */
-    border-radius: 22px;
-  }
-  @media (max-width: 480px) {
-    .hero-iframe-wrap { border-radius: 16px; }
-  }
-  @media (max-width: 480px) {
-    .hero-iframe-wrap { margin-top: 8px; }
-  }
-
-  .hero-content {
+  /* macOS-style window chrome */
+  .iframe-chrome {
     position: relative;
-    z-index: 1;
-    padding: 120px 0 16px;
+    height: 28px;
+    flex-shrink: 0;
+    background: #1e1d1b;
+    border-bottom: 1px solid rgba(237, 233, 227, 0.06);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
   }
-  @media (min-width: 480px) { .hero-content { padding: 130px 0 20px; } }
-  @media (min-width: 640px) { .hero-content { padding: 140px 0 40px; } }
-  @media (min-width: 1024px) { .hero-content { padding: 140px 0 40px; } }
-
-  .hero-bg-img {
+  .iframe-body {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    min-height: 0;
+  }
+  .iframe-traffic {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .iframe-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: rgba(237, 233, 227, 0.15);
+  }
+  .iframe-title {
     position: absolute;
-    top: 0;
     left: 50%;
     transform: translateX(-50%);
-    min-width: 1200px;
-    width: 100%;
-    height: auto;
+    font-family: 'Söhne', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.5);
+    letter-spacing: -0.01em;
     pointer-events: none;
-    z-index: 0;
-    filter: blur(3px);
-  }
-  @media (min-width: 768px) {
-    .hero-bg-img { min-width: 2400px; }
-  }
-
-  /* Iframe aspect container — clips the fixed-size iframe */
-  .iframe-aspect-box {
-    aspect-ratio: 16 / 9.5;
-    border-radius: 14px;
-    overflow: hidden;
-    position: relative;
-    background: #ffffff;
   }
 
   /* Iframe loader — covers the iframe area ONLY in slow-load fallback.
@@ -245,7 +240,7 @@
     position: absolute;
     inset: 0;
     z-index: 2;
-    background: #ffffff;
+    background: #1e1d1b;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -290,66 +285,40 @@
     .iframe-loader-logo { animation: none; opacity: 0.85; }
   }
 
-  /* Iframe element — scaled down on mobile to show full desktop layout */
+  /* Iframe — slight zoom-out (renders at 125%, scales to 80%) */
   .hero-iframe {
     position: absolute;
-    top: 0; left: 0;
-    width: 250%;
-    height: 250%;
-    transform: scale(0.4);
+    top: 0;
+    left: 0;
+    width: 125%;
+    height: 125%;
+    transform: scale(0.8);
     transform-origin: 0 0;
     border: none;
-    background: #ffffff;
-  }
-  @media (min-width: 480px) {
-    .hero-iframe {
-      width: 200%;
-      height: 200%;
-      transform: scale(0.5);
-    }
-  }
-  @media (min-width: 768px) {
-    .hero-iframe {
-      width: 111.11%;
-      height: 111.11%;
-      transform: scale(0.9);
-    }
+    background: #1e1d1b;
+    display: block;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   @media (max-width: 480px) {
     .hero-btn { font-size: 14px; padding: 10px 22px; }
-    .iframe-border { border-radius: 12px; }
-    .iframe-glow { border-radius: 16px; }
   }
 
-  .iframe-border {
-    border-radius: 18px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    background: #ffffff;
-    box-shadow:
-      0 0 0 1px rgba(0, 0, 0, 0.03),
-      0 4px 16px rgba(0, 0, 0, 0.06),
-      0 12px 40px rgba(0, 0, 0, 0.08);
-    overflow-anchor: none;
-    contain: layout style;
+  /* ── Light mode sync from iframe ── */
+  .iframe-chrome-light {
+    background: #f5f5f5 !important;
+    border-bottom-color: rgba(0, 0, 0, 0.08) !important;
   }
-
-  .iframe-glow {
-    border-radius: 22px;
-    padding: 4px;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.9) 0%,
-      rgba(244, 243, 236, 0.6) 30%,
-      rgba(255, 255, 255, 0.8) 50%,
-      rgba(244, 243, 236, 0.5) 70%,
-      rgba(255, 255, 255, 0.9) 100%
-    );
-    box-shadow:
-      0 0 60px rgba(0, 0, 0, 0.04),
-      0 0 120px rgba(0, 0, 0, 0.02);
-    contain: layout style;
+  .iframe-chrome-light .iframe-dot {
+    background: rgba(0, 0, 0, 0.12) !important;
+  }
+  .iframe-chrome-light .iframe-dot:first-child { background: #ff5f57 !important; }
+  .iframe-chrome-light .iframe-dot:nth-child(2) { background: #ffbd2e !important; }
+  .iframe-chrome-light .iframe-dot:last-child { background: #28c840 !important; }
+  .iframe-chrome-light .iframe-title {
+    color: rgba(0, 0, 0, 0.5) !important;
   }
 </style>
 
@@ -518,5 +487,13 @@
       }
       checkZoom();
     }
+
+    // ── Theme sync: iframe chrome bar only ──
+    window.addEventListener('message', (e) => {
+      if (e.data?.type !== 'eluu-theme') return;
+      const isLight = e.data.theme === 'light';
+      const chrome = document.querySelector('.iframe-chrome') as HTMLElement;
+      if (chrome) chrome.classList.toggle('iframe-chrome-light', isLight);
+    });
   })();
 </script>

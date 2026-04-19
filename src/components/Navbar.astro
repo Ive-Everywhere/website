@@ -13,21 +13,25 @@
       <!-- Center: Platform (with dropdown), Pricing -->
       <div class="nav-links">
         <div class="nav-link-wrap" data-dropdown-wrap>
-          <a href="#" class="nav-link nav-link-trigger">
+          <button type="button" class="nav-link nav-link-trigger" aria-expanded="false" aria-haspopup="true">
             <span>Platform</span>
             <svg class="nav-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
-          </a>
+          </button>
         </div>
         <a href="/pricing" class="nav-link">Pricing</a>
       </div>
 
-      <!-- Right: Log in -->
+      <!-- Right: Log in + hamburger -->
       <div class="nav-actions">
         <a
           href="https://app.eluu.ai"
           class="nav-btn"
           onclick="window.posthog?.capture('log_in_clicked', { location: 'navbar' })"
         >Log in</a>
+        <button class="nav-hamburger" id="nav-hamburger" type="button" aria-label="Menu" aria-expanded="false">
+          <span class="nav-ham-line"></span>
+          <span class="nav-ham-line"></span>
+        </button>
       </div>
     </div>
   </div>
@@ -64,6 +68,20 @@
     </div>
   </div>
 
+  <!-- Mobile menu panel -->
+  <div class="nav-mobile" id="nav-mobile">
+    <div class="nav-mobile-inner">
+      <a href="/features/colleagues" class="nav-mobile-link">Colleagues</a>
+      <a href="/features/integrations" class="nav-mobile-link">Integrations</a>
+      <a href="/features/team-drive" class="nav-mobile-link">Hard Drive</a>
+      <a href="/features/views" class="nav-mobile-link">Views</a>
+      <a href="/features/jobs" class="nav-mobile-link">Jobs</a>
+      <a href="/features/slack" class="nav-mobile-link">Slack</a>
+      <div class="nav-mobile-divider"></div>
+      <a href="/pricing" class="nav-mobile-link">Pricing</a>
+      <a href="https://app.eluu.ai" class="nav-mobile-cta">Get started</a>
+    </div>
+  </div>
 </nav>
 
 <style>
@@ -77,42 +95,49 @@
     right: 0;
     z-index: 50;
     transform: translateY(0);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                background 0.3s ease,
-                backdrop-filter 0.3s ease,
-                -webkit-backdrop-filter 0.3s ease;
+    /* Unified 0.35s timing so bg and transform animate together — no flash */
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.35s ease,
+                backdrop-filter 0.35s ease,
+                -webkit-backdrop-filter 0.35s ease,
+                border-color 0.35s ease;
+    border-bottom: 1px solid transparent;
   }
   .site-nav.hidden {
     transform: translateY(-100%);
   }
 
-  /* Normal scrolled state */
+  /* Scrolled: applied at scrollY > 0, so navbar ALWAYS has bg when off top */
   .site-nav.scrolled {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(20, 18, 11, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(23, 16, 14, 0.06);
+    border-bottom-color: rgba(237, 233, 227, 0.06);
   }
 
   /* ── Dropdown-open state: the SAME blur style on the entire nav
      (which now includes the dropdown panel). One unified glass. ── */
   .site-nav.dropdown-open {
-    background: rgba(255, 255, 255, 0.60);
+    background: rgba(20, 18, 11, 0.85);
     backdrop-filter: blur(40px) saturate(1.15);
     -webkit-backdrop-filter: blur(40px) saturate(1.15);
-    border-bottom: 1px solid rgba(23, 16, 14, 0.06);
+    border-bottom: 1px solid rgba(237, 233, 227, 0.06);
   }
 
   /* ── Nav bar row ── */
   .nav-bar {
-    padding: 12px 16px;
+    padding: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
   }
-  @media (min-width: 640px) { .nav-bar { padding: 16px 24px; } }
-  @media (min-width: 1024px) { .nav-bar { padding: 20px 36px; } }
 
   .nav-container {
-    max-width: 1800px;
+    max-width: 1380px;
+    width: 100%;
     margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -121,46 +146,59 @@
   .nav-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     text-decoration: none;
   }
-  .nav-logo { width: 40px; height: 40px; }
-  @media (min-width: 640px) { .nav-logo { width: 48px; height: 48px; } }
+  .nav-logo { width: 26px; height: 26px; }
   .nav-wordmark {
     font-family: 'Jersey 10', cursive;
-    font-size: 34px;
-    color: #17100e;
+    font-size: 28px;
+    color: #ede9e3;
     line-height: 1;
     letter-spacing: -0.3px;
   }
-  @media (min-width: 640px) { .nav-wordmark { font-size: 40px; } }
 
   /* ── Center nav links ── */
   .nav-links {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 28px;
   }
   .nav-link {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    color: #17100e;
+    display: flex;
+    align-items: center;
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.7);
     text-decoration: none;
     line-height: 1;
-    transition: opacity 0.2s ease;
+    height: 100%;
+    transition: color 0.2s ease;
   }
-  .nav-link:hover { opacity: 0.6; }
+  .nav-link:hover { color: #ede9e3; }
 
-  .nav-link-wrap { position: relative; }
+  .nav-link-wrap { position: relative; display: flex; align-items: center; }
   .nav-link-trigger {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 4px;
+    background: none;
+    border: none;
+    margin: 0;
+    cursor: pointer;
+    padding: 0;
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: inherit;
+    line-height: 1;
+    height: 100%;
   }
   .nav-chevron {
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     width: 12px; height: 12px;
+    flex-shrink: 0;
   }
   .site-nav.dropdown-open .nav-chevron {
     transform: rotate(180deg);
@@ -183,16 +221,16 @@
   .nav-dropdown-inner {
     min-height: 0;
     overflow: hidden;
-    padding: 0 36px;
+    padding: 0 20px;
     transition: padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .nav-dropdown.active .nav-dropdown-inner {
-    padding: 24px 36px 40px;
+    padding: 24px 20px 40px;
   }
 
   /* ── 3×2 grid ── */
   .nav-dropdown-grid {
-    max-width: 1200px;
+    max-width: 1380px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -226,20 +264,20 @@
   }
 
   .nav-dd-item:hover {
-    background: rgba(23, 16, 14, 0.05);
+    background: rgba(237, 233, 227, 0.06);
   }
 
   .nav-dd-item h4 {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Söhne', sans-serif;
     font-size: 15px;
     font-weight: 600;
-    color: #17100e;
+    color: #ede9e3;
     margin: 0 0 6px;
   }
   .nav-dd-item p {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Söhne', sans-serif;
     font-size: 13px;
-    color: #5c5c5c;
+    color: rgba(237, 233, 227, 0.5);
     line-height: 1.5;
     margin: 0;
   }
@@ -247,60 +285,135 @@
   /* ── Right: Log in ── */
   .nav-actions { display: flex; align-items: center; }
   .nav-btn {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Söhne', sans-serif;
     font-size: 14px;
-    font-weight: 500;
-    color: #ffffff;
-    background: #17100e;
-    border-radius: 10px;
-    padding: 10px 24px;
+    font-weight: 400;
+    color: #14120b;
+    background: #ede9e3;
+    border-radius: 8px;
+    padding: 8px 18px;
     text-decoration: none;
     line-height: 1;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   .nav-btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(23, 16, 14, 0.15);
+    box-shadow: 0 4px 12px rgba(237, 233, 227, 0.15);
   }
 
-  /* ── Mobile ── */
+  /* ── Hamburger button — only visible on mobile ── */
+  .nav-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px;
+  }
+  .nav-ham-line {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background: #ede9e3;
+    border-radius: 1px;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.2s ease;
+  }
+  /* X state when open */
+  .nav-hamburger.open .nav-ham-line:first-child {
+    transform: translateY(3.25px) rotate(45deg);
+  }
+  .nav-hamburger.open .nav-ham-line:last-child {
+    transform: translateY(-3.25px) rotate(-45deg);
+  }
+
+  /* ── Mobile menu panel ── */
+  .nav-mobile {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 49;
+    background: rgba(19, 16, 10, 0.97);
+    backdrop-filter: blur(24px);
+    overscroll-behavior: contain;
+    -webkit-backdrop-filter: blur(24px);
+    padding: 80px 24px 40px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    overflow-y: auto;
+  }
+  .nav-mobile.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .nav-mobile-inner {
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .nav-mobile-link {
+    font-family: 'Söhne', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(237, 233, 227, 0.7);
+    text-decoration: none;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(237, 233, 227, 0.06);
+    transition: color 0.2s ease;
+  }
+  .nav-mobile-link:hover { color: #ede9e3; }
+  .nav-mobile-divider {
+    height: 1px;
+    background: rgba(237, 233, 227, 0.1);
+    margin: 8px 0;
+  }
+  .nav-mobile-cta {
+    display: block;
+    text-align: center;
+    font-family: 'Söhne', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #14120b;
+    background: #ede9e3;
+    border-radius: 4px;
+    padding: 14px 24px;
+    text-decoration: none;
+    margin-top: 16px;
+    transition: background 0.2s ease;
+  }
+  .nav-mobile-cta:hover { background: #d7d3cd; }
+
+  /* ── Mobile breakpoints ── */
   @media (max-width: 768px) {
     .nav-links { display: none; }
     .nav-dropdown { display: none; }
+    .nav-hamburger { display: flex; }
+    .nav-mobile { display: block; }
   }
   @media (max-width: 400px) {
-    .nav-wordmark { font-size: 28px; white-space: nowrap; }
-    .nav-logo { width: 34px; height: 34px; }
-    .nav-btn { padding: 8px 16px; font-size: 13px; }
-  }
-  @media (max-width: 320px) {
-    .nav-wordmark { font-size: 22px; }
-    .nav-logo { width: 28px; height: 28px; }
-    .nav-btn { padding: 6px 12px; font-size: 12px; }
+    .nav-wordmark { font-size: 22px; white-space: nowrap; }
+    .nav-logo { width: 22px; height: 22px; }
+    .nav-btn { padding: 10px 16px; font-size: 12px; }
   }
 
-  /* ── Dark theme variant (for /beta page) ── */
-  [data-theme="dark"] .nav-wordmark { color: #ffffff; }
-  [data-theme="dark"] .nav-link { color: rgba(255, 255, 255, 0.7); }
-  [data-theme="dark"] .nav-link:hover { color: #ffffff; opacity: 1; }
-  [data-theme="dark"] .nav-chevron { color: rgba(255, 255, 255, 0.7); }
-  [data-theme="dark"] .nav-btn { color: #0a0908; background: #ffffff; }
-  [data-theme="dark"] .nav-btn:hover { box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15); }
-  [data-theme="dark"] .site-nav.scrolled {
-    background: rgba(10, 9, 8, 0.85);
-    border-bottom-color: rgba(255, 255, 255, 0.06);
-  }
-  [data-theme="dark"] .site-nav.dropdown-open {
-    background: rgba(10, 9, 8, 0.75);
-  }
-  [data-theme="dark"] .nav-dropdown-inner { border-top-color: rgba(255, 255, 255, 0.06); }
-  [data-theme="dark"] .nav-dd-item h4 { color: #ffffff; }
-  [data-theme="dark"] .nav-dd-item p { color: rgba(255, 255, 255, 0.5); }
-  [data-theme="dark"] .nav-dd-item:hover { background: rgba(255, 255, 255, 0.06); }
 
   @media (prefers-reduced-motion: reduce) {
     .nav-dropdown, .nav-dd-item, .nav-chevron, .nav-dropdown-inner { transition: none; }
   }
+
 </style>
 
 <script>
@@ -313,13 +426,23 @@
     let closeTimeout: ReturnType<typeof setTimeout> | null = null;
     let activePanel: HTMLElement | null = null;
 
+    function updateAriaExpanded() {
+      triggers.forEach((trigger, i) => {
+        const btn = trigger.querySelector('.nav-link-trigger');
+        const panel = document.querySelector(`[data-dropdown-panel="${panelMap[i]}"]`);
+        if (btn && panel) {
+          btn.setAttribute('aria-expanded', String(panel.classList.contains('active')));
+        }
+      });
+    }
+
     function openDropdown(panel: HTMLElement) {
       if (closeTimeout) { clearTimeout(closeTimeout); closeTimeout = null; }
-      // Hide any other open panel
       panels.forEach(p => { if (p !== panel) p.classList.remove('active'); });
       panel.classList.add('active');
       activePanel = panel;
       nav!.classList.add('dropdown-open');
+      updateAriaExpanded();
     }
 
     function closeDropdown() {
@@ -327,6 +450,7 @@
         panels.forEach(p => p.classList.remove('active'));
         nav!.classList.remove('dropdown-open');
         activePanel = null;
+        updateAriaExpanded();
       }, 80);
     }
 
@@ -334,8 +458,8 @@
       if (closeTimeout) { clearTimeout(closeTimeout); closeTimeout = null; }
     }
 
-    // Map triggers to panels by index (Features=0, Resources=1)
-    const panelMap = ['features'];
+    // Map triggers to panels by index (Features=0)
+    const panelMap = ['features', 'resources'];
     triggers.forEach((trigger, i) => {
       const panel = document.querySelector(`[data-dropdown-panel="${panelMap[i]}"]`) as HTMLElement;
       if (!panel) return;
@@ -344,25 +468,66 @@
       trigger.addEventListener('mouseleave', closeDropdown);
       panel.addEventListener('mouseenter', cancelClose);
       panel.addEventListener('mouseleave', closeDropdown);
+
+      // Keyboard: toggle on Enter/Space, close on Escape
+      const btn = trigger.querySelector('.nav-link-trigger') as HTMLElement;
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (panel.classList.contains('active')) {
+            closeDropdown();
+          } else {
+            openDropdown(panel);
+          }
+        });
+        btn.addEventListener('keydown', (e: KeyboardEvent) => {
+          if (e.key === 'Escape') {
+            closeDropdown();
+            btn.focus();
+          }
+        });
+      }
+    });
+
+    // Global Escape closes any open dropdown
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && activePanel) {
+        panels.forEach(p => p.classList.remove('active'));
+        nav!.classList.remove('dropdown-open');
+        activePanel = null;
+      }
     });
   }
 
   // ── Scroll behavior ──
+  // Best practices: background from scrollY > 0 (no naked floating state),
+  // direction delta threshold (60px of continuous downward scroll to hide),
+  // instant show on any upward scroll, debounced hide.
   let lastScrollY = 0;
+  let scrollDelta = 0;
   let ticking = false;
+  const HIDE_DELTA = 60; // px of continuous down-scroll before hiding
 
   function updateNav() {
     const currentY = window.scrollY;
-    if (currentY > lastScrollY && currentY > 100) {
-      nav?.classList.add('hidden');
+    const diff = currentY - lastScrollY;
+
+    // Background: apply immediately at any scroll > 0
+    nav?.classList.toggle('scrolled', currentY > 0);
+
+    // Hide/show: accumulate directional delta, reset on direction change
+    if (diff > 0) {
+      // Scrolling down — accumulate
+      scrollDelta += diff;
+      if (scrollDelta > HIDE_DELTA && currentY > 80) {
+        nav?.classList.add('hidden');
+      }
     } else {
+      // Scrolling up — show immediately, reset delta
+      scrollDelta = 0;
       nav?.classList.remove('hidden');
     }
-    if (currentY > 50) {
-      nav?.classList.add('scrolled');
-    } else {
-      nav?.classList.remove('scrolled');
-    }
+
     lastScrollY = currentY;
     ticking = false;
   }
@@ -373,4 +538,28 @@
       ticking = true;
     }
   }, { passive: true });
+
+  // ── Mobile hamburger menu ──
+  const hamburger = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('nav-mobile');
+
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', () => {
+      const isOpen = hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    // Close on link click
+    mobileMenu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      });
+    });
+  }
 </script>
