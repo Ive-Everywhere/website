@@ -96,12 +96,10 @@
   }
   @media (max-width: 768px) {
     .hero-inner { padding: 100px 16px 48px; gap: 32px; }
-    .hero-media-frame { min-height: min(480px, 60vh); height: min(600px, 70vh); }
-    .hero-iframe-wrap { width: min(1180px, calc(100% - 32px)); height: min(720px, calc(100% - 32px)); }
+    .hero-iframe-wrap { width: calc(100% - 32px); }
   }
   @media (max-width: 480px) {
     .hero-inner { padding: 90px 16px 32px; gap: 24px; }
-    .hero-media-frame { min-height: min(360px, 55vh); height: min(480px, 65vh); }
   }
 
   /* ── Mirai-style hero heading ──
@@ -166,8 +164,8 @@
   }
   .hero-media-frame {
     z-index: 20;
-    height: min(880px, 80vh);
-    min-height: min(760px, 70vh); /* don't overflow viewport on small screens */
+    aspect-ratio: 1180 / 720;
+    max-height: min(880px, 80vh);
     position: relative;
     overflow: hidden;
   }
@@ -176,8 +174,9 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: min(1180px, calc(100% - 64px));
-    height: min(720px, calc(100% - 64px));
+    width: calc(100% - 64px);
+    max-width: 1180px;
+    aspect-ratio: 1180 / 720;
     border-radius: 12px;
     overflow: hidden;
     background: #1e1d1b;
@@ -229,6 +228,18 @@
     color: rgba(237, 233, 227, 0.5);
     letter-spacing: -0.01em;
     pointer-events: none;
+  }
+  @media (max-width: 1024px) {
+    .iframe-chrome { height: 20px; padding: 0 8px; }
+    .iframe-dot { width: 8px; height: 8px; }
+    .iframe-traffic { gap: 5px; }
+    .iframe-title { font-size: 10px; }
+  }
+  @media (max-width: 640px) {
+    .iframe-chrome { height: 14px; padding: 0 6px; }
+    .iframe-dot { width: 5px; height: 5px; }
+    .iframe-traffic { gap: 4px; }
+    .iframe-title { font-size: 8px; }
   }
 
   /* Iframe loader — covers the iframe area ONLY in slow-load fallback.
@@ -285,7 +296,10 @@
     .iframe-loader-logo { animation: none; opacity: 0.85; }
   }
 
-  /* Iframe — slight zoom-out (renders at 125%, scales to 80%) */
+  /* Iframe — renders at a large viewport and scales to fit.
+     On desktop 125%/0.8 gives ~1400px rendered width.
+     On smaller screens we increase the ratio to keep the same
+     ~1400px rendered viewport so the desktop layout always shows. */
   .hero-iframe {
     position: absolute;
     top: 0;
@@ -300,6 +314,20 @@
     will-change: transform;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+  }
+  @media (max-width: 1024px) {
+    .hero-iframe {
+      width: 200%;
+      height: 200%;
+      transform: scale(0.5);
+    }
+  }
+  @media (max-width: 640px) {
+    .hero-iframe {
+      width: 350%;
+      height: 350%;
+      transform: scale(0.2857);
+    }
   }
 
   @media (max-width: 480px) {
@@ -450,24 +478,23 @@
       observer.observe(wrapper);
     }
 
-    // ── Hide iframe when zoom exceeds 200% ──
-    if (wrapper) {
-      const iframeWrap = wrapper as HTMLElement;
-      const MAX_ZOOM = 2; // 200%
+    // ── Iframe zoom handling ──
+    // When zoom exceeds 200%, hide the entire hero media section
+    // (iframe + background painting). No counter-scaling — just show or hide.
+    const heroMedia = iframe.closest('.hero-media') as HTMLElement;
+    if (heroMedia) {
+      const MAX_ZOOM = 2; // hide above 200%
       const baseDPR = window.devicePixelRatio || 1;
 
       function checkZoom() {
-        // Method 1: Desktop browser zoom (Ctrl+/-)
         const desktopZoom = window.outerWidth / window.innerWidth;
-        // Method 2: Mobile pinch zoom
         const pinchZoom = window.visualViewport?.scale ?? 1;
-        // Method 3: Page zoom via viewport shrink (mobile full-width browsers)
         const viewportZoom = screen.width / window.innerWidth;
-        // Method 4: Page zoom via DPR change (Android Chrome menu zoom)
         const dprZoom = (window.devicePixelRatio || 1) / baseDPR;
 
-        const maxZoom = Math.max(desktopZoom, pinchZoom, viewportZoom, dprZoom);
-        iframeWrap.style.display = maxZoom > MAX_ZOOM ? 'none' : '';
+        const zoom = Math.max(desktopZoom, pinchZoom, viewportZoom, dprZoom);
+
+        heroMedia.style.display = zoom > MAX_ZOOM ? 'none' : '';
       }
 
       // Resize: fires on desktop zoom + mobile page zoom
