@@ -302,8 +302,21 @@
     -webkit-backface-visibility: hidden;
   }
 
+  /* Mobile: scale iframe down more aggressively */
+  @media (max-width: 768px) {
+    .hero-iframe {
+      width: 200%;
+      height: 200%;
+      transform: scale(0.5);
+    }
+  }
   @media (max-width: 480px) {
     .hero-btn { font-size: 14px; padding: 10px 22px; }
+    .hero-iframe {
+      width: 250%;
+      height: 250%;
+      transform: scale(0.4);
+    }
   }
 
   /* ── Light mode sync from iframe ── */
@@ -450,24 +463,38 @@
       observer.observe(wrapper);
     }
 
-    // ── Hide iframe when zoom exceeds 200% ──
+    // ── Iframe zoom handling ──
+    // Counter-scale the iframe so it stays the same visual size regardless
+    // of page zoom. When zoom exceeds 200%, hide it entirely.
     if (wrapper) {
       const iframeWrap = wrapper as HTMLElement;
-      const MAX_ZOOM = 2; // 200%
+      const MAX_ZOOM = 2; // hide above 200%
       const baseDPR = window.devicePixelRatio || 1;
 
       function checkZoom() {
-        // Method 1: Desktop browser zoom (Ctrl+/-)
         const desktopZoom = window.outerWidth / window.innerWidth;
-        // Method 2: Mobile pinch zoom
         const pinchZoom = window.visualViewport?.scale ?? 1;
-        // Method 3: Page zoom via viewport shrink (mobile full-width browsers)
         const viewportZoom = screen.width / window.innerWidth;
-        // Method 4: Page zoom via DPR change (Android Chrome menu zoom)
         const dprZoom = (window.devicePixelRatio || 1) / baseDPR;
 
-        const maxZoom = Math.max(desktopZoom, pinchZoom, viewportZoom, dprZoom);
-        iframeWrap.style.display = maxZoom > MAX_ZOOM ? 'none' : '';
+        const zoom = Math.max(desktopZoom, pinchZoom, viewportZoom, dprZoom);
+
+        if (zoom > MAX_ZOOM) {
+          iframeWrap.style.display = 'none';
+          return;
+        }
+
+        iframeWrap.style.display = '';
+
+        // Counter-scale on desktop only — mobile pinch-zoom is intentional.
+        // Preserve the translate(-50%, -50%) centering from CSS.
+        const isMobile = window.innerWidth < 768;
+        if (!isMobile && zoom > 1.05) {
+          const counter = 1 / zoom;
+          iframeWrap.style.transform = `translate(-50%, -50%) scale(${counter})`;
+        } else {
+          iframeWrap.style.transform = '';
+        }
       }
 
       // Resize: fires on desktop zoom + mobile page zoom
