@@ -284,7 +284,10 @@
     .iframe-loader-logo { animation: none; opacity: 0.85; }
   }
 
-  /* Iframe — slight zoom-out (renders at 125%, scales to 80%) */
+  /* Iframe — renders at a large viewport and scales to fit.
+     On desktop 125%/0.8 gives ~1400px rendered width.
+     On smaller screens we increase the ratio to keep the same
+     ~1400px rendered viewport so the desktop layout always shows. */
   .hero-iframe {
     position: absolute;
     top: 0;
@@ -299,6 +302,20 @@
     will-change: transform;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+  }
+  @media (max-width: 1024px) {
+    .hero-iframe {
+      width: 200%;
+      height: 200%;
+      transform: scale(0.5);
+    }
+  }
+  @media (max-width: 640px) {
+    .hero-iframe {
+      width: 350%;
+      height: 350%;
+      transform: scale(0.2857);
+    }
   }
 
   @media (max-width: 480px) {
