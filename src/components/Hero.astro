@@ -305,6 +305,21 @@
   @media (max-width: 480px) {
     .hero-btn { font-size: 14px; padding: 10px 22px; }
   }
+
+  /* ── Light mode sync from iframe ── */
+  .iframe-chrome-light {
+    background: #f5f5f5 !important;
+    border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+  }
+  .iframe-chrome-light .iframe-dot {
+    background: rgba(0, 0, 0, 0.12) !important;
+  }
+  .iframe-chrome-light .iframe-dot:first-child { background: #ff5f57 !important; }
+  .iframe-chrome-light .iframe-dot:nth-child(2) { background: #ffbd2e !important; }
+  .iframe-chrome-light .iframe-dot:last-child { background: #28c840 !important; }
+  .iframe-chrome-light .iframe-title {
+    color: rgba(0, 0, 0, 0.5) !important;
+  }
 </style>
 
 <script>
@@ -472,5 +487,15 @@
       }
       checkZoom();
     }
+
+    // ── Theme sync: listen for iframe theme changes ──
+    window.addEventListener('message', (e) => {
+      if (e.data?.type !== 'eluu-theme') return;
+      const isLight = e.data.theme === 'light';
+      const nav = document.getElementById('main-nav');
+      const chrome = document.querySelector('.iframe-chrome') as HTMLElement;
+      if (nav) nav.classList.toggle('nav-light', isLight);
+      if (chrome) chrome.classList.toggle('iframe-chrome-light', isLight);
+    });
   })();
 </script>
