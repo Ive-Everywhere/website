@@ -127,7 +127,10 @@ const plans = [
 
     </div>
 
-    <!-- Testimonials — reuse homepage component -->
+    <!-- Testimonials -->
+    <div class="pr-testimonials-header">
+      <h2 class="pr-testimonials-heading">What teams are saying</h2>
+    </div>
     <Testimonials />
 
     <div class="pr-content" style="padding-top: 0;">
@@ -358,6 +361,22 @@ const plans = [
   .pr-cta-outline:hover {
     border-color: rgba(237, 233, 227, 0.3);
     color: #ede9e3;
+  }
+
+  /* ── Testimonials heading ── */
+  .pr-testimonials-header {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px 0;
+    box-sizing: border-box;
+  }
+  .pr-testimonials-heading {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 600;
+    color: #ede9e3;
+    letter-spacing: -0.02em;
+    margin: 0;
   }
 
   /* ── FAQ ── */

@@ -1,0 +1,52 @@
+---
+---
+<div class="sm-stage">
+  <div class="sm-window">
+    <div class="sm-header">
+      <span class="sm-channel"># sales</span>
+    </div>
+    <div class="sm-body">
+      <div class="sm-row">
+        <img src="/images/devind-dp.webp" alt="" class="sm-user-avatar" />
+        <div class="sm-content">
+          <span class="sm-author">Devin</span>
+          <span class="sm-text"><b>@Steve</b> send the weekly pipeline brief</span>
+        </div>
+      </div>
+      <div class="sm-row">
+        <img src="/images/logo.svg" alt="" class="sm-agent-avatar" />
+        <div class="sm-content">
+          <span class="sm-author">Steve</span>
+          <div class="sm-steps">
+            <div class="sm-step"><span class="sm-check">✓</span> Reading pipeline data</div>
+            <div class="sm-step"><span class="sm-check">✓</span> Drafting summary</div>
+            <div class="sm-step sm-step-active">
+              <span class="sm-spinner"></span> Posting to #leadership
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sm-stage { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px 14px 14px; }
+  .sm-window { width: 100%; max-width: 300px; background: #1a1d21; border-radius: 6px; border: 1px solid rgba(237,233,227,0.04); overflow: hidden; }
+  .sm-header { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .sm-channel { font-family: 'Söhne', sans-serif; font-size: 11px; font-weight: 600; color: rgba(209,210,211,0.7); }
+  .sm-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 12px; }
+  .sm-row { display: flex; gap: 8px; }
+  .sm-user-avatar, .sm-agent-avatar { width: 22px; height: 22px; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
+  .sm-agent-avatar { opacity: 0.6; }
+  .sm-content { display: flex; flex-direction: column; gap: 3px; }
+  .sm-author { font-family: 'Söhne', sans-serif; font-size: 10px; font-weight: 600; color: rgba(209,210,211,0.6); }
+  .sm-text { font-family: 'Söhne', sans-serif; font-size: 11px; color: rgba(209,210,211,0.5); line-height: 1.4; }
+  .sm-text b { color: #1d9bd1; font-weight: 500; }
+  .sm-steps { display: flex; flex-direction: column; gap: 4px; margin-top: 2px; }
+  .sm-step { font-family: 'Söhne', sans-serif; font-size: 10px; color: rgba(209,210,211,0.45); display: flex; align-items: center; gap: 5px; }
+  .sm-check { color: #2eb67d; font-size: 9px; font-weight: 600; }
+  .sm-step-active { color: rgba(209,210,211,0.6); }
+  .sm-spinner { width: 8px; height: 8px; border: 1.5px solid rgba(209,210,211,0.15); border-top-color: rgba(209,210,211,0.5); border-radius: 50%; animation: sm-spin 0.8s linear infinite; }
+  @keyframes sm-spin { to { transform: rotate(360deg); } }
+</style>

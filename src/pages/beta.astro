@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import '../styles/beta.css';
 ---
 
-<Layout title="Eluu — Closed Beta Waitlist">
+<Layout title="Eluu — Try the Beta">
   <Navbar />
 
   <section class="bta">
@@ -15,23 +15,18 @@ import '../styles/beta.css';
     <div class="bta-dim"></div>
 
     <div class="bta-wrap">
-      <!-- Logo icon -->
       <img src="/images/logo.svg" alt="Eluu" class="bta-logo" />
 
-      <!-- Heading -->
       <h1 class="bta-h">The future of work<br />is agentic.</h1>
 
-      <!-- Description -->
-      <p class="bta-p">We're building AI colleagues that connect to your tools, learn your workflows, and execute real tasks on repeat. Eluu is currently in closed beta — join the waitlist to get early access.</p>
+      <p class="bta-p">AI colleagues that connect to your tools, learn your workflows, and execute real tasks on repeat. Eluu is in open beta — try it free and see what your AI team can do.</p>
 
-      <!-- Email form -->
-      <form class="bta-form" id="bta-form">
-        <input type="email" required placeholder="Enter your email" class="bta-email" autocomplete="email" />
-        <button type="submit" class="bta-go">Join waitlist</button>
-      </form>
-      <p class="bta-done" id="bta-done">You're on the list. We'll be in touch.</p>
+      <a
+        href="https://app.eluu.ai"
+        class="bta-cta"
+        onclick="window.posthog?.capture('beta_try_clicked')"
+      >Try Eluu free</a>
 
-      <!-- Community -->
       <div class="bta-community">
         <h2 class="bta-ch">Join the community</h2>
         <p class="bta-cp">Connect with the team and other early users building with Eluu.</p>
@@ -55,10 +50,4 @@ import '../styles/beta.css';
 <script is:inline>
   var v = document.querySelector('.bta-vid');
   if (v) v.playbackRate = 0.8;
-  document.getElementById('bta-form')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-    this.style.display = 'none';
-    document.getElementById('bta-done').style.display = 'block';
-    window.posthog?.capture('waitlist_submitted');
-  });
 </script>
