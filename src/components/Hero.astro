@@ -96,12 +96,10 @@
   }
   @media (max-width: 768px) {
     .hero-inner { padding: 100px 16px 48px; gap: 32px; }
-    .hero-media-frame { min-height: min(480px, 60vh); height: min(600px, 70vh); }
-    .hero-iframe-wrap { width: min(1180px, calc(100% - 32px)); height: min(720px, calc(100% - 32px)); }
+    .hero-iframe-wrap { width: calc(100% - 32px); }
   }
   @media (max-width: 480px) {
     .hero-inner { padding: 90px 16px 32px; gap: 24px; }
-    .hero-media-frame { min-height: min(360px, 55vh); height: min(480px, 65vh); }
   }
 
   /* ── Mirai-style hero heading ──
@@ -166,8 +164,8 @@
   }
   .hero-media-frame {
     z-index: 20;
-    height: min(880px, 80vh);
-    min-height: min(760px, 70vh); /* don't overflow viewport on small screens */
+    aspect-ratio: 1180 / 720;
+    max-height: min(880px, 80vh);
     position: relative;
     overflow: hidden;
   }
@@ -176,8 +174,9 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: min(1180px, calc(100% - 64px));
-    height: min(720px, calc(100% - 64px));
+    width: calc(100% - 64px);
+    max-width: 1180px;
+    aspect-ratio: 1180 / 720;
     border-radius: 12px;
     overflow: hidden;
     background: #1e1d1b;
@@ -302,21 +301,8 @@
     -webkit-backface-visibility: hidden;
   }
 
-  /* Mobile: scale iframe down more aggressively */
-  @media (max-width: 768px) {
-    .hero-iframe {
-      width: 200%;
-      height: 200%;
-      transform: scale(0.5);
-    }
-  }
   @media (max-width: 480px) {
     .hero-btn { font-size: 14px; padding: 10px 22px; }
-    .hero-iframe {
-      width: 250%;
-      height: 250%;
-      transform: scale(0.4);
-    }
   }
 
   /* ── Light mode sync from iframe ── */
