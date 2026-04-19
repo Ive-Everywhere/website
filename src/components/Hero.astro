@@ -229,6 +229,18 @@
     letter-spacing: -0.01em;
     pointer-events: none;
   }
+  @media (max-width: 1024px) {
+    .iframe-chrome { height: 20px; padding: 0 8px; }
+    .iframe-dot { width: 8px; height: 8px; }
+    .iframe-traffic { gap: 5px; }
+    .iframe-title { font-size: 10px; }
+  }
+  @media (max-width: 640px) {
+    .iframe-chrome { height: 14px; padding: 0 6px; }
+    .iframe-dot { width: 5px; height: 5px; }
+    .iframe-traffic { gap: 4px; }
+    .iframe-title { font-size: 8px; }
+  }
 
   /* Iframe loader — covers the iframe area ONLY in slow-load fallback.
      Hidden by default (opacity 0). Fades in via .visible class added by JS
