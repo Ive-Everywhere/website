@@ -69,52 +69,23 @@
   max-width: 580px;
 }
 
-/* ── Email form ──
-   Fused input + button. Same visual weight as the
-   community buttons below — forms one cohesive block. */
-.bta-form {
-  display: flex;
+/* ── CTA button ── */
+.bta-cta {
+  display: inline-block;
   margin: 32px auto 0;
-  max-width: 420px;
-  border: 1px solid rgba(237,233,227,0.1);
-  border-radius: 4px;
-  overflow: hidden;
-  background: rgba(237,233,227,0.03);
-}
-.bta-email {
-  flex: 1;
-  background: transparent;
-  border: none;
-  padding: 14px 16px;
-  color: #ede9e3;
-  font-family: 'Söhne', sans-serif;
-  font-size: 14px;
-  outline: none;
-  min-width: 0;
-}
-.bta-email::placeholder { color: rgba(237,233,227,0.2); }
-
-.bta-go {
+  padding: 18px 72px;
   background: #ede9e3;
   color: #14120b;
-  border: none;
-  padding: 14px 28px;
   font-family: 'Söhne', sans-serif;
   font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.15s ease;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.15s ease, transform 0.15s ease;
 }
-.bta-go:hover { background: #d7d3cd; }
-
-.bta-done {
-  display: none;
-  font-family: 'Söhne', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #ede9e3;
-  margin: 32px 0 0;
+.bta-cta:hover {
+  background: #d7d3cd;
+  transform: translateY(-1px);
 }
 
 /* ── Community section ──
