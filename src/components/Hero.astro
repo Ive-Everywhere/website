@@ -488,13 +488,11 @@
       checkZoom();
     }
 
-    // ── Theme sync: listen for iframe theme changes ──
+    // ── Theme sync: iframe chrome bar only ──
     window.addEventListener('message', (e) => {
       if (e.data?.type !== 'eluu-theme') return;
       const isLight = e.data.theme === 'light';
-      const nav = document.getElementById('main-nav');
       const chrome = document.querySelector('.iframe-chrome') as HTMLElement;
-      if (nav) nav.classList.toggle('nav-light', isLight);
       if (chrome) chrome.classList.toggle('iframe-chrome-light', isLight);
     });
   })();
