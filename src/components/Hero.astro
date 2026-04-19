@@ -450,10 +450,10 @@
     }
 
     // ── Iframe zoom handling ──
-    // Counter-scale the iframe so it stays the same visual size regardless
-    // of page zoom. When zoom exceeds 200%, hide it entirely.
-    if (wrapper) {
-      const iframeWrap = wrapper as HTMLElement;
+    // When zoom exceeds 200%, hide the entire hero media section
+    // (iframe + background painting). No counter-scaling — just show or hide.
+    const heroMedia = iframe.closest('.hero-media') as HTMLElement;
+    if (heroMedia) {
       const MAX_ZOOM = 2; // hide above 200%
       const baseDPR = window.devicePixelRatio || 1;
 
@@ -465,22 +465,7 @@
 
         const zoom = Math.max(desktopZoom, pinchZoom, viewportZoom, dprZoom);
 
-        if (zoom > MAX_ZOOM) {
-          iframeWrap.style.display = 'none';
-          return;
-        }
-
-        iframeWrap.style.display = '';
-
-        // Counter-scale on desktop only — mobile pinch-zoom is intentional.
-        // Preserve the translate(-50%, -50%) centering from CSS.
-        const isMobile = window.innerWidth < 768;
-        if (!isMobile && zoom > 1.05) {
-          const counter = 1 / zoom;
-          iframeWrap.style.transform = `translate(-50%, -50%) scale(${counter})`;
-        } else {
-          iframeWrap.style.transform = '';
-        }
+        heroMedia.style.display = zoom > MAX_ZOOM ? 'none' : '';
       }
 
       // Resize: fires on desktop zoom + mobile page zoom
