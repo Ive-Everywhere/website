@@ -67,22 +67,32 @@
       </div>
     </div>
   </div>
-
-  <!-- Mobile menu panel -->
-  <div class="nav-mobile" id="nav-mobile">
-    <div class="nav-mobile-inner">
-      <a href="/features/colleagues" class="nav-mobile-link">Colleagues</a>
-      <a href="/features/integrations" class="nav-mobile-link">Integrations</a>
-      <a href="/features/team-drive" class="nav-mobile-link">Hard Drive</a>
-      <a href="/features/views" class="nav-mobile-link">Views</a>
-      <a href="/features/jobs" class="nav-mobile-link">Jobs</a>
-      <a href="/features/slack" class="nav-mobile-link">Slack</a>
-      <div class="nav-mobile-divider"></div>
-      <a href="/pricing" class="nav-mobile-link">Pricing</a>
-      <a href="https://app.eluu.ai" class="nav-mobile-cta">Get started</a>
-    </div>
-  </div>
 </nav>
+
+<!-- Mobile sidebar — OUTSIDE .site-nav to avoid iOS transform/backdrop-filter bugs -->
+<div class="nav-sidebar-backdrop" id="nav-sidebar-backdrop"></div>
+<aside class="nav-sidebar" id="nav-sidebar" aria-hidden="true">
+  <div class="nav-sidebar-header">
+    <button class="nav-sidebar-close" id="nav-sidebar-close" type="button" aria-label="Close menu">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M5 5L15 15M15 5L5 15"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="nav-sidebar-links">
+    <span class="nav-sidebar-label">Platform</span>
+    <a href="/features/colleagues" class="nav-sidebar-link">Colleagues</a>
+    <a href="/features/integrations" class="nav-sidebar-link">Integrations</a>
+    <a href="/features/team-drive" class="nav-sidebar-link">Hard Drive</a>
+    <a href="/features/views" class="nav-sidebar-link">Views</a>
+    <a href="/features/jobs" class="nav-sidebar-link">Jobs</a>
+    <a href="/features/slack" class="nav-sidebar-link">Slack</a>
+    <a href="/pricing" class="nav-sidebar-link nav-sidebar-link--spaced">Pricing</a>
+  </nav>
+  <div class="nav-sidebar-footer">
+    <a href="https://app.eluu.ai" class="nav-sidebar-cta">Get started</a>
+  </div>
+</aside>
 
 <style>
   /* ── The nav is the glass panel. It expands to include the dropdown.
@@ -307,13 +317,17 @@
     background: none;
     border: none;
     cursor: pointer;
-    width: 36px;
-    height: 36px;
+    /* 44px minimum touch target for iOS */
+    width: 44px;
+    height: 44px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 5px;
-    padding: 8px;
+    padding: 0;
+    margin-left: 4px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
   .nav-ham-line {
     display: block;
@@ -332,76 +346,156 @@
     transform: translateY(-3.25px) rotate(-45deg);
   }
 
-  /* ── Mobile menu panel ── */
-  .nav-mobile {
+  /* ── Mobile sidebar backdrop ── */
+  .nav-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 998;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-sidebar-backdrop.open {
+    opacity: 1;
+  }
+
+  /* ── Mobile sidebar panel ── */
+  .nav-sidebar {
     display: none;
     position: fixed;
     top: 0;
-    left: 0;
     right: 0;
     bottom: 0;
-    z-index: 49;
-    background: rgba(19, 16, 10, 0.97);
-    backdrop-filter: blur(24px);
-    overscroll-behavior: contain;
-    -webkit-backdrop-filter: blur(24px);
-    padding: 80px 24px 40px;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    pointer-events: none;
+    z-index: 999;
+    width: 240px;
+    max-width: 70vw;
+    background: #1e1d1b;
+    border-left: 1px solid rgba(237, 233, 227, 0.06);
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     overflow-y: auto;
-  }
-  .nav-mobile.open {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-  .nav-mobile-inner {
-    max-width: 400px;
-    margin: 0 auto;
-    display: flex;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     flex-direction: column;
-    gap: 0;
   }
-  .nav-mobile-link {
-    font-family: 'Söhne', sans-serif;
-    font-size: 18px;
-    font-weight: 500;
-    color: rgba(237, 233, 227, 0.7);
-    text-decoration: none;
-    padding: 16px 0;
-    border-bottom: 1px solid rgba(237, 233, 227, 0.06);
+  .nav-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .nav-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 48px;
+    padding: env(safe-area-inset-top) 12px 0;
+    flex-shrink: 0;
+  }
+  .nav-sidebar-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(237, 233, 227, 0.5);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
     transition: color 0.2s ease;
   }
-  .nav-mobile-link:hover { color: #ede9e3; }
-  .nav-mobile-divider {
-    height: 1px;
-    background: rgba(237, 233, 227, 0.1);
-    margin: 8px 0;
+  .nav-sidebar-close:hover { color: #ede9e3; }
+
+  .nav-sidebar-links {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
   }
-  .nav-mobile-cta {
+
+  /* Section label — Jersey 10 for brand personality */
+  .nav-sidebar-label {
+    font-family: 'Jersey 10', cursive;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    color: rgba(237, 233, 227, 0.25);
+    padding-bottom: 14px;
+    border-bottom: 1px dotted rgba(237, 233, 227, 0.08);
+    margin-bottom: 4px;
+  }
+
+  /* Feature links — staggered transition on open, tactile tap feedback */
+  .nav-sidebar-link {
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: -0.1px;
+    color: rgba(237, 233, 227, 0.55);
+    text-decoration: none;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(237, 233, 227, 0.04);
+    -webkit-tap-highlight-color: transparent;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s ease;
+  }
+  .nav-sidebar-link:last-child { border-bottom: none; }
+  .nav-sidebar-link:active {
+    color: rgba(237, 233, 227, 0.9);
+  }
+
+  /* Stagger — triggers only when sidebar is open */
+  .nav-sidebar.open .nav-sidebar-link {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .nav-sidebar.open .nav-sidebar-link:nth-of-type(1) { transition-delay: 60ms; }
+  .nav-sidebar.open .nav-sidebar-link:nth-of-type(2) { transition-delay: 100ms; }
+  .nav-sidebar.open .nav-sidebar-link:nth-of-type(3) { transition-delay: 140ms; }
+  .nav-sidebar.open .nav-sidebar-link:nth-of-type(4) { transition-delay: 180ms; }
+  .nav-sidebar.open .nav-sidebar-link:nth-of-type(5) { transition-delay: 220ms; }
+  .nav-sidebar.open .nav-sidebar-link:nth-of-type(6) { transition-delay: 260ms; }
+  .nav-sidebar.open .nav-sidebar-link:nth-of-type(7) { transition-delay: 320ms; }
+
+  /* Pricing — elevated standalone link */
+  .nav-sidebar-link--spaced {
+    margin-top: 20px;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.3px;
+    color: rgba(237, 233, 227, 0.8);
+    border-bottom: none;
+  }
+
+  .nav-sidebar-footer {
+    padding: 12px 20px calc(28px + env(safe-area-inset-bottom));
+    margin-top: auto;
+  }
+  .nav-sidebar-cta {
     display: block;
     text-align: center;
     font-family: 'Söhne', sans-serif;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 500;
     color: #14120b;
     background: #ede9e3;
     border-radius: 4px;
-    padding: 14px 24px;
+    padding: 11px 20px;
     text-decoration: none;
-    margin-top: 16px;
     transition: background 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
   }
-  .nav-mobile-cta:hover { background: #d7d3cd; }
+  .nav-sidebar-cta:hover { background: #d7d3cd; }
 
   /* ── Mobile breakpoints ── */
   @media (max-width: 768px) {
     .nav-links { display: none; }
     .nav-dropdown { display: none; }
     .nav-hamburger { display: flex; }
-    .nav-mobile { display: block; }
+    .nav-sidebar { display: flex; }
+    .nav-sidebar-backdrop { display: block; pointer-events: none; }
+    .nav-sidebar-backdrop.open { pointer-events: auto; }
   }
   @media (max-width: 400px) {
     .nav-wordmark { font-size: 22px; white-space: nowrap; }
@@ -411,7 +505,9 @@
 
 
   @media (prefers-reduced-motion: reduce) {
-    .nav-dropdown, .nav-dd-item, .nav-chevron, .nav-dropdown-inner { transition: none; }
+    .nav-dropdown, .nav-dd-item, .nav-chevron, .nav-dropdown-inner,
+    .nav-sidebar, .nav-sidebar-backdrop { transition: none; }
+    .nav-sidebar-link { transition: none; opacity: 1; transform: none; }
   }
 
 </style>
@@ -539,27 +635,99 @@
     }
   }, { passive: true });
 
-  // ── Mobile hamburger menu ──
+  // ── Mobile sidebar menu ──
   const hamburger = document.getElementById('nav-hamburger');
-  const mobileMenu = document.getElementById('nav-mobile');
+  const sidebar = document.getElementById('nav-sidebar');
+  const backdrop = document.getElementById('nav-sidebar-backdrop');
+  const sidebarClose = document.getElementById('nav-sidebar-close');
 
-  if (hamburger && mobileMenu) {
+  // Focus trap: keep Tab cycling inside sidebar
+  function trapFocus(e: KeyboardEvent) {
+    if (e.key !== 'Tab' || !sidebar) return;
+    const focusable = sidebar.querySelectorAll<HTMLElement>('a, button, [tabindex]');
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
+    }
+  }
+
+  function openSidebar() {
+    if (!hamburger || !sidebar || !backdrop) return;
+    hamburger.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    sidebar.classList.add('open');
+    sidebar.setAttribute('aria-hidden', 'false');
+    backdrop.classList.add('open');
+    // iOS-safe body scroll lock
+    const scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.dataset.scrollY = String(scrollY);
+    // Focus management
+    sidebarClose?.focus();
+    document.addEventListener('keydown', trapFocus);
+  }
+
+  function closeSidebar() {
+    if (!hamburger || !sidebar || !backdrop) return;
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    sidebar.classList.remove('open');
+    sidebar.setAttribute('aria-hidden', 'true');
+    backdrop.classList.remove('open');
+    // Restore scroll position
+    const scrollY = parseInt(document.body.dataset.scrollY || '0', 10);
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    window.scrollTo(0, scrollY);
+    // Return focus
+    document.removeEventListener('keydown', trapFocus);
+    hamburger?.focus();
+  }
+
+  if (hamburger && sidebar && backdrop) {
+    // Toggle on hamburger tap
     hamburger.addEventListener('click', () => {
-      const isOpen = hamburger.classList.toggle('open');
-      mobileMenu.classList.toggle('open');
-      hamburger.setAttribute('aria-expanded', String(isOpen));
-      // Prevent body scroll when menu is open
-      document.body.style.overflow = isOpen ? 'hidden' : '';
+      if (sidebar.classList.contains('open')) {
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
     });
 
+    // Close on backdrop tap
+    backdrop.addEventListener('click', closeSidebar);
+
+    // Close on X button
+    if (sidebarClose) {
+      sidebarClose.addEventListener('click', closeSidebar);
+    }
+
     // Close on link click
-    mobileMenu.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => {
-        hamburger.classList.remove('open');
-        mobileMenu.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      });
+    sidebar.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeSidebar);
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+        closeSidebar();
+      }
+    });
+
+    // Close if viewport crosses breakpoint (e.g. orientation change)
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768 && sidebar.classList.contains('open')) {
+        closeSidebar();
+      }
     });
   }
 </script>
