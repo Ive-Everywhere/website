@@ -40,13 +40,13 @@
 
 <style>
   .tm-stage { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px 14px 14px; }
-  .tm-window { width: 100%; max-width: 280px; }
-  .tm-card { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #1a1917; border-radius: 6px; border: 1px solid rgba(237,233,227,0.04); margin-bottom: 12px; }
+  .tm-window { width: 100%; max-width: 300px; background: #1a1917; border-radius: 6px; border: 1px solid rgba(237,233,227,0.04); overflow: hidden; padding: 10px 12px; }
+  .tm-card { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(237,233,227,0.04); margin-bottom: 0; }
   .tm-icon { color: rgba(237,233,227,0.3); flex-shrink: 0; }
   .tm-info { display: flex; flex-direction: column; gap: 2px; }
   .tm-label { font-family: 'Söhne', sans-serif; font-size: 12px; font-weight: 600; color: rgba(237,233,227,0.85); }
   .tm-schedule { font-family: 'Söhne', sans-serif; font-size: 10px; color: rgba(237,233,227,0.45); }
-  .tm-timeline { display: flex; flex-direction: column; padding-left: 8px; }
+  .tm-timeline { display: flex; flex-direction: column; padding-left: 8px; padding-top: 6px; }
   .tm-event { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-left: 1px solid rgba(237,233,227,0.06); padding-left: 14px; position: relative; }
   .tm-dot { width: 7px; height: 7px; border-radius: 50%; position: absolute; left: -4px; }
   .tm-dot-done { background: rgba(237,233,227,0.15); }
