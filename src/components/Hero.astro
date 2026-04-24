@@ -164,10 +164,12 @@
   }
   .hero-media-frame {
     z-index: 20;
+    position: relative;
     aspect-ratio: 1180 / 720;
     max-height: min(880px, 80vh);
-    position: relative;
-    overflow: hidden;
+    width: 100%;
+    max-width: calc(min(880px, 80vh) * 1180 / 720);
+    justify-self: center;
   }
   .hero-iframe-wrap {
     position: absolute;
