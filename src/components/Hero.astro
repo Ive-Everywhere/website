@@ -165,10 +165,13 @@
   .hero-media-frame {
     z-index: 20;
     position: relative;
-    aspect-ratio: 1180 / 720;
-    max-height: min(880px, 80vh);
+    /* Frame is 8% taller than the iframe content so the painting bg has more
+       breathing room above/below. The iframe-wrap inside has its own fixed
+       aspect-ratio, so it stays centered at its original size. */
+    aspect-ratio: 1180 / 778;
+    max-height: min(950px, 86.4vh);
     width: 100%;
-    max-width: calc(min(880px, 80vh) * 1180 / 720);
+    max-width: calc(min(950px, 86.4vh) * 1180 / 778);
     justify-self: center;
   }
   .hero-iframe-wrap {
