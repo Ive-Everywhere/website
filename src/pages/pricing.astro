@@ -124,7 +124,7 @@ const enterpriseFeatures = [
               <div class="pr-cta-wrap">
                 <a
                   href="https://app.eluu.ai"
-                  class="pr-cta pr-cta-primary pr-cta-pill"
+                  class="pr-cta pr-cta-outline pr-cta-pill"
                   onclick={`window.posthog?.capture('pricing_plan_selected', { plan: '${plan.slug}' })`}
                 >
                   {plan.cta}
@@ -158,7 +158,7 @@ const enterpriseFeatures = [
         </div>
         <a
           href="https://cal.com/krishna-kaipa-wh7ao3/15min"
-          class="pr-cta pr-cta-primary pr-enterprise-cta"
+          class="pr-cta pr-cta-primary pr-cta-pill pr-enterprise-cta"
           onclick={`window.posthog?.capture('enterprise_contact_clicked')`}
         >
           Talk to sales
@@ -435,8 +435,14 @@ const enterpriseFeatures = [
     display: block;
     width: 100%;
     border-radius: 999px;
-    padding: 13px 24px;
+    padding: 15px 28px;
     margin: 0;
+  }
+  /* Active card's CTA fills with cream — follows the gradient state */
+  .pr-col.is-active .pr-cta-outline {
+    background: #ede9e3;
+    color: #14120b;
+    border-color: #ede9e3;
   }
 
   /* ── Features card: each column's features in its own bordered box (site aesthetic) ── */
@@ -497,7 +503,8 @@ const enterpriseFeatures = [
     text-decoration: none;
     line-height: 1;
     margin-top: 16px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+                background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
   }
   .pr-cta-primary {
     background: #ede9e3;
@@ -506,8 +513,8 @@ const enterpriseFeatures = [
   }
   .pr-cta-outline {
     background: transparent;
-    color: rgba(237, 233, 227, 0.7);
-    border: 1px solid rgba(237, 233, 227, 0.15);
+    color: rgba(237, 233, 227, 0.85);
+    border: 1px solid rgba(237, 233, 227, 0.2);
   }
   /* Hover transforms only on devices that support real hover (skip on touch) */
   @media (hover: hover) {
@@ -584,7 +591,6 @@ const enterpriseFeatures = [
   }
   .pr-enterprise-cta {
     flex-shrink: 0;
-    padding: 12px 26px;
     width: auto;
     margin: 0;
   }
