@@ -6,15 +6,30 @@ import Testimonials from '../components/Testimonials.astro';
 
 const plans = [
   {
+    slug: 'free',
+    name: 'Free',
+    description: 'Get started with AI-powered development.',
+    price: 'Free',
+    period: '',
+    cta: 'Start for free',
+    features: [
+      '1 colleague',
+      '3 active jobs',
+      '3 parallel sessions',
+      '5 action views',
+      '100 MB file storage',
+      'Up to 2 users',
+    ],
+  },
+  {
     slug: 'team',
     name: 'Team',
     description: 'For small teams getting productive.',
-    price: '$17',
+    price: '$34',
     period: '/mo',
+    cta: 'Choose Team',
     features: [
-      '2 colleagues',
-      '$20 usage budget /month',
-      '1,000 integration credits',
+      '5 colleagues',
       '25 active jobs',
       '6 parallel sessions',
       '10 action views',
@@ -29,10 +44,10 @@ const plans = [
     description: 'For growing teams with heavy usage.',
     price: '$99',
     period: '/mo',
+    popular: true,
+    cta: 'Choose Max',
     features: [
       'Unlimited colleagues',
-      '$150 usage budget /month',
-      '25K integration credits',
       '25 active jobs',
       '20 parallel sessions',
       '10 action views',
@@ -48,10 +63,9 @@ const plans = [
     description: 'Maximum power for demanding teams.',
     price: '$199',
     period: '/mo',
+    cta: 'Choose Max Pro',
     features: [
       'Unlimited colleagues',
-      '$330 usage budget /month',
-      '100K integration credits',
       'Unlimited active jobs',
       '40 parallel sessions',
       'Unlimited action views',
@@ -61,22 +75,16 @@ const plans = [
       'Up to 5 users',
     ],
   },
-  {
-    slug: 'enterprise',
-    name: 'Enterprise',
-    description: 'Built for organisations with advanced security, compliance, and scale requirements.',
-    price: 'Custom',
-    period: '',
-    features: [
-      'Dedicated account manager',
-      'Custom integrations & tool access',
-      'SSO & role-based permissions',
-      'Advanced audit logging',
-      'Customer-facing colleague deployment',
-      'Custom data residency',
-      'SLA guarantees',
-    ],
-  },
+];
+
+const enterpriseFeatures = [
+  'Dedicated account manager',
+  'Custom integrations & tool access',
+  'SSO & role-based permissions',
+  'Advanced audit logging',
+  'Customer-facing colleague deployment',
+  'Custom data residency',
+  'SLA guarantees',
 ];
 ---
 
@@ -86,43 +94,75 @@ const plans = [
     <div class="pr-content">
       <!-- Header -->
       <div class="pr-header">
-        <span class="pr-badge reveal">Pricing</span>
         <h1 class="pr-title reveal">Power your team at any scale.</h1>
         <p class="pr-sub reveal">Start free. Scale when you're ready.</p>
       </div>
 
-      <!-- Cards -->
-      <div class="pr-cards">
-        {plans.map((plan) => (
-          <div class="pr-card reveal">
-            <div class="pr-card-top">
-              <h2 class="pr-plan-name">{plan.name}</h2>
-              <p class="pr-plan-desc">{plan.description}</p>
-              <div class="pr-price">
-                <span class="pr-price-value">{plan.price}</span>
-                {plan.period && <span class="pr-price-period">{plan.period}</span>}
+      <!-- Cards grid (single bordered frame, columns separated by hairlines) -->
+      <div class="pr-grid">
+        {plans.map((plan, i) => (
+          <div class={`pr-col reveal ${plan.popular ? 'pr-col-popular is-active' : ''}`} data-tier={plan.slug}>
+            <div class="pr-col-inner">
+              <!-- Header panel (rounded card; gradient on highlighted plan) -->
+              <div class="pr-header-panel">
+                <div class="pr-header-panel-top">
+                  <div class="pr-header-panel-name-row">
+                    <h2 class="pr-plan-name">{plan.name}</h2>
+                    {plan.popular && <span class="pr-popular-badge">Popular</span>}
+                  </div>
+                  <p class="pr-plan-desc">{plan.description}</p>
+                </div>
+                <div class="pr-header-panel-bottom">
+                  <div class="pr-price">
+                    <span class="pr-price-value">{plan.price}</span>
+                    {plan.period && <span class="pr-price-period">{plan.period}</span>}
+                  </div>
+                </div>
               </div>
-              <a
-                href={plan.slug === 'enterprise' ? 'https://cal.com/krishna-kaipa-wh7ao3/15min' : 'https://app.eluu.ai'}
-                class={`pr-cta ${plan.slug === 'enterprise' ? 'pr-cta-outline' : 'pr-cta-primary'}`}
-                onclick={plan.slug === 'enterprise'
-                  ? `window.posthog?.capture('enterprise_contact_clicked')`
-                  : `window.posthog?.capture('pricing_plan_selected', { plan: '${plan.slug}' })`}
-              >
-                {plan.slug === 'enterprise' ? 'Contact sales' : 'Get started'}
-              </a>
+
+              <!-- CTA (full-width pill) -->
+              <div class="pr-cta-wrap">
+                <a
+                  href="https://app.eluu.ai"
+                  class="pr-cta pr-cta-primary pr-cta-pill"
+                  onclick={`window.posthog?.capture('pricing_plan_selected', { plan: '${plan.slug}' })`}
+                >
+                  {plan.cta}
+                </a>
+              </div>
+
+              <!-- Features list -->
+              <div class="pr-features-wrap">
+                <div class="pr-features-inherit">
+                  {i > 0 ? `Everything in ${plans[i - 1].name}, plus` : 'Includes'}
+                </div>
+                <ul class="pr-features">
+                  {plan.features.map((f) => (
+                    <li>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <div class="pr-divider"></div>
-            <ul class="pr-features">
-              {plan.features.map((f) => (
-                <li>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                  {f}
-                </li>
-              ))}
-            </ul>
           </div>
         ))}
+      </div>
+
+      <!-- Enterprise -->
+      <div class="pr-enterprise reveal">
+        <div class="pr-enterprise-info">
+          <h2 class="pr-enterprise-title">Enterprise</h2>
+          <p class="pr-enterprise-desc">Custom plans for organisations with advanced security, compliance, and scale requirements.</p>
+        </div>
+        <a
+          href="https://cal.com/krishna-kaipa-wh7ao3/15min"
+          class="pr-cta pr-cta-primary pr-enterprise-cta"
+          onclick={`window.posthog?.capture('enterprise_contact_clicked')`}
+        >
+          Talk to sales
+        </a>
       </div>
 
     </div>
@@ -141,11 +181,11 @@ const plans = [
         <div class="pr-faq-list">
           <details class="pr-faq-item">
             <summary class="pr-faq-q">Is there a free trial?</summary>
-            <p class="pr-faq-a">There's no traditional free trial, but every new account comes with a small amount of free usage so you can explore the platform, set up colleagues, and see how it works. Once you've used your free allocation, you'll need to purchase a plan to continue.</p>
+            <p class="pr-faq-a">Every new account starts on the Free plan, which includes enough usage to explore the platform, set up colleagues, and see how it works. When you're ready for more, upgrade to a paid tier anytime.</p>
           </details>
           <details class="pr-faq-item">
             <summary class="pr-faq-q">How does usage work?</summary>
-            <p class="pr-faq-a">Usage is budget-based. Every action your colleagues take — reading data, executing tasks, generating outputs — consumes from your usage budget. Team includes $20/month, Max gives you $150/month, and Max Pro includes $330/month. Enterprise gets custom budgets sized to your workload.</p>
+            <p class="pr-faq-a">Usage is budget-based. Every action your colleagues take — reading data, executing tasks, generating outputs — consumes from your usage budget. Each paid plan includes a monthly usage allocation, with higher tiers offering more. Enterprise gets custom budgets sized to your workload.</p>
           </details>
           <details class="pr-faq-item">
             <summary class="pr-faq-q">Can I switch plans later?</summary>
@@ -174,6 +214,21 @@ const plans = [
   <Footer />
 </Layout>
 
+<script>
+  // Sticky-hover gradient: the last hovered column keeps its gradient
+  // active until another column is hovered. Works for touch devices too —
+  // a tap fires `mouseenter` and the gradient persists.
+  const cols = document.querySelectorAll('.pr-col');
+  const setActive = (target) => {
+    cols.forEach((c) => c.classList.remove('is-active'));
+    target.classList.add('is-active');
+  };
+  cols.forEach((col) => {
+    col.addEventListener('mouseenter', () => setActive(col));
+    col.addEventListener('focusin', () => setActive(col));
+  });
+</script>
+
 <style>
   .pr-page {
     background: #13100a;
@@ -194,19 +249,7 @@ const plans = [
   /* ── Header ── */
   .pr-header {
     text-align: center;
-    margin-bottom: 56px;
-  }
-  .pr-badge {
-    display: inline-block;
-    font-family: 'Söhne', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    color: rgba(237, 233, 227, 0.6);
-    background: rgba(237, 233, 227, 0.06);
-    padding: 6px 16px;
-    border-radius: 4px;
-    border: 1px solid rgba(237, 233, 227, 0.08);
-    margin-bottom: 16px;
+    margin-bottom: 72px;
   }
   .pr-title {
     font-family: 'Söhne', sans-serif;
@@ -226,90 +269,192 @@ const plans = [
     line-height: 1.5;
   }
 
-  /* ── Cards ── */
-  .pr-cards {
+  /* ── Cards: floating header + CTA, separate bordered features card per column ── */
+  .pr-grid {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 16px;
+    background: transparent;
   }
   @media (min-width: 640px) {
-    .pr-cards { grid-template-columns: 1fr 1fr; }
+    .pr-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
   }
   @media (min-width: 1080px) {
-    .pr-cards { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .pr-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
   }
 
-  .pr-card {
-    background: #1e1d1b;
-    border-radius: 4px;
-    padding: 28px 24px;
+  .pr-col {
+    position: relative;
+    padding: 0;
+    box-sizing: border-box;
+    min-width: 0; /* allow grid cell to shrink within 1fr */
+  }
+
+  .pr-col-inner {
     display: flex;
     flex-direction: column;
-    position: relative;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
   }
-  .pr-card::before {
+
+  /* ── Per-tier gradients (each unique in colour + radial pattern, but same vibe) ── */
+  .pr-col[data-tier="free"] {
+    --header-gradient:
+      radial-gradient(130% 110% at 100% 0%, rgba(170, 195, 215, 0.30) 0%, transparent 60%),
+      radial-gradient(95% 100% at 0% 100%, rgba(220, 215, 200, 0.16) 0%, transparent 55%),
+      linear-gradient(135deg, #23262d 0%, #1e1d1b 70%);
+  }
+  .pr-col[data-tier="team"] {
+    --header-gradient:
+      radial-gradient(115% 90% at 0% 0%, rgba(150, 180, 130, 0.30) 0%, transparent 55%),
+      radial-gradient(120% 100% at 100% 100%, rgba(200, 200, 145, 0.18) 0%, transparent 60%),
+      linear-gradient(135deg, #232a23 0%, #1e1d1b 70%);
+  }
+  .pr-col[data-tier="max"] {
+    --header-gradient:
+      radial-gradient(120% 100% at 100% 0%, rgba(255, 196, 140, 0.50) 0%, transparent 60%),
+      radial-gradient(110% 100% at 0% 100%, rgba(196, 110, 90, 0.40) 0%, transparent 55%),
+      linear-gradient(135deg, #3a2f25 0%, #1e1d1b 70%);
+  }
+  .pr-col[data-tier="maxpro"] {
+    --header-gradient:
+      radial-gradient(130% 100% at 50% 0%, rgba(180, 130, 200, 0.32) 0%, transparent 55%),
+      radial-gradient(100% 100% at 0% 100%, rgba(140, 100, 180, 0.22) 0%, transparent 50%),
+      linear-gradient(135deg, #2a2333 0%, #1e1d1b 70%);
+  }
+
+  /* ── Header panel: rounded rectangle with name top-left and price bottom-left ── */
+  .pr-header-panel {
+    position: relative;
+    background: #1e1d1b;
+    border-radius: 6px;
+    padding: 22px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  /* Gradient overlay — opacity-animated so transitions are smooth */
+  .pr-header-panel::before {
     content: "";
-    pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 4px;
-    border: 1px solid rgba(237, 233, 227, 0.025);
+    background: var(--header-gradient);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    z-index: 0;
   }
-  .pr-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  .pr-header-panel-top,
+  .pr-header-panel-bottom {
+    position: relative;
+    z-index: 1;
   }
-
-  .pr-card-top {
+  .pr-header-panel::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    border: 1px solid rgba(237, 233, 227, 0.05);
+    pointer-events: none;
+    z-index: 2;
+  }
+  /* Active column shows its gradient — class is toggled by JS on mouseenter,
+     so the gradient sticks to the last hovered card */
+  .pr-col.is-active .pr-header-panel::before {
+    opacity: 1;
+  }
+  .pr-header-panel-top {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
   }
-
+  .pr-header-panel-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
   .pr-plan-name {
     font-family: 'Söhne', sans-serif;
-    font-size: 18px;
+    font-size: 26px;
     font-weight: 600;
     color: #ede9e3;
     margin: 0;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .pr-popular-badge {
+    display: inline-block;
+    font-family: 'Söhne', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #ede9e3;
+    background: transparent;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(237, 233, 227, 0.3);
+    letter-spacing: 0.02em;
+    line-height: 1.4;
   }
   .pr-plan-desc {
     font-family: 'Söhne', sans-serif;
-    font-size: 14px;
-    color: rgba(237, 233, 227, 0.5);
+    font-size: 13.5px;
+    color: rgba(237, 233, 227, 0.55);
     line-height: 1.5;
     margin: 0;
-    min-height: 42px;
   }
-
+  .pr-header-panel-bottom { display: flex; }
   .pr-price {
     display: flex;
     align-items: baseline;
-    gap: 4px;
-    margin-top: 12px;
+    gap: 5px;
   }
   .pr-price-value {
     font-family: 'Söhne', sans-serif;
-    font-size: 42px;
+    font-size: 36px;
     font-weight: 600;
     color: #ede9e3;
-    letter-spacing: -1px;
+    letter-spacing: -0.02em;
     line-height: 1;
   }
   .pr-price-period {
     font-family: 'Söhne', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
-    color: rgba(237, 233, 227, 0.4);
+    color: rgba(237, 233, 227, 0.5);
   }
 
-  .pr-divider {
-    height: 1px;
-    background: rgba(237, 233, 227, 0.06);
-    margin: 24px 0;
+  /* ── CTA wrapper: full-width pill, generous gap above features ── */
+  .pr-cta-wrap {
+    margin: 16px 0 24px;
+  }
+  .pr-cta-pill {
+    display: block;
+    width: 100%;
+    border-radius: 999px;
+    padding: 13px 24px;
+    margin: 0;
   }
 
+  /* ── Features card: each column's features in its own bordered box (site aesthetic) ── */
+  .pr-features-wrap {
+    position: relative;
+    flex: 1;
+    padding: 22px 22px 24px;
+    border: 1px solid rgba(237, 233, 227, 0.04);
+    border-radius: 6px;
+    background: #1e1d1b;
+  }
+  .pr-features-inherit {
+    font-family: 'Söhne', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.45);
+    margin: 0 0 12px;
+  }
   .pr-features {
     list-style: none;
     padding: 0;
@@ -320,16 +465,24 @@ const plans = [
   }
   .pr-features li {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     font-family: 'Söhne', sans-serif;
     font-size: 14px;
     color: rgba(237, 233, 227, 0.7);
-    line-height: 1.4;
+    line-height: 1.45;
   }
   .pr-features svg {
     flex-shrink: 0;
     color: rgba(237, 233, 227, 0.35);
+    margin-top: 2px;
+  }
+
+  /* ── Popular badge tone (sits on top of the gradient overlay) ── */
+  .pr-col-popular .pr-popular-badge {
+    background: rgba(20, 18, 11, 0.4);
+    border-color: rgba(237, 233, 227, 0.4);
+    backdrop-filter: blur(4px);
   }
 
   /* ── CTA buttons ── */
@@ -346,28 +499,114 @@ const plans = [
     margin-top: 16px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .pr-cta:hover { transform: translateY(-1px); }
   .pr-cta-primary {
     background: #ede9e3;
     color: #14120b;
     border: 1px solid #ede9e3; /* match outline variant height */
   }
-  .pr-cta-primary:hover { box-shadow: 0 4px 12px rgba(237, 233, 227, 0.15); }
   .pr-cta-outline {
     background: transparent;
     color: rgba(237, 233, 227, 0.7);
     border: 1px solid rgba(237, 233, 227, 0.15);
   }
-  .pr-cta-outline:hover {
-    border-color: rgba(237, 233, 227, 0.3);
+  /* Hover transforms only on devices that support real hover (skip on touch) */
+  @media (hover: hover) {
+    .pr-cta:hover { transform: translateY(-1px); }
+    .pr-cta-primary:hover { box-shadow: 0 4px 12px rgba(237, 233, 227, 0.15); }
+    .pr-cta-outline:hover {
+      border-color: rgba(237, 233, 227, 0.3);
+      color: #ede9e3;
+    }
+  }
+
+  /* ── Responsive polish ── */
+  /* Tablet — soften header-panel min-height in 2-up layout */
+  @media (max-width: 1079.98px) {
+    .pr-header-panel { min-height: 180px; }
+  }
+  /* Phone — tighten paddings and min-heights for narrow screens */
+  @media (max-width: 480px) {
+    .pr-header-panel { padding: 20px; min-height: 160px; }
+    .pr-features-wrap { padding: 20px 18px 22px; }
+    .pr-plan-name { font-size: 22px; }
+    .pr-price-value { font-size: 32px; }
+    .pr-cta-wrap { margin: 14px 0 20px; }
+  }
+
+  /* Safari support for the Popular badge backdrop blur */
+  .pr-col-popular .pr-popular-badge {
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* Honour reduced-motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .pr-header-panel::before,
+    .pr-cta,
+    .pr-enterprise-cta svg,
+    .pr-card {
+      transition: none;
+    }
+  }
+
+  /* ── Enterprise (single horizontal box — same aesthetic as features cards) ── */
+  .pr-enterprise {
+    margin-top: 16px;
+    padding: 24px 28px;
+    border: 1px solid rgba(237, 233, 227, 0.04);
+    border-radius: 6px;
+    background: #1e1d1b;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .pr-enterprise-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .pr-enterprise-title {
+    font-family: 'Söhne', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
     color: #ede9e3;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin: 0;
+  }
+  .pr-enterprise-desc {
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    color: rgba(237, 233, 227, 0.55);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .pr-enterprise-cta {
+    flex-shrink: 0;
+    padding: 12px 26px;
+    width: auto;
+    margin: 0;
+  }
+  @media (max-width: 640px) {
+    .pr-enterprise {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: left;
+      gap: 16px;
+      padding: 22px 20px;
+    }
+    .pr-enterprise-cta {
+      align-self: stretch;
+      text-align: center;
+    }
   }
 
   /* ── Testimonials heading ── */
   .pr-testimonials-header {
     max-width: 1380px;
     margin: 0 auto;
-    padding: 0 20px 0;
+    padding: 0 20px 24px;
     box-sizing: border-box;
   }
   .pr-testimonials-heading {
@@ -377,6 +616,15 @@ const plans = [
     color: #ede9e3;
     letter-spacing: -0.02em;
     margin: 0;
+  }
+  /* Tighten Testimonials top padding on the pricing page so the heading sits close to the cards */
+  .pr-page :global(.ts-section) {
+    padding-top: 0;
+  }
+  /* Align testimonials horizontal padding with .pr-content at mobile (16px instead of 20px) */
+  @media (max-width: 480px) {
+    .pr-testimonials-header { padding: 0 16px 16px; }
+    .pr-page :global(.ts-container) { padding: 0 16px; }
   }
 
   /* ── FAQ ── */
