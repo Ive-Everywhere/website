@@ -4,15 +4,37 @@ import '../styles/footer.css'
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import PostHog from '../components/PostHog.astro';
-const { title, pageTitle, updatedDate = 'February 24, 2026' } = Astro.props;
+const { title, pageTitle, description, path, updatedDate = 'February 24, 2026' } = Astro.props;
+const fullTitle = `${title} — Eluu`;
+const metaDescription = description || `${pageTitle} for the Eluu AI platform. Read our ${pageTitle.toLowerCase()} to understand how we operate.`;
+const canonicalURL = `https://eluu.ai${path || ""}`;
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{title} — Eluu</title>
-  <meta name="description" content={`${pageTitle} for Eluu AI platform.`} />
+  <title>{fullTitle}</title>
+  <meta name="description" content={metaDescription} />
+  <link rel="canonical" href={canonicalURL} />
+  <meta name="theme-color" content="#13100a" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={metaDescription} />
+  <meta property="og:image" content="https://eluu.ai/images/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Eluu AI" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={fullTitle} />
+  <meta name="twitter:description" content={metaDescription} />
+  <meta name="twitter:image" content="https://eluu.ai/images/og-image.png" />
+
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" href="/favicon.ico" />
   <link rel="preload" href="/fonts/sohne-buch.otf" as="font" type="font/otf" crossorigin />
