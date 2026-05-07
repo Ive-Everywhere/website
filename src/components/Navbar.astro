@@ -1,6 +1,8 @@
 ---
 const pathname = Astro.url.pathname;
 const isPricing = pathname === '/pricing' || pathname.startsWith('/pricing/');
+const isResearch = pathname === '/research' || pathname.startsWith('/research/');
+const isCookbook = pathname === '/cookbook' || pathname.startsWith('/cookbook/');
 ---
 
 <nav id="main-nav" class="site-nav">
@@ -20,7 +22,8 @@ const isPricing = pathname === '/pricing' || pathname.startsWith('/pricing/');
             <svg class="nav-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
           </button>
         </div>
-        <a href="/research" class="nav-link">Research</a>
+        <a href="/research" class:list={['nav-link', { 'is-active': isResearch }]}>Research</a>
+        <a href="/cookbook" class:list={['nav-link', { 'is-active': isCookbook }]}>Cookbook</a>
         <a href="/pricing" class:list={['nav-link', { 'is-active': isPricing }]}>Pricing</a>
       </div>
 
@@ -91,6 +94,7 @@ const isPricing = pathname === '/pricing' || pathname.startsWith('/pricing/');
     <a href="/features/jobs" class="nav-sidebar-link">Jobs</a>
     <a href="/features/slack" class="nav-sidebar-link">Slack</a>
     <a href="/research" class="nav-sidebar-link nav-sidebar-link--spaced">Research</a>
+    <a href="/cookbook" class="nav-sidebar-link">Cookbook</a>
     <a href="/pricing" class="nav-sidebar-link">Pricing</a>
   </nav>
   <div class="nav-sidebar-footer">
