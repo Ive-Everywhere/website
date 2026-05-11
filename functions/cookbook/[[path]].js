@@ -20,10 +20,33 @@ export async function onRequest(context) {
   // cookbook site is built with base '/cookbook'.
   const target = new URL(url.pathname + url.search, origin);
 
-  return fetch(target.toString(), {
+  const upstream = await fetch(target.toString(), {
     method: request.method,
     headers: request.headers,
     body: request.method === 'GET' || request.method === 'HEAD' ? null : request.body,
     redirect: 'manual',
   });
+
+  // Rewrite any Location header that points back at the origin subdomain so
+  // 3xx redirects keep users (and search-engine crawlers) on the main
+  // domain. Without this, a 301 from the origin would expose
+  // `cookbook.eluu.ai` to the client and let it become the indexed URL,
+  // splitting SEO authority from `eluu.ai/cookbook`.
+  const location = upstream.headers.get('location');
+  if (location) {
+    const originHost = new URL(origin).host; // cookbook.eluu.ai or override
+    const requestHost = url.host;             // eluu.ai (or whatever proxied us)
+    const rewritten = location.replace(new RegExp(`https?://${originHost}`, 'i'), `https://${requestHost}`);
+    if (rewritten !== location) {
+      const headers = new Headers(upstream.headers);
+      headers.set('location', rewritten);
+      return new Response(upstream.body, {
+        status: upstream.status,
+        statusText: upstream.statusText,
+        headers,
+      });
+    }
+  }
+
+  return upstream;
 }

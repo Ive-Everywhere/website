@@ -19,3 +19,4 @@ Disallow: /
 
 Sitemap: https://eluu.ai/sitemap.xml
 Sitemap: https://eluu.ai/research/sitemap-index.xml
+Sitemap: https://eluu.ai/cookbook/sitemap-index.xml
