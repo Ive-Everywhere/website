@@ -12,6 +12,8 @@ interface FeatureData {
   breadcrumb: string;
   headline: string;
   description: string;
+  /** SEO title override (≤60 chars). Falls back to "{name} — Eluu" if absent. */
+  seoTitle?: string;
   heroImage?: string;
   intro?: { bold: string; supporting: string };
   valueProps: { title: string; description?: string; image?: string; features: { title: string; desc: string }[] }[];
@@ -22,7 +24,7 @@ interface FeatureData {
 }
 
 const { feature: f } = Astro.props as { feature: FeatureData };
-const pageTitle = `${f.name} — Eluu`;
+const pageTitle = f.seoTitle ?? `${f.name} — Eluu`;
 const canonicalURL = `https://eluu.ai/features/${f.slug}`;
 ---
 <!DOCTYPE html>
