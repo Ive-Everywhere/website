@@ -24,13 +24,6 @@ const isCookbook = pathname === '/cookbook' || pathname.startsWith('/cookbook/')
         </div>
         <a href="/research" class:list={['nav-link', { 'is-active': isResearch }]}>Research</a>
         <a href="/cookbook" class:list={['nav-link', { 'is-active': isCookbook }]}>Cookbook</a>
-        <a
-          href="https://docs.eluu.ai"
-          class="nav-link"
-          target="_blank"
-          rel="noopener noreferrer"
-          onclick="window.posthog?.capture('external_link_clicked', { location: 'nav_docs', target_host: 'docs.eluu.ai' })"
-        >Docs</a>
         <a href="/pricing" class:list={['nav-link', { 'is-active': isPricing }]}>Pricing</a>
       </div>
 
@@ -102,13 +95,6 @@ const isCookbook = pathname === '/cookbook' || pathname.startsWith('/cookbook/')
     <a href="/features/slack" class="nav-sidebar-link">Slack</a>
     <a href="/research" class="nav-sidebar-link nav-sidebar-link--spaced">Research</a>
     <a href="/cookbook" class="nav-sidebar-link">Cookbook</a>
-    <a
-      href="https://docs.eluu.ai"
-      class="nav-sidebar-link"
-      target="_blank"
-      rel="noopener noreferrer"
-      onclick="window.posthog?.capture('external_link_clicked', { location: 'nav_docs', target_host: 'docs.eluu.ai' })"
-    >Docs</a>
     <a href="/pricing" class="nav-sidebar-link">Pricing</a>
   </nav>
   <div class="nav-sidebar-footer">
