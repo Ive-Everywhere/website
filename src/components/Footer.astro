@@ -5,6 +5,7 @@ const legal = [
   { text: 'Terms of Service', href: '/terms' },
   { text: 'Privacy Policy', href: '/privacy' },
   { text: 'Security', href: '/security' },
+  { text: 'Docs', href: 'https://docs.eluu.ai', external: true },
 ];
 
 const navLinks = [
@@ -53,7 +54,15 @@ const navLinks = [
         </div>
         <div class="sftr-bottom-links">
           {legal.map((link) => (
-            <a href={link.href} class="sftr-bottom-link">{link.text}</a>
+            link.external
+              ? <a
+                  href={link.href}
+                  class="sftr-bottom-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onclick={`window.posthog?.capture('external_link_clicked', { location: 'footer_legal', target_host: 'docs.eluu.ai' })`}
+                >{link.text}</a>
+              : <a href={link.href} class="sftr-bottom-link">{link.text}</a>
           ))}
         </div>
         <span class="sftr-copy">&copy; {new Date().getFullYear()} Eluu AI. All rights reserved.</span>

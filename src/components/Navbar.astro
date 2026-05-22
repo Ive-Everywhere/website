@@ -24,6 +24,13 @@ const isCookbook = pathname === '/cookbook' || pathname.startsWith('/cookbook/')
         </div>
         <a href="/research" class:list={['nav-link', { 'is-active': isResearch }]}>Research</a>
         <a href="/cookbook" class:list={['nav-link', { 'is-active': isCookbook }]}>Cookbook</a>
+        <a
+          href="https://docs.eluu.ai"
+          class="nav-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          onclick="window.posthog?.capture('external_link_clicked', { location: 'nav_docs', target_host: 'docs.eluu.ai' })"
+        >Docs</a>
         <a href="/pricing" class:list={['nav-link', { 'is-active': isPricing }]}>Pricing</a>
       </div>
 
@@ -95,6 +102,13 @@ const isCookbook = pathname === '/cookbook' || pathname.startsWith('/cookbook/')
     <a href="/features/slack" class="nav-sidebar-link">Slack</a>
     <a href="/research" class="nav-sidebar-link nav-sidebar-link--spaced">Research</a>
     <a href="/cookbook" class="nav-sidebar-link">Cookbook</a>
+    <a
+      href="https://docs.eluu.ai"
+      class="nav-sidebar-link"
+      target="_blank"
+      rel="noopener noreferrer"
+      onclick="window.posthog?.capture('external_link_clicked', { location: 'nav_docs', target_host: 'docs.eluu.ai' })"
+    >Docs</a>
     <a href="/pricing" class="nav-sidebar-link">Pricing</a>
   </nav>
   <div class="nav-sidebar-footer">
@@ -121,13 +135,9 @@ const isCookbook = pathname === '/cookbook' || pathname.startsWith('/cookbook/')
                 border-color 0.35s ease;
     border-bottom: 1px solid transparent;
   }
-  .site-nav.hidden {
-    transform: translateY(-100%);
-  }
-
   /* Scrolled: applied at scrollY > 0, so navbar ALWAYS has bg when off top */
   .site-nav.scrolled {
-    background: rgba(20, 18, 11, 0.85);
+    background: rgba(20, 18, 11, 0.65);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom-color: rgba(237, 233, 227, 0.06);
@@ -136,7 +146,7 @@ const isCookbook = pathname === '/cookbook' || pathname.startsWith('/cookbook/')
   /* ── Dropdown-open state: the SAME blur style on the entire nav
      (which now includes the dropdown panel). One unified glass. ── */
   .site-nav.dropdown-open {
-    background: rgba(20, 18, 11, 0.85);
+    background: rgba(20, 18, 11, 0.65);
     backdrop-filter: blur(40px) saturate(1.15);
     -webkit-backdrop-filter: blur(40px) saturate(1.15);
     border-bottom: 1px solid rgba(237, 233, 227, 0.06);
@@ -649,39 +659,20 @@ const isCookbook = pathname === '/cookbook' || pathname.startsWith('/cookbook/')
   }
 
   // ── Scroll behavior ──
-  // Best practices: background from scrollY > 0 (no naked floating state),
-  // direction delta threshold (60px of continuous downward scroll to hide),
-  // instant show on any upward scroll, debounced hide.
-  let lastScrollY = 0;
-  let scrollDelta = 0;
+  // Background applied at scrollY > 0 (anthropic.com-style: always visible,
+  // gets a bg when scrolled past top via .scrolled).
   let ticking = false;
-  const HIDE_DELTA = 60; // px of continuous down-scroll before hiding
 
   function updateNav() {
     // Skip scroll handling while sidebar is open — body is position:fixed
-    // so scrollY is 0 and would corrupt lastScrollY / remove .scrolled
+    // so scrollY is 0 and would corrupt scroll tracking / remove .scrolled
     if (sidebar?.classList.contains('open')) { ticking = false; return; }
 
     const currentY = window.scrollY;
-    const diff = currentY - lastScrollY;
 
     // Background: apply immediately at any scroll > 0
     nav?.classList.toggle('scrolled', currentY > 0);
 
-    // Hide/show: accumulate directional delta, reset on direction change
-    if (diff > 0) {
-      // Scrolling down — accumulate
-      scrollDelta += diff;
-      if (scrollDelta > HIDE_DELTA && currentY > 80) {
-        nav?.classList.add('hidden');
-      }
-    } else {
-      // Scrolling up — show immediately, reset delta
-      scrollDelta = 0;
-      nav?.classList.remove('hidden');
-    }
-
-    lastScrollY = currentY;
     ticking = false;
   }
 
@@ -726,8 +717,6 @@ const isCookbook = pathname === '/cookbook' || pathname.startsWith('/cookbook/')
     document.body.style.left = '0';
     document.body.style.right = '0';
     document.body.dataset.scrollY = String(scrollY);
-    // Hide navbar behind sidebar
-    nav?.classList.add('hidden');
     // Focus management
     sidebarClose?.focus();
     document.addEventListener('keydown', trapFocus);
@@ -742,17 +731,12 @@ const isCookbook = pathname === '/cookbook' || pathname.startsWith('/cookbook/')
     backdrop.classList.remove('open');
     // Restore scroll position
     const scrollY = parseInt(document.body.dataset.scrollY || '0', 10);
-    // Reset scroll tracking BEFORE restoring scroll so the scroll
-    // listener doesn't interpret the jump as a fast downward scroll
-    lastScrollY = scrollY;
-    scrollDelta = 0;
     document.body.style.position = '';
     document.body.style.top = '';
     document.body.style.left = '';
     document.body.style.right = '';
     window.scrollTo(0, scrollY);
     // Restore navbar with correct scrolled state
-    nav?.classList.remove('hidden');
     nav?.classList.toggle('scrolled', scrollY > 0);
     // Return focus
     document.removeEventListener('keydown', trapFocus);
