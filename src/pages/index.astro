@@ -1,68 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
-import Hero from '../components/Hero.astro';
-import Features from '../components/Features.astro';
-import WhyEluu from '../components/WhyEluu.astro';
-import Frontier from '../components/Frontier.astro';
-import Integrations from '../components/Integrations.astro';
+import HeroAgents from '../components/HeroAgents.astro';
+import WorkforceGrid from '../components/WorkforceGrid.astro';
+import PutToWork from '../components/PutToWork.astro';
 import Testimonials from '../components/Testimonials.astro';
 import Channels from '../components/Channels.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="Eluu AI — AI Colleagues for Your Team" description="AI colleagues that work alongside your team. Eluu integrates with your existing tools to handle tasks, automate workflows, and drive results autonomously." path="/">
+<Layout title="Eluu AI — Specialist agents that run your business" description="Deploy a team of AI specialists that work across your whole tool stack. In the cloud, in your Slack, on your schedule. Connected, controlled, and auditable by default." path="/">
   <Navbar />
-<style>
-  .hp-intro {
-    background: #13100a;
-    padding: 48px 0 64px;
-  }
-  .hp-intro-inner {
-    max-width: 1380px;
-    margin: 0 auto;
-    padding: 0 20px;
-    box-sizing: border-box;
-  }
-  .hp-intro-text {
-    font-family: 'Söhne', sans-serif;
-    font-weight: 400;
-    font-size: clamp(18px, 2.2vw, 26px);
-    color: rgba(237, 233, 227, 0.4);
-    line-height: 1.45;
-    letter-spacing: -0.01em;
-    margin: 0;
-    max-width: 900px;
-  }
-  .hp-intro-text strong {
-    color: #ede9e3;
-    font-weight: 600;
-  }
-  @media (max-width: 480px) {
-    .hp-intro { padding: 32px 0 40px; }
-  }
-
-</style>
   <main>
-    <Hero />
-
-    <!-- Intro statement -->
-    <section class="hp-intro">
-      <div class="hp-intro-inner">
-        <h2 class="hp-intro-text reveal">
-          <strong>One platform, as many agents as you need.</strong> Deploy colleagues across sales, finance, legal, and support. Each connects to your tools, learns your processes, and shares the same context.
-        </h2>
-      </div>
-    </section>
-
-    <WhyEluu />
-    <Frontier />
-    <Features>
-      <Integrations />
-    </Features>
+    <HeroAgents />
+    <WorkforceGrid />
+    <PutToWork />
     <Testimonials />
     <Channels />
-
   </main>
   <Footer />
 </Layout>

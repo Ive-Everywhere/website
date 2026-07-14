@@ -1,0 +1,106 @@
+---
+// Format B - 3 stacked cards, each split text / mockup, alternating sides.
+// Each card = one theme with 3 facet links (outcome statements, not CTAs).
+const arrow = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+const cards = [
+  {
+    title: ['Agents that act', 'across your whole stack'],
+    href: '/connections',
+    links: ['Give agents the same tools you use', 'Run work across the stack', 'Cut manual work across the team'],
+    mock: 'stack',
+  },
+  {
+    title: ['Agents that run', 'without you'],
+    href: '/workspace',
+    links: ['Run on a schedule, around the clock', 'Deliver finished work to your Slack', 'Scale work without scaling headcount'],
+    mock: 'schedule',
+  },
+  {
+    title: ['Agents you', 'stay in control of'],
+    href: '/security',
+    links: ['Control and audit every action', 'Monitor the data flowing into your agents', 'Measure cost across teams'],
+    mock: 'control',
+  },
+];
+---
+
+<section class="pw">
+  <div class="pw-inner">
+    <div class="pw-head reveal">
+      <h2 class="pw-title">Put agents to work across your business.</h2>
+      <p class="pw-sub">With every action in your control.</p>
+    </div>
+
+    {cards.map((c) => (
+      <div class="pw-card reveal">
+        <div class="pw-text">
+          <h3 class="pw-card-title">{c.title[0]}<br />{c.title[1]}</h3>
+          <ul class="pw-links">
+            {c.links.map((l) => (
+              <li>
+                <a href={c.href}>
+                  <span class="pw-link-dot"></span>
+                  <span class="pw-link-label">{l}</span>
+                  <span class="pw-link-arrow" set:html={arrow}></span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class={`pw-mock pw-mock-${c.mock}`}>
+          <div class="pw-mock-bar"></div>
+          <div class="pw-mock-row"></div>
+          <div class="pw-mock-row short"></div>
+          <div class="pw-mock-row"></div>
+          <div class="pw-mock-row shorter"></div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .pw { background: #13100a; }
+  .pw-inner { max-width: 1380px; margin: 0 auto; padding: 40px 20px 90px; box-sizing: border-box; }
+  .pw-head { margin-bottom: 32px; }
+  .pw-title { font-family: 'Söhne', sans-serif; font-weight: 600; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.02em; color: #ede9e3; margin: 0 0 8px; }
+  .pw-sub { font-size: clamp(15px, 1.4vw, 18px); color: rgba(237, 233, 227, 0.4); margin: 0; }
+
+  .pw-card {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+    border: 1px solid rgba(237, 233, 227, 0.1); border-radius: 16px;
+    padding: 48px; margin-bottom: 20px; overflow: hidden;
+    background: rgba(237, 233, 227, 0.015);
+  }
+  .pw-card:nth-child(odd) .pw-text { order: 2; }
+  .pw-card:nth-child(odd) .pw-mock { order: 1; }
+
+  .pw-card-title { font-family: 'Söhne', sans-serif; font-weight: 600; font-size: clamp(22px, 2vw, 28px); line-height: 1.15; letter-spacing: -0.02em; color: #ede9e3; margin: 0 0 22px; }
+  .pw-links { list-style: none; margin: 0; padding: 0; }
+  .pw-links li { border-top: 1px solid rgba(237, 233, 227, 0.08); }
+  .pw-links a { display: flex; align-items: center; gap: 12px; padding: 15px 4px; text-decoration: none; color: #ede9e3; transition: gap 0.2s ease; }
+  .pw-links a:hover { gap: 16px; }
+  .pw-link-dot { width: 6px; height: 6px; border-radius: 50%; background: #ED733B; flex-shrink: 0; }
+  .pw-link-label { flex: 1; font-size: 16px; }
+  .pw-link-arrow { color: rgba(237, 233, 227, 0.35); display: inline-flex; }
+  .pw-links a:hover .pw-link-arrow { color: #ED733B; }
+
+  /* lightweight mockup placeholder (real UI shots swap in later) */
+  .pw-mock {
+    background: #1b1a18; border: 1px solid rgba(237, 233, 227, 0.08);
+    border-radius: 12px; padding: 22px; min-height: 240px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .pw-mock-bar { height: 34px; border-radius: 8px; background: rgba(237, 233, 227, 0.06); }
+  .pw-mock-row { height: 14px; border-radius: 6px; background: rgba(237, 233, 227, 0.05); }
+  .pw-mock-row.short { width: 70%; }
+  .pw-mock-row.shorter { width: 45%; }
+  .pw-mock-control .pw-mock-bar { background: rgba(237, 115, 59, 0.14); }
+
+  @media (max-width: 820px) {
+    .pw-card { grid-template-columns: 1fr; gap: 26px; padding: 30px 22px; }
+    .pw-card:nth-child(odd) .pw-text { order: 1; }
+    .pw-card:nth-child(odd) .pw-mock { order: 2; }
+    .pw-mock { min-height: 160px; }
+  }
+</style>
