@@ -1,0 +1,75 @@
+---
+// Format A - the 4 pillars in ONE box, 2x2, hairline dividers, orange links.
+// Each cell carries a small dot-grid motif on the right that echoes the hero.
+const cards = [
+  { name: 'Agents', body: 'Pre-built specialists for every role, ready to work on day one. Or build your own for any job.', cta: 'Meet the agents', href: '/agents' },
+  { name: 'Connections', body: 'Connect every tool your team uses, and see exactly what data each agent can touch.', cta: 'Explore connections', href: '/connections' },
+  { name: 'Workspace', body: 'Run as many agents as you need, all in parallel, with shared memory, files, and team skills.', cta: 'Explore the workspace', href: '/workspace' },
+  { name: 'Security', body: 'Control access, restrict risky actions, and audit every step. Enterprise-grade by default.', cta: 'Learn about security', href: '/security' },
+];
+const dots = Array.from({ length: 12 });
+---
+
+<section class="wf">
+  <div class="wf-inner">
+    <div class="wf-head reveal">
+      <h2 class="wf-title">The AI workforce for your business.</h2>
+      <p class="wf-sub">Deploy agents across sales, finance, legal, and support. Each connects to your tools, learns your processes, and shares the same context.</p>
+    </div>
+
+    <div class="wf-box reveal">
+      {cards.map((c) => (
+        <a class="wf-cell" href={c.href}>
+          <div class="wf-cell-main">
+            <h3 class="wf-cell-name">{c.name}</h3>
+            <p class="wf-cell-body">{c.body}</p>
+            <span class="wf-cell-cta">{c.cta}
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </div>
+          <div class="wf-dots">{dots.map(() => <span></span>)}</div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .wf { background: #13100a; }
+  .wf-inner { max-width: 1380px; margin: 0 auto; padding: 40px 20px 80px; box-sizing: border-box; }
+  .wf-head { margin-bottom: 28px; }
+  .wf-title { font-family: 'Söhne', sans-serif; font-weight: 600; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.02em; color: #ede9e3; margin: 0 0 8px; }
+  .wf-sub { font-size: clamp(15px, 1.4vw, 18px); line-height: 1.5; color: rgba(237, 233, 227, 0.4); margin: 0; max-width: 780px; }
+
+  .wf-box {
+    border: 1px solid rgba(237, 233, 227, 0.1);
+    border-radius: 14px; overflow: hidden;
+    display: grid; grid-template-columns: 1fr 1fr;
+    background: rgba(237, 233, 227, 0.015);
+  }
+  .wf-cell {
+    display: flex; justify-content: space-between; gap: 20px;
+    padding: 36px 34px; min-height: 190px; text-decoration: none;
+    border-right: 1px solid rgba(237, 233, 227, 0.1);
+    border-bottom: 1px solid rgba(237, 233, 227, 0.1);
+    transition: background 0.2s ease;
+  }
+  .wf-cell:hover { background: rgba(237, 233, 227, 0.025); }
+  .wf-cell:nth-child(2n) { border-right: none; }
+  .wf-cell:nth-child(3), .wf-cell:nth-child(4) { border-bottom: none; }
+  .wf-cell-main { display: flex; flex-direction: column; gap: 10px; max-width: 420px; }
+  .wf-cell-name { font-family: 'Söhne', sans-serif; font-weight: 600; font-size: 20px; color: #ede9e3; margin: 0; }
+  .wf-cell-body { font-size: 15px; line-height: 1.55; color: rgba(237, 233, 227, 0.55); margin: 0; }
+  .wf-cell-cta { display: inline-flex; align-items: center; gap: 7px; margin-top: auto; padding-top: 8px; font-size: 15px; color: #ED733B; }
+  .wf-cell:hover .wf-cell-cta { gap: 10px; }
+
+  .wf-dots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-content: start; height: fit-content; flex-shrink: 0; opacity: 0.6; }
+  .wf-dots span { width: 8px; height: 8px; border-radius: 2px; background: rgba(237, 233, 227, 0.12); }
+
+  @media (max-width: 760px) {
+    .wf-box { grid-template-columns: 1fr; }
+    .wf-cell { border-right: none !important; padding: 28px 22px; min-height: 0; }
+    .wf-cell:nth-child(3) { border-bottom: 1px solid rgba(237, 233, 227, 0.1); }
+    .wf-dots { display: none; }
+  }
+</style>
