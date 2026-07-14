@@ -1,0 +1,269 @@
+---
+// New hero: centered claim + CTAs, then the task-flow animation stage.
+// Tasks slide in from the left over a grid of squares. The squares cycle
+// colors while the task processes, its steps reveal one by one, then every
+// square turns green, the task gets a check, and it slides out. Loops.
+const COLS = 7;
+const ROWS = 2; // per band (top + bottom)
+const cells = Array.from({ length: COLS * ROWS });
+---
+
+<section class="h2">
+  <div class="h2-inner">
+    <div class="h2-head reveal">
+      <h1 class="h2-title">
+        <span>Specialist agents</span>
+        <span>that run your business</span>
+      </h1>
+      <p class="h2-sub">
+        Deploy a team of AI specialists that work across your whole tool stack.
+        In the cloud, in your Slack, on your schedule.
+      </p>
+      <div class="h2-ctas">
+        <a href="/beta" class="h2-btn h2-btn-solid" onclick="window.posthog?.capture('get_started_clicked', { location: 'hero' })">
+          Start for free
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="h2-btn h2-btn-ghost" onclick="window.posthog?.capture('book_demo_clicked', { location: 'hero' })">Book a demo</a>
+      </div>
+    </div>
+
+    <div class="h2-stage reveal" id="h2-stage" aria-hidden="true">
+      <div class="h2-band h2-band-top">
+        {cells.map(() => <span class="h2-sq"></span>)}
+      </div>
+
+      <div class="h2-task" id="h2-task">
+        <div class="h2-task-head">
+          <span class="h2-task-mark" id="h2-task-mark">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M11.5 3.2a2.1 2.1 0 1 0-2.9 2.9v1.4H7.2a2.1 2.1 0 1 0 0 4.2h1.4v1.4a2.1 2.1 0 1 0 2.9 2.9v-1.4h1.4a2.1 2.1 0 1 0 0-4.2h-1.4V8.9h1.4a2.1 2.1 0 1 0-2.9-2.9V3.2Z" fill="#e01e5a"/></svg>
+          </span>
+          <span class="h2-task-title" id="h2-task-title">Review the Acme Inc. MSA and draft a negotiation brief</span>
+          <span class="h2-task-check" id="h2-task-check">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5fd39a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </span>
+        </div>
+        <div class="h2-steps" id="h2-steps">
+          <div class="h2-steps-line"></div>
+          <ul id="h2-steps-list"></ul>
+        </div>
+      </div>
+
+      <div class="h2-band h2-band-bottom">
+        {cells.map(() => <span class="h2-sq"></span>)}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .h2 { background: #13100a; position: relative; overflow: hidden; }
+  .h2-inner {
+    max-width: 1000px; margin: 0 auto;
+    padding: 150px 20px 110px;
+    display: flex; flex-direction: column; align-items: center; gap: 64px;
+    box-sizing: border-box;
+  }
+  .h2-head { display: flex; flex-direction: column; align-items: center; gap: 28px; text-align: center; }
+  .h2-title {
+    font-family: 'Söhne', sans-serif; font-weight: 600;
+    font-size: clamp(34px, 5vw, 64px); line-height: 1.06;
+    letter-spacing: -0.03em; color: #ede9e3; margin: 0;
+  }
+  .h2-title span { display: block; }
+  .h2-sub {
+    font-size: clamp(16px, 1.5vw, 19px); line-height: 1.5;
+    color: rgba(237, 233, 227, 0.55); max-width: 620px; margin: 0;
+  }
+  .h2-ctas { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .h2-btn {
+    font-family: 'Söhne', sans-serif; font-size: 16px; font-weight: 400;
+    padding: 0.85em 1.5em; border-radius: 9999px; text-decoration: none;
+    line-height: 1; display: inline-flex; align-items: center; gap: 9px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .h2-btn:hover { transform: translateY(-1px); }
+  .h2-btn-solid { color: #14120b; background: #ede9e3; border: 1px solid #ede9e3; }
+  .h2-btn-solid:hover { box-shadow: 0 4px 12px rgba(237, 233, 227, 0.15); }
+  .h2-btn-ghost { color: #ede9e3; background: transparent; border: 1px solid rgba(237, 233, 227, 0.2); }
+  .h2-btn-ghost:hover { border-color: rgba(237, 233, 227, 0.4); }
+
+  /* Animation stage */
+  .h2-stage {
+    position: relative; width: 100%; max-width: 860px;
+    display: flex; flex-direction: column; gap: 26px;
+  }
+  .h2-band {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    gap: 26px; padding: 0 6px;
+  }
+  .h2-sq {
+    aspect-ratio: 1; width: 100%; max-width: 34px; justify-self: center;
+    background: #d7d3cd; border-radius: 3px;
+    transition: background 0.45s ease;
+  }
+  .h2-sq.c-green { background: #6cd6a0; }
+  .h2-sq.c-pink { background: #e8a7e0; }
+  .h2-sq.c-blue { background: #7db8f0; }
+  .h2-sq.c-indigo { background: #2f6bff; }
+  .h2-sq.c-done { background: #6cd6a0; }
+
+  /* Task pill */
+  .h2-task {
+    background: #1b1a18; border: 1px solid rgba(237, 233, 227, 0.1);
+    border-radius: 10px; padding: 18px 22px;
+    opacity: 0; transform: translateX(-40px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  .h2-task.in { opacity: 1; transform: translateX(0); }
+  .h2-task.out { opacity: 0; transform: translateX(40px); }
+  .h2-task-head { display: flex; align-items: center; gap: 14px; }
+  .h2-task-mark { flex-shrink: 0; display: inline-flex; }
+  .h2-task-title {
+    font-size: clamp(15px, 1.6vw, 19px); color: #ede9e3; flex: 1;
+    letter-spacing: -0.01em;
+  }
+  .h2-task-check { flex-shrink: 0; opacity: 0; transition: opacity 0.3s ease; }
+  .h2-task.done .h2-task-check { opacity: 1; }
+  .h2-task.processing .h2-task-title { color: rgba(237, 233, 227, 0.45); }
+
+  .h2-steps {
+    display: grid; grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s ease, margin-top 0.5s ease, opacity 0.4s ease;
+    opacity: 0; margin-top: 0; position: relative;
+  }
+  .h2-task.processing .h2-steps, .h2-task.done .h2-steps {
+    grid-template-rows: 1fr; opacity: 1; margin-top: 16px;
+  }
+  .h2-steps > * { min-height: 0; overflow: hidden; }
+  .h2-steps-line {
+    position: absolute; left: 3px; top: 6px; bottom: 6px; width: 1.5px;
+    background: rgba(237, 233, 227, 0.15);
+  }
+  .h2-steps ul { list-style: none; margin: 0; padding: 0 0 0 22px; display: flex; flex-direction: column; gap: 14px; }
+  .h2-step {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 15px; color: rgba(237, 233, 227, 0.75);
+    opacity: 0; transform: translateY(4px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .h2-step.show { opacity: 1; transform: translateY(0); }
+  .h2-step-ico {
+    width: 18px; height: 18px; flex-shrink: 0; display: inline-flex;
+    align-items: center; justify-content: center; color: rgba(237,233,227,0.5);
+  }
+
+  @media (max-width: 640px) {
+    .h2-inner { padding: 110px 16px 72px; gap: 44px; }
+    .h2-band { gap: 16px; }
+    .h2-sq { max-width: 22px; border-radius: 2px; }
+    .h2-task { padding: 14px 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .h2-task { opacity: 1; transform: none; }
+    .h2-step { opacity: 1; transform: none; }
+  }
+</style>
+
+<script>
+  (function () {
+    const stage = document.getElementById('h2-stage');
+    if (!stage) return;
+    const task = document.getElementById('h2-task') as HTMLElement;
+    const titleEl = document.getElementById('h2-task-title') as HTMLElement;
+    const listEl = document.getElementById('h2-steps-list') as HTMLElement;
+    const squares = Array.from(stage.querySelectorAll('.h2-sq')) as HTMLElement[];
+
+    const ico = {
+      cloud: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
+      mail: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>',
+      tool: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.3 2.3-2-2 2.3-2.3z"/></svg>',
+      doc: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>',
+      slack: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M6 15a2 2 0 1 1-2-2h2v2zm1 0a2 2 0 1 1 4 0v5a2 2 0 1 1-4 0v-5zM9 6a2 2 0 1 1 2-2v2H9zm0 1a2 2 0 1 1 0 4H4a2 2 0 1 1 0-4h5zm9 2a2 2 0 1 1 2 2h-2V9zm-1 0a2 2 0 1 1-4 0V4a2 2 0 1 1 4 0v5zm-2 9a2 2 0 1 1-2 2v-2h2zm0-1a2 2 0 1 1 0-4h5a2 2 0 1 1 0 4h-5z"/></svg>',
+    };
+
+    const TASKS = [
+      { title: 'Review the Acme Inc. MSA and draft a negotiation brief', steps: [
+        ['Starting secure cloud sandbox', ico.cloud],
+        ['Fetching documents from Gmail', ico.mail],
+        ['Using the MSA skill', ico.tool],
+        ['Created redline and negotiation brief', ico.doc],
+        ['Created a draft and notified you', ico.slack],
+      ]},
+      { title: 'Reconcile last month across Stripe and Salesforce', steps: [
+        ['Starting secure cloud sandbox', ico.cloud],
+        ['Pulling charges and invoices', ico.doc],
+        ['Matching against the ledger', ico.tool],
+        ['Flagged 3 exceptions to review', ico.doc],
+        ['Posted the summary to Slack', ico.slack],
+      ]},
+      { title: 'Check account health and flag anything at risk', steps: [
+        ['Starting secure cloud sandbox', ico.cloud],
+        ['Reading Salesforce, Gong and email', ico.mail],
+        ['Scoring engagement signals', ico.tool],
+        ['Found 2 accounts trending down', ico.doc],
+        ['Sent the brief to your inbox', ico.mail],
+      ]},
+    ];
+
+    const COLORS = ['c-green', 'c-pink', 'c-blue', 'c-indigo'];
+    const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+    function clearSquares() {
+      squares.forEach(s => { s.className = 'h2-sq'; });
+    }
+
+    function renderTask(t: typeof TASKS[number]) {
+      titleEl.textContent = t.title;
+      listEl.innerHTML = t.steps.map(([label, svg]) =>
+        `<li class="h2-step"><span class="h2-step-ico">${svg}</span><span>${label}</span></li>`
+      ).join('');
+    }
+
+    async function cycle(t: typeof TASKS[number]) {
+      task.className = 'h2-task';
+      clearSquares();
+      renderTask(t);
+      const steps = Array.from(listEl.querySelectorAll('.h2-step')) as HTMLElement[];
+      void stage!.offsetHeight;
+
+      task.classList.add('in');
+      await sleep(900);
+
+      task.classList.add('processing');
+      await sleep(500);
+
+      for (let i = 0; i < steps.length; i++) {
+        steps[i].classList.add('show');
+        for (let k = 0; k < 3; k++) {
+          const idx = (i * 5 + k * 7 + 3) % squares.length;
+          squares[idx].classList.add(COLORS[(i + k) % COLORS.length]);
+        }
+        await sleep(720);
+      }
+
+      await sleep(300);
+      squares.forEach(s => { s.className = 'h2-sq c-done'; });
+      task.classList.remove('processing');
+      task.classList.add('done');
+      await sleep(1900);
+
+      task.classList.remove('in');
+      task.classList.add('out');
+      await sleep(650);
+    }
+
+    async function run() {
+      let i = 0;
+      while (true) {
+        await cycle(TASKS[i % TASKS.length]);
+        i++;
+      }
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) { io.disconnect(); run(); }
+    }, { threshold: 0.25 });
+    io.observe(stage);
+  })();
+</script>
