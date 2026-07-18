@@ -1,0 +1,109 @@
+---
+// /connections — product pillar page, content per research/website-content/connections.md.
+// PillarPage pattern: OnaNav → OnaHero(eyebrow) → Explanation → StatsBand →
+// FeatureCards(5) → QuoteBlock([VERIFY] placeholder) → TechDetails(3) → FinalCTA → MegaFooter.
+import Layout from '../layouts/Layout.astro';
+import OnaNav from '../components/ona/OnaNav.astro';
+import OnaHero from '../components/ona/OnaHero.astro';
+import Explanation from '../components/ona/Explanation.astro';
+import StatsBand from '../components/ona/StatsBand.astro';
+import FeatureCards from '../components/ona/FeatureCards.astro';
+import QuoteBlock from '../components/ona/QuoteBlock.astro';
+import TechDetails from '../components/ona/TechDetails.astro';
+import FinalCTA from '../components/ona/FinalCTA.astro';
+import MegaFooter from '../components/ona/MegaFooter.astro';
+
+// §3 — Three numbers
+const stats = [
+  { value: '100+ tools', label: 'you can connect' },
+  { value: 'Native', label: 'connections, no middleware between your agent and your tools' },
+  { value: 'Full visibility', label: 'see what each agent can reach' },
+];
+
+// §4 — Feature cards
+const featureCards = [
+  {
+    headline: 'Connect any tool',
+    eyebrowQuote: 'Native connections to the tools you already use.',
+    body: 'Slack, Gmail, Salesforce, Stripe, Sheets, and 100+ more, connected directly. No glue code, no third-party automation tool sitting in the middle.',
+  },
+  {
+    headline: 'Agents act, not just read',
+    eyebrowQuote: 'They do the work inside your tools.',
+    body: 'Update the CRM record, send the email, post to Slack, file the ticket. Not just pull data out and hand it back.',
+  },
+  {
+    headline: 'See what each agent can touch',
+    eyebrowQuote: 'No hidden access.',
+    body: 'Open any agent and see its exact tool list and the data it was granted, tool by tool.',
+  },
+  {
+    headline: 'Watch how tools get used',
+    eyebrowQuote: 'Know which integrations your agents lean on.',
+    body: 'Usage across every connected tool, so you can see what is working and what is sitting idle.',
+  },
+  {
+    headline: 'They learn your tools',
+    eyebrowQuote: 'The same job gets faster each time.',
+    body: 'The first time, an agent works out your field names and where things live. After that it reuses what it learned, so it stops re-figuring out the same tool on every run.',
+  },
+];
+
+// §6 — Technical details → docs
+const techRows = [
+  {
+    title: 'How connections work',
+    desc: 'Auth, scopes, and what an agent can access.',
+  },
+  {
+    title: 'How agents learn your tools',
+    desc: 'Field mapping, usage patterns, encoded workflows.',
+  },
+  {
+    title: 'The integration catalog',
+    desc: 'Every tool you can connect.',
+  },
+];
+---
+
+<Layout
+  title="Eluu AI — Connect your agents to every tool your team uses"
+  description="Agents read and act across your tools, and you see exactly what each one can touch."
+  path="/connections"
+>
+  <OnaNav />
+  <main>
+    <!-- §1 HERO -->
+    <OnaHero
+      eyebrow="Connections"
+      h1="Connect your agents to every tool your team uses."
+      sub="Agents read and act across your tools, and you see exactly what each one can touch."
+    />
+
+    <!-- §2 EXPLANATION -->
+    <Explanation
+      heading="Agents that act in your tools, not just read them."
+      subhead="Connect Slack, Gmail, Salesforce, Stripe, Sheets, and 100+ more, natively. Agents don't just pull data out, they take action inside your tools. And they get better at those tools the more they use them."
+      linkLabel="Explore the docs"
+      linkHref="#"
+      mediaLabel="Connected-tools view — an agent working across several systems"
+    />
+
+    <!-- §3 THREE NUMBERS -->
+    <StatsBand stats={stats} />
+
+    <!-- §4 FEATURE CARDS -->
+    <FeatureCards cards={featureCards} />
+
+    <!-- §5 TESTIMONIAL ([VERIFY] — placeholder) -->
+    <QuoteBlock />
+
+    <!-- §6 TECHNICAL DETAILS -->
+    <TechDetails rows={techRows} />
+
+    <!-- §7 FINAL CTA -->
+    <FinalCTA headline="Connect your first tool." />
+  </main>
+
+  <MegaFooter />
+</Layout>

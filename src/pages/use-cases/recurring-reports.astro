@@ -1,0 +1,141 @@
+---
+// /use-cases/recurring-reports — use-case page, content per research/website-content/usecase-recurring-reports.md.
+import Layout from '../../layouts/Layout.astro';
+import OnaNav from '../../components/ona/OnaNav.astro';
+import OnaHero from '../../components/ona/OnaHero.astro';
+import Explanation from '../../components/ona/Explanation.astro';
+import StatsBand from '../../components/ona/StatsBand.astro';
+import FeatureCards from '../../components/ona/FeatureCards.astro';
+import QuoteBlock from '../../components/ona/QuoteBlock.astro';
+import PoweredBy from '../../components/ona/PoweredBy.astro';
+import LogoBar from '../../components/ona/LogoBar.astro';
+import ComplianceBadges from '../../components/ona/ComplianceBadges.astro';
+import ResourceCards from '../../components/ona/ResourceCards.astro';
+import FinalCTA from '../../components/ona/FinalCTA.astro';
+import MegaFooter from '../../components/ona/MegaFooter.astro';
+
+// §3 — Numbers ([VERIFIED] shown, [BENCHMARK] shown)
+const stats = [
+  {
+    value: '32×',
+    label: 'the 8 AM brief has run on its own, no one starting it',
+  },
+  {
+    value: '50',
+    label: 'nightly briefs delivered without anyone asking',
+  },
+  {
+    value: '~1 hour saved',
+    label: 'each morning, the time teams spend assembling a brief by hand',
+  },
+];
+
+// §4 — Feature cards (5)
+const featureCards = [
+  {
+    headline: 'Pick the cadence',
+    eyebrowQuote: 'Daily, weekly, or month-end.',
+    body: 'Set when it runs, and it runs then. The morning brief at 8, the pipeline update on Monday, the pack at close.',
+  },
+  {
+    headline: 'It gathers the data itself',
+    eyebrowQuote: 'No one exports anything.',
+    body: 'The agent pulls straight from your tools, so nobody spends the first hour copying numbers into a sheet.',
+  },
+  {
+    headline: 'It writes it up',
+    eyebrowQuote: 'Formatted and in context, not a raw export.',
+    body: 'You get the report written, with the numbers explained, not a dump of data to interpret yourself.',
+  },
+  {
+    headline: 'It lands where you work',
+    eyebrowQuote: 'Ready in Slack before you log on.',
+    body: "The finished brief arrives in Slack or your inbox, so it's waiting when you start, not something you chase.",
+  },
+  {
+    headline: 'Every run on the record',
+    eyebrowQuote: 'You can see how each report was built.',
+    body: 'What it pulled, when, and from where.',
+  },
+];
+
+// §6 — Powered by (cross-links; body/CTA copy reused from home.md §3 pillar cards)
+const poweredBy = [
+  {
+    name: 'Connect any tool',
+    body: 'Connect every tool your team uses, and see exactly what data each agent can touch.',
+    ctaLabel: 'Explore connections',
+    href: '/connections',
+  },
+  {
+    name: 'Run it on a schedule',
+    body: 'Run as many agents as you need, all in parallel, with shared memory, files, and team skills.',
+    ctaLabel: 'Explore the workspace',
+    href: '/workspace',
+  },
+  {
+    name: 'See every run',
+    body: 'Control access, restrict risky actions, and audit every step. Enterprise-grade by default.',
+    ctaLabel: 'Learn about security',
+    href: '/security',
+  },
+];
+
+// §9 — Resource cards (placeholders until recipe/demo/docs land)
+const resourceCards = [
+  { placeholder: true, placeholderLabel: 'Recipe' },
+  { placeholder: true, placeholderLabel: 'Demo' },
+  { placeholder: true, placeholderLabel: 'Docs' },
+];
+---
+
+<Layout
+  title="Automate recurring reports and briefs — Eluu AI"
+  description="The morning brief, the weekly pipeline update, the month-end pack. An agent pulls the data, writes it up, and has it ready before you log on."
+  path="/use-cases/recurring-reports"
+>
+  <OnaNav />
+  <main>
+    <!-- §1 HERO -->
+    <OnaHero
+      eyebrow="Use case"
+      h1="An agent that writes your recurring reports, on schedule."
+      sub="The morning brief, the weekly pipeline update, the month-end pack. An agent pulls the data, writes it up, and has it ready before you log on."
+    />
+
+    <!-- §2 VALUE PROP -->
+    <Explanation
+      heading="It gathers the data, writes the report, and delivers it on schedule."
+      subhead="The weekly pack you rebuild by hand, ready every week without you touching it."
+      linkLabel="See it in the cookbook"
+      linkHref="/cookbook"
+      mediaLabel="Product visual — a scheduled brief landing in Slack"
+    />
+
+    <!-- §3 NUMBERS -->
+    <StatsBand stats={stats} />
+
+    <!-- §4 FEATURE CARDS -->
+    <FeatureCards cards={featureCards} />
+
+    <!-- §5 TESTIMONIAL -->
+    <QuoteBlock />
+
+    <!-- §6 POWERED BY -->
+    <PoweredBy blocks={poweredBy} />
+
+    <!-- §7 AGGREGATE PROOF -->
+    <LogoBar label="Aggregate proof" />
+
+    <!-- §8 COMPLIANCE -->
+    <ComplianceBadges badges={['SOC 2', 'GDPR']} />
+
+    <!-- §9 RESOURCE CARDS -->
+    <ResourceCards heading="Resources." cards={resourceCards} />
+
+    <!-- §10 FINAL CTA -->
+    <FinalCTA headline="Put your recurring reports on a schedule." />
+  </main>
+
+  <MegaFooter />
+</Layout>

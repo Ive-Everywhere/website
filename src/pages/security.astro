@@ -1,0 +1,110 @@
+---
+// /security — product pillar page, content per research/website-content/security.md.
+// (The old legal security notice now lives at /legal/security.)
+// PillarPage pattern: OnaNav → OnaHero(eyebrow) → Explanation → StatsBand →
+// FeatureCards(5) → QuoteBlock([VERIFY] placeholder) → TechDetails(3) → FinalCTA → MegaFooter.
+import Layout from '../layouts/Layout.astro';
+import OnaNav from '../components/ona/OnaNav.astro';
+import OnaHero from '../components/ona/OnaHero.astro';
+import Explanation from '../components/ona/Explanation.astro';
+import StatsBand from '../components/ona/StatsBand.astro';
+import FeatureCards from '../components/ona/FeatureCards.astro';
+import QuoteBlock from '../components/ona/QuoteBlock.astro';
+import TechDetails from '../components/ona/TechDetails.astro';
+import FinalCTA from '../components/ona/FinalCTA.astro';
+import MegaFooter from '../components/ona/MegaFooter.astro';
+
+// §3 — Three statements (security has no natural metrics; SOC 2 status [VERIFY] — not added)
+const stats = [
+  { value: 'BYOK or self-host', label: 'your data stays in your account' },
+  { value: 'Per-agent control', label: 'the tools and actions you approve, nothing more' },
+  { value: 'Every action logged', label: 'a full audit trail' },
+];
+
+// §4 — Feature cards
+const featureCards = [
+  {
+    headline: 'Control what reaches the model',
+    eyebrowQuote: 'Decide what an agent can send to an LLM.',
+    body: 'Bring your own model key, or self-host, so your data flows through your account and not ours.',
+  },
+  {
+    headline: 'Restrict each agent',
+    eyebrowQuote: 'Give each agent only the tools it needs.',
+    body: 'Limit the tools and data an agent can reach. Routine actions run on their own; risky ones wait for a person to approve.',
+  },
+  {
+    headline: 'Audit every action',
+    eyebrowQuote: 'A full record of what every agent did.',
+    body: 'What it accessed, what it changed, and when. The trail is there when finance, legal, or a customer asks.',
+  },
+  {
+    headline: 'See and control cost',
+    eyebrowQuote: 'Know what every agent and team is spending.',
+    body: 'See spend per agent and per team, and set a hard cap that stops an agent when it hits the limit.',
+  },
+  {
+    headline: 'Works with any harness',
+    eyebrowQuote: 'Your coding harnesses, under the same controls.',
+    body: 'Claude Code, Codex, and Cline connect through the same permission and audit layer, so agents built on them follow the same rules as everything else.',
+  },
+];
+
+// §6 — Technical details → docs
+const techRows = [
+  {
+    title: 'BYOK and self-hosting',
+    desc: 'Where your data flows.',
+  },
+  {
+    title: 'Roles and permissions',
+    desc: 'Who can build, connect, and change what.',
+  },
+  {
+    title: 'Audit logs and data handling',
+    desc: "What's recorded and how it's stored.",
+  },
+];
+---
+
+<Layout
+  title="Eluu AI — Enterprise controls for every agent you run"
+  description="Decide what each agent can reach and do, and keep a record of every action it takes."
+  path="/security"
+>
+  <OnaNav />
+  <main>
+    <!-- §1 HERO -->
+    <OnaHero
+      eyebrow="Security"
+      h1="Enterprise controls for every agent you run."
+      sub="Decide what each agent can reach and do, and keep a record of every action it takes."
+    />
+
+    <!-- §2 EXPLANATION -->
+    <Explanation
+      heading="Your keys, your data, your rules."
+      subhead="An agent that can reach your tools needs limits, the same way a new hire does. Bring your own model key or self-host so your data stays in your account, and give each agent only the tools and actions you approve."
+      linkLabel="Explore the docs"
+      linkHref="#"
+      mediaLabel="Access and audit view — agent permissions, action log"
+    />
+
+    <!-- §3 THREE STATEMENTS -->
+    <StatsBand stats={stats} />
+
+    <!-- §4 FEATURE CARDS -->
+    <FeatureCards cards={featureCards} />
+
+    <!-- §5 TESTIMONIAL ([VERIFY] — placeholder) -->
+    <QuoteBlock />
+
+    <!-- §6 TECHNICAL DETAILS -->
+    <TechDetails rows={techRows} />
+
+    <!-- §7 FINAL CTA -->
+    <FinalCTA headline="Put agents to work, safely." />
+  </main>
+
+  <MegaFooter />
+</Layout>

@@ -1,0 +1,141 @@
+---
+// /use-cases/replace-saas — use-case page, content per research/website-content/usecase-replace-saas.md.
+import Layout from '../../layouts/Layout.astro';
+import OnaNav from '../../components/ona/OnaNav.astro';
+import OnaHero from '../../components/ona/OnaHero.astro';
+import Explanation from '../../components/ona/Explanation.astro';
+import StatsBand from '../../components/ona/StatsBand.astro';
+import FeatureCards from '../../components/ona/FeatureCards.astro';
+import QuoteBlock from '../../components/ona/QuoteBlock.astro';
+import PoweredBy from '../../components/ona/PoweredBy.astro';
+import LogoBar from '../../components/ona/LogoBar.astro';
+import ComplianceBadges from '../../components/ona/ComplianceBadges.astro';
+import ResourceCards from '../../components/ona/ResourceCards.astro';
+import FinalCTA from '../../components/ona/FinalCTA.astro';
+import MegaFooter from '../../components/ona/MegaFooter.astro';
+
+// §3 — Numbers ([VERIFIED] shown, [BENCHMARK] shown, [VERIFY the figure] → em-dash placeholder)
+const stats = [
+  {
+    value: '2 paid tools retired',
+    label: 'one analytics, one legal-AI, both rebuilt in-house',
+  },
+  {
+    // [VERIFY the figure] — dollar amount slot stays empty until confirmed
+    label: 'the analytics subscription that got cancelled',
+  },
+  {
+    value: 'Thousands',
+    label: 'per seat, per year — what a legal-AI tool charges, gone',
+  },
+];
+
+// §4 — Feature cards (5)
+const featureCards = [
+  {
+    headline: 'Rebuild the tool',
+    eyebrowQuote: 'The reporting, review, or tracker you were renting.',
+    body: 'An agent builds the thing you were paying a vendor for, on the platform you already have.',
+  },
+  {
+    headline: 'No migration project',
+    eyebrowQuote: 'It reads your systems in place.',
+    body: 'Nothing to export out of the old vendor. The rebuild runs against your live systems from day one.',
+  },
+  {
+    headline: 'Only the features you use',
+    eyebrowQuote: "Not the vendor's one-size version.",
+    body: 'You spec what your team actually needs, and the agent builds only that, not the bloat you were paying for.',
+  },
+  {
+    headline: 'Cancel the subscription',
+    eyebrowQuote: 'The recurring bill stops.',
+    body: 'Once the rebuild is doing the job, the per-seat charge goes away.',
+  },
+  {
+    headline: "Your data stays off the vendor's servers",
+    eyebrowQuote: 'It lives in your workspace.',
+    body: "The tool and its data run in your account, not on a third party's infrastructure.",
+  },
+];
+
+// §6 — Powered by (cross-links; body/CTA copy reused from home.md §3 pillar cards)
+const poweredBy = [
+  {
+    name: 'Build it here',
+    body: 'Run as many agents as you need, all in parallel, with shared memory, files, and team skills.',
+    ctaLabel: 'Explore the workspace',
+    href: '/workspace',
+  },
+  {
+    name: 'Connect your data',
+    body: 'Connect every tool your team uses, and see exactly what data each agent can touch.',
+    ctaLabel: 'Explore connections',
+    href: '/connections',
+  },
+  {
+    name: 'Own and govern it',
+    body: 'Control access, restrict risky actions, and audit every step. Enterprise-grade by default.',
+    ctaLabel: 'Learn about security',
+    href: '/security',
+  },
+];
+
+// §9 — Resource cards (placeholders until recipe/demo/docs land)
+const resourceCards = [
+  { placeholder: true, placeholderLabel: 'Recipe' },
+  { placeholder: true, placeholderLabel: 'Demo' },
+  { placeholder: true, placeholderLabel: 'Docs' },
+];
+---
+
+<Layout
+  title="Replace the SaaS you're paying for — Eluu AI"
+  description="The single-purpose SaaS you rent, reporting, contract review, trackers, can be rebuilt on Eluu, run on your own data, and the subscription retired."
+  path="/use-cases/replace-saas"
+>
+  <OnaNav />
+  <main>
+    <!-- §1 HERO -->
+    <OnaHero
+      eyebrow="Use case"
+      h1="An agent that replaces the tools you're paying for."
+      sub="The single-purpose SaaS you rent, reporting, contract review, trackers, can be rebuilt on Eluu, run on your own data, and the subscription retired."
+    />
+
+    <!-- §2 VALUE PROP -->
+    <Explanation
+      heading="It rebuilds the tool's core on your live data, runs it in your workspace, and the vendor bill stops."
+      subhead="You keep the features your team actually uses and drop the ones you were paying for and ignoring."
+      linkLabel="See it in the cookbook"
+      linkHref="/cookbook"
+      mediaLabel="Product visual — an in-house tool replacing a paid one"
+    />
+
+    <!-- §3 NUMBERS -->
+    <StatsBand stats={stats} />
+
+    <!-- §4 FEATURE CARDS -->
+    <FeatureCards cards={featureCards} />
+
+    <!-- §5 TESTIMONIAL -->
+    <QuoteBlock />
+
+    <!-- §6 POWERED BY -->
+    <PoweredBy blocks={poweredBy} />
+
+    <!-- §7 AGGREGATE PROOF -->
+    <LogoBar label="Aggregate proof" />
+
+    <!-- §8 COMPLIANCE -->
+    <ComplianceBadges badges={['SOC 2', 'GDPR']} />
+
+    <!-- §9 RESOURCE CARDS -->
+    <ResourceCards heading="Resources." cards={resourceCards} />
+
+    <!-- §10 FINAL CTA -->
+    <FinalCTA headline="Own the tool instead of renting it." />
+  </main>
+
+  <MegaFooter />
+</Layout>

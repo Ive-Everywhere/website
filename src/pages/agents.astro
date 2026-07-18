@@ -1,0 +1,109 @@
+---
+// /agents — product pillar page, content per research/website-content/agents.md.
+// PillarPage pattern: OnaNav → OnaHero(eyebrow) → Explanation → StatsBand →
+// FeatureCards(5) → QuoteBlock([VERIFY] placeholder) → TechDetails(3) → FinalCTA → MegaFooter.
+import Layout from '../layouts/Layout.astro';
+import OnaNav from '../components/ona/OnaNav.astro';
+import OnaHero from '../components/ona/OnaHero.astro';
+import Explanation from '../components/ona/Explanation.astro';
+import StatsBand from '../components/ona/StatsBand.astro';
+import FeatureCards from '../components/ona/FeatureCards.astro';
+import QuoteBlock from '../components/ona/QuoteBlock.astro';
+import TechDetails from '../components/ona/TechDetails.astro';
+import FinalCTA from '../components/ona/FinalCTA.astro';
+import MegaFooter from '../components/ona/MegaFooter.astro';
+
+// §3 — Three numbers (product numbers)
+const stats = [
+  { value: 'Minutes', label: 'to put a prebuilt specialist to work' },
+  { value: '24/7', label: 'running in the cloud, working while you sleep' },
+  { value: '3 surfaces', label: 'it shows up on: Slack, web, and email' },
+];
+
+// §4 — Feature cards
+const featureCards = [
+  {
+    headline: 'Built and tested for the job',
+    eyebrowQuote: 'Not a prompt you hope works.',
+    body: "Each agent is assembled for its role and run against real work before it touches yours. It does the job, it isn't a demo of the job.",
+  },
+  {
+    headline: 'Reach it where you work',
+    eyebrowQuote: 'Hand it off and close your laptop.',
+    body: 'Give it a task in Slack, on the web, or over email. It works in the cloud, and the finished work comes back to you in the same place you asked.',
+  },
+  {
+    headline: 'It learns your business',
+    eyebrowQuote: 'The longer it works, the more it knows.',
+    body: "Every task teaches it your accounts, your process, your exceptions. It doesn't reset between sessions, and that knowledge doesn't leave when someone quits.",
+  },
+  {
+    headline: 'Prebuilt, or build your own',
+    eyebrowQuote: 'Start in minutes, or build for any job.',
+    body: 'Pick a specialist for a common role, or build one yourself. Name the role, connect the tools, set how it works. No code.',
+  },
+  {
+    headline: 'You stay in control',
+    eyebrowQuote: 'You see what every agent can touch.',
+    body: "What data it can reach, what it can do, and every step it took. Nothing runs where you can't see it.",
+  },
+];
+
+// §6 — Technical details → docs
+const techRows = [
+  {
+    title: 'How an agent is configured',
+    desc: 'Identity, skills, tools, behaviour, integrations.',
+  },
+  {
+    title: 'How agents run in the cloud',
+    desc: 'The runtime, scheduling, hand-off.',
+  },
+  {
+    title: 'How agent memory works',
+    desc: "What it learns, where it's stored, who sees it.",
+  },
+];
+---
+
+<Layout
+  title="Eluu AI — An AI specialist for every role on your team"
+  description="Each one comes built for its job and connected to your tools. Hand it work in Slack, and it runs in the cloud while you get on with your day."
+  path="/agents"
+>
+  <OnaNav />
+  <main>
+    <!-- §1 HERO -->
+    <OnaHero
+      eyebrow="Agents"
+      h1="An AI specialist for every role on your team."
+      sub="Each one comes built for its job and connected to your tools. Hand it work in Slack, and it runs in the cloud while you get on with your day."
+    />
+
+    <!-- §2 EXPLANATION -->
+    <Explanation
+      heading="Built for the role, ready to work."
+      subhead="Each agent is built for a specific role, with the tools, skills, and knowledge that role needs wired in and tested on real work. Most AI is an experiment. An agent isn't. And it runs in the cloud, so you hand off the work and close your laptop."
+      linkLabel="See the agent library"
+      linkHref="/cookbook"
+      mediaLabel="Product clip — an agent running a real task end to end"
+    />
+
+    <!-- §3 THREE NUMBERS -->
+    <StatsBand stats={stats} />
+
+    <!-- §4 FEATURE CARDS -->
+    <FeatureCards cards={featureCards} />
+
+    <!-- §5 TESTIMONIAL ([VERIFY] — placeholder) -->
+    <QuoteBlock />
+
+    <!-- §6 TECHNICAL DETAILS -->
+    <TechDetails rows={techRows} />
+
+    <!-- §7 FINAL CTA -->
+    <FinalCTA headline="Start with one specialist. Grow a team." />
+  </main>
+
+  <MegaFooter />
+</Layout>

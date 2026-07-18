@@ -1,0 +1,141 @@
+---
+// /use-cases/reconcile-data — use-case page, content per research/website-content/usecase-reconcile-data.md.
+import Layout from '../../layouts/Layout.astro';
+import OnaNav from '../../components/ona/OnaNav.astro';
+import OnaHero from '../../components/ona/OnaHero.astro';
+import Explanation from '../../components/ona/Explanation.astro';
+import StatsBand from '../../components/ona/StatsBand.astro';
+import FeatureCards from '../../components/ona/FeatureCards.astro';
+import QuoteBlock from '../../components/ona/QuoteBlock.astro';
+import PoweredBy from '../../components/ona/PoweredBy.astro';
+import LogoBar from '../../components/ona/LogoBar.astro';
+import ComplianceBadges from '../../components/ona/ComplianceBadges.astro';
+import ResourceCards from '../../components/ona/ResourceCards.astro';
+import FinalCTA from '../../components/ona/FinalCTA.astro';
+import MegaFooter from '../../components/ona/MegaFooter.astro';
+
+// §3 — Stats ([VERIFIED] shown, [BENCHMARK] shown, [VERIFY] → em-dash placeholder)
+const stats = [
+  {
+    value: '378 runs',
+    label: 'on their own — reconciliation that fires on a schedule, not when someone remembers',
+  },
+  {
+    value: 'Same-day',
+    label: 'close, against an industry-standard 5 to 7 days',
+  },
+  {
+    // [VERIFY the share] — value slot stays empty until confirmed
+    label: 'of lines cleared untouched, so a person only sees the mismatches',
+  },
+];
+
+// §4 — Feature blocks (5)
+const featureCards = [
+  {
+    headline: 'It reads every system',
+    eyebrowQuote: 'One pass across your whole stack.',
+    body: "Stripe, the ledger, the CRM, the spreadsheet. It pulls from all of them, so you're not copying between tabs.",
+  },
+  {
+    headline: 'It matches line by line',
+    eyebrowQuote: 'Record by record, not just the totals.',
+    body: 'It compares the way an analyst would, field by field, and catches the mismatch a totals check would miss.',
+  },
+  {
+    headline: "It only flags what's off",
+    eyebrowQuote: "Look at what's wrong, skip what's right.",
+    body: 'It clears everything that matches and hands you the short list that needs a look.',
+  },
+  {
+    headline: 'It runs on a schedule',
+    eyebrowQuote: 'Every night, or every few hours.',
+    body: 'Runs on its own, and the result is in Slack before you open the sheet.',
+  },
+  {
+    headline: 'Every match is logged',
+    eyebrowQuote: 'You can see how it got there.',
+    body: 'What it compared, what it matched, and what it flagged.',
+  },
+];
+
+// §6 — Powered by (cross-links; body/CTA copy reused from home.md §3 pillar cards)
+const poweredBy = [
+  {
+    name: 'Connect any system',
+    body: 'Connect every tool your team uses, and see exactly what data each agent can touch.',
+    ctaLabel: 'Explore connections',
+    href: '/connections',
+  },
+  {
+    name: 'Run it on a schedule',
+    body: 'Run as many agents as you need, all in parallel, with shared memory, files, and team skills.',
+    ctaLabel: 'Explore the workspace',
+    href: '/workspace',
+  },
+  {
+    name: 'See every action',
+    body: 'Control access, restrict risky actions, and audit every step. Enterprise-grade by default.',
+    ctaLabel: 'Learn about security',
+    href: '/security',
+  },
+];
+
+// §9 — Resource cards (placeholders until recipe/demo/docs land)
+const resourceCards = [
+  { placeholder: true, placeholderLabel: 'Recipe' },
+  { placeholder: true, placeholderLabel: 'Demo' },
+  { placeholder: true, placeholderLabel: 'Docs' },
+];
+---
+
+<Layout
+  title="Reconcile data across every system — Eluu AI"
+  description="Charges in one tool, invoices in another, the ledger in a third. The agent pulls from all of them, matches line by line, and flags only what doesn't tie out."
+  path="/use-cases/reconcile-data"
+>
+  <OnaNav />
+  <main>
+    <!-- §1 HERO -->
+    <OnaHero
+      eyebrow="Use case"
+      h1="An agent that reconciles data across every system."
+      sub="Charges in one tool, invoices in another, the ledger in a third. The agent pulls from all of them, matches line by line, and flags only what doesn't tie out."
+    />
+
+    <!-- §2 VALUE PROP -->
+    <Explanation
+      heading="It pulls from every system, matches line by line, and flags only the exceptions."
+      subhead="The month-end grind, done every night. You look at what's wrong, not everything that's right."
+      linkLabel="See it in the cookbook"
+      linkHref="/cookbook"
+      mediaLabel="Product visual — reconciliation run (systems in, exceptions out)"
+    />
+
+    <!-- §3 STATS -->
+    <StatsBand stats={stats} />
+
+    <!-- §4 FEATURE BLOCKS -->
+    <FeatureCards cards={featureCards} />
+
+    <!-- §5 TESTIMONIAL -->
+    <QuoteBlock />
+
+    <!-- §6 POWERED BY -->
+    <PoweredBy blocks={poweredBy} />
+
+    <!-- §7 AGGREGATE PROOF -->
+    <LogoBar label="Aggregate proof" />
+
+    <!-- §8 COMPLIANCE -->
+    <ComplianceBadges badges={['SOC 2', 'GDPR']} />
+
+    <!-- §9 RESOURCE CARDS -->
+    <ResourceCards heading="Resources." cards={resourceCards} />
+
+    <!-- §10 FINAL CTA -->
+    <FinalCTA headline="Put reconciliation on autopilot." />
+  </main>
+
+  <MegaFooter />
+</Layout>
