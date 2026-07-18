@@ -28,7 +28,7 @@ const { heading = 'Powered by the Eluu platform', blocks } = Astro.props;
           </div>
           <span class="opb-card-cta">
             {block.ctaLabel}
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </span>
         </a>
       ))}
@@ -39,7 +39,7 @@ const { heading = 'Powered by the Eluu platform', blocks } = Astro.props;
 <style>
   .opb {
     background: #13100a;
-    padding: 112px 0 0;
+    padding: 96px 0 0;
   }
   .opb-container {
     max-width: 1380px;
@@ -47,7 +47,7 @@ const { heading = 'Powered by the Eluu platform', blocks } = Astro.props;
     padding: 0 20px;
     box-sizing: border-box;
   }
-  .opb-intro { margin-bottom: 22.4px; }
+  .opb-intro { margin-bottom: 24px; }
   .opb-heading {
     font-family: 'Söhne', sans-serif;
     font-size: clamp(22px, 2.3vw, 32px);
@@ -76,25 +76,25 @@ const { heading = 'Powered by the Eluu platform', blocks } = Astro.props;
     justify-content: space-between;
     gap: 24px;
     background: #1e1d1b;
-    border-radius: 10px;
+    border-radius: 2px;
     padding: 24px;
     box-sizing: border-box;
     text-decoration: none;
     overflow: hidden;
-    transition: background 0.25s ease;
+    transition: background 0.18s ease-out, transform 0.18s ease-out;
   }
   .opb-card::before {
     content: "";
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 10px;
+    border-radius: 2px;
     border: 1px solid rgba(237, 233, 227, 0.06);
     z-index: 30;
-    transition: border-color 0.25s ease;
+    transition: border-color 0.18s ease-out;
   }
-  .opb-card:hover { background: #232220; }
-  .opb-card:hover::before { border-color: rgba(237, 233, 227, 0.08); }
+  .opb-card:hover { background: #23221f; transform: translateY(-2px); }
+  .opb-card:hover::before { border-color: rgba(237, 233, 227, 0.18); }
 
   .opb-card-text {
     display: flex;
@@ -128,8 +128,10 @@ const { heading = 'Powered by the Eluu platform', blocks } = Astro.props;
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    transition: color 0.18s ease-out;
   }
-  .opb-card-cta svg { transition: transform 0.2s ease; }
+  .opb-card-cta svg { transition: transform 0.18s ease-out; }
+  .opb-card:hover .opb-card-cta { color: #f28e5f; }
   .opb-card:hover .opb-card-cta svg { transform: translateX(2px); }
 
   @media (max-width: 639px) {

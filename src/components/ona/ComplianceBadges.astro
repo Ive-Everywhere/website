@@ -1,7 +1,6 @@
 ---
-// ComplianceBadges — per ona ref (frame-07/08 "Enterprise-ready." + case
-// frame-07): bold heading line with a muted second line, then a row of wide
-// badge TILES (equal cards, centered badge mark inside, generous padding).
+// ComplianceBadges — quiet trust strip: heading/body intro, then a
+// left-aligned row of compact inline badges (icon + label side by side).
 // Badges render muted pending certification verification — never a claimed fact.
 // Props: heading?, body?, badges (string[]).
 interface Props {
@@ -22,8 +21,8 @@ const { heading, body, badges = ['SOC 2', 'GDPR'] } = Astro.props;
     )}
     <div class="ocb-row reveal">
       {badges.map((badge) => (
-        <div class="ocb-tile">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <div class="ocb-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
           <span>{badge}</span>
@@ -36,7 +35,7 @@ const { heading, body, badges = ['SOC 2', 'GDPR'] } = Astro.props;
 <style>
   .ocb {
     background: #13100a;
-    padding: 112px 0 0;
+    padding: 96px 0 0;
   }
   .ocb-container {
     max-width: 1380px;
@@ -45,7 +44,7 @@ const { heading, body, badges = ['SOC 2', 'GDPR'] } = Astro.props;
     box-sizing: border-box;
   }
   .ocb-intro {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     max-width: 720px;
     display: flex;
     flex-direction: column;
@@ -72,49 +71,37 @@ const { heading, body, badges = ['SOC 2', 'GDPR'] } = Astro.props;
     text-wrap: pretty;
   }
 
-  /* ── Equal wide tiles ── */
+  /* ── Quiet trust strip: compact inline badges ── */
   .ocb-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-  @media (min-width: 720px) {
-    /* ona shows a 4-across row; with fewer badges the tiles keep 4-col width */
-    .ocb-row { grid-template-columns: repeat(4, 1fr); }
-  }
-  .ocb-tile {
-    position: relative;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    flex-wrap: wrap;
     gap: 10px;
-    min-height: 110px;
+  }
+  .ocb-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
     background: #1e1d1b;
-    border-radius: 10px;
-    padding: 24px;
+    border: 1px solid rgba(237, 233, 227, 0.06);
+    border-radius: 2px;
     box-sizing: border-box;
-    overflow: hidden;
     font-family: 'Söhne', sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     letter-spacing: -0.005em;
     color: rgba(237, 233, 227, 0.55);
+    line-height: 1;
+    transition: border-color 0.18s ease-out, color 0.18s ease-out;
   }
-  .ocb-tile::before {
-    content: "";
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    border-radius: 10px;
-    border: 1px solid rgba(237, 233, 227, 0.06);
-    z-index: 30;
+  .ocb-badge:hover {
+    border-color: rgba(237, 233, 227, 0.14);
+    color: rgba(237, 233, 227, 0.75);
   }
-  .ocb-tile svg { color: rgba(237, 233, 227, 0.3); flex-shrink: 0; }
+  .ocb-badge svg { color: rgba(237, 233, 227, 0.3); flex-shrink: 0; }
 
   @media (max-width: 639px) {
     .ocb { padding: 64px 0 0; }
-    .ocb-row { gap: 10px; }
-    .ocb-tile { min-height: 90px; padding: 18px; }
+    .ocb-badge { padding: 12px 18px; }
   }
 </style>

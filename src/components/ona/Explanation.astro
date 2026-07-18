@@ -40,7 +40,7 @@ const hasMedia = Astro.slots.has('default');
 <style>
   .oex {
     background: #13100a;
-    padding: 112px 0 0;
+    padding: 96px 0 0;
   }
   .oex-container {
     max-width: 1380px;
@@ -96,10 +96,10 @@ const hasMedia = Astro.slots.has('default');
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    transition: opacity 0.2s ease;
+    transition: color 0.18s ease-out;
   }
-  .oex-link:hover { opacity: 0.8; }
-  .oex-link svg { transition: transform 0.2s ease; }
+  .oex-link:hover { color: #f28e5f; }
+  .oex-link svg { transition: transform 0.18s ease-out; }
   .oex-link:hover svg { transform: translateX(2px); }
 
   .oex-media { width: 100%; min-width: 0; }

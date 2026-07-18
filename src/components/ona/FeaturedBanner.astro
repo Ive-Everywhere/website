@@ -45,7 +45,7 @@ const { eyebrow, heading, body, ctaLabel, ctaHref, thumbnails = [] } = Astro.pro
 <style>
   .ofb {
     background: #13100a;
-    padding: 112px 0 0;
+    padding: 96px 0 0;
   }
   .ofb-container {
     max-width: 1380px;
@@ -56,7 +56,7 @@ const { eyebrow, heading, body, ctaLabel, ctaHref, thumbnails = [] } = Astro.pro
   .ofb-card {
     position: relative;
     background: #1e1d1b;
-    border-radius: 10px;
+    border-radius: 2px;
     overflow: hidden;
     display: grid;
     grid-template-columns: 1fr;
@@ -69,7 +69,7 @@ const { eyebrow, heading, body, ctaLabel, ctaHref, thumbnails = [] } = Astro.pro
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 10px;
+    border-radius: 2px;
     border: 1px solid rgba(237, 233, 227, 0.06);
     z-index: 30;
   }
@@ -89,11 +89,12 @@ const { eyebrow, heading, body, ctaLabel, ctaHref, thumbnails = [] } = Astro.pro
   }
   .ofb-eyebrow {
     font-family: 'Söhne', sans-serif;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #ED733B;
+    line-height: 1;
     margin-bottom: 12px;
   }
   .ofb-heading {
@@ -128,12 +129,12 @@ const { eyebrow, heading, body, ctaLabel, ctaHref, thumbnails = [] } = Astro.pro
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    border-radius: 6px;
+    border-radius: 4px;
     padding: 9px 18px;
     line-height: 1;
-    transition: opacity 0.2s ease;
+    transition: background 0.18s ease-out, transform 0.18s ease-out;
   }
-  .ofb-cta:hover { opacity: 0.9; }
+  .ofb-cta:hover { background: #f28e5f; transform: translateY(-1px); }
 
   /* ── Thumbnail row with captions ── */
   .ofb-thumbs {

@@ -33,7 +33,7 @@ const { heading, rows } = Astro.props;
               data-todo={row.linkHref ? undefined : ''}
             >
               {row.linkLabel ?? 'Docs'}
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
           </div>
         </div>
@@ -45,7 +45,7 @@ const { heading, rows } = Astro.props;
 <style>
   .otd {
     background: #13100a;
-    padding: 112px 0 0;
+    padding: 96px 0 0;
   }
   .otd-container {
     max-width: 1380px;
@@ -53,7 +53,7 @@ const { heading, rows } = Astro.props;
     padding: 0 20px;
     box-sizing: border-box;
   }
-  .otd-intro { margin-bottom: 22.4px; }
+  .otd-intro { margin-bottom: 24px; }
   .otd-heading {
     font-family: 'Söhne', sans-serif;
     font-size: clamp(22px, 2.3vw, 32px);
@@ -118,10 +118,10 @@ const { heading, rows } = Astro.props;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    transition: opacity 0.2s ease;
+    transition: color 0.18s ease-out;
   }
-  .otd-row-link:hover { opacity: 0.8; }
-  .otd-row-link svg { transition: transform 0.2s ease; }
+  .otd-row-link:hover { color: #f28e5f; }
+  .otd-row-link svg { transition: transform 0.18s ease-out; }
   .otd-row-link:hover svg { transform: translateX(2px); }
 
   @media (max-width: 639px) {

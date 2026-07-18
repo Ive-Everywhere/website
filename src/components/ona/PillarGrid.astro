@@ -68,7 +68,7 @@ const H = (ROWS - 1) * STEP + R * 2;
                   cx={d.x}
                   cy={d.y}
                   r={R}
-                  fill={d.on ? 'rgba(237, 233, 227, 0.45)' : 'rgba(237, 233, 227, 0.12)'}
+                  class={d.on ? 'opg-dot-on' : 'opg-dot-off'}
                 />
               ))}
             </svg>
@@ -82,7 +82,7 @@ const H = (ROWS - 1) * STEP + R * 2;
 <style>
   .opg {
     background: #13100a;
-    padding: 112px 0 0;
+    padding: 96px 0 0;
   }
   .opg-container {
     max-width: 1380px;
@@ -91,7 +91,7 @@ const H = (ROWS - 1) * STEP + R * 2;
     box-sizing: border-box;
   }
   .opg-intro {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
   .opg-heading {
     font-family: 'Söhne', sans-serif;
@@ -109,7 +109,7 @@ const H = (ROWS - 1) * STEP + R * 2;
     display: grid;
     grid-template-columns: 1fr;
     border: 1px solid rgba(237, 233, 227, 0.1);
-    border-radius: 10px;
+    border-radius: 2px;
     overflow: hidden;
   }
   @media (min-width: 900px) {
@@ -125,7 +125,7 @@ const H = (ROWS - 1) * STEP + R * 2;
     box-sizing: border-box;
     text-decoration: none;
     border-bottom: 1px solid rgba(237, 233, 227, 0.1);
-    transition: background 0.25s ease;
+    transition: background 0.18s ease-out;
   }
   .opg-cell:last-child { border-bottom: none; }
   @media (min-width: 900px) {
@@ -170,14 +170,26 @@ const H = (ROWS - 1) * STEP + R * 2;
     align-items: center;
     gap: 6px;
     margin-top: 26px;
+    transition: color 0.18s ease-out;
   }
-  .opg-cell-cta svg { transition: transform 0.2s ease; }
+  .opg-cell-cta svg { transition: transform 0.18s ease-out; }
+  .opg-cell:hover .opg-cell-cta { color: #f28e5f; }
   .opg-cell:hover .opg-cell-cta svg { transform: translateX(2px); }
 
   .opg-cell-matrix {
     flex-shrink: 0;
     display: flex;
     align-items: flex-start;
+  }
+  .opg-cell-matrix :global(.opg-dot-on) {
+    fill: rgba(237, 233, 227, 0.45);
+    transition: fill 0.18s ease-out;
+  }
+  .opg-cell-matrix :global(.opg-dot-off) {
+    fill: rgba(237, 233, 227, 0.12);
+  }
+  .opg-cell:hover .opg-cell-matrix :global(.opg-dot-on) {
+    fill: rgba(237, 233, 227, 0.75);
   }
   @media (max-width: 479px) {
     .opg-cell-matrix { display: none; }

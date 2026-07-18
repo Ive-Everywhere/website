@@ -54,7 +54,7 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
 <style>
   .oqb {
     background: #13100a;
-    padding: 112px 0 0;
+    padding: 96px 0 0;
   }
   .oqb-container {
     max-width: 1380px;
@@ -67,7 +67,7 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
   .oqb-band {
     position: relative;
     background: #1e1d1b;
-    border-radius: 10px;
+    border-radius: 2px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -81,7 +81,7 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 10px;
+    border-radius: 2px;
     border: 1px solid rgba(237, 233, 227, 0.06);
     z-index: 30;
   }
@@ -126,14 +126,16 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
     align-items: center;
     gap: 6px;
     border: 1px solid rgba(237, 115, 59, 0.25);
-    border-radius: 9999px;
+    border-radius: 4px;
     padding: 9px 18px;
-    transition: background 0.25s ease, border-color 0.25s ease;
+    transition: background 0.18s ease-out, border-color 0.18s ease-out;
   }
+  .oqb-cta svg { transition: transform 0.18s ease-out; }
   .oqb-cta:hover {
     background: rgba(237, 115, 59, 0.06);
     border-color: rgba(237, 115, 59, 0.4);
   }
+  .oqb-cta:hover svg { transform: translateX(2px); }
 
   /* ── Stats row under the band (3 cards, big numeral + muted label) ── */
   .oqb-stats {
@@ -151,7 +153,7 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
     flex-direction: column;
     gap: 10px;
     background: #1e1d1b;
-    border-radius: 10px;
+    border-radius: 2px;
     padding: 32px 28px 36px;
     box-sizing: border-box;
     overflow: hidden;
@@ -161,7 +163,7 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 10px;
+    border-radius: 2px;
     border: 1px solid rgba(237, 233, 227, 0.06);
     z-index: 30;
   }
@@ -172,6 +174,7 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
     color: #ede9e3;
     line-height: 1;
     letter-spacing: -0.025em;
+    font-variant-numeric: tabular-nums;
   }
   .oqb-stat-label {
     font-family: 'Söhne', sans-serif;

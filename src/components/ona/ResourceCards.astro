@@ -97,7 +97,7 @@ const { heading, variant = 'grid', cards } = Astro.props;
 <style>
   .orc {
     background: #13100a;
-    padding: 112px 0 0;
+    padding: 96px 0 0;
   }
   .orc-container {
     max-width: 1380px;
@@ -105,7 +105,7 @@ const { heading, variant = 'grid', cards } = Astro.props;
     padding: 0 20px;
     box-sizing: border-box;
   }
-  .orc-intro { margin-bottom: 32px; }
+  .orc-intro { margin-bottom: 24px; }
   .orc-heading {
     font-family: 'Söhne', sans-serif;
     font-size: clamp(22px, 2.3vw, 32px);
@@ -138,25 +138,25 @@ const { heading, variant = 'grid', cards } = Astro.props;
     justify-content: space-between;
     gap: 24px;
     background: #1e1d1b;
-    border-radius: 10px;
+    border-radius: 2px;
     padding: 24px 28px;
     box-sizing: border-box;
     text-decoration: none;
     overflow: hidden;
-    transition: background 0.25s ease;
+    transition: background 0.18s ease-out;
   }
   .orc-row::before {
     content: "";
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 10px;
+    border-radius: 2px;
     border: 1px solid rgba(237, 233, 227, 0.06);
     z-index: 30;
-    transition: border-color 0.25s ease;
+    transition: border-color 0.18s ease-out;
   }
-  a.orc-row:hover { background: #232220; }
-  a.orc-row:hover::before { border-color: rgba(237, 233, 227, 0.1); }
+  a.orc-row:hover { background: #23221f; }
+  a.orc-row:hover::before { border-color: rgba(237, 233, 227, 0.18); }
   .orc-row--placeholder {
     align-items: center;
     justify-content: center;
@@ -208,6 +208,11 @@ const { heading, variant = 'grid', cards } = Astro.props;
     border-radius: 4px;
     padding: 4px 10px;
     line-height: 1;
+    transition: border-color 0.18s ease-out, color 0.18s ease-out;
+  }
+  a.orc-row:hover .orc-row-tag {
+    border-color: rgba(237, 233, 227, 0.25);
+    color: rgba(237, 233, 227, 0.7);
   }
 
   /* ── grid variant: 3 columns, media on top ── */
@@ -227,12 +232,12 @@ const { heading, variant = 'grid', cards } = Astro.props;
     flex-direction: column;
     gap: 18px;
     background: #1e1d1b;
-    border-radius: 10px;
+    border-radius: 2px;
     padding: 20px;
     box-sizing: border-box;
     text-decoration: none;
     overflow: hidden;
-    transition: background 0.25s ease;
+    transition: background 0.18s ease-out, transform 0.18s ease-out;
     min-height: 220px;
   }
   .orc-card::before {
@@ -240,13 +245,13 @@ const { heading, variant = 'grid', cards } = Astro.props;
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 10px;
+    border-radius: 2px;
     border: 1px solid rgba(237, 233, 227, 0.06);
     z-index: 30;
-    transition: border-color 0.25s ease;
+    transition: border-color 0.18s ease-out;
   }
-  a.orc-card:hover { background: #232220; }
-  a.orc-card:hover::before { border-color: rgba(237, 233, 227, 0.1); }
+  a.orc-card:hover { background: #23221f; transform: translateY(-2px); }
+  a.orc-card:hover::before { border-color: rgba(237, 233, 227, 0.18); }
 
   .orc-card--placeholder {
     align-items: center;
@@ -271,11 +276,12 @@ const { heading, variant = 'grid', cards } = Astro.props;
   }
   .orc-card-eyebrow {
     font-family: 'Söhne', sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #ED733B;
+    line-height: 1;
   }
   .orc-card-title {
     font-family: 'Söhne', sans-serif;
@@ -305,8 +311,10 @@ const { heading, variant = 'grid', cards } = Astro.props;
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    transition: color 0.18s ease-out;
   }
-  .orc-card-cta svg { transition: transform 0.2s ease; }
+  .orc-card-cta svg { transition: transform 0.18s ease-out; }
+  a.orc-card:hover .orc-card-cta { color: #f28e5f; }
   a.orc-card:hover .orc-card-cta svg { transform: translateX(2px); }
 
   @media (max-width: 639px) {

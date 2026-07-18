@@ -135,6 +135,16 @@ const resources = [
   </div>
 </aside>
 
+<style is:global>
+  /* Craft details for all ona-structure pages (OnaNav is on every one). */
+  ::selection { background: rgba(237, 115, 59, 0.35); color: #ede9e3; }
+  a:focus-visible,
+  button:focus-visible {
+    outline: 1px solid #ED733B;
+    outline-offset: 2px;
+  }
+</style>
+
 <style>
   .onav {
     position: fixed;
@@ -225,7 +235,6 @@ const resources = [
     width: 4px;
     height: 4px;
     background: #ED733B;
-    border-radius: 50%;
     transform: translateX(-50%);
   }
 
@@ -284,7 +293,7 @@ const resources = [
   .onav-dd-item {
     text-decoration: none;
     padding: 16px;
-    border-radius: 12px;
+    border-radius: 4px;
     opacity: 0;
     transform: translateY(6px);
     transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
@@ -329,7 +338,7 @@ const resources = [
     font-family: 'Söhne', sans-serif;
     font-size: 14px;
     font-weight: 400;
-    border-radius: 8px;
+    border-radius: 4px;
     padding: 8px 18px;
     text-decoration: none;
     line-height: 1;

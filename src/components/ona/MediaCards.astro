@@ -94,7 +94,7 @@ const icons: Record<string, string> = {
 <style>
   .omc {
     background: #13100a;
-    padding: 112px 0 0;
+    padding: 96px 0 0;
   }
   .omc-container {
     max-width: 1380px;
@@ -103,7 +103,7 @@ const icons: Record<string, string> = {
     box-sizing: border-box;
   }
   .omc-intro {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -137,7 +137,7 @@ const icons: Record<string, string> = {
   .omc-card {
     position: relative;
     background: #1e1d1b;
-    border-radius: 10px;
+    border-radius: 2px;
     overflow: hidden;
     display: grid;
     grid-template-columns: 1fr;
@@ -150,7 +150,7 @@ const icons: Record<string, string> = {
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 10px;
+    border-radius: 2px;
     border: 1px solid rgba(237, 233, 227, 0.06);
     z-index: 30;
   }
@@ -224,14 +224,13 @@ const icons: Record<string, string> = {
     gap: 12px;
     padding: 16px 0;
     text-decoration: none;
-    transition: border-color 0.2s ease;
   }
   .omc-link-icon {
     display: flex;
     align-items: center;
     color: rgba(237, 233, 227, 0.35);
     flex-shrink: 0;
-    transition: color 0.2s ease;
+    transition: color 0.18s ease-out;
   }
   .omc-link-label {
     font-family: 'Söhne', sans-serif;
@@ -240,13 +239,13 @@ const icons: Record<string, string> = {
     color: rgba(237, 233, 227, 0.75);
     line-height: 1.4;
     letter-spacing: -0.005em;
-    transition: color 0.2s ease;
+    transition: color 0.18s ease-out;
   }
   .omc-link-arrow {
     color: rgba(237, 233, 227, 0.3);
     margin-left: auto;
     flex-shrink: 0;
-    transition: transform 0.2s ease, color 0.2s ease;
+    transition: transform 0.18s ease-out, color 0.18s ease-out;
   }
   .omc-link:hover .omc-link-label { color: #ede9e3; }
   .omc-link:hover .omc-link-icon { color: #ED733B; }

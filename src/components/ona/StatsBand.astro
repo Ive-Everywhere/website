@@ -29,7 +29,7 @@ const { stats } = Astro.props;
 <style>
   .osb {
     background: #13100a;
-    padding: 112px 0 0;
+    padding: 96px 0 0;
   }
   .osb-container {
     max-width: 1380px;
@@ -52,7 +52,7 @@ const { stats } = Astro.props;
     flex-direction: column;
     gap: 12px;
     background: #1e1d1b;
-    border-radius: 10px;
+    border-radius: 2px;
     padding: 40px 32px 44px;
     box-sizing: border-box;
     overflow: hidden;
@@ -62,7 +62,7 @@ const { stats } = Astro.props;
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 10px;
+    border-radius: 2px;
     border: 1px solid rgba(237, 233, 227, 0.06);
     z-index: 30;
   }
@@ -73,6 +73,7 @@ const { stats } = Astro.props;
     color: #ede9e3;
     line-height: 1;
     letter-spacing: -0.025em;
+    font-variant-numeric: tabular-nums;
   }
   .osb-label {
     font-family: 'Söhne', sans-serif;

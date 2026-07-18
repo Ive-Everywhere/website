@@ -103,13 +103,13 @@ const {
     border-radius: 9999px;
     text-decoration: none;
     line-height: 1;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
   .ofcta-btn:hover { transform: translateY(-1px); }
   .ofcta-btn-solid { color: #14120b; background: #ede9e3; border: 1px solid #ede9e3; }
   .ofcta-btn-solid:hover { box-shadow: 0 4px 16px rgba(237, 233, 227, 0.15); }
   .ofcta-btn-ghost { color: #ede9e3; background: transparent; border: 1px solid rgba(237, 233, 227, 0.2); }
-  .ofcta-btn-ghost:hover { box-shadow: 0 4px 16px rgba(237, 233, 227, 0.1); }
+  .ofcta-btn-ghost:hover { border-color: rgba(237, 233, 227, 0.4); box-shadow: 0 4px 16px rgba(237, 233, 227, 0.1); }
 
   @media (max-width: 400px) {
     .ofcta-content { padding: 32px 16px; }

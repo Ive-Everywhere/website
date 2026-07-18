@@ -1,213 +1,162 @@
 ---
-// HeroTaskAnimation — looping "agents as process nodes" hero visual.
-// A Slack task box slides in, processes through a 5-step timeline while
-// agent-node squares above/below pulse into color, completes green, resets.
-// Self-contained: vanilla JS state machine (setTimeout chain) toggles classes,
-// all motion lives in CSS. Starts/pauses via IntersectionObserver.
-const COLS = 7;
-const ROWS = [0, 1];
-const cells = (prefix: string) =>
-  ROWS.map((r) =>
-    Array.from({ length: COLS }, (_, c) => ({
-      id: `${prefix}${r * COLS + c}`,
-      col: c,
-      row: r,
-    }))
-  );
-const topRows = cells('a');
-const bottomRows = cells('b');
+// HeroTaskAnimation — GSAP-driven hero visual.
+// A constant, uniform grid of squares fills the stage. A Slack task box slides
+// in over the grid's center rows (only the covered footprint clears), timeline
+// items stream in while random squares flicker like parallel computation, then
+// a mint radial wave marks completion and everything resets. One master
+// gsap.timeline({ repeat: -1 }) plus a delayedCall-based flicker scheduler.
+// Starts/pauses via IntersectionObserver; prefers-reduced-motion gets a static
+// completed frame straight from CSS (no JS motion at all).
+const D_COLS = 14;
+const D_ROWS = 9;
+const M_COLS = 8;
+const M_ROWS = 6;
+const desktopCells = Array.from({ length: D_COLS * D_ROWS }, (_, i) => i);
+const mobileCells = Array.from({ length: M_COLS * M_ROWS }, (_, i) => i);
 ---
 
 <div class="hta" aria-hidden="true">
-  <div class="hta-grid">
-    {topRows.map((row, r) => (
-      <div class="hta-row" data-row={r}>
-        {row.map((cell) => (
-          <span class="sq" data-id={cell.id} style={`--i:${cell.col}`}></span>
-        ))}
-      </div>
-    ))}
+  {/* Desktop grid: 14 x 9. Footprint (cleared under box): cols 1-12, rows 3-6 (0-indexed). */}
+  <div
+    class="hta-cells hta-cells--d"
+    data-cols={D_COLS}
+    data-rows={D_ROWS}
+    data-fp="1,12,3,6"
+  >
+    {desktopCells.map(() => <span class="sq"></span>)}
   </div>
 
-  <div class="hta-stage">
-    <div class="hta-box">
-      <div class="hta-head">
-        <span class="hta-ico hta-ico-slack">
-          <svg viewBox="0 0 127 127" width="20" height="20" fill="none">
-            <path d="M27.2 80c0 7.3-5.9 13.2-13.2 13.2C6.7 93.2.8 87.3.8 80c0-7.3 5.9-13.2 13.2-13.2h13.2V80zm6.6 0c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2v33c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V80z" fill="#E01E5A"/>
-            <path d="M47 27.2c-7.3 0-13.2-5.9-13.2-13.2C33.8 6.7 39.7.8 47 .8c7.3 0 13.2 5.9 13.2 13.2v13.2H47zm0 6.6c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H13.9C6.6 60.2.7 54.3.7 47c0-7.3 5.9-13.2 13.2-13.2H47z" fill="#36C5F0"/>
-            <path d="M99.8 47c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H99.8V47zm-6.6 0c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V13.9C66.8 6.6 72.7.7 80 .7c7.3 0 13.2 5.9 13.2 13.2V47z" fill="#2EB67D"/>
-            <path d="M80 99.8c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V99.8H80zm0-6.6c-7.3 0-13.2-5.9-13.2-13.2 0-7.3 5.9-13.2 13.2-13.2h33.1c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H80z" fill="#ECB22E"/>
-          </svg>
-        </span>
-        <span class="hta-title">Review the Acme Inc. MSA and draft a negotiation brief</span>
-        <span class="hta-check">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#63cf9e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4.5 12.5l5 5 10-11" />
-          </svg>
-        </span>
-      </div>
-      <div class="hta-log">
-        <ul class="hta-items">
-          <li class="hta-item">
-            <div class="hta-item-in">
-              <div class="hta-item-row">
-                <span class="hta-item-text">Starting secure cloud sandbox</span>
-                <svg class="hta-mono" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(237,233,227,0.7)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="2.5" y="4" width="19" height="13" rx="1.5" />
-                  <path d="M6.5 8.5l2.5 2-2.5 2M12 12.5h4M8.5 20.5h7" />
-                </svg>
-              </div>
-            </div>
-          </li>
-          <li class="hta-item">
-            <div class="hta-item-in">
-              <div class="hta-item-row">
-                <span class="hta-item-text">Fetching documents from Gmail</span>
-                <svg viewBox="0 0 48 36" width="15" height="12">
-                  <path fill="#4285F4" d="M3.27 36h6.55V20.09L0 12.73v20A3.27 3.27 0 0 0 3.27 36z"/>
-                  <path fill="#34A853" d="M38.18 36h6.55A3.27 3.27 0 0 0 48 32.73v-20l-9.82 7.36z"/>
-                  <path fill="#FBBC04" d="M38.18 6.55v13.54L48 12.73V8.18c0-4.05-4.62-6.36-7.85-3.93z"/>
-                  <path fill="#EA4335" d="M9.82 20.09V6.55L24 17.18 38.18 6.55v13.54L24 30.73z"/>
-                  <path fill="#C5221F" d="M0 8.18v4.55l9.82 7.36V6.55L7.85 4.25C4.62 1.82 0 4.13 0 8.18z"/>
-                </svg>
-              </div>
-            </div>
-          </li>
-          <li class="hta-item">
-            <div class="hta-item-in">
-              <div class="hta-item-row">
-                <span class="hta-item-text">Using the MSA skill</span>
-                <svg class="hta-mono" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(237,233,227,0.7)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M14.7 6.3a4.5 4.5 0 0 0-6 5.6L3 17.6a2 2 0 0 0 2.8 2.8l5.7-5.7a4.5 4.5 0 0 0 5.6-6l-3 3-2.8-.7-.7-2.8 3.1-3z" />
-                </svg>
-              </div>
-            </div>
-          </li>
-          <li class="hta-item">
-            <div class="hta-item-in">
-              <div class="hta-item-row">
-                <span class="hta-item-text">Created redline and negotiation brief</span>
-                <svg class="hta-mono" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(237,233,227,0.7)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M13.5 2.5H6.5a1.5 1.5 0 0 0-1.5 1.5v16a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5V8l-5.5-5.5z" />
-                  <path d="M13.5 2.5V8H19M9 12.5h6M9 16h6" />
-                </svg>
-              </div>
-            </div>
-          </li>
-          <li class="hta-item">
-            <div class="hta-item-in">
-              <div class="hta-item-row">
-                <span class="hta-item-text">Created a draft and notified user</span>
-                <svg viewBox="0 0 127 127" width="14" height="14" fill="none">
-                  <path d="M27.2 80c0 7.3-5.9 13.2-13.2 13.2C6.7 93.2.8 87.3.8 80c0-7.3 5.9-13.2 13.2-13.2h13.2V80zm6.6 0c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2v33c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V80z" fill="#E01E5A"/>
-                  <path d="M47 27.2c-7.3 0-13.2-5.9-13.2-13.2C33.8 6.7 39.7.8 47 .8c7.3 0 13.2 5.9 13.2 13.2v13.2H47zm0 6.6c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H13.9C6.6 60.2.7 54.3.7 47c0-7.3 5.9-13.2 13.2-13.2H47z" fill="#36C5F0"/>
-                  <path d="M99.8 47c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H99.8V47zm-6.6 0c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V13.9C66.8 6.6 72.7.7 80 .7c7.3 0 13.2 5.9 13.2 13.2V47z" fill="#2EB67D"/>
-                  <path d="M80 99.8c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V99.8H80zm0-6.6c-7.3 0-13.2-5.9-13.2-13.2 0-7.3 5.9-13.2 13.2-13.2h33.1c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H80z" fill="#ECB22E"/>
-                </svg>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
+  {/* Mobile grid: 8 x 6. Footprint: cols 0-7, rows 1-4 (0-indexed). */}
+  <div
+    class="hta-cells hta-cells--m"
+    data-cols={M_COLS}
+    data-rows={M_ROWS}
+    data-fp="0,7,1,4"
+  >
+    {mobileCells.map(() => <span class="sq"></span>)}
+  </div>
+
+  <div class="hta-box">
+    <div class="hta-head">
+      <span class="hta-ico-slack">
+        <svg viewBox="0 0 127 127" width="22" height="22" fill="none">
+          <path d="M27.2 80c0 7.3-5.9 13.2-13.2 13.2C6.7 93.2.8 87.3.8 80c0-7.3 5.9-13.2 13.2-13.2h13.2V80zm6.6 0c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2v33c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V80z" fill="#E01E5A"/>
+          <path d="M47 27.2c-7.3 0-13.2-5.9-13.2-13.2C33.8 6.7 39.7.8 47 .8c7.3 0 13.2 5.9 13.2 13.2v13.2H47zm0 6.6c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H13.9C6.6 60.2.7 54.3.7 47c0-7.3 5.9-13.2 13.2-13.2H47z" fill="#36C5F0"/>
+          <path d="M99.8 47c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H99.8V47zm-6.6 0c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V13.9C66.8 6.6 72.7.7 80 .7c7.3 0 13.2 5.9 13.2 13.2V47z" fill="#2EB67D"/>
+          <path d="M80 99.8c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V99.8H80zm0-6.6c-7.3 0-13.2-5.9-13.2-13.2 0-7.3 5.9-13.2 13.2-13.2h33.1c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H80z" fill="#ECB22E"/>
+        </svg>
+      </span>
+      <span class="hta-title">Review the Acme Inc. MSA and draft a negotiation brief</span>
+      <span class="hta-check">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#63cf9e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path class="hta-check-path" pathLength="1" d="M4.5 12.5l5 5 10-11" />
+        </svg>
+      </span>
     </div>
-  </div>
-
-  <div class="hta-grid">
-    {bottomRows.map((row, r) => (
-      <div class="hta-row" data-row={r}>
-        {row.map((cell) => (
-          <span class="sq" data-id={cell.id} style={`--i:${cell.col}`}></span>
-        ))}
-      </div>
-    ))}
+    <ul class="hta-items">
+      <li class="hta-item">
+        <span class="hta-item-text">Starting secure cloud sandbox</span>
+        <svg class="hta-mono" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(237,233,227,0.7)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2.5" y="4" width="19" height="13" rx="1.5" />
+          <path d="M6.5 8.5l2.5 2-2.5 2M12 12.5h4M8.5 20.5h7" />
+        </svg>
+      </li>
+      <li class="hta-item">
+        <span class="hta-item-text">Fetching documents from Gmail</span>
+        <svg viewBox="0 0 48 36" width="16" height="12">
+          <path fill="#4285F4" d="M3.27 36h6.55V20.09L0 12.73v20A3.27 3.27 0 0 0 3.27 36z"/>
+          <path fill="#34A853" d="M38.18 36h6.55A3.27 3.27 0 0 0 48 32.73v-20l-9.82 7.36z"/>
+          <path fill="#FBBC04" d="M38.18 6.55v13.54L48 12.73V8.18c0-4.05-4.62-6.36-7.85-3.93z"/>
+          <path fill="#EA4335" d="M9.82 20.09V6.55L24 17.18 38.18 6.55v13.54L24 30.73z"/>
+          <path fill="#C5221F" d="M0 8.18v4.55l9.82 7.36V6.55L7.85 4.25C4.62 1.82 0 4.13 0 8.18z"/>
+        </svg>
+      </li>
+      <li class="hta-item">
+        <span class="hta-item-text">Using the MSA skill</span>
+        <svg class="hta-mono" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(237,233,227,0.7)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.7 6.3a4.5 4.5 0 0 0-6 5.6L3 17.6a2 2 0 0 0 2.8 2.8l5.7-5.7a4.5 4.5 0 0 0 5.6-6l-3 3-2.8-.7-.7-2.8 3.1-3z" />
+        </svg>
+      </li>
+      <li class="hta-item">
+        <span class="hta-item-text">Created redline and negotiation brief</span>
+        <svg class="hta-mono" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(237,233,227,0.7)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13.5 2.5H6.5a1.5 1.5 0 0 0-1.5 1.5v16a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5V8l-5.5-5.5z" />
+          <path d="M13.5 2.5V8H19M9 12.5h6M9 16h6" />
+        </svg>
+      </li>
+      <li class="hta-item">
+        <span class="hta-item-text">Created a draft and notified user</span>
+        <svg viewBox="0 0 127 127" width="14" height="14" fill="none">
+          <path d="M27.2 80c0 7.3-5.9 13.2-13.2 13.2C6.7 93.2.8 87.3.8 80c0-7.3 5.9-13.2 13.2-13.2h13.2V80zm6.6 0c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2v33c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V80z" fill="#E01E5A"/>
+          <path d="M47 27.2c-7.3 0-13.2-5.9-13.2-13.2C33.8 6.7 39.7.8 47 .8c7.3 0 13.2 5.9 13.2 13.2v13.2H47zm0 6.6c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H13.9C6.6 60.2.7 54.3.7 47c0-7.3 5.9-13.2 13.2-13.2H47z" fill="#36C5F0"/>
+          <path d="M99.8 47c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H99.8V47zm-6.6 0c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V13.9C66.8 6.6 72.7.7 80 .7c7.3 0 13.2 5.9 13.2 13.2V47z" fill="#2EB67D"/>
+          <path d="M80 99.8c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V99.8H80zm0-6.6c-7.3 0-13.2-5.9-13.2-13.2 0-7.3 5.9-13.2 13.2-13.2h33.1c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H80z" fill="#ECB22E"/>
+        </svg>
+      </li>
+    </ul>
   </div>
 </div>
 
 <style>
   .hta {
+    position: relative;
     width: 100%;
     max-width: 1100px;
-    margin: 0 auto;
-    padding: 8px 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-
-  /* --- Agent-node squares --- */
-  .hta-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    padding: 0 8px;
-  }
-  .hta-row {
-    display: flex;
-    justify-content: space-between;
-  }
-  .sq {
-    width: 18px;
-    height: 18px;
-    border-radius: 2px;
-    background: rgba(237, 233, 227, 0.22);
-    transition: background 0.5s ease, box-shadow 0.5s ease;
-  }
-  .sq.lit {
-    background: var(--c);
-    box-shadow: 0 0 12px 0 rgba(237, 233, 227, 0.12), 0 0 14px -2px var(--c);
-    animation: sq-pulse 0.6s ease;
-  }
-  @keyframes sq-pulse {
-    0% { transform: scale(1); }
-    40% { transform: scale(1.25); }
-    100% { transform: scale(1); }
-  }
-  /* Complete: everything mint, quick left-to-right stagger ripple */
-  .hta.done .sq {
-    background: #63cf9e;
-    box-shadow: 0 0 10px -1px rgba(99, 207, 158, 0.5);
-    transition-delay: calc(var(--i) * 30ms);
-    animation: sq-pulse 0.5s ease both;
-    animation-delay: calc(var(--i) * 30ms);
-  }
-
-  /* --- Task box --- */
-  .hta-stage {
-    min-height: 296px;
-    display: flex;
-    align-items: center;
-  }
-  .hta-box {
-    width: 100%;
-    max-width: 640px;
+    height: 540px;
     margin: 0 auto;
     background: #13100a;
-    border: 1px solid rgba(237, 233, 227, 0.25);
-    border-radius: 4px;
-    opacity: 0;
-    transform: translateX(420px);
-    transition:
-      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-      opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
   }
-  .hta-box.enter {
-    opacity: 1;
-    transform: translateX(0);
+
+  /* --- The constant grid --- */
+  .hta-cells {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
   }
-  .hta-box.exit {
+  .hta-cells--d {
+    grid-template-columns: repeat(14, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+  }
+  .hta-cells--m {
+    display: none;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+  }
+  .sq {
+    width: 12px;
+    height: 12px;
+    border-radius: 0;
+    background: rgba(237, 233, 227, 0.28);
+  }
+
+  /* --- Task box: fixed footprint over grid rows 4-7, cols 2-13 --- */
+  .hta-box {
+    position: absolute;
+    left: calc(100% / 14);
+    top: calc(100% * 3 / 9);
+    width: calc(100% * 12 / 14);
+    height: calc(100% * 4 / 9);
+    z-index: 2;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background: #13100a;
+    border: 1px solid rgba(237, 233, 227, 0.28);
+    border-radius: 2px;
+    box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.65);
+    /* Hidden until GSAP takes over; reduced-motion CSS reveals it below. */
     opacity: 0;
-    transform: translateX(0);
-    transition: opacity 0.7s ease;
   }
 
   .hta-head {
-    height: 64px;
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 0 20px;
+    gap: 13px;
+    flex: none;
+    padding: 16px 22px 8px;
   }
   .hta-ico-slack {
     display: inline-flex;
@@ -229,250 +178,334 @@ const bottomRows = cells('b');
     display: inline-flex;
     flex: none;
     opacity: 0;
-    transform: scale(0.4);
-    transition:
-      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-      opacity 0.3s ease;
   }
-  .hta-box.complete .hta-check {
-    opacity: 1;
-    transform: scale(1);
+  .hta-check-path {
+    stroke-dasharray: 1;
   }
 
-  /* --- Timeline log --- */
-  .hta-log {
-    padding: 0 20px 0 27px;
-  }
+  /* --- Timeline items: full height reserved from the start --- */
   .hta-items {
     list-style: none;
-    margin: 0;
-    padding: 0 0 0 16px;
-    position: relative;
-  }
-  .hta-items::before {
-    content: '';
-    position: absolute;
-    left: 4px;
-    top: 2px;
-    bottom: 6px;
-    width: 1px;
-    background: rgba(237, 233, 227, 0.15);
-  }
-  /* Each item collapses to zero height until shown — box height grows stepwise. */
-  .hta-item {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .hta-item-in {
-    overflow: hidden;
+    flex: 1;
     min-height: 0;
+    margin: 0;
+    padding: 4px 22px 12px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
   }
-  .hta-item-row {
+  .hta-item {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 9px;
-    padding: 7px 0;
+    padding: 3px 0 3px 16px;
     font-family: 'Söhne', sans-serif;
     font-weight: 400;
-    font-size: 16px;
-    color: rgba(237, 233, 227, 0.85);
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    font-size: 15px;
+    color: rgba(237, 233, 227, 0.8);
+    opacity: 0; /* revealed by GSAP / reduced-motion CSS */
   }
-  .hta-item:last-child .hta-item-row {
-    padding-bottom: 18px;
+  /* 1px left connector rail */
+  .hta-item::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: -4px;
+    bottom: -4px;
+    width: 1px;
+    background: rgba(237, 233, 227, 0.16);
   }
-  .hta-item.show {
-    grid-template-rows: 1fr;
+  .hta-item:first-child::before {
+    top: 2px;
   }
-  .hta-item.show .hta-item-row {
-    opacity: 1;
-    transform: translateY(0);
+  .hta-item:last-child::before {
+    bottom: 2px;
   }
-  .hta-item-row svg {
+  .hta-item svg {
     flex: none;
   }
-  /* Collapse everything on complete (overrides .show — declared after) */
-  .hta-box.complete .hta-item {
-    grid-template-rows: 0fr;
-  }
-  .hta-box.complete .hta-item-row {
-    opacity: 0;
-    transform: translateY(0);
-    transition: opacity 0.35s ease;
+  .hta-item-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  /* Instant reset between loops — no transitions while classes are cleared */
-  .hta.snap .hta-box,
-  .hta.snap .hta-item,
-  .hta.snap .hta-item-row,
-  .hta.snap .hta-check,
-  .hta.snap .sq {
-    transition: none !important;
-    animation: none !important;
-  }
-
-  /* --- Mobile: 1 row x 5 squares per grid, tighter type --- */
+  /* --- Mobile: 8 x 6 grid, wider box --- */
   @media (max-width: 639px) {
     .hta {
-      gap: 20px;
+      height: 440px;
     }
-    .hta-row[data-row='1'] {
+    .hta-cells--d {
       display: none;
     }
-    .hta-row .sq:nth-child(n + 6) {
-      display: none;
+    .hta-cells--m {
+      display: grid;
     }
-    .sq {
-      width: 16px;
-      height: 16px;
-    }
-    .hta-stage {
-      min-height: 252px;
+    .hta-box {
+      left: 0;
+      top: calc(100% * 1 / 6);
+      width: 100%;
+      height: calc(100% * 4 / 6);
     }
     .hta-head {
-      height: 56px;
       gap: 10px;
-      padding: 0 14px;
+      padding: 14px 16px 6px;
     }
     .hta-title {
       font-size: 15px;
     }
-    .hta-log {
-      padding: 0 14px 0 19px;
+    .hta-items {
+      padding: 2px 16px 10px 16px;
     }
-    .hta-item-row {
+    .hta-item {
       font-size: 13px;
-      padding: 6px 0;
     }
   }
 
-  /* --- Reduced motion: static completed state, no animation --- */
+  /* --- Reduced motion: static completed frame, zero JS motion --- */
   @media (prefers-reduced-motion: reduce) {
-    .hta * {
-      transition: none !important;
-      animation: none !important;
+    .sq {
+      background: rgba(99, 207, 158, 0.38);
     }
-    .hta.static .hta-box {
+    .hta-box {
       opacity: 1;
-      transform: none;
     }
-    .hta.static .hta-check {
+    .hta-item {
       opacity: 1;
-      transform: scale(1);
     }
-    .hta.static .sq {
-      background: #63cf9e;
+    .hta-check {
+      opacity: 1;
     }
   }
 </style>
 
 <script>
+  import gsap from 'gsap';
+
+  const SQ_DEFAULT = 'rgba(237,233,227,0.28)';
+  const CREAM = 'rgba(237,233,227,0.9)';
+  const ACCENTS = ['#63cf9e', '#ee9de0', '#6db7f0', '#ED733B'];
+  const MINT_WAVE = 'rgba(99,207,158,0.85)';
+  const MOBILE_MQ = '(max-width: 639px)';
+
   function initHeroTaskAnimation(root: HTMLElement) {
-    const box = root.querySelector('.hta-box') as HTMLElement;
-    const items = Array.from(root.querySelectorAll('.hta-item'));
-    const squares = new Map<string, HTMLElement>();
-    root.querySelectorAll<HTMLElement>('.sq').forEach((el) => {
-      const id = el.dataset.id;
-      if (id) squares.set(id, el);
-    });
-
-    // Deterministic scattered node assignment per step (a = above grid, b = below).
-    // Each step keeps at least one square visible in the mobile subset (a0-a4 / b0-b4).
-    const STEPS = [
-      { ids: ['a1', 'b4', 'b11'], color: '#63cf9e' }, // sandbox — mint
-      { ids: ['a3', 'a9', 'b7'], color: '#ee9de0' }, // gmail — pink
-      { ids: ['a6', 'a12', 'b2'], color: '#6db7f0' }, // skill — light blue
-      { ids: ['a10', 'b0', 'b9'], color: '#63cf9e' }, // redline — mint
-      { ids: ['a4', 'a13', 'b13'], color: '#2f6bff' }, // notify — blue
-    ];
-
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      root.classList.add('static');
-      box.classList.add('enter', 'complete');
-      return;
+      return; // static completed frame comes straight from CSS
     }
 
-    // --- Timeline (ms from loop start) ---
-    const T_ENTER = 60; //   box slides in from the right (0.8s)
-    const T_STEP0 = 1150; // first timeline item + first pulse
-    const STEP_GAP = 1100; // between items
-    const T_COMPLETE = T_STEP0 + 5 * STEP_GAP; //          6650: collapse + check + green ripple
-    const T_RESET = T_COMPLETE + 900 + 2200; //            9750: after collapse (~0.9s) + hold 2.2s
-    const T_LOOP = T_RESET + 950; //                      10700: total loop duration
+    const box = root.querySelector<HTMLElement>('.hta-box')!;
+    const check = root.querySelector<HTMLElement>('.hta-check')!;
+    const checkPath = root.querySelector<SVGPathElement>('.hta-check-path')!;
+    const items = Array.from(root.querySelectorAll<HTMLElement>('.hta-item'));
+    const mql = window.matchMedia(MOBILE_MQ);
 
-    let timeouts: ReturnType<typeof setTimeout>[] = [];
-    let running = false;
-    const at = (t: number, fn: () => void) => timeouts.push(setTimeout(fn, t));
-    const clearAll = () => {
-      timeouts.forEach(clearTimeout);
-      timeouts = [];
-    };
+    let cleanup: (() => void) | null = null;
 
-    const hardReset = () => {
-      root.classList.add('snap');
-      root.classList.remove('done');
-      box.classList.remove('enter', 'complete', 'exit');
-      items.forEach((el) => el.classList.remove('show'));
-      squares.forEach((el) => {
-        el.classList.remove('lit');
-        el.style.removeProperty('--c');
-      });
-      void box.offsetWidth; // flush styles while transitions are off
-      root.classList.remove('snap');
-    };
+    function build() {
+      const grid = root.querySelector<HTMLElement>(
+        mql.matches ? '.hta-cells--m' : '.hta-cells--d'
+      )!;
+      const cols = Number(grid.dataset.cols);
+      const rows = Number(grid.dataset.rows);
+      const [c0, c1, r0, r1] = grid.dataset.fp!.split(',').map(Number);
+      const cells = Array.from(grid.children) as HTMLElement[]; // row-major
 
-    const loop = () => {
-      hardReset();
-      // 1. ENTER
-      at(T_ENTER, () => box.classList.add('enter'));
-      // 2. PROCESS — items land, matching squares pulse at the same moment
-      STEPS.forEach((step, i) => {
-        at(T_STEP0 + i * STEP_GAP, () => {
-          items[i]?.classList.add('show');
-          step.ids.forEach((id) => {
-            const el = squares.get(id);
-            if (!el) return;
-            el.style.setProperty('--c', step.color);
-            el.classList.add('lit');
-          });
-        });
+      const footprint: HTMLElement[] = [];
+      const outside: HTMLElement[] = [];
+      const flickerPool: HTMLElement[] = []; // outside cells; edge ring weighted 2x
+      cells.forEach((el, i) => {
+        const row = Math.floor(i / cols);
+        const col = i % cols;
+        const inFp = col >= c0 && col <= c1 && row >= r0 && row <= r1;
+        if (inFp) {
+          footprint.push(el);
+        } else {
+          outside.push(el);
+          flickerPool.push(el);
+          // Activity radiates: cells touching the box footprint flash more often.
+          const nearCol = (col === c0 - 1 || col === c1 + 1) && row >= r0 - 1 && row <= r1 + 1;
+          const nearRow = (row === r0 - 1 || row === r1 + 1) && col >= c0 - 1 && col <= c1 + 1;
+          if (nearCol || nearRow) flickerPool.push(el);
+        }
       });
-      // 3. COMPLETE — collapse, checkmark pop, full mint ripple
-      at(T_COMPLETE, () => {
-        box.classList.add('complete');
-        root.classList.add('done');
-      });
-      // 4. HOLD, then RESET — box fades out in place, squares fade back to grey
-      at(T_RESET, () => {
-        box.classList.add('exit');
-        root.classList.remove('done');
-        squares.forEach((el) => el.classList.remove('lit'));
-      });
-      at(T_LOOP, loop);
-    };
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !running) {
-            running = true;
-            loop();
-          } else if (!entry.isIntersecting && running) {
-            running = false;
-            clearAll();
-            hardReset();
+      // ---------------- Flicker scheduler ----------------
+      // gsap.delayedCall pump: while (window && visible), fire 1-2 flashes every
+      // ~55-125ms. Each flash: hard-set a color, tween back to default in
+      // 120-200ms -> 3-5 concurrent flashes at any moment. No setTimeout.
+      const flicker = { window: false, visible: false, call: null as gsap.core.Tween | null };
+
+      const flash = () => {
+        const el = flickerPool[(Math.random() * flickerPool.length) | 0];
+        const color =
+          Math.random() < 0.6 ? CREAM : ACCENTS[(Math.random() * ACCENTS.length) | 0];
+        gsap.fromTo(
+          el,
+          { backgroundColor: color },
+          {
+            backgroundColor: SQ_DEFAULT,
+            duration: 0.12 + Math.random() * 0.08,
+            ease: 'power2.in',
+            overwrite: true,
           }
-        });
-      },
-      { threshold: 0.2 }
-    );
-    io.observe(root);
+        );
+      };
+
+      const pump = () => {
+        flicker.call = null;
+        if (!flicker.window || !flicker.visible) return;
+        flash();
+        if (Math.random() < 0.7) flash();
+        flicker.call = gsap.delayedCall(0.05 + Math.random() * 0.06, pump);
+      };
+
+      const pumpIfIdle = () => {
+        if (flicker.window && flicker.visible && !flicker.call) pump();
+      };
+      const haltPump = () => {
+        flicker.call?.kill();
+        flicker.call = null;
+      };
+      const openWindow = () => {
+        flicker.window = true;
+        pumpIfIdle();
+      };
+      const closeWindow = () => {
+        flicker.window = false;
+        haltPump();
+        outside.forEach((el) => gsap.killTweensOf(el, 'backgroundColor'));
+      };
+
+      // ---------------- Master timeline ----------------
+      const waveStagger = () => ({
+        grid: [rows, cols] as [number, number],
+        from: 'center' as const,
+        amount: 0.6,
+      });
+
+      const tl = gsap.timeline({
+        repeat: -1,
+        paused: true,
+        // Re-record start values every loop so tweens pick up whatever color a
+        // killed flash left behind instead of snapping.
+        onRepeat: () => tl.invalidate(),
+      });
+
+      // ENTER — box slides in from the right; only the covered footprint clears.
+      tl.addLabel('enter', 0)
+        .to(
+          footprint,
+          {
+            opacity: 0,
+            scale: 0.6,
+            duration: 0.45,
+            ease: 'power2.out',
+            stagger: { amount: 0.15, from: 'random' },
+          },
+          'enter'
+        )
+        .fromTo(
+          box,
+          { x: 120, autoAlpha: 0 },
+          { x: 0, autoAlpha: 1, duration: 0.7, ease: 'power3.out' },
+          'enter'
+        )
+        .call(openWindow, undefined, 'enter+=0.7');
+
+      // PROCESS — 5 items stream in on a 0.55s cadence while the grid flickers.
+      items.forEach((item, i) => {
+        tl.fromTo(
+          item,
+          { autoAlpha: 0, y: 8, filter: 'blur(3px)' },
+          { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.45, ease: 'power2.out' },
+          0.95 + i * 0.55
+        );
+      });
+
+      // COMPLETE — flicker stops, check draws in, mint wave radiates from center.
+      tl.addLabel('complete', 3.95)
+        .call(closeWindow, undefined, 'complete')
+        .fromTo(
+          check,
+          { autoAlpha: 0, scale: 0.5 },
+          { autoAlpha: 1, scale: 1, duration: 0.35, ease: 'back.out(2.2)' },
+          'complete'
+        )
+        .fromTo(
+          checkPath,
+          { strokeDashoffset: 1 },
+          { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out' },
+          'complete'
+        )
+        .to(
+          cells,
+          { backgroundColor: MINT_WAVE, duration: 0.25, ease: 'power1.out', stagger: waveStagger() },
+          'complete+=0.05'
+        )
+        .to(
+          cells,
+          {
+            keyframes: [
+              { scale: 1.15, duration: 0.11, ease: 'power2.out' },
+              { scale: 1, duration: 0.14, ease: 'power2.in' },
+            ],
+            stagger: waveStagger(),
+          },
+          'complete+=0.05'
+        );
+
+      // HOLD 1.6s, then EXIT — box leaves left, grid crossfades back to grey.
+      tl.addLabel('exit', 'complete+=2.55')
+        .to(box, { x: -120, autoAlpha: 0, duration: 0.5, ease: 'power3.in' }, 'exit')
+        .to(
+          footprint,
+          { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' },
+          'exit+=0.3'
+        )
+        .to(
+          cells,
+          { backgroundColor: SQ_DEFAULT, scale: 1, duration: 0.6, ease: 'power1.inOut' },
+          'exit+=0.3'
+        )
+        // REST before the loop repeats.
+        .to({}, { duration: 0.9 });
+
+      // ---------------- Visibility ----------------
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              flicker.visible = true;
+              tl.play();
+              pumpIfIdle();
+            } else {
+              flicker.visible = false;
+              haltPump();
+              tl.pause();
+            }
+          });
+        },
+        { threshold: 0.25 }
+      );
+      io.observe(root);
+
+      cleanup = () => {
+        io.disconnect();
+        haltPump();
+        tl.kill();
+        gsap.killTweensOf([...cells, box, check, checkPath, ...items]);
+        gsap.set([...cells, box, check, checkPath, ...items], { clearProps: 'all' });
+        cleanup = null;
+      };
+    }
+
+    build();
+    mql.addEventListener('change', () => {
+      cleanup?.();
+      build();
+    });
   }
 
-  document
-    .querySelectorAll<HTMLElement>('.hta')
-    .forEach(initHeroTaskAnimation);
+  document.querySelectorAll<HTMLElement>('.hta').forEach(initHeroTaskAnimation);
 </script>

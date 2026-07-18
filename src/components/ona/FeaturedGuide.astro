@@ -50,7 +50,7 @@ const hasCover = Astro.slots.has('cover');
 <style>
   .ofg {
     background: #13100a;
-    padding: 112px 0 0;
+    padding: 96px 0 0;
   }
   /* narrower than the standard container, centered — per ona frame-07 */
   .ofg-container {
@@ -62,7 +62,7 @@ const hasCover = Astro.slots.has('cover');
   .ofg-card {
     position: relative;
     background: #1e1d1b;
-    border-radius: 10px;
+    border-radius: 2px;
     overflow: hidden;
     display: grid;
     grid-template-columns: 1fr;
@@ -75,7 +75,7 @@ const hasCover = Astro.slots.has('cover');
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 10px;
+    border-radius: 2px;
     border: 1px solid rgba(237, 233, 227, 0.06);
     z-index: 30;
   }
@@ -97,11 +97,13 @@ const hasCover = Astro.slots.has('cover');
   }
   .ofg-eyebrow {
     font-family: 'Söhne', sans-serif;
-    font-size: 12px;
-    font-weight: 400;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: rgba(237, 233, 227, 0.4);
-    letter-spacing: 0.01em;
-    margin-bottom: 10px;
+    line-height: 1;
+    margin-bottom: 12px;
   }
   .ofg-heading {
     font-family: 'Söhne', sans-serif;
@@ -134,10 +136,10 @@ const hasCover = Astro.slots.has('cover');
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    transition: opacity 0.2s ease;
+    transition: color 0.18s ease-out;
   }
-  .ofg-cta:hover { opacity: 0.8; }
-  .ofg-cta svg { transition: transform 0.2s ease; }
+  .ofg-cta:hover { color: #f28e5f; }
+  .ofg-cta svg { transition: transform 0.18s ease-out; }
   .ofg-cta:hover svg { transform: translateX(2px); }
 
   @media (max-width: 639px) {
