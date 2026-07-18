@@ -1,0 +1,222 @@
+---
+// MediaCards — the 3-card format (home §4): each card = two-line headline,
+// subhead, 3 icon link-rows with arrows, and a media slot.
+// Props: heading, sub?, cards (array of { titleLine1, titleLine2, sub, links: [{label, href}], mediaLabel }).
+// Named slots media-1/media-2/media-3 can replace a card's placeholder with a real visual.
+import MediaPlaceholder from './MediaPlaceholder.astro';
+
+interface CardLink {
+  label: string;
+  href: string;
+}
+interface Card {
+  titleLine1: string;
+  titleLine2: string;
+  sub: string;
+  links: CardLink[];
+  mediaLabel?: string;
+}
+interface Props {
+  heading: string;
+  sub?: string;
+  cards: Card[];
+}
+const { heading, sub, cards } = Astro.props;
+---
+
+<section class="omc">
+  <div class="omc-container">
+    <div class="omc-intro reveal">
+      <h2 class="omc-heading">{heading}</h2>
+      {sub && <p class="omc-sub">{sub}</p>}
+    </div>
+
+    <div class="omc-stack">
+      {cards.map((card, i) => (
+        <article class="omc-card reveal">
+          <div class="omc-text-col">
+            <h3 class="omc-card-title">
+              <span class="omc-title-l1">{card.titleLine1}</span>
+              <span class="omc-title-l2">{card.titleLine2}</span>
+            </h3>
+            <p class="omc-card-sub">{card.sub}</p>
+            <ul class="omc-links">
+              {card.links.map((link) => (
+                <li>
+                  <a href={link.href} class="omc-link">
+                    <span class="omc-link-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12h6M12 9l3 3-3 3"/></svg>
+                    </span>
+                    <span class="omc-link-label">{link.label}</span>
+                    <svg class="omc-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="omc-media-col">
+            {i === 0 && Astro.slots.has('media-1') ? <slot name="media-1" />
+              : i === 1 && Astro.slots.has('media-2') ? <slot name="media-2" />
+              : i === 2 && Astro.slots.has('media-3') ? <slot name="media-3" />
+              : <MediaPlaceholder label={card.mediaLabel ?? 'Product visual'} ratio="4 / 3" />}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .omc {
+    background: #13100a;
+    padding: 112px 0 0;
+  }
+  .omc-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .omc-intro {
+    margin-bottom: 22.4px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .omc-heading {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(22px, 2.3vw, 32px);
+    font-weight: 600;
+    color: #ede9e3;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .omc-sub {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(15px, 1.6vw, 18px);
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.4);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .omc-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* ── Card: text left, media right on desktop; stacked mobile ── */
+  .omc-card {
+    position: relative;
+    background: #1e1d1b;
+    border-radius: 4px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+  .omc-card::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    z-index: 30;
+  }
+  @media (min-width: 900px) {
+    .omc-card {
+      grid-template-columns: 5fr 7fr;
+      gap: 40px;
+      padding: 36px;
+      align-items: center;
+    }
+  }
+
+  .omc-text-col {
+    display: flex;
+    flex-direction: column;
+    max-width: 48ch;
+  }
+
+  .omc-card-title {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(20px, 2.1vw, 28px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .omc-title-l1,
+  .omc-title-l2 { display: block; }
+  .omc-title-l1 { color: #ede9e3; }
+  .omc-title-l2 { color: rgba(237, 233, 227, 0.4); }
+
+  .omc-card-sub {
+    font-family: 'Söhne', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.6);
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    margin: 14px 0 0;
+    text-wrap: pretty;
+  }
+
+  .omc-links {
+    list-style: none;
+    margin: 24px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .omc-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(237, 233, 227, 0.06);
+    transition: border-color 0.2s ease;
+  }
+  .omc-links li:last-child .omc-link { border-bottom: none; }
+  .omc-link-icon {
+    display: flex;
+    align-items: center;
+    color: rgba(237, 233, 227, 0.35);
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+  }
+  .omc-link-label {
+    font-family: 'Söhne', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.75);
+    line-height: 1.4;
+    letter-spacing: -0.005em;
+    transition: color 0.2s ease;
+  }
+  .omc-link-arrow {
+    color: rgba(237, 233, 227, 0.3);
+    margin-left: auto;
+    flex-shrink: 0;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+  .omc-link:hover .omc-link-label { color: #ede9e3; }
+  .omc-link:hover .omc-link-icon { color: #ED733B; }
+  .omc-link:hover .omc-link-arrow { color: #ED733B; transform: translateX(2px); }
+
+  .omc-media-col {
+    min-width: 0;
+  }
+
+  @media (max-width: 639px) {
+    .omc { padding: 64px 0 0; }
+    .omc-card { padding: 20px 16px; }
+  }
+</style>

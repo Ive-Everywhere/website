@@ -1,0 +1,88 @@
+---
+// StatsBand — 3 stat items (value, label). Used on home + every pillar/use-case page.
+// Missing values ([VERIFY] slots) render as em-dashes — never invented numbers.
+interface Stat {
+  value?: string;
+  label: string;
+}
+interface Props {
+  stats: Stat[];
+}
+const { stats } = Astro.props;
+---
+
+<section class="osb">
+  <div class="osb-container">
+    <div class="osb-grid reveal">
+      {stats.map((stat) => (
+        <div class="osb-item">
+          <span class="osb-value">{stat.value ?? '—'}</span>
+          <span class="osb-label">{stat.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .osb {
+    background: #13100a;
+    padding: 112px 0 0;
+  }
+  .osb-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .osb-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  @media (min-width: 640px) {
+    .osb-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .osb-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #1e1d1b;
+    border-radius: 4px;
+    padding: 28px 24px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .osb-item::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    z-index: 30;
+  }
+  .osb-value {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(30px, 3.4vw, 48px);
+    font-weight: 600;
+    color: #ede9e3;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .osb-label {
+    font-family: 'Söhne', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.5);
+    line-height: 1.45;
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 639px) {
+    .osb { padding: 64px 0 0; }
+    .osb-item { padding: 20px 16px; }
+  }
+</style>

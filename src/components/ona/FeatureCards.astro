@@ -1,0 +1,151 @@
+---
+// FeatureCards — N cards: headline, eyebrow-quote, body (pillar §4 / use-case §4
+// format; supports 5 cards). Optional section heading + sub.
+// Props: heading?, sub?, cards ({ headline, eyebrowQuote?, body }[]).
+interface Card {
+  headline: string;
+  eyebrowQuote?: string;
+  body: string;
+}
+interface Props {
+  heading?: string;
+  sub?: string;
+  cards: Card[];
+}
+const { heading, sub, cards } = Astro.props;
+---
+
+<section class="ofc">
+  <div class="ofc-container">
+    {(heading || sub) && (
+      <div class="ofc-intro reveal">
+        {heading && <h2 class="ofc-heading">{heading}</h2>}
+        {sub && <p class="ofc-sub">{sub}</p>}
+      </div>
+    )}
+    <div class="ofc-grid" data-count={cards.length}>
+      {cards.map((card) => (
+        <article class="ofc-card reveal">
+          {card.eyebrowQuote && <span class="ofc-card-eyebrow">&ldquo;{card.eyebrowQuote}&rdquo;</span>}
+          <h3 class="ofc-card-headline">{card.headline}</h3>
+          <p class="ofc-card-body">{card.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ofc {
+    background: #13100a;
+    padding: 112px 0 0;
+  }
+  .ofc-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .ofc-intro {
+    margin-bottom: 22.4px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ofc-heading {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(22px, 2.3vw, 32px);
+    font-weight: 600;
+    color: #ede9e3;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .ofc-sub {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(15px, 1.6vw, 18px);
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.4);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .ofc-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    align-items: stretch;
+  }
+  @media (min-width: 640px) {
+    .ofc-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 1024px) {
+    .ofc-grid { grid-template-columns: repeat(3, 1fr); }
+    /* 5 cards: 3 on top, 2 wider below */
+    .ofc-grid[data-count="5"] .ofc-card:nth-child(4),
+    .ofc-grid[data-count="5"] .ofc-card:nth-child(5) {
+      grid-column: span 1;
+    }
+    .ofc-grid[data-count="5"] { grid-template-columns: repeat(6, 1fr); }
+    .ofc-grid[data-count="5"] .ofc-card { grid-column: span 2; }
+    .ofc-grid[data-count="5"] .ofc-card:nth-child(4) { grid-column: 1 / span 3; }
+    .ofc-grid[data-count="5"] .ofc-card:nth-child(5) { grid-column: 4 / span 3; }
+    .ofc-grid[data-count="4"] { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .ofc-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #1e1d1b;
+    border-radius: 4px;
+    padding: 24px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .ofc-card::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    z-index: 30;
+  }
+
+  .ofc-card-eyebrow {
+    font-family: 'Söhne', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    font-style: italic;
+    color: #ED733B;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+  .ofc-card-headline {
+    font-family: 'Söhne', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #ede9e3;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .ofc-card-body {
+    font-family: 'Söhne', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.6);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+    margin: 10px 0 0;
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 639px) {
+    .ofc { padding: 64px 0 0; }
+    .ofc-card { padding: 20px 16px; }
+  }
+</style>

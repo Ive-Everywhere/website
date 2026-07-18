@@ -1,0 +1,96 @@
+---
+// ComplianceBadges — badge row with [VERIFY] treatment (SOC 2 · GDPR).
+// Props: heading?, body?, badges (string[] — rendered as muted badge tiles,
+// pending certification verification; never a claimed fact).
+interface Props {
+  heading?: string;
+  body?: string;
+  badges?: string[];
+}
+const { heading, body, badges = ['SOC 2', 'GDPR'] } = Astro.props;
+---
+
+<section class="ocb">
+  <div class="ocb-container">
+    {(heading || body) && (
+      <div class="ocb-intro reveal">
+        {heading && <h2 class="ocb-heading">{heading}</h2>}
+        {body && <p class="ocb-body">{body}</p>}
+      </div>
+    )}
+    <div class="ocb-row reveal">
+      {badges.map((badge) => (
+        <div class="ocb-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>{badge}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ocb {
+    background: #13100a;
+    padding: 112px 0 0;
+  }
+  .ocb-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .ocb-intro {
+    margin-bottom: 28px;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .ocb-heading {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(22px, 2.3vw, 32px);
+    font-weight: 600;
+    color: #ede9e3;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .ocb-body {
+    font-family: 'Söhne', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.6);
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  .ocb-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .ocb-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #1e1d1b;
+    border: 1px solid rgba(237, 233, 227, 0.06);
+    border-radius: 4px;
+    padding: 12px 18px;
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.4);
+  }
+  .ocb-badge svg { color: rgba(237, 233, 227, 0.25); flex-shrink: 0; }
+
+  @media (max-width: 639px) {
+    .ocb { padding: 64px 0 0; }
+  }
+</style>

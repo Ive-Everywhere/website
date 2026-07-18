@@ -1,0 +1,197 @@
+---
+// CookbookStrip — heading, function tabs (static, no JS filtering in v1),
+// recipe cards, and a CTA to the cookbook.
+// Props: heading, tabs (string[]), recipes ({ category, title, href? }[]),
+// ctaLabel, ctaHref.
+interface Recipe {
+  category: string;
+  title: string;
+  href?: string;
+}
+interface Props {
+  heading: string;
+  tabs?: string[];
+  recipes: Recipe[];
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+const {
+  heading,
+  tabs = ['All', 'Sales', 'Finance', 'Legal', 'Operations', 'Executive', 'People', 'Product'],
+  recipes,
+  ctaLabel = 'Explore the cookbook',
+  ctaHref = '/cookbook',
+} = Astro.props;
+---
+
+<section class="ocs">
+  <div class="ocs-container">
+    <div class="ocs-intro reveal">
+      <h2 class="ocs-heading">{heading}</h2>
+    </div>
+
+    <div class="ocs-tabs reveal" role="tablist" aria-label="Filter recipes by function">
+      {tabs.map((tab, i) => (
+        <span class:list={['ocs-tab', { 'is-active': i === 0 }]}>{tab}</span>
+      ))}
+    </div>
+
+    <div class="ocs-grid">
+      {recipes.map((recipe) => (
+        <a href={recipe.href ?? ctaHref} class="ocs-card reveal">
+          <span class="ocs-card-cat">{recipe.category}</span>
+          <h3 class="ocs-card-title">{recipe.title}</h3>
+          <span class="ocs-card-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+        </a>
+      ))}
+    </div>
+
+    <div class="ocs-cta-row reveal">
+      <a href={ctaHref} class="ocs-cta">
+        {ctaLabel}
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ocs {
+    background: #13100a;
+    padding: 112px 0 0;
+  }
+  .ocs-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .ocs-intro { margin-bottom: 22.4px; }
+  .ocs-heading {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(22px, 2.3vw, 32px);
+    font-weight: 600;
+    color: #ede9e3;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .ocs-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .ocs-tab {
+    font-family: 'Söhne', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.6);
+    border: 1px solid rgba(237, 233, 227, 0.1);
+    border-radius: 9999px;
+    padding: 6px 14px;
+    line-height: 1;
+    user-select: none;
+  }
+  .ocs-tab.is-active {
+    color: #13100a;
+    background: #ede9e3;
+    border-color: #ede9e3;
+    font-weight: 600;
+  }
+
+  .ocs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  @media (min-width: 640px) {
+    .ocs-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 1024px) {
+    .ocs-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .ocs-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #1e1d1b;
+    border-radius: 4px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-decoration: none;
+    overflow: hidden;
+    transition: background 0.25s ease;
+  }
+  .ocs-card::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    z-index: 30;
+    transition: border-color 0.25s ease;
+  }
+  .ocs-card:hover { background: #232220; }
+  .ocs-card:hover::before { border-color: rgba(237, 233, 227, 0.08); }
+
+  .ocs-card-cat {
+    font-family: 'Söhne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #ED733B;
+  }
+  .ocs-card-title {
+    font-family: 'Söhne', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.85);
+    line-height: 1.45;
+    letter-spacing: -0.005em;
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .ocs-card-arrow {
+    margin-top: auto;
+    padding-top: 8px;
+    color: rgba(237, 233, 227, 0.3);
+    display: flex;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+  .ocs-card:hover .ocs-card-arrow { color: #ED733B; transform: translateX(2px); }
+
+  .ocs-cta-row { margin-top: 28px; }
+  .ocs-cta {
+    font-family: 'Söhne', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #ED733B;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(237, 115, 59, 0.25);
+    border-radius: 4px;
+    padding: 7px 14px;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+  .ocs-cta:hover {
+    background: rgba(237, 115, 59, 0.06);
+    border-color: rgba(237, 115, 59, 0.4);
+  }
+
+  @media (max-width: 639px) {
+    .ocs { padding: 64px 0 0; }
+    .ocs-card { padding: 16px; }
+  }
+</style>

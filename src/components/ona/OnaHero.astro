@@ -1,0 +1,155 @@
+---
+// OnaHero — hero for home-v2 / pillar / use-case pages.
+// Props: eyebrow?, h1, sub, tagline?, ctas (array of {label, href, style: 'solid'|'ghost'}).
+// Slot: visual under the text (media placeholder panel or animation).
+interface Cta {
+  label: string;
+  href: string;
+  style?: 'solid' | 'ghost';
+}
+interface Props {
+  eyebrow?: string;
+  h1: string;
+  sub: string;
+  tagline?: string;
+  ctas?: Cta[];
+}
+const {
+  eyebrow,
+  h1,
+  sub,
+  tagline,
+  ctas = [
+    { label: 'Start free', href: 'https://app.eluu.ai', style: 'solid' },
+    { label: 'Book a demo', href: 'https://cal.com/krishna-kaipa-wh7ao3/15min', style: 'ghost' },
+  ],
+} = Astro.props;
+const hasVisual = Astro.slots.has('default');
+---
+
+<section class="ohero hero-section">
+  <div class="ohero-inner">
+    <div class="ohero-top reveal">
+      {eyebrow && <span class="ohero-eyebrow">{eyebrow}</span>}
+      <h1 class="ohero-heading">{h1}</h1>
+      <p class="ohero-sub">{sub}</p>
+      {tagline && <p class="ohero-tagline">{tagline}</p>}
+      <div class="ohero-ctas">
+        {ctas.map((cta) => (
+          <a
+            href={cta.href}
+            class:list={['ohero-btn', cta.style === 'ghost' ? 'ohero-btn-ghost' : 'ohero-btn-solid']}
+          >{cta.label}</a>
+        ))}
+      </div>
+    </div>
+
+    {hasVisual && (
+      <div class="ohero-visual reveal">
+        <slot />
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .ohero {
+    background: #13100a;
+    position: relative;
+    overflow: hidden;
+  }
+  .ohero-inner {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 140px 20px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    box-sizing: border-box;
+  }
+
+  .ohero-top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ohero-eyebrow {
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #ED733B;
+    margin-bottom: 16px;
+  }
+
+  .ohero-heading {
+    font-family: 'Söhne', sans-serif;
+    font-weight: 600;
+    font-size: clamp(30px, 4.2vw, 56px);
+    letter-spacing: -0.025em;
+    color: #ede9e3;
+    line-height: 1.1;
+    margin: 0;
+    text-align: left;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+
+  .ohero-sub {
+    font-family: 'Söhne', sans-serif;
+    font-weight: 400;
+    font-size: clamp(16px, 1.8vw, 20px);
+    color: rgba(237, 233, 227, 0.6);
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    margin: 20px 0 0;
+    max-width: 56ch;
+    text-wrap: pretty;
+  }
+
+  .ohero-tagline {
+    font-family: 'Söhne', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: rgba(237, 233, 227, 0.4);
+    line-height: 1.5;
+    margin: 12px 0 0;
+  }
+
+  .ohero-ctas {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+  .ohero-btn {
+    font-family: 'Söhne', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 0.89em 1.45em;
+    border-radius: 9999px;
+    text-decoration: none;
+    line-height: 1;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .ohero-btn:hover { transform: translateY(-1px); }
+  .ohero-btn-solid { color: #14120b; background: #ede9e3; border: 1px solid #ede9e3; }
+  .ohero-btn-solid:hover { box-shadow: 0 4px 12px rgba(237, 233, 227, 0.15); }
+  .ohero-btn-ghost { color: #ede9e3; background: transparent; border: 1px solid rgba(237, 233, 227, 0.2); }
+  .ohero-btn-ghost:hover { border-color: rgba(237, 233, 227, 0.4); box-shadow: 0 4px 12px rgba(237, 233, 227, 0.08); }
+
+  .ohero-visual {
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .ohero-inner { padding: 100px 16px 48px; gap: 32px; }
+  }
+  @media (max-width: 480px) {
+    .ohero-inner { padding: 90px 16px 32px; gap: 24px; }
+    .ohero-btn { padding: 10px 20px; font-size: 14px; }
+  }
+</style>

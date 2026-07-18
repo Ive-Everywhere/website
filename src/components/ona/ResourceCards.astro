@@ -1,0 +1,181 @@
+---
+// ResourceCards — 3 cards (recipe/demo/docs, use-case §9), also usable for
+// blog highlights on home §10.
+// Props: heading?, cards ({ eyebrow?, title, body?, href?, ctaLabel?, placeholder? }[]).
+// Cards with placeholder: true render as designed placeholder tiles (e.g. latest posts TBD).
+interface Card {
+  eyebrow?: string;
+  title?: string;
+  body?: string;
+  href?: string;
+  ctaLabel?: string;
+  placeholder?: boolean;
+  placeholderLabel?: string;
+}
+interface Props {
+  heading?: string;
+  cards: Card[];
+}
+const { heading, cards } = Astro.props;
+---
+
+<section class="orc">
+  <div class="orc-container">
+    {heading && (
+      <div class="orc-intro reveal">
+        <h2 class="orc-heading">{heading}</h2>
+      </div>
+    )}
+    <div class="orc-grid">
+      {cards.map((card) =>
+        card.placeholder ? (
+          <div class="orc-card orc-card--placeholder reveal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            <span class="orc-ph-label">{card.placeholderLabel ?? 'Coming soon'}</span>
+          </div>
+        ) : (
+          <a href={card.href ?? '#'} class="orc-card reveal" data-todo={card.href ? undefined : ''}>
+            <div class="orc-card-text">
+              {card.eyebrow && <span class="orc-card-eyebrow">{card.eyebrow}</span>}
+              <h3 class="orc-card-title">{card.title}</h3>
+              {card.body && <p class="orc-card-body">{card.body}</p>}
+            </div>
+            <span class="orc-card-cta">
+              {card.ctaLabel ?? 'Read more'}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </a>
+        )
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .orc {
+    background: #13100a;
+    padding: 112px 0 0;
+  }
+  .orc-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .orc-intro { margin-bottom: 22.4px; }
+  .orc-heading {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(22px, 2.3vw, 32px);
+    font-weight: 600;
+    color: #ede9e3;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .orc-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    align-items: stretch;
+  }
+  @media (min-width: 640px) {
+    .orc-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .orc-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    background: #1e1d1b;
+    border-radius: 4px;
+    padding: 24px;
+    box-sizing: border-box;
+    text-decoration: none;
+    overflow: hidden;
+    transition: background 0.25s ease;
+    min-height: 180px;
+  }
+  .orc-card::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    z-index: 30;
+    transition: border-color 0.25s ease;
+  }
+  a.orc-card:hover { background: #232220; }
+  a.orc-card:hover::before { border-color: rgba(237, 233, 227, 0.08); }
+
+  .orc-card--placeholder {
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: rgba(237, 233, 227, 0.25);
+  }
+  .orc-ph-label {
+    font-family: 'Söhne', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.4);
+    text-align: center;
+  }
+
+  .orc-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .orc-card-eyebrow {
+    font-family: 'Söhne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #ED733B;
+  }
+  .orc-card-title {
+    font-family: 'Söhne', sans-serif;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: #ede9e3;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .orc-card-body {
+    font-family: 'Söhne', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.6);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .orc-card-cta {
+    font-family: 'Söhne', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #ED733B;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .orc-card-cta svg { transition: transform 0.2s ease; }
+  a.orc-card:hover .orc-card-cta svg { transform: translateX(2px); }
+
+  @media (max-width: 639px) {
+    .orc { padding: 64px 0 0; }
+    .orc-card { padding: 20px 16px; min-height: 140px; }
+  }
+</style>

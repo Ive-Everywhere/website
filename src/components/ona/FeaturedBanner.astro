@@ -1,0 +1,149 @@
+---
+// FeaturedBanner — eyebrow, heading, body, CTA, and thumbnail slots (home §6).
+// Props: eyebrow?, heading, body, ctaLabel, ctaHref, thumbnails (labels for
+// placeholder thumbnails when no real assets exist yet).
+import MediaPlaceholder from './MediaPlaceholder.astro';
+
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  body: string;
+  ctaLabel: string;
+  ctaHref: string;
+  thumbnails?: string[];
+}
+const { eyebrow, heading, body, ctaLabel, ctaHref, thumbnails = [] } = Astro.props;
+---
+
+<section class="ofb">
+  <div class="ofb-container">
+    <div class="ofb-card reveal">
+      <div class="ofb-text">
+        {eyebrow && <span class="ofb-eyebrow">{eyebrow}</span>}
+        <h2 class="ofb-heading">{heading}</h2>
+        <p class="ofb-body">{body}</p>
+        <div class="ofb-cta-row">
+          <a href={ctaHref} class="ofb-cta">
+            {ctaLabel}
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+      </div>
+      {thumbnails.length > 0 && (
+        <div class="ofb-thumbs">
+          {thumbnails.map((label) => (
+            <MediaPlaceholder label={label} ratio="16 / 10" compact />
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ofb {
+    background: #13100a;
+    padding: 112px 0 0;
+  }
+  .ofb-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .ofb-card {
+    position: relative;
+    background: #1e1d1b;
+    border-radius: 4px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 32px 24px;
+    box-sizing: border-box;
+  }
+  .ofb-card::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(237, 233, 227, 0.025);
+    z-index: 30;
+  }
+  @media (min-width: 900px) {
+    .ofb-card {
+      grid-template-columns: 5fr 6fr;
+      gap: 48px;
+      padding: 48px;
+      align-items: center;
+    }
+  }
+
+  .ofb-text {
+    display: flex;
+    flex-direction: column;
+    max-width: 48ch;
+  }
+  .ofb-eyebrow {
+    font-family: 'Söhne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #ED733B;
+    margin-bottom: 12px;
+  }
+  .ofb-heading {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(20px, 2.2vw, 30px);
+    font-weight: 600;
+    color: #ede9e3;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .ofb-body {
+    font-family: 'Söhne', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.6);
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    margin: 14px 0 0;
+    text-wrap: pretty;
+  }
+  .ofb-cta-row { margin-top: 26px; }
+  .ofb-cta {
+    font-family: 'Söhne', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #ED733B;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(237, 115, 59, 0.25);
+    border-radius: 4px;
+    padding: 7px 14px;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+  .ofb-cta:hover {
+    background: rgba(237, 115, 59, 0.06);
+    border-color: rgba(237, 115, 59, 0.4);
+  }
+
+  .ofb-thumbs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    align-items: start;
+  }
+  @media (max-width: 639px) {
+    .ofb { padding: 64px 0 0; }
+    .ofb-thumbs { grid-template-columns: 1fr; }
+    .ofb-card { padding: 24px 16px; }
+  }
+</style>

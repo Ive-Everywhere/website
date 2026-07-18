@@ -1,0 +1,96 @@
+---
+// LogoBar — customer logo strip with tenure captions.
+// Props: label, logos (array of { name?, tenure? }) — unverified entries render
+// as designed placeholder boxes, never invented facts.
+interface Logo {
+  name?: string;
+  tenure?: string;
+}
+interface Props {
+  label: string;
+  logos?: Logo[];
+}
+const { label, logos = [{}, {}, {}] } = Astro.props;
+---
+
+<section class="olb">
+  <div class="olb-container reveal">
+    <p class="olb-label">{label}</p>
+    <div class="olb-row">
+      {logos.map((logo) => (
+        <div class="olb-item">
+          <div class="olb-box">
+            <span class="olb-box-label">{logo.name ?? 'Customer logo'}</span>
+          </div>
+          <span class="olb-tenure">{logo.tenure ?? '—'}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .olb {
+    background: #13100a;
+    padding: 56px 0;
+  }
+  .olb-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+  .olb-label {
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.4);
+    letter-spacing: 0.01em;
+    margin: 0;
+    text-align: center;
+  }
+  .olb-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px 40px;
+  }
+  .olb-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .olb-box {
+    width: 150px;
+    height: 48px;
+    background: #1e1d1b;
+    border: 1px solid rgba(237, 233, 227, 0.06);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .olb-box-label {
+    font-family: 'Söhne', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.25);
+  }
+  .olb-tenure {
+    font-family: 'Söhne', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.25);
+  }
+
+  @media (max-width: 640px) {
+    .olb { padding: 40px 0; }
+    .olb-row { gap: 12px 24px; }
+    .olb-box { width: 120px; height: 40px; }
+  }
+</style>

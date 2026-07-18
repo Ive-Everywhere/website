@@ -1,0 +1,193 @@
+---
+// home-v2 — new home page (ona structure), content per research/website-content/home.md §0–§12.
+// Temp preview route; goes to `/` at launch.
+import Layout from '../layouts/Layout.astro';
+import OnaNav from '../components/ona/OnaNav.astro';
+import OnaHero from '../components/ona/OnaHero.astro';
+import MediaPlaceholder from '../components/ona/MediaPlaceholder.astro';
+import LogoBar from '../components/ona/LogoBar.astro';
+import PillarGrid from '../components/ona/PillarGrid.astro';
+import MediaCards from '../components/ona/MediaCards.astro';
+import CookbookStrip from '../components/ona/CookbookStrip.astro';
+import FeaturedBanner from '../components/ona/FeaturedBanner.astro';
+import QuoteBlock from '../components/ona/QuoteBlock.astro';
+import FeaturedGuide from '../components/ona/FeaturedGuide.astro';
+import ComplianceBadges from '../components/ona/ComplianceBadges.astro';
+import ResourceCards from '../components/ona/ResourceCards.astro';
+import FinalCTA from '../components/ona/FinalCTA.astro';
+import MegaFooter from '../components/ona/MegaFooter.astro';
+
+// §3 — The pillars
+const pillars = [
+  {
+    name: 'Agents',
+    body: 'Pre-built specialists for every role, ready to work on day one. Or build your own for any job.',
+    ctaLabel: 'Meet the agents',
+    href: '/agents',
+  },
+  {
+    name: 'Workspace',
+    body: 'Run as many agents as you need, all in parallel, with shared memory, files, and team skills.',
+    ctaLabel: 'Explore the workspace',
+    href: '/workspace',
+  },
+  {
+    name: 'Connections',
+    body: 'Connect every tool your team uses, and see exactly what data each agent can touch.',
+    ctaLabel: 'Explore connections',
+    href: '/connections',
+  },
+  {
+    name: 'Security',
+    body: 'Control access, restrict risky actions, and audit every step. Enterprise-grade by default.',
+    ctaLabel: 'Learn about security',
+    href: '/security',
+  },
+];
+
+// §4 — Across your business (3 cards)
+const mediaCards = [
+  {
+    titleLine1: 'Agents that act',
+    titleLine2: 'across your whole stack',
+    sub: 'Agents pull data, combine it, and take action across every system you use, from Slack to Salesforce to your spreadsheets.',
+    links: [
+      { label: 'Connect every tool your team uses', href: '/connections' },
+      { label: 'Reconcile data across systems', href: '/use-cases/reconcile-data' },
+      { label: 'Build dashboards and internal apps', href: '/use-cases/build-apps' },
+    ],
+    mediaLabel: 'Product visual — connected-tools flow',
+  },
+  {
+    titleLine1: 'Agents that run',
+    titleLine2: 'without you',
+    sub: 'Assign the work and close your laptop. Agents run in the cloud around the clock and deliver finished results to your Slack.',
+    links: [
+      { label: 'Automate recurring reports and briefs', href: '/use-cases/recurring-reports' },
+      { label: 'Run as many agents as you need, in parallel', href: '/workspace' },
+      { label: 'Hand it off in Slack and close your laptop', href: '/agents' },
+    ],
+    mediaLabel: 'Product visual — scheduled-run workflow',
+  },
+  {
+    titleLine1: 'Agents you',
+    titleLine2: 'stay in control of',
+    sub: 'Full visibility over what every agent can see, do, change, and cost, with an audit trail for every action.',
+    links: [
+      { label: 'Control what every agent can do', href: '/security' },
+      { label: 'See what data each agent can touch', href: '/connections' },
+      { label: 'Keep an audit trail of every action', href: '/security' },
+    ],
+    mediaLabel: 'Product visual — access and audit panel',
+  },
+];
+
+// §5 — Cookbook strip
+const recipes = [
+  { category: 'Sales', title: 'Monitor account health across Salesforce, Gong, and email' },
+  { category: 'Finance', title: 'Reconcile Stripe against Salesforce' },
+  { category: 'Finance', title: 'Run the month-end close' },
+  { category: 'Legal', title: 'Redline an MSA from your inbox' },
+  { category: 'Executive', title: 'Draft the weekly board report' },
+  { category: 'Executive', title: 'Prep the weekly QBR' },
+  { category: 'Product', title: 'First-PM: turn research into a roadmap' },
+  { category: 'Operations', title: 'Build a company intel brief' },
+];
+
+// §7 — Customer story stats ([verify] — placeholder values)
+const storyStats = [
+  { label: 'hours a week saved' },
+  { label: 'tasks completed on their own' },
+  { label: 'tools connected' },
+];
+
+// §10 — Blog highlights (placeholder, three latest posts)
+const blogCards = [
+  { placeholder: true, placeholderLabel: 'Latest post' },
+  { placeholder: true, placeholderLabel: 'Latest post' },
+  { placeholder: true, placeholderLabel: 'Latest post' },
+];
+---
+
+<Layout
+  title="Eluu AI — Specialist agents that run your business"
+  description="Deploy a team of AI specialists that work across your whole tool stack. In the cloud, in your Slack, on your schedule. Connected, controlled, and auditable by default."
+  path="/home-v2"
+>
+  <OnaNav />
+  <main>
+    <!-- §1 HERO -->
+    <OnaHero
+      h1="Specialist agents that run your business."
+      sub="Deploy a team of AI specialists that work across your whole tool stack. In the cloud, in your Slack, on your schedule."
+      tagline="Connected, controlled, and auditable by default."
+    >
+      <MediaPlaceholder
+        label="Product video — a specialist pulling data from several tools and dropping a finished deliverable into Slack"
+        ratio="16 / 9"
+      />
+    </OnaHero>
+
+    <!-- §2 CUSTOMER LOGOS -->
+    <LogoBar label="Trusted by operations teams at" />
+
+    <!-- §3 THE PILLARS -->
+    <PillarGrid heading="The AI workforce for your business." cards={pillars} />
+
+    <!-- §4 ACROSS YOUR BUSINESS -->
+    <MediaCards
+      heading="Put agents to work across your business."
+      sub="With every action in your control."
+      cards={mediaCards}
+    />
+
+    <!-- §5 COOKBOOK STRIP -->
+    <CookbookStrip heading="Deploy an agent today." recipes={recipes} />
+
+    <!-- §6 SEE IT IN ACTION -->
+    <FeaturedBanner
+      heading="Watch teams put agents to work."
+      body="Short recorded walkthroughs. A legal agent redlining a contract, a finance agent closing the month, a sales agent flagging at-risk accounts."
+      ctaLabel="Watch the demos"
+      ctaHref="#"
+      thumbnails={[
+        'Demo — legal agent redlining a contract',
+        'Demo — finance agent closing the month',
+        'Demo — sales agent flagging at-risk accounts',
+      ]}
+    />
+
+    <!-- §7 CUSTOMER STORY -->
+    <QuoteBlock
+      quote="This is indispensable for me now."
+      stats={storyStats}
+      ctaLabel="Read the story"
+      ctaHref="#"
+    />
+
+    <!-- §8 FEATURED GUIDE -->
+    <FeaturedGuide
+      headline="An operator's guide to AI agents."
+      body="What to automate first, how to keep your data in your control, and how to scale from one agent to a whole team."
+      ctaLabel="Read the guide"
+      ctaHref="#"
+      coverLabel="Guide cover — An operator's guide to AI agents"
+    />
+
+    <!-- §9 ENTERPRISE-READY -->
+    <ComplianceBadges
+      heading="Enterprise-ready."
+      body="Your data, your rules. See what every agent can access, restrict what they can do, and keep a full audit trail of every action. Works alongside Claude, OpenAI, and any harness your team already uses."
+      badges={['SOC 2', 'GDPR']}
+    />
+
+    <!-- §10 BLOG HIGHLIGHTS -->
+    <ResourceCards heading="Recent highlights from our blog." cards={blogCards} />
+
+    <!-- §11 FINAL CTA -->
+    <FinalCTA headline="Start with one agent. Scale to a workforce." />
+  </main>
+
+  <!-- §12 FOOTER -->
+  <MegaFooter />
+</Layout>

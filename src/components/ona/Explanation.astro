@@ -1,0 +1,107 @@
+---
+// Explanation — heading + subhead + link + media slot (pillar §2 / use-case §2).
+// Props: heading, subhead, linkLabel?, linkHref?, mediaLabel?.
+// Default slot replaces the media placeholder with a real visual/animation.
+import MediaPlaceholder from './MediaPlaceholder.astro';
+
+interface Props {
+  heading: string;
+  subhead: string;
+  linkLabel?: string;
+  linkHref?: string;
+  mediaLabel?: string;
+}
+const { heading, subhead, linkLabel, linkHref, mediaLabel } = Astro.props;
+const hasMedia = Astro.slots.has('default');
+---
+
+<section class="oex">
+  <div class="oex-container">
+    <div class="oex-text reveal">
+      <h2 class="oex-heading">{heading}</h2>
+      <p class="oex-subhead">{subhead}</p>
+      {linkLabel && linkHref && (
+        <div class="oex-link-row">
+          <a href={linkHref} class="oex-link">
+            {linkLabel}
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+      )}
+    </div>
+    {(hasMedia || mediaLabel) && (
+      <div class="oex-media reveal">
+        {hasMedia ? <slot /> : <MediaPlaceholder label={mediaLabel!} ratio="16 / 9" />}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .oex {
+    background: #13100a;
+    padding: 112px 0 0;
+  }
+  .oex-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .oex-text {
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+  }
+  .oex-heading {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(22px, 2.6vw, 36px);
+    font-weight: 600;
+    color: #ede9e3;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .oex-subhead {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(16px, 1.8vw, 20px);
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.6);
+    line-height: 1.55;
+    letter-spacing: -0.01em;
+    margin: 16px 0 0;
+    text-wrap: pretty;
+  }
+  .oex-link-row { margin-top: 24px; }
+  .oex-link {
+    font-family: 'Söhne', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #ED733B;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(237, 115, 59, 0.25);
+    border-radius: 4px;
+    padding: 7px 14px;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+  .oex-link:hover {
+    background: rgba(237, 115, 59, 0.06);
+    border-color: rgba(237, 115, 59, 0.4);
+  }
+
+  .oex-media { width: 100%; }
+
+  @media (max-width: 639px) {
+    .oex { padding: 64px 0 0; }
+    .oex-container { gap: 28px; }
+  }
+</style>

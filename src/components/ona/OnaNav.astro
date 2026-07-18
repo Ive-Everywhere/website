@@ -1,0 +1,675 @@
+---
+// OnaNav — nav for the ona-structure pages (home-v2, pillars, use cases).
+// Based on Navbar.astro's styling/behaviour (sticky glass, dropdowns, mobile sidebar), simplified.
+const pathname = Astro.url.pathname;
+const isCookbook = pathname === '/cookbook' || pathname.startsWith('/cookbook/');
+const isPricing = pathname === '/pricing' || pathname.startsWith('/pricing/');
+
+const platform = [
+  { name: 'Agents', desc: 'Pre-built specialists for every role, or build your own.', href: '/agents' },
+  { name: 'Workspace', desc: 'Run agents in parallel with shared memory, files, and skills.', href: '/workspace' },
+  { name: 'Connections', desc: 'Connect every tool and see what data each agent can touch.', href: '/connections' },
+  { name: 'Security', desc: 'Control access, restrict actions, and audit every step.', href: '/security' },
+];
+const useCases = [
+  { name: 'Reconcile data', desc: 'An agent that reconciles data across every system.', href: '/use-cases/reconcile-data' },
+  { name: 'Recurring reports', desc: 'An agent that writes your recurring reports, on schedule.', href: '/use-cases/recurring-reports' },
+  { name: 'Build apps', desc: 'An agent that builds your internal dashboards and apps.', href: '/use-cases/build-apps' },
+  { name: 'Replace SaaS', desc: "An agent that replaces the tools you're paying for.", href: '/use-cases/replace-saas' },
+];
+const resources = [
+  { name: 'Blog', desc: 'Research, launches, and notes from the team.', href: '/research' },
+  { name: 'Docs', desc: 'Guides and reference for building with Eluu.', href: '#', todo: true },
+];
+---
+
+<nav id="ona-nav" class="onav">
+  <div class="onav-bar">
+    <div class="onav-container">
+      <a href="/" class="onav-brand">
+        <img src="/images/logo.svg" alt="Eluu" class="onav-logo" />
+        <span class="onav-wordmark">Eluu AI</span>
+      </a>
+
+      <div class="onav-links">
+        <div class="onav-link-wrap" data-ona-dropdown-wrap="platform">
+          <button type="button" class="onav-link onav-trigger" aria-expanded="false" aria-haspopup="true">
+            <span>Platform</span>
+            <svg class="onav-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
+          </button>
+        </div>
+        <div class="onav-link-wrap" data-ona-dropdown-wrap="usecases">
+          <button type="button" class="onav-link onav-trigger" aria-expanded="false" aria-haspopup="true">
+            <span>Use cases</span>
+            <svg class="onav-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
+          </button>
+        </div>
+        <a href="/cookbook" class:list={['onav-link', { 'is-active': isCookbook }]}>Cookbook</a>
+        <a href="/pricing" class:list={['onav-link', { 'is-active': isPricing }]}>Pricing</a>
+        <div class="onav-link-wrap" data-ona-dropdown-wrap="resources">
+          <button type="button" class="onav-link onav-trigger" aria-expanded="false" aria-haspopup="true">
+            <span>Resources</span>
+            <svg class="onav-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="onav-actions">
+        <a href="https://app.eluu.ai" class="onav-signin"
+          onclick="window.posthog?.capture('log_in_clicked', { location: 'ona_navbar' })"
+        >Sign in</a>
+        <a href="https://app.eluu.ai" class="onav-btn onav-btn-solid"
+          onclick="window.posthog?.capture('get_started_clicked', { location: 'ona_navbar' })"
+        >Start free</a>
+        <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="onav-btn onav-btn-ghost"
+          onclick="window.posthog?.capture('book_demo_clicked', { location: 'ona_navbar' })"
+        >Book a demo</a>
+        <button class="onav-hamburger" id="ona-hamburger" type="button" aria-label="Menu" aria-expanded="false">
+          <span class="onav-ham-line"></span>
+          <span class="onav-ham-line"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dropdown panels -->
+  <div class="onav-dropdown" data-ona-dropdown-panel="platform">
+    <div class="onav-dropdown-inner">
+      <div class="onav-dropdown-grid">
+        {platform.map((item) => (
+          <a href={item.href} class="onav-dd-item">
+            <h4>{item.name}</h4>
+            <p>{item.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+  <div class="onav-dropdown" data-ona-dropdown-panel="usecases">
+    <div class="onav-dropdown-inner">
+      <div class="onav-dropdown-grid">
+        {useCases.map((item) => (
+          <a href={item.href} class="onav-dd-item">
+            <h4>{item.name}</h4>
+            <p>{item.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+  <div class="onav-dropdown" data-ona-dropdown-panel="resources">
+    <div class="onav-dropdown-inner">
+      <div class="onav-dropdown-grid onav-dropdown-grid--sm">
+        {resources.map((item) => (
+          <a href={item.href} class="onav-dd-item" data-todo={item.todo ? '' : undefined}>
+            <h4>{item.name}</h4>
+            <p>{item.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile sidebar — outside the nav to avoid iOS transform/backdrop-filter bugs -->
+<div class="onav-sidebar-backdrop" id="ona-sidebar-backdrop"></div>
+<aside class="onav-sidebar" id="ona-sidebar" aria-hidden="true">
+  <div class="onav-sidebar-header">
+    <button class="onav-sidebar-close" id="ona-sidebar-close" type="button" aria-label="Close menu">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 5L15 15M15 5L5 15"/></svg>
+    </button>
+  </div>
+  <nav class="onav-sidebar-links">
+    <span class="onav-sidebar-label">Platform</span>
+    {platform.map((item) => <a href={item.href} class="onav-sidebar-link">{item.name}</a>)}
+    <span class="onav-sidebar-label onav-sidebar-label--spaced">Use cases</span>
+    {useCases.map((item) => <a href={item.href} class="onav-sidebar-link">{item.name}</a>)}
+    <a href="/cookbook" class="onav-sidebar-link onav-sidebar-link--spaced">Cookbook</a>
+    <a href="/pricing" class="onav-sidebar-link">Pricing</a>
+    <a href="/research" class="onav-sidebar-link">Blog</a>
+    <a href="#" class="onav-sidebar-link" data-todo>Docs</a>
+  </nav>
+  <div class="onav-sidebar-footer">
+    <a href="https://app.eluu.ai" class="onav-sidebar-cta">Start free</a>
+    <a href="https://cal.com/krishna-kaipa-wh7ao3/15min" class="onav-sidebar-cta onav-sidebar-cta--ghost">Book a demo</a>
+  </div>
+</aside>
+
+<style>
+  .onav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    transition: background 0.35s ease,
+                backdrop-filter 0.35s ease,
+                -webkit-backdrop-filter 0.35s ease,
+                border-color 0.35s ease;
+    border-bottom: 1px solid transparent;
+  }
+  .onav.scrolled {
+    background: rgba(20, 18, 11, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom-color: rgba(237, 233, 227, 0.06);
+  }
+  .onav.dropdown-open {
+    background: rgba(20, 18, 11, 0.65);
+    backdrop-filter: blur(40px) saturate(1.15);
+    -webkit-backdrop-filter: blur(40px) saturate(1.15);
+    border-bottom: 1px solid rgba(237, 233, 227, 0.06);
+  }
+
+  .onav-bar {
+    height: 56px;
+    display: flex;
+    align-items: center;
+  }
+  .onav-container {
+    max-width: 1380px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .onav-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .onav-logo { width: 26px; height: 26px; }
+  .onav-wordmark {
+    font-family: 'Jersey 10', cursive;
+    font-size: 28px;
+    color: #ede9e3;
+    line-height: 1;
+    letter-spacing: -0.3px;
+  }
+
+  .onav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .onav-link {
+    display: flex;
+    align-items: center;
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.7);
+    text-decoration: none;
+    line-height: 1;
+    transition: color 0.2s ease;
+  }
+  .onav-link:hover { color: #ede9e3; }
+  .onav-link.is-active {
+    font-weight: 600;
+    color: #ede9e3;
+    position: relative;
+    line-height: 1;
+  }
+  .onav-link.is-active::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    margin-top: 4px;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: #ED733B;
+    border-radius: 50%;
+    transform: translateX(-50%);
+  }
+
+  .onav-link-wrap { position: relative; display: flex; align-items: center; }
+  .onav-trigger {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    margin: 0;
+    cursor: pointer;
+    padding: 0;
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: inherit;
+    line-height: 1;
+  }
+  .onav-chevron {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 12px; height: 12px;
+    flex-shrink: 0;
+  }
+  .onav-link-wrap.open .onav-chevron { transform: rotate(180deg); }
+
+  /* ── Dropdown panels ── */
+  .onav-dropdown {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+  }
+  .onav-dropdown.active { grid-template-rows: 1fr; }
+  .onav-dropdown-inner {
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 20px;
+    transition: padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .onav-dropdown.active .onav-dropdown-inner { padding: 24px 20px 40px; }
+
+  .onav-dropdown-grid {
+    max-width: 1380px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px 48px;
+  }
+  .onav-dropdown-grid--sm {
+    grid-template-columns: 1fr 1fr;
+    max-width: 700px;
+    margin: 0;
+  }
+
+  .onav-dd-item {
+    text-decoration: none;
+    padding: 16px;
+    border-radius: 12px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.15s ease;
+  }
+  .onav-dd-item:nth-child(1) { transition-delay: 0.02s; }
+  .onav-dd-item:nth-child(2) { transition-delay: 0.05s; }
+  .onav-dd-item:nth-child(3) { transition-delay: 0.08s; }
+  .onav-dd-item:nth-child(4) { transition-delay: 0.11s; }
+  .onav-dropdown.active .onav-dd-item { opacity: 1; transform: translateY(0); }
+  .onav-dd-item:hover { background: rgba(237, 233, 227, 0.06); }
+  .onav-dd-item h4 {
+    font-family: 'Söhne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #ede9e3;
+    margin: 0 0 6px;
+  }
+  .onav-dd-item p {
+    font-family: 'Söhne', sans-serif;
+    font-size: 13px;
+    color: rgba(237, 233, 227, 0.5);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* ── Right actions ── */
+  .onav-actions { display: flex; align-items: center; gap: 10px; }
+  .onav-signin {
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.7);
+    text-decoration: none;
+    line-height: 1;
+    margin-right: 4px;
+    transition: color 0.2s ease;
+  }
+  .onav-signin:hover { color: #ede9e3; }
+  .onav-btn {
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 8px;
+    padding: 8px 18px;
+    text-decoration: none;
+    line-height: 1;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .onav-btn:hover { transform: translateY(-1px); }
+  .onav-btn-solid { color: #14120b; background: #ede9e3; border: 1px solid #ede9e3; }
+  .onav-btn-solid:hover { box-shadow: 0 4px 12px rgba(237, 233, 227, 0.15); }
+  .onav-btn-ghost { color: #ede9e3; background: transparent; border: 1px solid rgba(237, 233, 227, 0.2); }
+  .onav-btn-ghost:hover { border-color: rgba(237, 233, 227, 0.4); }
+
+  /* ── Hamburger ── */
+  .onav-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0;
+    margin-left: 4px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .onav-ham-line {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background: #ede9e3;
+    border-radius: 1px;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  }
+  .onav-hamburger.open .onav-ham-line:first-child { transform: translateY(3.25px) rotate(45deg); }
+  .onav-hamburger.open .onav-ham-line:last-child { transform: translateY(-3.25px) rotate(-45deg); }
+
+  /* ── Mobile sidebar ── */
+  .onav-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 998;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .onav-sidebar-backdrop.open { opacity: 1; }
+
+  .onav-sidebar {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    width: 260px;
+    max-width: 78vw;
+    background: #1e1d1b;
+    border-left: 1px solid rgba(237, 233, 227, 0.06);
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    flex-direction: column;
+  }
+  .onav-sidebar.open { transform: translateX(0); }
+
+  .onav-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 48px;
+    padding: env(safe-area-inset-top) 12px 0;
+    flex-shrink: 0;
+  }
+  .onav-sidebar-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(237, 233, 227, 0.5);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: color 0.2s ease;
+  }
+  .onav-sidebar-close:hover { color: #ede9e3; }
+
+  .onav-sidebar-links {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+  }
+  .onav-sidebar-label {
+    font-family: 'Jersey 10', cursive;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    color: rgba(237, 233, 227, 0.25);
+    padding-bottom: 14px;
+    border-bottom: 1px dotted rgba(237, 233, 227, 0.08);
+    margin-bottom: 4px;
+  }
+  .onav-sidebar-label--spaced { margin-top: 24px; }
+  .onav-sidebar-link {
+    font-family: 'Söhne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: -0.1px;
+    color: rgba(237, 233, 227, 0.55);
+    text-decoration: none;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(237, 233, 227, 0.04);
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.2s ease;
+  }
+  .onav-sidebar-link:last-child { border-bottom: none; }
+  .onav-sidebar-link:active { color: rgba(237, 233, 227, 0.9); }
+  .onav-sidebar-link--spaced {
+    margin-top: 20px;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.3px;
+    color: rgba(237, 233, 227, 0.8);
+  }
+
+  .onav-sidebar-footer {
+    padding: 20px 20px calc(28px + env(safe-area-inset-bottom));
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .onav-sidebar-cta {
+    display: block;
+    text-align: center;
+    font-family: 'Söhne', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #14120b;
+    background: #ede9e3;
+    border-radius: 4px;
+    padding: 11px 20px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .onav-sidebar-cta:hover { background: #d7d3cd; }
+  .onav-sidebar-cta--ghost {
+    color: #ede9e3;
+    background: transparent;
+    border: 1px solid rgba(237, 233, 227, 0.2);
+  }
+  .onav-sidebar-cta--ghost:hover { background: rgba(237, 233, 227, 0.06); }
+
+  /* ── Breakpoints ── */
+  @media (max-width: 1080px) {
+    .onav-btn-ghost { display: none; }
+  }
+  @media (max-width: 900px) {
+    .onav-links { display: none; }
+    .onav-dropdown { display: none; }
+    .onav-signin { display: none; }
+    .onav-btn-solid { display: none; }
+    .onav-hamburger { display: flex; }
+    .onav-sidebar { display: flex; }
+    .onav-sidebar-backdrop { display: block; pointer-events: none; }
+    .onav-sidebar-backdrop.open { pointer-events: auto; }
+  }
+  @media (max-width: 400px) {
+    .onav-wordmark { font-size: 22px; white-space: nowrap; }
+    .onav-logo { width: 22px; height: 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .onav-dropdown, .onav-dd-item, .onav-chevron, .onav-dropdown-inner,
+    .onav-sidebar, .onav-sidebar-backdrop { transition: none; }
+  }
+</style>
+
+<script>
+  const nav = document.getElementById('ona-nav');
+  const wraps = document.querySelectorAll('[data-ona-dropdown-wrap]') as NodeListOf<HTMLElement>;
+  const panels = document.querySelectorAll('[data-ona-dropdown-panel]') as NodeListOf<HTMLElement>;
+
+  if (nav && wraps.length && panels.length) {
+    let closeTimeout: ReturnType<typeof setTimeout> | null = null;
+    let activePanel: HTMLElement | null = null;
+
+    function setExpanded() {
+      wraps.forEach((wrap) => {
+        const key = wrap.dataset.onaDropdownWrap;
+        const panel = document.querySelector(`[data-ona-dropdown-panel="${key}"]`);
+        const btn = wrap.querySelector('.onav-trigger');
+        const isOpen = !!panel && panel.classList.contains('active');
+        wrap.classList.toggle('open', isOpen);
+        btn?.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+
+    function openDropdown(panel: HTMLElement) {
+      if (closeTimeout) { clearTimeout(closeTimeout); closeTimeout = null; }
+      panels.forEach((p) => { if (p !== panel) p.classList.remove('active'); });
+      panel.classList.add('active');
+      activePanel = panel;
+      nav!.classList.add('dropdown-open');
+      setExpanded();
+    }
+
+    function closeDropdowns() {
+      closeTimeout = setTimeout(() => {
+        panels.forEach((p) => p.classList.remove('active'));
+        nav!.classList.remove('dropdown-open');
+        activePanel = null;
+        setExpanded();
+      }, 80);
+    }
+
+    function cancelClose() {
+      if (closeTimeout) { clearTimeout(closeTimeout); closeTimeout = null; }
+    }
+
+    wraps.forEach((wrap) => {
+      const key = wrap.dataset.onaDropdownWrap;
+      const panel = document.querySelector(`[data-ona-dropdown-panel="${key}"]`) as HTMLElement | null;
+      if (!panel) return;
+
+      wrap.addEventListener('mouseenter', () => openDropdown(panel));
+      wrap.addEventListener('mouseleave', closeDropdowns);
+      panel.addEventListener('mouseenter', cancelClose);
+      panel.addEventListener('mouseleave', closeDropdowns);
+
+      const btn = wrap.querySelector('.onav-trigger') as HTMLElement | null;
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (panel.classList.contains('active')) {
+            closeDropdowns();
+          } else {
+            openDropdown(panel);
+          }
+        });
+        btn.addEventListener('keydown', (e: KeyboardEvent) => {
+          if (e.key === 'Escape') { closeDropdowns(); btn.focus(); }
+        });
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && activePanel) {
+        panels.forEach((p) => p.classList.remove('active'));
+        nav!.classList.remove('dropdown-open');
+        activePanel = null;
+        setExpanded();
+      }
+    });
+  }
+
+  // ── Scrolled state ──
+  let ticking = false;
+  function updateNav() {
+    if (sidebar?.classList.contains('open')) { ticking = false; return; }
+    nav?.classList.toggle('scrolled', window.scrollY > 0);
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(updateNav); ticking = true; }
+  }, { passive: true });
+
+  // ── Mobile sidebar ──
+  const hamburger = document.getElementById('ona-hamburger');
+  const sidebar = document.getElementById('ona-sidebar');
+  const backdrop = document.getElementById('ona-sidebar-backdrop');
+  const sidebarClose = document.getElementById('ona-sidebar-close');
+
+  function trapFocus(e: KeyboardEvent) {
+    if (e.key !== 'Tab' || !sidebar) return;
+    const focusable = sidebar.querySelectorAll<HTMLElement>('a, button, [tabindex]');
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
+  function openSidebar() {
+    if (!hamburger || !sidebar || !backdrop) return;
+    hamburger.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    sidebar.classList.add('open');
+    sidebar.setAttribute('aria-hidden', 'false');
+    backdrop.classList.add('open');
+    const scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.dataset.scrollY = String(scrollY);
+    sidebarClose?.focus();
+    document.addEventListener('keydown', trapFocus);
+  }
+
+  function closeSidebar() {
+    if (!hamburger || !sidebar || !backdrop) return;
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    sidebar.classList.remove('open');
+    sidebar.setAttribute('aria-hidden', 'true');
+    backdrop.classList.remove('open');
+    const scrollY = parseInt(document.body.dataset.scrollY || '0', 10);
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    window.scrollTo(0, scrollY);
+    nav?.classList.toggle('scrolled', scrollY > 0);
+    document.removeEventListener('keydown', trapFocus);
+    hamburger?.focus();
+  }
+
+  if (hamburger && sidebar && backdrop) {
+    hamburger.addEventListener('click', () => {
+      if (sidebar.classList.contains('open')) closeSidebar();
+      else openSidebar();
+    });
+    backdrop.addEventListener('click', closeSidebar);
+    sidebarClose?.addEventListener('click', closeSidebar);
+    sidebar.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeSidebar));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidebar.classList.contains('open')) closeSidebar();
+    });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 900 && sidebar.classList.contains('open')) closeSidebar();
+    });
+  }
+</script>

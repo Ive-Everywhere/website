@@ -1,0 +1,119 @@
+---
+// FinalCTA — headline + 2 CTAs (+ optional sub). Styled like CTAFooter.
+// Props: headline, sub?, ctas ({ label, href, style }[]).
+interface Cta {
+  label: string;
+  href: string;
+  style?: 'solid' | 'ghost';
+}
+interface Props {
+  headline: string;
+  sub?: string;
+  ctas?: Cta[];
+}
+const {
+  headline,
+  sub,
+  ctas = [
+    { label: 'Start free', href: 'https://app.eluu.ai', style: 'solid' },
+    { label: 'Book a demo', href: 'https://cal.com/krishna-kaipa-wh7ao3/15min', style: 'ghost' },
+  ],
+} = Astro.props;
+---
+
+<section class="ofcta">
+  <div class="ofcta-container">
+    <div class="ofcta-content reveal">
+      <h2 class="ofcta-heading">{headline}</h2>
+      {sub && <p class="ofcta-sub">{sub}</p>}
+      <div class="ofcta-buttons">
+        {ctas.map((cta) => (
+          <a
+            href={cta.href}
+            class:list={['ofcta-btn', cta.style === 'ghost' ? 'ofcta-btn-ghost' : 'ofcta-btn-solid']}
+          >{cta.label}</a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ofcta {
+    background: #13100a;
+  }
+  .ofcta-container {
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  @media (min-width: 640px) { .ofcta-container { min-height: 360px; } }
+  @media (min-width: 1024px) { .ofcta-container { min-height: 460px; } }
+
+  .ofcta-content {
+    position: relative;
+    z-index: 2;
+    padding: 40px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: inherit;
+  }
+  @media (min-width: 640px) { .ofcta-content { padding: 56px 40px; } }
+  @media (min-width: 1024px) { .ofcta-content { padding: 80px 48px; } }
+
+  .ofcta-heading {
+    font-family: 'Söhne', sans-serif;
+    font-weight: 600;
+    font-size: clamp(24px, 5vw, 48px);
+    letter-spacing: -1px;
+    color: #ffffff;
+    line-height: 1.1;
+    margin: 0;
+    max-width: 100%;
+    text-wrap: balance;
+  }
+  .ofcta-sub {
+    font-family: 'Söhne', sans-serif;
+    font-size: clamp(14px, 2vw, 16px);
+    color: rgba(237, 233, 227, 0.6);
+    line-height: 1.4;
+    margin: 12px 0 0;
+    max-width: 100%;
+  }
+  .ofcta-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .ofcta-btn {
+    font-family: 'Söhne', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 0.89em 1.45em;
+    border-radius: 9999px;
+    text-decoration: none;
+    line-height: 1;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .ofcta-btn:hover { transform: translateY(-1px); }
+  .ofcta-btn-solid { color: #14120b; background: #ede9e3; border: 1px solid #ede9e3; }
+  .ofcta-btn-solid:hover { box-shadow: 0 4px 16px rgba(237, 233, 227, 0.15); }
+  .ofcta-btn-ghost { color: #ede9e3; background: transparent; border: 1px solid rgba(237, 233, 227, 0.2); }
+  .ofcta-btn-ghost:hover { box-shadow: 0 4px 16px rgba(237, 233, 227, 0.1); }
+
+  @media (max-width: 400px) {
+    .ofcta-content { padding: 32px 16px; }
+    .ofcta-btn { padding: 10px 20px; font-size: 13px; }
+    .ofcta-buttons { gap: 8px; }
+  }
+</style>
