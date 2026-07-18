@@ -1,7 +1,9 @@
 ---
-// LogoBar — customer logo strip with tenure captions.
-// Props: label, logos (array of { name?, tenure? }) — unverified entries render
-// as designed placeholder boxes, never invented facts.
+// LogoBar — customer logo strip per ona ref (frame-01): a tiny centered label
+// above one single centered row of evenly-spaced muted wordmarks (no boxes,
+// no borders). Unverified entries render as muted placeholder wordmarks —
+// never invented facts. Props: label, logos ({ name?, tenure? }[]).
+// (tenure is accepted for compatibility but not displayed; ona shows none.)
 interface Logo {
   name?: string;
   tenure?: string;
@@ -10,7 +12,7 @@ interface Props {
   label: string;
   logos?: Logo[];
 }
-const { label, logos = [{}, {}, {}] } = Astro.props;
+const { label, logos = [{}, {}, {}, {}, {}, {}] } = Astro.props;
 ---
 
 <section class="olb">
@@ -18,12 +20,9 @@ const { label, logos = [{}, {}, {}] } = Astro.props;
     <p class="olb-label">{label}</p>
     <div class="olb-row">
       {logos.map((logo) => (
-        <div class="olb-item">
-          <div class="olb-box">
-            <span class="olb-box-label">{logo.name ?? 'Customer logo'}</span>
-          </div>
-          <span class="olb-tenure">{logo.tenure ?? '—'}</span>
-        </div>
+        <span class:list={['olb-mark', { 'olb-mark--placeholder': !logo.name }]}>
+          {logo.name ?? 'Customer logo'}
+        </span>
       ))}
     </div>
   </div>
@@ -32,7 +31,7 @@ const { label, logos = [{}, {}, {}] } = Astro.props;
 <style>
   .olb {
     background: #13100a;
-    padding: 56px 0;
+    padding: 72px 0;
   }
   .olb-container {
     max-width: 1380px;
@@ -42,11 +41,11 @@ const { label, logos = [{}, {}, {}] } = Astro.props;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
+    gap: 36px;
   }
   .olb-label {
     font-family: 'Söhne', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 400;
     color: rgba(237, 233, 227, 0.4);
     letter-spacing: 0.01em;
@@ -54,43 +53,36 @@ const { label, logos = [{}, {}, {}] } = Astro.props;
     text-align: center;
   }
   .olb-row {
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px 40px;
-  }
-  .olb-item {
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 20px 64px;
   }
-  .olb-box {
-    width: 150px;
-    height: 48px;
-    background: #1e1d1b;
-    border: 1px solid rgba(237, 233, 227, 0.06);
+  @media (min-width: 900px) {
+    .olb-row { justify-content: space-between; flex-wrap: nowrap; }
+  }
+  .olb-mark {
+    font-family: 'Söhne', sans-serif;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: rgba(237, 233, 227, 0.35);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .olb-mark--placeholder {
+    font-weight: 400;
+    font-size: 14px;
+    color: rgba(237, 233, 227, 0.25);
+    border: 1px dashed rgba(237, 233, 227, 0.1);
     border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .olb-box-label {
-    font-family: 'Söhne', sans-serif;
-    font-size: 12px;
-    font-weight: 400;
-    color: rgba(237, 233, 227, 0.25);
-  }
-  .olb-tenure {
-    font-family: 'Söhne', sans-serif;
-    font-size: 12px;
-    font-weight: 400;
-    color: rgba(237, 233, 227, 0.25);
+    padding: 10px 18px;
   }
 
   @media (max-width: 640px) {
-    .olb { padding: 40px 0; }
-    .olb-row { gap: 12px 24px; }
-    .olb-box { width: 120px; height: 40px; }
+    .olb { padding: 48px 0; }
+    .olb-row { gap: 16px 32px; }
   }
 </style>

@@ -1,5 +1,7 @@
 ---
-// Explanation — heading + subhead + link + media slot (pillar §2 / use-case §2).
+// Explanation — pillar/use-case §2, per ona ref (case frame-00 "Hand off work,
+// walk away"): narrow text column on the LEFT (heading, body, plain arrow-link)
+// beside a LARGE media panel on the right (~62% width). Stacks on mobile.
 // Props: heading, subhead, linkLabel?, linkHref?, mediaLabel?.
 // Default slot replaces the media placeholder with a real visual/animation.
 import MediaPlaceholder from './MediaPlaceholder.astro';
@@ -24,16 +26,14 @@ const hasMedia = Astro.slots.has('default');
         <div class="oex-link-row">
           <a href={linkHref} class="oex-link">
             {linkLabel}
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
         </div>
       )}
     </div>
-    {(hasMedia || mediaLabel) && (
-      <div class="oex-media reveal">
-        {hasMedia ? <slot /> : <MediaPlaceholder label={mediaLabel!} ratio="16 / 9" />}
-      </div>
-    )}
+    <div class="oex-media reveal">
+      {hasMedia ? <slot /> : <MediaPlaceholder label={mediaLabel ?? 'Product visual'} ratio="16 / 10" />}
+    </div>
   </div>
 </section>
 
@@ -47,19 +47,26 @@ const hasMedia = Astro.slots.has('default');
     margin: 0 auto;
     padding: 0 20px;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  @media (min-width: 900px) {
+    .oex-container {
+      grid-template-columns: 35fr 62fr;
+      gap: 64px;
+      align-items: start;
+    }
   }
 
   .oex-text {
-    max-width: 900px;
     display: flex;
     flex-direction: column;
+    min-width: 0;
   }
   .oex-heading {
     font-family: 'Söhne', sans-serif;
-    font-size: clamp(22px, 2.6vw, 36px);
+    font-size: clamp(22px, 2.3vw, 32px);
     font-weight: 600;
     color: #ede9e3;
     line-height: 1.2;
@@ -69,12 +76,13 @@ const hasMedia = Astro.slots.has('default');
   }
   .oex-subhead {
     font-family: 'Söhne', sans-serif;
-    font-size: clamp(16px, 1.8vw, 20px);
+    font-size: 0.9375rem;
     font-weight: 400;
     color: rgba(237, 233, 227, 0.6);
-    line-height: 1.55;
-    letter-spacing: -0.01em;
-    margin: 16px 0 0;
+    line-height: 1.6;
+    letter-spacing: -0.005em;
+    margin: 18px 0 0;
+    max-width: 44ch;
     text-wrap: pretty;
   }
   .oex-link-row { margin-top: 24px; }
@@ -88,20 +96,20 @@ const hasMedia = Astro.slots.has('default');
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    border: 1px solid rgba(237, 115, 59, 0.25);
-    border-radius: 4px;
-    padding: 7px 14px;
-    transition: background 0.25s ease, border-color 0.25s ease;
+    transition: opacity 0.2s ease;
   }
-  .oex-link:hover {
-    background: rgba(237, 115, 59, 0.06);
-    border-color: rgba(237, 115, 59, 0.4);
+  .oex-link:hover { opacity: 0.8; }
+  .oex-link svg { transition: transform 0.2s ease; }
+  .oex-link:hover svg { transform: translateX(2px); }
+
+  .oex-media { width: 100%; min-width: 0; }
+
+  @media (max-width: 899px) {
+    /* media above text when stacked, matching ona's mobile order */
+    .oex-media { order: -1; }
   }
-
-  .oex-media { width: 100%; }
-
   @media (max-width: 639px) {
     .oex { padding: 64px 0 0; }
-    .oex-container { gap: 28px; }
+    .oex-container { gap: 24px; }
   }
 </style>

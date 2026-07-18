@@ -152,16 +152,20 @@ const legal = [
 </footer>
 
 <style>
+  /* ── Ona footer geometry: one big rounded card inset from page edges ── */
   .omf {
     background: #13100a;
-    border-top: 1px solid rgba(237, 233, 227, 0.06);
     margin-top: 40px;
+    padding: 0 20px 20px;
   }
   .omf-container {
-    max-width: 1380px;
+    max-width: 1340px;
     margin: 0 auto;
-    padding: 64px 20px 32px;
+    padding: 56px 48px 32px;
     box-sizing: border-box;
+    background: #1e1d1b;
+    border: 1px solid rgba(237, 233, 227, 0.06);
+    border-radius: 12px;
   }
 
   /* ── Columns ── */
@@ -230,9 +234,9 @@ const legal = [
     gap: 12px 20px;
     margin-top: 56px;
     padding: 18px 20px;
-    background: #1e1d1b;
+    background: rgba(237, 233, 227, 0.03);
     border: 1px solid rgba(237, 233, 227, 0.06);
-    border-radius: 4px;
+    border-radius: 8px;
   }
   .omf-askai-label {
     font-family: 'Söhne', sans-serif;
@@ -313,7 +317,8 @@ const legal = [
   .omf-social:hover { color: #ede9e3; border-color: rgba(237, 233, 227, 0.2); }
 
   @media (max-width: 639px) {
-    .omf-container { padding: 48px 16px 24px; }
+    .omf { padding: 0 12px 12px; }
+    .omf-container { padding: 40px 20px 24px; }
     .omf-askai { margin-top: 40px; }
   }
 </style>

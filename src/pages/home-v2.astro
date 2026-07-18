@@ -5,6 +5,7 @@ import Layout from '../layouts/Layout.astro';
 import OnaNav from '../components/ona/OnaNav.astro';
 import OnaHero from '../components/ona/OnaHero.astro';
 import MediaPlaceholder from '../components/ona/MediaPlaceholder.astro';
+import HeroTaskAnimation from '../components/ona/HeroTaskAnimation.astro';
 import LogoBar from '../components/ona/LogoBar.astro';
 import PillarGrid from '../components/ona/PillarGrid.astro';
 import MediaCards from '../components/ona/MediaCards.astro';
@@ -52,33 +53,36 @@ const mediaCards = [
     titleLine2: 'across your whole stack',
     sub: 'Agents pull data, combine it, and take action across every system you use, from Slack to Salesforce to your spreadsheets.',
     links: [
-      { label: 'Connect every tool your team uses', href: '/connections' },
-      { label: 'Reconcile data across systems', href: '/use-cases/reconcile-data' },
-      { label: 'Build dashboards and internal apps', href: '/use-cases/build-apps' },
+      { label: 'Connect every tool your team uses', href: '/connections', icon: 'plug' },
+      { label: 'Reconcile data across systems', href: '/use-cases/reconcile-data', icon: 'chart' },
+      { label: 'Build dashboards and internal apps', href: '/use-cases/build-apps', icon: 'box' },
     ],
     mediaLabel: 'Product visual — connected-tools flow',
+    mediaSide: 'left',
   },
   {
     titleLine1: 'Agents that run',
     titleLine2: 'without you',
     sub: 'Assign the work and close your laptop. Agents run in the cloud around the clock and deliver finished results to your Slack.',
     links: [
-      { label: 'Automate recurring reports and briefs', href: '/use-cases/recurring-reports' },
-      { label: 'Run as many agents as you need, in parallel', href: '/workspace' },
-      { label: 'Hand it off in Slack and close your laptop', href: '/agents' },
+      { label: 'Automate recurring reports and briefs', href: '/use-cases/recurring-reports', icon: 'clock' },
+      { label: 'Run as many agents as you need, in parallel', href: '/workspace', icon: 'parallel' },
+      { label: 'Hand it off in Slack and close your laptop', href: '/agents', icon: 'chat' },
     ],
     mediaLabel: 'Product visual — scheduled-run workflow',
+    mediaSide: 'right',
   },
   {
     titleLine1: 'Agents you',
     titleLine2: 'stay in control of',
     sub: 'Full visibility over what every agent can see, do, change, and cost, with an audit trail for every action.',
     links: [
-      { label: 'Control what every agent can do', href: '/security' },
-      { label: 'See what data each agent can touch', href: '/connections' },
-      { label: 'Keep an audit trail of every action', href: '/security' },
+      { label: 'Control what every agent can do', href: '/security', icon: 'shield' },
+      { label: 'See what data each agent can touch', href: '/connections', icon: 'eye' },
+      { label: 'Keep an audit trail of every action', href: '/security', icon: 'audit' },
     ],
     mediaLabel: 'Product visual — access and audit panel',
+    mediaSide: 'left',
   },
 ];
 
@@ -122,10 +126,7 @@ const blogCards = [
       sub="Deploy a team of AI specialists that work across your whole tool stack. In the cloud, in your Slack, on your schedule."
       tagline="Connected, controlled, and auditable by default."
     >
-      <MediaPlaceholder
-        label="Product video — a specialist pulling data from several tools and dropping a finished deliverable into Slack"
-        ratio="16 / 9"
-      />
+      <HeroTaskAnimation />
     </OnaHero>
 
     <!-- §2 CUSTOMER LOGOS -->
@@ -182,7 +183,7 @@ const blogCards = [
     />
 
     <!-- §10 BLOG HIGHLIGHTS -->
-    <ResourceCards heading="Recent highlights from our blog." cards={blogCards} />
+    <ResourceCards heading="Recent highlights from our blog." variant="list" cards={blogCards} />
 
     <!-- §11 FINAL CTA -->
     <FinalCTA headline="Start with one agent. Scale to a workforce." />

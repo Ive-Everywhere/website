@@ -1,11 +1,15 @@
 ---
-// FeatureCards — N cards: headline, eyebrow-quote, body (pillar §4 / use-case §4
-// format; supports 5 cards). Optional section heading + sub.
-// Props: heading?, sub?, cards ({ headline, eyebrowQuote?, body }[]).
+// FeatureCards — case-page feature grid per ona ref (case frames 05–06):
+// cards in a 2-column grid; each card contains its own media panel on top,
+// then title + body (+ optional eyebrow-quote). 5 cards → 2+2+1 (last spans).
+// Props: heading?, sub?, cards ({ headline, eyebrowQuote?, body, mediaLabel? }[]).
+import MediaPlaceholder from './MediaPlaceholder.astro';
+
 interface Card {
   headline: string;
   eyebrowQuote?: string;
   body: string;
+  mediaLabel?: string;
 }
 interface Props {
   heading?: string;
@@ -26,9 +30,14 @@ const { heading, sub, cards } = Astro.props;
     <div class="ofc-grid" data-count={cards.length}>
       {cards.map((card) => (
         <article class="ofc-card reveal">
-          {card.eyebrowQuote && <span class="ofc-card-eyebrow">&ldquo;{card.eyebrowQuote}&rdquo;</span>}
-          <h3 class="ofc-card-headline">{card.headline}</h3>
-          <p class="ofc-card-body">{card.body}</p>
+          <div class="ofc-card-media">
+            <MediaPlaceholder label={card.mediaLabel ?? 'Product visual'} ratio="16 / 9" compact />
+          </div>
+          <div class="ofc-card-text">
+            {card.eyebrowQuote && <span class="ofc-card-eyebrow">&ldquo;{card.eyebrowQuote}&rdquo;</span>}
+            <h3 class="ofc-card-headline">{card.headline}</h3>
+            <p class="ofc-card-body">{card.body}</p>
+          </div>
         </article>
       ))}
     </div>
@@ -47,7 +56,7 @@ const { heading, sub, cards } = Astro.props;
     box-sizing: border-box;
   }
   .ofc-intro {
-    margin-bottom: 22.4px;
+    margin-bottom: 32px;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -71,35 +80,37 @@ const { heading, sub, cards } = Astro.props;
     margin: 0;
   }
 
+  /* ── 2×2-ish grid ── */
   .ofc-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 16px;
     align-items: stretch;
   }
   @media (min-width: 640px) {
     .ofc-grid { grid-template-columns: 1fr 1fr; }
-  }
-  @media (min-width: 1024px) {
-    .ofc-grid { grid-template-columns: repeat(3, 1fr); }
-    /* 5 cards: 3 on top, 2 wider below */
-    .ofc-grid[data-count="5"] .ofc-card:nth-child(4),
+    /* odd counts: last card spans the full row */
+    .ofc-grid[data-count="3"] .ofc-card:nth-child(3),
     .ofc-grid[data-count="5"] .ofc-card:nth-child(5) {
-      grid-column: span 1;
+      grid-column: 1 / -1;
     }
-    .ofc-grid[data-count="5"] { grid-template-columns: repeat(6, 1fr); }
-    .ofc-grid[data-count="5"] .ofc-card { grid-column: span 2; }
-    .ofc-grid[data-count="5"] .ofc-card:nth-child(4) { grid-column: 1 / span 3; }
-    .ofc-grid[data-count="5"] .ofc-card:nth-child(5) { grid-column: 4 / span 3; }
-    .ofc-grid[data-count="4"] { grid-template-columns: repeat(2, 1fr); }
+    /* wide (spanning) card lays out media beside text */
+    .ofc-grid[data-count="3"] .ofc-card:nth-child(3),
+    .ofc-grid[data-count="5"] .ofc-card:nth-child(5) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
   }
 
   .ofc-card {
     position: relative;
     display: flex;
     flex-direction: column;
+    gap: 24px;
     background: #1e1d1b;
-    border-radius: 4px;
+    border-radius: 10px;
     padding: 24px;
     box-sizing: border-box;
     overflow: hidden;
@@ -109,9 +120,18 @@ const { heading, sub, cards } = Astro.props;
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 4px;
-    border: 1px solid rgba(237, 233, 227, 0.025);
+    border-radius: 10px;
+    border: 1px solid rgba(237, 233, 227, 0.06);
     z-index: 30;
+  }
+  @media (min-width: 900px) {
+    .ofc-card { padding: 28px; }
+  }
+
+  .ofc-card-media { min-width: 0; }
+  .ofc-card-text {
+    display: flex;
+    flex-direction: column;
   }
 
   .ofc-card-eyebrow {
@@ -146,6 +166,6 @@ const { heading, sub, cards } = Astro.props;
 
   @media (max-width: 639px) {
     .ofc { padding: 64px 0 0; }
-    .ofc-card { padding: 20px 16px; }
+    .ofc-card { padding: 20px 16px; gap: 18px; }
   }
 </style>

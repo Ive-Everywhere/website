@@ -1,6 +1,9 @@
 ---
-// PillarGrid — heading + 4 linked cards (the "AI workforce" pillar grid).
-// Props: heading, cards (array of { name, body, ctaLabel, href }).
+// PillarGrid — heading + the 4-pillar frame (the "AI workforce" section).
+// Structure per ona ref (frame-02): ONE outer rounded container with a hairline
+// border, internally divided 2×2 by hairline lines (no gaps, no separate cards).
+// Each cell: text column (h3, muted body, arrow-link) + decorative dot-matrix
+// graphic on the right. Props: heading, cards ({ name, body, ctaLabel, href }[]).
 interface Card {
   name: string;
   body: string;
@@ -12,6 +15,34 @@ interface Props {
   cards: Card[];
 }
 const { heading, cards } = Astro.props;
+
+// ── Dot-matrix generation ─────────────────────────────────────────────
+// ~13×9 grid of small round dots; a deterministic subset renders brighter,
+// forming a slightly different pattern per cell (seeded PRNG, no runtime JS).
+const COLS = 13;
+const ROWS = 9;
+const STEP = 13;
+const R = 2.4;
+function matrixDots(seed: number) {
+  let s = (seed + 1) * 7919;
+  const rand = () => {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+  const dots: { x: number; y: number; on: boolean }[] = [];
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+      dots.push({
+        x: col * STEP + R,
+        y: row * STEP + R,
+        on: rand() < 0.34,
+      });
+    }
+  }
+  return dots;
+}
+const W = (COLS - 1) * STEP + R * 2;
+const H = (ROWS - 1) * STEP + R * 2;
 ---
 
 <section class="opg">
@@ -19,17 +50,29 @@ const { heading, cards } = Astro.props;
     <div class="opg-intro reveal">
       <h2 class="opg-heading">{heading}</h2>
     </div>
-    <div class="opg-grid">
-      {cards.map((card) => (
-        <a href={card.href} class="opg-card reveal">
-          <div class="opg-card-text">
-            <h3 class="opg-card-name">{card.name}</h3>
-            <p class="opg-card-body">{card.body}</p>
+    <div class="opg-frame reveal">
+      {cards.map((card, i) => (
+        <a href={card.href} class="opg-cell">
+          <div class="opg-cell-text">
+            <h3 class="opg-cell-name">{card.name}</h3>
+            <p class="opg-cell-body">{card.body}</p>
+            <span class="opg-cell-cta">
+              {card.ctaLabel}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
           </div>
-          <span class="opg-card-cta">
-            {card.ctaLabel}
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </span>
+          <div class="opg-cell-matrix" aria-hidden="true">
+            <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} fill="none">
+              {matrixDots(i).map((d) => (
+                <circle
+                  cx={d.x}
+                  cy={d.y}
+                  r={R}
+                  fill={d.on ? 'rgba(237, 233, 227, 0.45)' : 'rgba(237, 233, 227, 0.12)'}
+                />
+              ))}
+            </svg>
+          </div>
         </a>
       ))}
     </div>
@@ -48,7 +91,7 @@ const { heading, cards } = Astro.props;
     box-sizing: border-box;
   }
   .opg-intro {
-    margin-bottom: 22.4px;
+    margin-bottom: 32px;
   }
   .opg-heading {
     font-family: 'Söhne', sans-serif;
@@ -61,71 +104,64 @@ const { heading, cards } = Astro.props;
     text-wrap: balance;
   }
 
-  .opg-grid {
+  /* ── One frame, hairline-divided 2×2 (no gaps, no separate cards) ── */
+  .opg-frame {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 10px;
-    align-items: stretch;
+    border: 1px solid rgba(237, 233, 227, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
   }
-  @media (min-width: 640px) {
-    .opg-grid { grid-template-columns: 1fr 1fr; }
-  }
-  @media (min-width: 1024px) {
-    .opg-grid { grid-template-columns: repeat(4, 1fr); }
+  @media (min-width: 900px) {
+    .opg-frame { grid-template-columns: 1fr 1fr; }
   }
 
-  .opg-card {
-    position: relative;
+  .opg-cell {
     display: flex;
-    flex-direction: column;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 28px;
-    background: #1e1d1b;
-    border-radius: 4px;
-    padding: 24px;
+    gap: 40px;
+    padding: 44px 44px 40px;
     box-sizing: border-box;
     text-decoration: none;
-    overflow: hidden;
+    border-bottom: 1px solid rgba(237, 233, 227, 0.1);
     transition: background 0.25s ease;
   }
-  .opg-card::before {
-    content: "";
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    border-radius: 4px;
-    border: 1px solid rgba(237, 233, 227, 0.025);
-    z-index: 30;
-    transition: border-color 0.25s ease;
+  .opg-cell:last-child { border-bottom: none; }
+  @media (min-width: 900px) {
+    /* internal hairlines: right edge on left column, bottom edge on top row */
+    .opg-cell:nth-child(odd) { border-right: 1px solid rgba(237, 233, 227, 0.1); }
+    .opg-cell:nth-child(3),
+    .opg-cell:nth-child(4) { border-bottom: none; }
   }
-  .opg-card:hover { background: #232220; }
-  .opg-card:hover::before { border-color: rgba(237, 233, 227, 0.08); }
+  .opg-cell:hover { background: rgba(237, 233, 227, 0.02); }
 
-  .opg-card-text {
+  .opg-cell-text {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    min-width: 0;
+    max-width: 34ch;
   }
-  .opg-card-name {
+  .opg-cell-name {
     font-family: 'Söhne', sans-serif;
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
     font-weight: 600;
     color: #ede9e3;
-    line-height: 1.25;
-    letter-spacing: -0.015em;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
     margin: 0;
   }
-  .opg-card-body {
+  .opg-cell-body {
     font-family: 'Söhne', sans-serif;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     font-weight: 400;
     color: rgba(237, 233, 227, 0.6);
-    line-height: 1.5;
+    line-height: 1.55;
     letter-spacing: -0.005em;
-    margin: 0;
+    margin: 14px 0 0;
     text-wrap: pretty;
   }
-  .opg-card-cta {
+  .opg-cell-cta {
     font-family: 'Söhne', sans-serif;
     font-size: 0.875rem;
     font-weight: 400;
@@ -133,12 +169,24 @@ const { heading, cards } = Astro.props;
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    margin-top: 26px;
   }
-  .opg-card-cta svg { transition: transform 0.2s ease; }
-  .opg-card:hover .opg-card-cta svg { transform: translateX(2px); }
+  .opg-cell-cta svg { transition: transform 0.2s ease; }
+  .opg-cell:hover .opg-cell-cta svg { transform: translateX(2px); }
 
+  .opg-cell-matrix {
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+  }
+  @media (max-width: 479px) {
+    .opg-cell-matrix { display: none; }
+  }
+
+  @media (max-width: 899px) {
+    .opg-cell { padding: 28px 24px; gap: 24px; }
+  }
   @media (max-width: 639px) {
     .opg { padding: 64px 0 0; }
-    .opg-card { padding: 20px 16px; gap: 20px; }
   }
 </style>

@@ -1,5 +1,7 @@
 ---
-// FeaturedBanner — eyebrow, heading, body, CTA, and thumbnail slots (home §6).
+// FeaturedBanner — home §6, per ona ref (frame-06 "Summit recordings" card):
+// ONE full-width rounded card; text column on the LEFT (~55%: heading, body,
+// pill CTA) and a row of small thumbnails with captions on the RIGHT.
 // Props: eyebrow?, heading, body, ctaLabel, ctaHref, thumbnails (labels for
 // placeholder thumbnails when no real assets exist yet).
 import MediaPlaceholder from './MediaPlaceholder.astro';
@@ -23,16 +25,16 @@ const { eyebrow, heading, body, ctaLabel, ctaHref, thumbnails = [] } = Astro.pro
         <h2 class="ofb-heading">{heading}</h2>
         <p class="ofb-body">{body}</p>
         <div class="ofb-cta-row">
-          <a href={ctaHref} class="ofb-cta">
-            {ctaLabel}
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
+          <a href={ctaHref} class="ofb-cta">{ctaLabel}</a>
         </div>
       </div>
       {thumbnails.length > 0 && (
         <div class="ofb-thumbs">
           {thumbnails.map((label) => (
-            <MediaPlaceholder label={label} ratio="16 / 10" compact />
+            <div class="ofb-thumb">
+              <MediaPlaceholder label="" ratio="1 / 1" compact />
+              <span class="ofb-thumb-caption">{label}</span>
+            </div>
           ))}
         </div>
       )}
@@ -54,11 +56,11 @@ const { eyebrow, heading, body, ctaLabel, ctaHref, thumbnails = [] } = Astro.pro
   .ofb-card {
     position: relative;
     background: #1e1d1b;
-    border-radius: 4px;
+    border-radius: 10px;
     overflow: hidden;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 40px;
     padding: 32px 24px;
     box-sizing: border-box;
   }
@@ -67,15 +69,15 @@ const { eyebrow, heading, body, ctaLabel, ctaHref, thumbnails = [] } = Astro.pro
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 4px;
-    border: 1px solid rgba(237, 233, 227, 0.025);
+    border-radius: 10px;
+    border: 1px solid rgba(237, 233, 227, 0.06);
     z-index: 30;
   }
   @media (min-width: 900px) {
     .ofb-card {
-      grid-template-columns: 5fr 6fr;
-      gap: 48px;
-      padding: 48px;
+      grid-template-columns: 55fr 41fr;
+      gap: 64px;
+      padding: 44px 48px;
       align-items: center;
     }
   }
@@ -83,7 +85,7 @@ const { eyebrow, heading, body, ctaLabel, ctaHref, thumbnails = [] } = Astro.pro
   .ofb-text {
     display: flex;
     flex-direction: column;
-    max-width: 48ch;
+    min-width: 0;
   }
   .ofb-eyebrow {
     font-family: 'Söhne', sans-serif;
@@ -106,44 +108,57 @@ const { eyebrow, heading, body, ctaLabel, ctaHref, thumbnails = [] } = Astro.pro
   }
   .ofb-body {
     font-family: 'Söhne', sans-serif;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 400;
     color: rgba(237, 233, 227, 0.6);
     line-height: 1.55;
     letter-spacing: -0.005em;
     margin: 14px 0 0;
+    max-width: 52ch;
     text-wrap: pretty;
   }
-  .ofb-cta-row { margin-top: 26px; }
+  .ofb-cta-row { margin-top: 24px; }
   .ofb-cta {
     font-family: 'Söhne', sans-serif;
     font-size: 0.875rem;
     font-weight: 400;
-    color: #ED733B;
+    color: #13100a;
+    background: #ED733B;
     letter-spacing: -0.005em;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    border: 1px solid rgba(237, 115, 59, 0.25);
-    border-radius: 4px;
-    padding: 7px 14px;
-    transition: background 0.25s ease, border-color 0.25s ease;
+    border-radius: 6px;
+    padding: 9px 18px;
+    line-height: 1;
+    transition: opacity 0.2s ease;
   }
-  .ofb-cta:hover {
-    background: rgba(237, 115, 59, 0.06);
-    border-color: rgba(237, 115, 59, 0.4);
-  }
+  .ofb-cta:hover { opacity: 0.9; }
 
+  /* ── Thumbnail row with captions ── */
   .ofb-thumbs {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 16px;
     align-items: start;
   }
+  .ofb-thumb {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+  .ofb-thumb-caption {
+    font-family: 'Söhne', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(237, 233, 227, 0.45);
+    line-height: 1.4;
+  }
+
   @media (max-width: 639px) {
     .ofb { padding: 64px 0 0; }
-    .ofb-thumbs { grid-template-columns: 1fr; }
+    .ofb-thumbs { grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .ofb-card { padding: 24px 16px; }
   }
 </style>

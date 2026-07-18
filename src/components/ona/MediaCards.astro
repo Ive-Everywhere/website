@@ -1,13 +1,19 @@
 ---
-// MediaCards — the 3-card format (home §4): each card = two-line headline,
-// subhead, 3 icon link-rows with arrows, and a media slot.
-// Props: heading, sub?, cards (array of { titleLine1, titleLine2, sub, links: [{label, href}], mediaLabel }).
-// Named slots media-1/media-2/media-3 can replace a card's placeholder with a real visual.
+// MediaCards — the 3 big cards (home §4), per ona ref (frame-03/04):
+// each card = full-width rounded container with a LARGE media panel on one
+// side (~48% width) and a text column on the other; media side alternates
+// per card (left, right, left). Text column: two-line h3 (second line dimmer),
+// body sub, then 3 full-width link ROWS — leading icon, label, trailing arrow
+// at far right, hairline divider between rows.
+// Props: heading, sub?, cards ({ titleLine1, titleLine2, sub,
+//   links: [{ label, href, icon? }], mediaLabel?, mediaSide? }).
+// Named slots media-1/media-2/media-3 can replace a card's placeholder.
 import MediaPlaceholder from './MediaPlaceholder.astro';
 
 interface CardLink {
   label: string;
   href: string;
+  icon?: string;
 }
 interface Card {
   titleLine1: string;
@@ -15,6 +21,7 @@ interface Card {
   sub: string;
   links: CardLink[];
   mediaLabel?: string;
+  mediaSide?: 'left' | 'right';
 }
 interface Props {
   heading: string;
@@ -22,6 +29,21 @@ interface Props {
   cards: Card[];
 }
 const { heading, sub, cards } = Astro.props;
+
+// Small inline icon set for link rows (16px stroke icons).
+const icons: Record<string, string> = {
+  move: '<rect x="3" y="7" width="12" height="12" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  box: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12h6M12 9l3 3-3 3"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>',
+  parallel: '<path d="M7 4v16M12 4v16M17 4v16"/>',
+  chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  eye: '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>',
+  plug: '<path d="M9 7V2M15 7V2M6 7h12v4a6 6 0 0 1-12 0z"/><path d="M12 17v5"/>',
+  chart: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+  file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+  audit: '<path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/>',
+};
 ---
 
 <section class="omc">
@@ -32,36 +54,39 @@ const { heading, sub, cards } = Astro.props;
     </div>
 
     <div class="omc-stack">
-      {cards.map((card, i) => (
-        <article class="omc-card reveal">
-          <div class="omc-text-col">
-            <h3 class="omc-card-title">
-              <span class="omc-title-l1">{card.titleLine1}</span>
-              <span class="omc-title-l2">{card.titleLine2}</span>
-            </h3>
-            <p class="omc-card-sub">{card.sub}</p>
-            <ul class="omc-links">
-              {card.links.map((link) => (
-                <li>
-                  <a href={link.href} class="omc-link">
-                    <span class="omc-link-icon">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12h6M12 9l3 3-3 3"/></svg>
-                    </span>
-                    <span class="omc-link-label">{link.label}</span>
-                    <svg class="omc-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div class="omc-media-col">
-            {i === 0 && Astro.slots.has('media-1') ? <slot name="media-1" />
-              : i === 1 && Astro.slots.has('media-2') ? <slot name="media-2" />
-              : i === 2 && Astro.slots.has('media-3') ? <slot name="media-3" />
-              : <MediaPlaceholder label={card.mediaLabel ?? 'Product visual'} ratio="4 / 3" />}
-          </div>
-        </article>
-      ))}
+      {cards.map((card, i) => {
+        const side = card.mediaSide ?? (i % 2 === 0 ? 'left' : 'right');
+        return (
+          <article class:list={['omc-card', 'reveal', side === 'right' ? 'omc-card--media-right' : 'omc-card--media-left']}>
+            <div class="omc-media-col">
+              {i === 0 && Astro.slots.has('media-1') ? <slot name="media-1" />
+                : i === 1 && Astro.slots.has('media-2') ? <slot name="media-2" />
+                : i === 2 && Astro.slots.has('media-3') ? <slot name="media-3" />
+                : <MediaPlaceholder label={card.mediaLabel ?? 'Product visual'} ratio="4 / 3" />}
+            </div>
+            <div class="omc-text-col">
+              <h3 class="omc-card-title">
+                <span class="omc-title-l1">{card.titleLine1}</span>
+                <span class="omc-title-l2">{card.titleLine2}</span>
+              </h3>
+              <p class="omc-card-sub">{card.sub}</p>
+              <ul class="omc-links">
+                {card.links.map((link) => (
+                  <li>
+                    <a href={link.href} class="omc-link">
+                      <span class="omc-link-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={icons[link.icon ?? 'box'] ?? icons.box} />
+                      </span>
+                      <span class="omc-link-label">{link.label}</span>
+                      <svg class="omc-link-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        );
+      })}
     </div>
   </div>
 </section>
@@ -78,7 +103,7 @@ const { heading, sub, cards } = Astro.props;
     box-sizing: border-box;
   }
   .omc-intro {
-    margin-bottom: 22.4px;
+    margin-bottom: 32px;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -105,18 +130,18 @@ const { heading, sub, cards } = Astro.props;
   .omc-stack {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
   }
 
-  /* ── Card: text left, media right on desktop; stacked mobile ── */
+  /* ── Card: large media panel one side (~48%), text column the other ── */
   .omc-card {
     position: relative;
     background: #1e1d1b;
-    border-radius: 4px;
+    border-radius: 10px;
     overflow: hidden;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 32px;
     padding: 24px;
     box-sizing: border-box;
   }
@@ -125,23 +150,36 @@ const { heading, sub, cards } = Astro.props;
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-radius: 4px;
-    border: 1px solid rgba(237, 233, 227, 0.025);
+    border-radius: 10px;
+    border: 1px solid rgba(237, 233, 227, 0.06);
     z-index: 30;
   }
   @media (min-width: 900px) {
     .omc-card {
-      grid-template-columns: 5fr 7fr;
-      gap: 40px;
-      padding: 36px;
+      grid-template-columns: 48fr 44fr;
+      gap: 64px;
+      padding: 40px;
       align-items: center;
     }
+    /* alternate media side per card */
+    .omc-card--media-right .omc-media-col { order: 2; }
+    .omc-card--media-right .omc-text-col { order: 1; }
+    .omc-card--media-right { grid-template-columns: 44fr 48fr; }
+  }
+
+  .omc-media-col {
+    min-width: 0;
+  }
+  /* mobile: media stays on top regardless of side */
+  @media (max-width: 899px) {
+    .omc-media-col { order: 1; }
+    .omc-text-col { order: 2; }
   }
 
   .omc-text-col {
     display: flex;
     flex-direction: column;
-    max-width: 48ch;
+    min-width: 0;
   }
 
   .omc-card-title {
@@ -159,32 +197,35 @@ const { heading, sub, cards } = Astro.props;
 
   .omc-card-sub {
     font-family: 'Söhne', sans-serif;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 400;
     color: rgba(237, 233, 227, 0.6);
     line-height: 1.55;
     letter-spacing: -0.005em;
-    margin: 14px 0 0;
+    margin: 16px 0 0;
+    max-width: 48ch;
     text-wrap: pretty;
   }
 
+  /* ── Full-width link rows with hairline dividers ── */
   .omc-links {
     list-style: none;
-    margin: 24px 0 0;
+    margin: 28px 0 0;
     padding: 0;
     display: flex;
     flex-direction: column;
   }
+  .omc-links li + li .omc-link {
+    border-top: 1px solid rgba(237, 233, 227, 0.06);
+  }
   .omc-link {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 0;
+    gap: 12px;
+    padding: 16px 0;
     text-decoration: none;
-    border-bottom: 1px solid rgba(237, 233, 227, 0.06);
     transition: border-color 0.2s ease;
   }
-  .omc-links li:last-child .omc-link { border-bottom: none; }
   .omc-link-icon {
     display: flex;
     align-items: center;
@@ -211,12 +252,9 @@ const { heading, sub, cards } = Astro.props;
   .omc-link:hover .omc-link-icon { color: #ED733B; }
   .omc-link:hover .omc-link-arrow { color: #ED733B; transform: translateX(2px); }
 
-  .omc-media-col {
-    min-width: 0;
-  }
-
   @media (max-width: 639px) {
     .omc { padding: 64px 0 0; }
-    .omc-card { padding: 20px 16px; }
+    .omc-card { padding: 20px 16px; gap: 24px; }
+    .omc-link { padding: 13px 0; }
   }
 </style>
