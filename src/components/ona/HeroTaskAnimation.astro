@@ -347,20 +347,28 @@ const mobileCells = Array.from({ length: M_COLS * M_ROWS }, (_, i) => i);
       // 120-200ms -> 3-5 concurrent flashes at any moment. No setTimeout.
       const flicker = { window: false, visible: false, call: null as gsap.core.Tween | null };
 
+      // Track the active flash tween per cell and kill it explicitly on re-flash.
+      // NEVER use overwrite:true here — it would permanently kill that cell's
+      // slice of the timeline's staggered wave/crossfade tweens, leaving stray
+      // grey/colored squares in the "all mint" completion state.
+      const activeFlash = new Map<HTMLElement, gsap.core.Tween>();
+
       const flash = () => {
         const el = flickerPool[(Math.random() * flickerPool.length) | 0];
         const color =
           Math.random() < 0.6 ? CREAM : ACCENTS[(Math.random() * ACCENTS.length) | 0];
-        gsap.fromTo(
+        activeFlash.get(el)?.kill();
+        const tw = gsap.fromTo(
           el,
           { backgroundColor: color },
           {
             backgroundColor: SQ_DEFAULT,
             duration: 0.12 + Math.random() * 0.08,
             ease: 'power2.in',
-            overwrite: true,
+            onComplete: () => activeFlash.delete(el),
           }
         );
+        activeFlash.set(el, tw);
       };
 
       const pump = () => {
@@ -385,7 +393,13 @@ const mobileCells = Array.from({ length: M_COLS * M_ROWS }, (_, i) => i);
       const closeWindow = () => {
         flicker.window = false;
         haltPump();
-        outside.forEach((el) => gsap.killTweensOf(el, 'backgroundColor'));
+        // Settle any in-flight flash back to default instead of freezing it
+        // mid-color (killTweensOf alone left cells stuck on flash colors).
+        activeFlash.forEach((tw, el) => {
+          tw.kill();
+          gsap.to(el, { backgroundColor: SQ_DEFAULT, duration: 0.1, ease: 'power1.out' });
+        });
+        activeFlash.clear();
       };
 
       // ---------------- Master timeline ----------------
