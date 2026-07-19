@@ -332,7 +332,9 @@ const CELLS = Array.from({ length: 11 * 7 });
   /* ===== agent grid behind the cards ===== */
   .hta-cellgrid { position: absolute; inset: 0; display: grid;
     grid-template-columns: repeat(11, 1fr); grid-template-rows: repeat(7, 1fr);
-    place-items: center; pointer-events: none; z-index: 0; }
+    place-items: center; pointer-events: none; z-index: 0;
+    /* whole-field dim: per-cell opacity animations still work relative to this */
+    opacity: 0.4; }
   .sq { width: 18px; height: 18px; border-radius: 0; background: rgba(237,233,227,0.28); }
   .card { z-index: 2; }
 
