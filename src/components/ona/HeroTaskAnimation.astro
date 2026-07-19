@@ -143,6 +143,7 @@ const mobileCells = Array.from({ length: M_COLS * M_ROWS }, (_, i) => i);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* clips items while the box collapses to its header row */
     background: #13100a;
     border: 1px solid rgba(237, 233, 227, 0.28);
     border-radius: 2px;
@@ -268,11 +269,19 @@ const mobileCells = Array.from({ length: M_COLS * M_ROWS }, (_, i) => i);
     .sq {
       background: rgba(99, 207, 158, 0.38);
     }
+    /* Static completed frame = the collapsed header-row box with its check. */
     .hta-box {
       opacity: 1;
+      height: auto;
+    }
+    .hta-head {
+      padding-bottom: 16px;
     }
     .hta-item {
-      opacity: 1;
+      opacity: 0;
+    }
+    .hta-items {
+      display: none;
     }
     .hta-check {
       opacity: 1;
@@ -312,6 +321,7 @@ const mobileCells = Array.from({ length: M_COLS * M_ROWS }, (_, i) => i);
       const cells = Array.from(grid.children) as HTMLElement[]; // row-major
 
       const footprint: HTMLElement[] = [];
+      const fpBody: HTMLElement[] = []; // footprint rows below the header row — return early when the box collapses
       const outside: HTMLElement[] = [];
       const flickerPool: HTMLElement[] = []; // outside cells; edge ring weighted 2x
       cells.forEach((el, i) => {
@@ -320,6 +330,7 @@ const mobileCells = Array.from({ length: M_COLS * M_ROWS }, (_, i) => i);
         const inFp = col >= c0 && col <= c1 && row >= r0 && row <= r1;
         if (inFp) {
           footprint.push(el);
+          if (row > r0) fpBody.push(el);
         } else {
           outside.push(el);
           flickerPool.push(el);
@@ -423,25 +434,53 @@ const mobileCells = Array.from({ length: M_COLS * M_ROWS }, (_, i) => i);
         );
       });
 
-      // COMPLETE — flicker stops, check draws in, mint wave radiates from center.
+      // COMPLETE — flicker stops, items fold away, the box COLLAPSES back to its
+      // header row (mockup frame 3), freed rows return, check draws in, then the
+      // mint wave radiates from center.
+      const head = box.querySelector<HTMLElement>('.hta-head')!;
       tl.addLabel('complete', 3.95)
         .call(closeWindow, undefined, 'complete')
+        .to(
+          items,
+          { autoAlpha: 0, y: -6, duration: 0.26, ease: 'power2.in', stagger: 0.03 },
+          'complete'
+        )
+        .to(
+          box,
+          {
+            height: () => head.offsetHeight + 10,
+            duration: 0.5,
+            ease: 'power3.inOut',
+          },
+          'complete+=0.14'
+        )
+        .to(
+          fpBody,
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.35,
+            ease: 'power2.out',
+            stagger: { amount: 0.14 },
+          },
+          'complete+=0.3'
+        )
         .fromTo(
           check,
           { autoAlpha: 0, scale: 0.5 },
           { autoAlpha: 1, scale: 1, duration: 0.35, ease: 'back.out(2.2)' },
-          'complete'
+          'complete+=0.5'
         )
         .fromTo(
           checkPath,
           { strokeDashoffset: 1 },
           { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out' },
-          'complete'
+          'complete+=0.5'
         )
         .to(
           cells,
           { backgroundColor: MINT_WAVE, duration: 0.25, ease: 'power1.out', stagger: waveStagger() },
-          'complete+=0.05'
+          'complete+=0.75'
         )
         .to(
           cells,
@@ -452,22 +491,25 @@ const mobileCells = Array.from({ length: M_COLS * M_ROWS }, (_, i) => i);
             ],
             stagger: waveStagger(),
           },
-          'complete+=0.05'
+          'complete+=0.75'
         );
 
-      // HOLD 1.6s, then EXIT — box leaves left, grid crossfades back to grey.
-      tl.addLabel('exit', 'complete+=2.55')
-        .to(box, { x: -120, autoAlpha: 0, duration: 0.5, ease: 'power3.in' }, 'exit')
+      // HOLD, then EXIT — the collapsed box drifts left as it fades (gentle,
+      // no power3.in teleport), its header row returns, grid crossfades to grey.
+      tl.addLabel('exit', 'complete+=3.0')
+        .to(box, { x: -56, autoAlpha: 0, duration: 0.65, ease: 'power2.inOut' }, 'exit')
         .to(
           footprint,
-          { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' },
-          'exit+=0.3'
+          { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out', stagger: { amount: 0.1 } },
+          'exit+=0.35'
         )
         .to(
           cells,
-          { backgroundColor: SQ_DEFAULT, scale: 1, duration: 0.6, ease: 'power1.inOut' },
-          'exit+=0.3'
+          { backgroundColor: SQ_DEFAULT, scale: 1, duration: 0.7, ease: 'power1.inOut' },
+          'exit+=0.35'
         )
+        // Reset the collapsed height while invisible so the next loop starts full-size.
+        .set(box, { clearProps: 'height' })
         // REST before the loop repeats.
         .to({}, { duration: 0.9 });
 

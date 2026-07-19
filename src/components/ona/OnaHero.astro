@@ -13,6 +13,8 @@ interface Props {
   sub: string;
   tagline?: string;
   ctas?: Cta[];
+  /** 'stack' = text above visual (pillar/use-case pages); 'split' = text left, visual right (home). */
+  layout?: 'stack' | 'split';
 }
 const {
   eyebrow,
@@ -23,11 +25,12 @@ const {
     { label: 'Start free', href: 'https://app.eluu.ai', style: 'solid' },
     { label: 'Book a demo', href: 'https://cal.com/krishna-kaipa-wh7ao3/15min', style: 'ghost' },
   ],
+  layout = 'stack',
 } = Astro.props;
 const hasVisual = Astro.slots.has('default');
 ---
 
-<section class="ohero hero-section">
+<section class:list={['ohero', 'hero-section', { 'ohero--split': layout === 'split' && hasVisual }]}>
   <div class="ohero-inner">
     <div class="ohero-top reveal">
       {eyebrow && <span class="ohero-eyebrow">{eyebrow}</span>}
@@ -144,6 +147,37 @@ const hasVisual = Astro.slots.has('default');
 
   .ohero-visual {
     width: 100%;
+  }
+
+  /* Split layout — text column left, visual right, vertically centered (home hero). */
+  .ohero--split .ohero-inner {
+    flex-direction: row;
+    align-items: center;
+    gap: 56px;
+    padding-top: 110px;
+    min-height: 640px;
+  }
+  .ohero--split .ohero-top {
+    flex: 0 0 42%;
+    max-width: 42%;
+  }
+  .ohero--split .ohero-visual {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  @media (max-width: 980px) {
+    .ohero--split .ohero-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      min-height: 0;
+      gap: 40px;
+    }
+    .ohero--split .ohero-top,
+    .ohero--split .ohero-visual {
+      flex: none;
+      max-width: 100%;
+      width: 100%;
+    }
   }
 
   @media (max-width: 768px) {
