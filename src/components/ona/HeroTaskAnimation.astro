@@ -20,7 +20,7 @@ const CELLS = Array.from({ length: 11 * 7 });
     <div class="card email c-email">
       <div class="em-head">
         <div class="em-ico">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#63cf9e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="1.5"/><path d="M3 6.5l9 6.5 9-6.5"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="1.5"/><path d="M3 6.5l9 6.5 9-6.5"/></svg>
         </div>
         <div class="em-subj">Re: Q3 renewal pricing</div>
       </div>
@@ -38,7 +38,7 @@ const CELLS = Array.from({ length: 11 * 7 });
             order-form-v3.pdf
           </div>
         </div>
-        <div class="em-meta h0" data-a="em-meta"><span class="eyebrow" style="color:var(--mint)">Sent · 90s</span></div>
+        <div class="em-meta h0" data-a="em-meta"><span class="eyebrow">Sent · 90s</span></div>
       </div>
     </div>
 
@@ -351,6 +351,74 @@ const CELLS = Array.from({ length: 11 * 7 });
   .hta-static .c-slack { visibility: visible; }
   .hta-static .c-slack .h0 { opacity: 1; }
   .hta-static .c-slack [data-a="sl-typing"] { display: none; }
+
+  /* ===== per-surface authentic theming ===== */
+  /* SLACK: real Slack dark palette */
+  .slack { background: #1A1D21; border-color: #383A3E; }
+  .slack .sl-head { border-bottom-color: #303236; }
+  .slack .sl-chan { color: #FFFFFF; }
+  .slack .sl-chan .hash { color: #9A9C9E; }
+  .slack .sl-user { color: #FFFFFF; }
+  .slack .sl-text { color: #D1D2D3; }
+  .slack .sl-time { color: #9A9C9E; }
+  .slack .sl-text .mention { color: #1D9BD1; background: rgba(29,155,209,0.12); }
+  .slack .sl-app { color: #9A9C9E; border-color: #4A4D51; }
+  .slack .sl-attach { background: #232529; border-left-color: #2BAC76; }
+  .slack .sl-attach .fname { color: #FFFFFF; }
+  .slack .sl-attach .fmeta { color: #9A9C9E; }
+  .slack .sl-react { color: #D1D2D3; background: #25272B; border-color: #4A4D51; }
+  .slack .sl-input { border-color: #565856; color: #9A9C9E; border-radius: 8px; }
+  .slack .sl-av.user { background: rgba(29,155,209,0.15); color: #58AFD8; border-color: rgba(29,155,209,0.4); }
+  .slack .sl-meta .eyebrow { color: #2BAC76; }
+
+  /* EMAIL: light card (warm paper) */
+  .email { background: #FAF9F6; border-color: rgba(19,16,10,0.14); color: #23211C; }
+  .email .em-head { border-bottom-color: rgba(19,16,10,0.08); }
+  .email .em-subj { color: #1E1C18; }
+  .email .em-ico { background: rgba(31,138,93,0.1); border-color: rgba(31,138,93,0.35); color: #1F8A5D; }
+  .email .em-from { color: #1E1C18; }
+  .email .em-from.agent { color: #C9531B; }
+  .email .em-time { color: rgba(19,16,10,0.4); }
+  .email .em-text { color: rgba(19,16,10,0.72); }
+  .email .em-msg.reply { border-left-color: rgba(201,83,27,0.55); }
+  .email .em-av { background: rgba(237,115,59,0.1); border-color: rgba(201,83,27,0.5); }
+  .email .em-draft .em-drafting { color: rgba(19,16,10,0.45); }
+  .email .em-draft .tdots { background: rgba(19,16,10,0.06); }
+  .email .em-draft .tdots i { background: rgba(19,16,10,0.35); }
+  .email .em-attach { background: #FFFFFF; border-color: rgba(19,16,10,0.16); color: rgba(19,16,10,0.7); }
+  .email .em-meta .eyebrow { color: #1F8A5D; }
+
+  /* IN-PRODUCT: cool indigo SaaS app */
+  .product { background: #17191E; border-color: rgba(255,255,255,0.14); color: #DDE0E4; }
+  .product .chrome { background: #131519; border-bottom-color: rgba(255,255,255,0.07); }
+  .product .chrome .dot { background: rgba(255,255,255,0.14); }
+  .product .chrome .path { color: rgba(255,255,255,0.45); }
+  .product .pr-h { color: #E8EAED; }
+  .product .pr-h span { color: rgba(255,255,255,0.4); }
+  .product .pr-btn { background: #5E6AD2; color: #FFFFFF; }
+  .product .pr-tr { border-top-color: rgba(255,255,255,0.07); }
+  .product .pr-tr .eyebrow { color: rgba(255,255,255,0.4); }
+  .product .pr-id { color: rgba(255,255,255,0.38); }
+  .product .chip { color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.07); }
+  .product .chip.matched { color: #4CC38A; background: rgba(76,195,138,0.12); }
+  .product .chip.flagged { color: #F2994A; background: rgba(242,153,74,0.12); }
+  .product .pr-foot { border-top-color: rgba(255,255,255,0.07); color: rgba(255,255,255,0.6); }
+  .product .pr-foot b { color: #FFFFFF; }
+  .product .pr-foot .mark { background: #5E6AD2; }
+  .product .pr-foot .eyebrow { color: #4CC38A; }
+
+  /* API: green-phosphor terminal */
+  .api { background: #0C0E0A; border-color: rgba(122,220,165,0.22); }
+  .api .chrome { background: #090B07; border-bottom-color: rgba(122,220,165,0.12); }
+  .api .chrome .dot { background: rgba(122,220,165,0.16); }
+  .api .chrome .path { color: rgba(122,220,165,0.55); }
+  .api .c-cmd { color: #B7D9C0; }
+  .api .c-dim { color: rgba(160,200,170,0.4); }
+  .api .c-key { color: #7FBF9A; }
+  .api .c-str { color: #E4F6EA; }
+
+  /* WEB: ours — brand-marked */
+  .web { border-top: 2px solid rgba(237,115,59,0.55); }
 </style>
 
 <script>
@@ -555,9 +623,16 @@ const CELLS = Array.from({ length: 11 * 7 });
 
     // GREEN — the completion beat shared by every surface: border breathes mint
     // while the corner check pops; then it settles back.
+    function borderOf(card) {
+      if (card.classList.contains('slack')) return '#383A3E';
+      if (card.classList.contains('email')) return 'rgba(19,16,10,0.14)';
+      if (card.classList.contains('product')) return 'rgba(255,255,255,0.14)';
+      if (card.classList.contains('api')) return 'rgba(122,220,165,0.22)';
+      return 'rgba(237,233,227,0.12)';
+    }
     function green(tl, card, at) {
-      tl.to(card, { borderColor: 'rgba(99,207,158,0.65)', duration: 0.22, ease: 'power1.out' }, at)
-        .to(card, { borderColor: 'rgba(237,233,227,0.12)', duration: 0.5, ease: 'power1.inOut' }, at + 0.85);
+      tl.to(card, { borderColor: 'rgba(99,207,158,0.8)', duration: 0.22, ease: 'power1.out' }, at)
+        .to(card, { borderColor: borderOf(card), duration: 0.5, ease: 'power1.inOut' }, at + 0.85);
       return at + 1.15;
     }
 
@@ -654,7 +729,7 @@ const CELLS = Array.from({ length: 11 * 7 });
         if (targets.some((el) => el instanceof Element && root.contains(el))) tw.kill?.();
       });
       cards.forEach((card) => {
-        gsap.set(card, { visibility: 'hidden', x: OFF(), borderColor: 'rgba(237,233,227,0.12)' });
+        gsap.set(card, { visibility: 'hidden', x: OFF(), borderColor: borderOf(card) });
         card.querySelectorAll('.h0, [data-a]').forEach((el) => {
           if (el.classList.contains('h0') || el.dataset.a?.includes('typing')) {
             gsap.set(el, { clearProps: 'all' });
