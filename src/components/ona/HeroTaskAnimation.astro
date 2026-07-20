@@ -1,7 +1,7 @@
 ---
 // HeroTaskAnimation — mechanical port of projects/hero-lab/hero.html (approved).
-// Agent grid (11x7 squares) + 5 surface cards conveyor (Slack, Web, Email,
-// Product, API). Each card slides in from the right, plays its user-POV
+// Agent grid (11x7 squares) + 6 surface cards conveyor (Slack, Web, Email,
+// Support, Product, API). Each card slides in from the right, plays its user-POV
 // micro-story (message sent -> agent works -> response -> GREEN), then slides
 // out left as the next surface arrives. Fresh GSAP timeline per full cycle.
 // Site adaptations only: IntersectionObserver start/pause, prefers-reduced-
@@ -16,71 +16,144 @@ const CELLS = Array.from({ length: 11 * 7 });
       {CELLS.map(() => <span class="sq"></span>)}
     </div>
 
-    <!-- EMAIL -->
-    <div class="card email c-email">
-      <div class="em-head">
-        <div class="em-ico">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="1.5"/><path d="M3 6.5l9 6.5 9-6.5"/></svg>
-        </div>
-        <div class="em-subj">Re: Q3 renewal pricing</div>
+    <!-- EMAIL (Gmail-faithful) -->
+    <div class="card gmail c-email">
+      <div class="gm-subject">
+        <h2>Re: Q3 renewal pricing</h2>
+        <span class="gm-label">Inbox</span>
       </div>
-      <div class="em-body">
-        <div class="em-msg h0" data-a="em-in">
-          <div class="em-line"><span class="em-from">Dana Cole · vendor</span><span class="em-time">8:41 AM</span></div>
-          <div class="em-text">Can you send the updated order form and confirm the start date?</div>
+      <div class="gm-msg h0" data-a="em-in">
+        <div class="gm-head">
+          <div class="gm-avatar dana">D</div>
+          <div class="gm-who">
+            <div class="gm-line1">
+              <span class="gm-name">Dana Cole</span>
+              <span class="gm-addr">&lt;dana@nortavo.com&gt;</span>
+              <span class="gm-time">8:41 AM</span>
+            </div>
+            <div class="gm-to">to me <span class="caret">▾</span></div>
+          </div>
         </div>
-        <div class="em-draft h0" data-a="em-draft"><span class="tdots"><i></i><i></i><i></i></span><span class="em-drafting">drafting reply</span></div>
-        <div class="em-msg reply h0" data-a="em-reply">
-          <div class="em-line"><span class="em-av"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="8" y="7" width="3.2" height="10" rx="1" fill="#ED733B"/><rect x="13" y="7" width="3.2" height="6.5" rx="1" fill="#ED733B"/></svg></span><span class="em-from agent">Eluu</span><span class="em-time">8:42 AM</span></div>
-          <div class="em-text">Order form sent. Start date confirmed for Oct 1. Auto-renewal clause flagged for your review.</div>
-          <div class="em-attach h0" data-a="em-attach">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#63cf9e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 2.5H6.5a1.5 1.5 0 0 0-1.5 1.5v16a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5V8l-5.5-5.5z"/><path d="M13.5 2.5V8H19"/></svg>
-            order-form-v3.pdf
+        <div class="gm-body">Can you send the updated order form and confirm the start date?</div>
+      </div>
+      <hr class="gm-sep" />
+      <div class="gm-draft h0" data-a="em-draft"><span class="tdots"><i></i><i></i><i></i></span><span class="drafting">drafting reply</span></div>
+      <div class="gm-msg h0" data-a="em-reply">
+        <div class="gm-head">
+          <div class="gm-avatar eluu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="8" y="7" width="3.4" height="10" rx="1" fill="#fff"/><rect x="13.2" y="7" width="3.4" height="6.5" rx="1" fill="#fff"/></svg></div>
+          <div class="gm-who">
+            <div class="gm-line1">
+              <span class="gm-name">Eluu</span>
+              <span class="gm-addr">&lt;agent@acme.com&gt;</span>
+              <span class="gm-time">8:42 AM</span>
+            </div>
+            <div class="gm-to">to Dana <span class="caret">▾</span></div>
+          </div>
+        </div>
+        <div class="gm-body">Order form sent. Start date confirmed for Oct 1. Auto-renewal clause flagged for your review.</div>
+        <div class="gm-attach h0" data-a="em-attach">
+          <div class="ficon">PDF</div>
+          <div>
+            <div class="fname">order-form-v3.pdf</div>
+            <div class="fsize">98 KB</div>
           </div>
         </div>
       </div>
+      <div class="gm-actions h0" data-a="em-actions" style="padding-bottom:16px">
+        <span class="gm-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14l-5-5 5-5"/><path d="M4 9h10a6 6 0 0 1 6 6v3"/></svg>Reply</span>
+        <span class="gm-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0-6 6v3"/></svg>Forward</span>
+      </div>
     </div>
 
-    <!-- SLACK -->
-    <div class="card slack c-slack">
-      <div class="sl-head">
-        <span class="sl-chan"><span class="hash">#</span>legal</span>
-        <svg class="sl-logo" viewBox="0 0 127 127" width="15" height="15" fill="none">
+    <!-- SLACK (faithful) -->
+    <div class="card slackx c-slack">
+      <div class="sx-head">
+        <span class="sx-chan"><span class="hash">#</span>legal</span>
+        <svg class="sx-star" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l2.7 5.8 6.3.8-4.6 4.3 1.2 6.2L12 17l-5.6 3.1 1.2-6.2L3 9.6l6.3-.8z"/></svg>
+        <span class="sx-members">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="3.2"/><path d="M3.5 20c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><circle cx="17" cy="8" r="2.6"/><path d="M16 15.2c2.6.3 4.5 2 4.5 4.8"/></svg>
+          12
+        </span>
+        <svg viewBox="0 0 127 127" width="15" height="15" fill="none" style="margin-left:10px">
           <path d="M27.2 80c0 7.3-5.9 13.2-13.2 13.2C6.7 93.2.8 87.3.8 80c0-7.3 5.9-13.2 13.2-13.2h13.2V80zm6.6 0c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2v33c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V80z" fill="#E01E5A"/>
           <path d="M47 27.2c-7.3 0-13.2-5.9-13.2-13.2C33.8 6.7 39.7.8 47 .8c7.3 0 13.2 5.9 13.2 13.2v13.2H47zm0 6.6c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H13.9C6.6 60.2.7 54.3.7 47c0-7.3 5.9-13.2 13.2-13.2H47z" fill="#36C5F0"/>
           <path d="M99.8 47c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H99.8V47zm-6.6 0c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V13.9C66.8 6.6 72.7.7 80 .7c7.3 0 13.2 5.9 13.2 13.2V47z" fill="#2EB67D"/>
           <path d="M80 99.8c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V99.8H80zm0-6.6c-7.3 0-13.2-5.9-13.2-13.2 0-7.3 5.9-13.2 13.2-13.2h33.1c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H80z" fill="#ECB22E"/>
         </svg>
       </div>
-      <div class="sl-body">
-        <div class="sl-msg h0" data-a="sl-user">
-          <div class="sl-av user">MK</div>
+      <div class="sx-body">
+        <div class="sx-msg h0" data-a="sl-user">
+          <div class="sx-avatar maya">MK</div>
           <div>
-            <div class="sl-line1"><span class="sl-user">Maya Kim</span><span class="sl-time">9:02 AM</span></div>
-            <div class="sl-text"><span class="mention">@Eluu</span> review the Acme MSA and draft a negotiation brief before the 2pm call</div>
+            <div class="sx-line1"><span class="sx-name">Maya Kim</span><span class="sx-time">9:02 AM</span></div>
+            <div class="sx-text"><span class="mention">@Eluu</span> review the Acme MSA and draft a negotiation brief before the 2pm call</div>
           </div>
         </div>
-        <div class="sl-msg h0" data-a="sl-typing">
-          <div class="sl-av bot"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="8" y="7" width="3.2" height="10" rx="1" fill="#ED733B"/><rect x="13" y="7" width="3.2" height="6.5" rx="1" fill="#ED733B"/></svg></div>
-          <span class="tdots" style="margin-top:5px"><i></i><i></i><i></i></span>
+        <div class="sx-msg h0" data-a="sl-typing">
+          <div class="sx-avatar eluu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="8" y="7" width="3.4" height="10" rx="1" fill="#fff"/><rect x="13.2" y="7" width="3.4" height="6.5" rx="1" fill="#fff"/></svg></div>
+          <span class="tdots" style="margin-top:8px"><i></i><i></i><i></i></span>
         </div>
-        <div class="sl-msg h0" data-a="sl-bot">
-          <div class="sl-av bot"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="8" y="7" width="3.2" height="10" rx="1" fill="#ED733B"/><rect x="13" y="7" width="3.2" height="6.5" rx="1" fill="#ED733B"/></svg></div>
+        <div class="sx-msg h0" data-a="sl-bot">
+          <div class="sx-avatar eluu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="8" y="7" width="3.4" height="10" rx="1" fill="#fff"/><rect x="13.2" y="7" width="3.4" height="6.5" rx="1" fill="#fff"/></svg></div>
           <div>
-            <div class="sl-line1"><span class="sl-user">Eluu</span><span class="sl-app">APP</span><span class="sl-time">9:05 AM</span></div>
-            <div class="sl-text">Done. Redlined 6 clauses and drafted the brief. Liability cap and IP assignment need your call.</div>
-            <div class="sl-attach h0" data-a="sl-attach">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#63cf9e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 2.5H6.5a1.5 1.5 0 0 0-1.5 1.5v16a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5V8l-5.5-5.5z"/><path d="M13.5 2.5V8H19"/></svg>
-              <div><div class="fname">acme-msa-redline-and-brief.docx</div><div class="fmeta">2 files · 14 pages</div></div>
+            <div class="sx-line1"><span class="sx-name">Eluu</span><span class="sx-app">APP</span><span class="sx-time">9:05 AM</span></div>
+            <div class="sx-text">Done. Redlined 6 clauses and drafted the brief. Liability cap and IP assignment need your call.</div>
+            <div class="sx-file h0" data-a="sl-attach">
+              <div class="ficon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 2.5H6.5a1.5 1.5 0 0 0-1.5 1.5v16a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5V8l-5.5-5.5z"/><path d="M13.5 2.5V8H19M9 12.5h6M9 16h6"/></svg></div>
+              <div>
+                <div class="fname">acme-msa-redline-and-brief.docx</div>
+                <div class="fmeta">Word document · 14 pages</div>
+              </div>
             </div>
-            <span class="sl-react h0" data-a="sl-react">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg>
-              2
-            </span>
+            <span class="sx-react h0" data-a="sl-react">✅ 2</span>
           </div>
         </div>
       </div>
-      <div class="sl-input">Message #legal</div>
+      <div class="sx-input">
+        Message #legal
+        <div class="sx-send"><svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M3 11l18-8-8 18-2-8z"/></svg></div>
+      </div>
+    </div>
+
+    <!-- SUPPORT (widget) -->
+    <div class="card chatw c-support">
+      <div class="cw-head">
+        <div class="cw-head-row">
+          <div class="cw-avatar"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="8" y="7" width="3.4" height="10" rx="1" fill="#fff"/><rect x="13.2" y="7" width="3.4" height="6.5" rx="1" fill="#fff"/></svg></div>
+          <div>
+            <div class="cw-name">Support</div>
+            <div class="cw-sub">Eluu agent · Active now</div>
+          </div>
+        </div>
+      </div>
+      <div class="cw-body">
+        <div class="cw-row visitor h0" data-a="cw-visitor">
+          <div class="cw-bubble visitor">Where's the refund for order #10432? It's been 9 days.</div>
+        </div>
+        <div class="cw-row h0" data-a="cw-typing">
+          <div class="cw-mini"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="8" y="7" width="3.4" height="10" rx="1" fill="#fff"/><rect x="13.2" y="7" width="3.4" height="6.5" rx="1" fill="#fff"/></svg></div>
+          <div class="cw-bubble agent"><span class="tdots"><i></i><i></i><i></i></span></div>
+        </div>
+        <div class="cw-row h0" data-a="cw-agent">
+          <div class="cw-mini"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="8" y="7" width="3.4" height="10" rx="1" fill="#fff"/><rect x="13.2" y="7" width="3.4" height="6.5" rx="1" fill="#fff"/></svg></div>
+          <div class="cw-bubble agent">Checked Stripe. Your refund cleared this morning. Receipt attached.</div>
+        </div>
+        <div class="cw-attach h0" data-a="cw-attach">
+          <div class="ficon">PDF</div>
+          <div>
+            <div class="fname">refund-receipt.pdf</div>
+            <div class="fsize">RF-2291 · 42 KB</div>
+          </div>
+        </div>
+      </div>
+      <div class="cw-input">
+        Write a message…
+        <div class="cw-icons">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.2 2.1 1.8 3.5 1.8s2.5-.6 3.5-1.8M9.3 9.8h.01M14.7 9.8h.01"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.5l-8.5 8.5a5.66 5.66 0 0 1-8-8L13 4.5a3.77 3.77 0 0 1 5.3 5.3L9.8 18.3a1.89 1.89 0 0 1-2.7-2.7L15 7.8"/></svg>
+        </div>
+      </div>
+      <div class="cw-power">Powered by <b>Eluu</b></div>
     </div>
 
     <!-- PRODUCT -->
@@ -415,6 +488,209 @@ const CELLS = Array.from({ length: 11 * 7 });
 
   /* WEB: ours — brand-marked */
   .web { border-top: 2px solid rgba(237,115,59,0.55); }
+
+  /* ================= EMAIL — Gmail-faithful, light ================= */
+  .gmail {
+    width: 460px; background: #FFFFFF; border-radius: 10px;
+    box-shadow: 0 28px 70px -30px rgba(0,0,0,0.9);
+    overflow: hidden; color: #1F1F1F;
+  }
+  .gm-subject {
+    display: flex; align-items: center; gap: 10px;
+    padding: 18px 22px 14px;
+  }
+  .gm-subject h2 { margin: 0; font-size: 16.5px; font-weight: 600; color: #1F1F1F; }
+  .gm-label { font-size: 10.5px; color: #444746; background: #F1F3F4; border-radius: 4px; padding: 2px 7px; }
+  .gm-msg { padding: 10px 22px 6px; }
+  .gm-head { display: flex; gap: 12px; align-items: flex-start; }
+  .gm-avatar {
+    width: 36px; height: 36px; border-radius: 50%; flex: none;
+    display: grid; place-items: center;
+    font-size: 15px; font-weight: 600; color: #fff;
+  }
+  .gm-avatar.dana { background: #7A5EA6; }
+  .gm-avatar.eluu { background: #ED733B; }
+  .gm-who { flex: 1; min-width: 0; }
+  .gm-line1 { display: flex; align-items: baseline; gap: 7px; }
+  .gm-name { font-size: 13.5px; font-weight: 600; }
+  .gm-addr { font-size: 11.5px; color: #5E5E5E; }
+  .gm-time { margin-left: auto; font-size: 11.5px; color: #5E5E5E; }
+  .gm-to { font-size: 11.5px; color: #5E5E5E; margin-top: 1px; }
+  .gm-to .caret { font-size: 8px; }
+  .gm-body { font-size: 13px; line-height: 1.55; color: #3C3C3C; padding: 10px 0 4px 48px; }
+  .gm-attach {
+    margin: 6px 0 4px 48px;
+    display: inline-flex; align-items: center; gap: 10px;
+    border: 1px solid #DADCE0; border-radius: 8px;
+    padding: 9px 14px 9px 10px;
+  }
+  .gm-attach .ficon {
+    width: 30px; height: 36px; border-radius: 4px; background: #D93025;
+    display: grid; place-items: center;
+    font-size: 8.5px; font-weight: 600; color: #fff; letter-spacing: 0.04em;
+  }
+  .gm-attach .fname { font-size: 12.5px; font-weight: 600; color: #1F1F1F; }
+  .gm-attach .fsize { font-size: 11px; color: #5E5E5E; margin-top: 1px; }
+  .gm-sep { border: 0; border-top: 1px solid #EEEEEE; margin: 10px 22px; }
+  .gm-actions { display: flex; gap: 10px; padding: 4px 22px 18px 70px; }
+  .gm-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    border: 1px solid #DADCE0; border-radius: 999px;
+    padding: 7px 16px; font-size: 12.5px; font-weight: 600; color: #444746;
+  }
+  .gm-sent { padding: 0 22px 14px 70px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; color: #188038; }
+
+  /* ================= SLACK — faithful dark ================= */
+  .slackx {
+    width: 440px; background: #1A1D21; border-radius: 9px;
+    border: 1px solid #33363A;
+    box-shadow: 0 28px 70px -30px rgba(0,0,0,0.9);
+    overflow: hidden; color: #D1D2D3;
+  }
+  .sx-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px; border-bottom: 1px solid #2F3136;
+  }
+  .sx-chan { font-size: 14.5px; font-weight: 600; color: #FFFFFF; }
+  .sx-chan .hash { color: #9A9C9E; font-weight: 400; margin-right: 1px; }
+  .sx-star { color: #9A9C9E; }
+  .sx-members { margin-left: auto; display: flex; align-items: center; gap: 5px; font-size: 12px; color: #9A9C9E; }
+  .sx-body { padding: 14px 16px 6px; display: flex; flex-direction: column; gap: 14px; }
+  .sx-msg { display: flex; gap: 10px; }
+  .sx-avatar {
+    width: 36px; height: 36px; border-radius: 6px; flex: none;
+    display: grid; place-items: center;
+    font-size: 13px; font-weight: 600; color: #fff;
+  }
+  .sx-avatar.maya { background: #E8912D; }
+  .sx-avatar.eluu { background: #ED733B; }
+  .sx-line1 { display: flex; align-items: baseline; gap: 7px; }
+  .sx-name { font-size: 14px; font-weight: 700; color: #FFFFFF; }
+  .sx-app { font-size: 9px; font-weight: 600; color: #C9CACB; background: #35373B; border-radius: 3px; padding: 1.5px 5px; transform: translateY(-1px); }
+  .sx-time { font-size: 11.5px; color: #9A9C9E; }
+  .sx-text { font-size: 13.5px; line-height: 1.5; color: #D1D2D3; margin-top: 2px; }
+  .sx-text .mention { color: #1D9BD1; background: rgba(29,155,209,0.13); border-radius: 3px; padding: 0 2px; }
+  .sx-file {
+    margin-top: 8px;
+    display: flex; align-items: center; gap: 11px;
+    width: fit-content; min-width: 270px;
+    background: #222529; border: 1px solid #35373B; border-radius: 12px;
+    padding: 10px 14px 10px 10px;
+  }
+  .sx-file .ficon {
+    width: 34px; height: 34px; border-radius: 8px; background: #1D9BD1;
+    display: grid; place-items: center;
+  }
+  .sx-file .fname { font-size: 13px; font-weight: 600; color: #FFFFFF; }
+  .sx-file .fmeta { font-size: 11.5px; color: #9A9C9E; margin-top: 1px; }
+  .sx-react {
+    display: inline-flex; align-items: center; gap: 5px;
+    margin-top: 8px;
+    font-size: 11.5px; color: #C9CACB;
+    background: rgba(29,155,209,0.1); border: 1px solid rgba(29,155,209,0.5);
+    border-radius: 999px; padding: 2.5px 9px;
+  }
+  .sx-input {
+    margin: 10px 16px 14px;
+    border: 1px solid #565856; border-radius: 10px;
+    display: flex; align-items: center;
+    padding: 9px 8px 9px 13px;
+    font-size: 13px; color: #9A9C9E;
+  }
+  .sx-send {
+    margin-left: auto;
+    width: 26px; height: 26px; border-radius: 5px;
+    background: #007A5A;
+    display: grid; place-items: center;
+  }
+
+  /* ================= SUPPORT — Intercom-style widget ================= */
+  .chatw {
+    width: 330px; background: #FFFFFF; border-radius: 18px;
+    box-shadow: 0 32px 80px -28px rgba(0,0,0,0.95);
+    overflow: hidden; color: #1F2430;
+  }
+  .cw-head {
+    background: linear-gradient(160deg, #3D53E4, #2E3FB8);
+    padding: 18px 20px 16px;
+    color: #fff;
+  }
+  .cw-head-row { display: flex; align-items: center; gap: 12px; }
+  .cw-avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.5);
+    display: grid; place-items: center;
+    font-size: 15px; font-weight: 600; color: #fff;
+    position: relative;
+  }
+  .cw-avatar::after {
+    content: ''; position: absolute; right: -1px; bottom: -1px;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: #3ECF8E; border: 2px solid #3D53E4;
+  }
+  .cw-name { font-size: 14.5px; font-weight: 600; }
+  .cw-sub { font-size: 11.5px; opacity: 0.75; margin-top: 2px; }
+  .cw-body { padding: 16px 14px 10px; display: flex; flex-direction: column; gap: 10px; background: #FFFFFF; }
+  .cw-row { display: flex; gap: 8px; align-items: flex-end; }
+  .cw-row.visitor { justify-content: flex-end; }
+  .cw-mini {
+    width: 24px; height: 24px; border-radius: 50%; flex: none;
+    background: #3D53E4; color: #fff;
+    display: grid; place-items: center;
+    font-size: 10px; font-weight: 600;
+  }
+  .cw-bubble {
+    max-width: 78%;
+    font-size: 13px; line-height: 1.5;
+    padding: 10px 13px;
+  }
+  .cw-bubble.agent {
+    background: #F1F2F6; color: #1F2430;
+    border-radius: 16px 16px 16px 5px;
+  }
+  .cw-bubble.visitor {
+    background: #3D53E4; color: #fff;
+    border-radius: 16px 16px 5px 16px;
+  }
+  .cw-attach {
+    display: flex; align-items: center; gap: 9px;
+    margin-left: 32px;
+    width: fit-content;
+    border: 1px solid #E3E5EC; border-radius: 12px;
+    padding: 8px 13px 8px 9px;
+  }
+  .cw-attach .ficon {
+    width: 28px; height: 32px; border-radius: 4px; background: #D93025;
+    display: grid; place-items: center;
+    font-size: 8px; font-weight: 600; color: #fff;
+  }
+  .cw-attach .fname { font-size: 12px; font-weight: 600; }
+  .cw-attach .fsize { font-size: 10.5px; color: #7A8194; margin-top: 1px; }
+  .cw-seen { margin-left: 32px; font-size: 10.5px; color: #7A8194; }
+  .cw-input {
+    border-top: 1px solid #EDEEF2;
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 16px;
+    font-size: 13px; color: #9AA0AE;
+  }
+  .cw-icons { margin-left: auto; display: flex; gap: 12px; color: #9AA0AE; }
+  .cw-power {
+    text-align: center; font-size: 10px; color: #A8AEBB;
+    padding: 0 0 10px;
+  }
+  .cw-power b { color: #7A8194; font-weight: 600; }
+
+  /* integration tweaks for animated faithful cards */
+  .gmail, .slackx, .chatw { box-shadow: 0 24px 64px -32px rgba(0,0,0,0.85); }
+  .gmail { border: 1px solid #E4E2DD; }
+  .chatw { border: 1px solid rgba(31,36,48,0.1); }
+  .gmail .tdots { background: #F1F3F4; }
+  .gmail .tdots i { background: #5E5E5E; }
+  .gm-draft { display: flex; align-items: center; gap: 8px; padding: 2px 22px 8px 70px; }
+  .gm-draft .drafting { font-size: 11px; color: #5E5E5E; }
+  .chatw .tdots { background: transparent; padding: 4px 2px; }
+  .chatw .tdots i { background: #7A8194; }
 </style>
 
 <script>
@@ -432,7 +708,7 @@ const CELLS = Array.from({ length: 11 * 7 });
     const A = (card, key) => card.querySelector(`[data-a="${key}"]`);
 
     const stage = $('.hta-stage');
-    const cards = ['.c-slack', '.c-web', '.c-email', '.c-product', '.c-api'].map((s) => $(s));
+    const cards = ['.c-slack', '.c-web', '.c-email', '.c-support', '.c-product', '.c-api'].map((s) => $(s));
     const MINT = '#63cf9e';
     // ================= agent grid engine =================
     const COLS = 11, ROWS = 7;
@@ -440,8 +716,8 @@ const CELLS = Array.from({ length: 11 * 7 });
     const SQ_DIM = 'rgba(237,233,227,0.12)';
     const CREAM = 'rgba(237,233,227,0.9)';
     const MINT_WAVE = 'rgba(99,207,158,0.85)';
-    // per-surface tint: slack, web, email, product, api
-    const TINTS = ['#6db7f0', '#ED733B', '#63cf9e', CREAM, '#ee9de0'];
+    // per-surface tint: slack, web, email, support, product, api
+    const TINTS = ['#6db7f0', '#ED733B', '#63cf9e', '#7A8CF8', CREAM, '#ee9de0'];
     const grid = $('.hta-cellgrid');
     // squares are server-rendered (Astro scoped styles need them in the template)
     const cells = Array.from(grid.children);
@@ -620,8 +896,9 @@ const CELLS = Array.from({ length: 11 * 7 });
     // GREEN — the completion beat shared by every surface: border breathes mint
     // while the corner check pops; then it settles back.
     function borderOf(card) {
-      if (card.classList.contains('slack')) return '#383A3E';
-      if (card.classList.contains('email')) return 'rgba(19,16,10,0.14)';
+      if (card.classList.contains('slackx')) return '#33363A';
+      if (card.classList.contains('gmail')) return '#E4E2DD';
+      if (card.classList.contains('chatw')) return 'rgba(31,36,48,0.1)';
       if (card.classList.contains('product')) return 'rgba(255,255,255,0.14)';
       if (card.classList.contains('api')) return 'rgba(122,220,165,0.22)';
       return 'rgba(237,233,227,0.12)';
@@ -641,6 +918,7 @@ const CELLS = Array.from({ length: 11 * 7 });
         .set(A(card, 'em-draft'), { position: 'absolute', visibility: 'hidden' }, t + 2.05);
       popIn(tl, A(card, 'em-reply'), t + 2.1);
       popIn(tl, A(card, 'em-attach'), t + 2.55);
+      popIn(tl, A(card, 'em-actions'), t + 2.9, 4);
       return green(tl, card, t + 3.45);
     }
 
@@ -708,7 +986,18 @@ const CELLS = Array.from({ length: 11 * 7 });
       return green(tl, card, t + 4.0);
     }
 
-    const stories = [storySlack, storyWeb, storyEmail, storyProduct, storyApi];
+    function storySupport(tl, card, t) {
+      popIn(tl, A(card, 'cw-visitor'), t + 0.25);
+      popIn(tl, A(card, 'cw-typing'), t + 0.95);
+      dotsWave(tl, A(card, 'cw-typing'), t + 1.0, 0.9);
+      tl.to(A(card, 'cw-typing'), { autoAlpha: 0, duration: 0.15, ease: 'power1.in' }, t + 1.9)
+        .set(A(card, 'cw-typing'), { position: 'absolute', visibility: 'hidden' }, t + 2.05);
+      popIn(tl, A(card, 'cw-agent'), t + 2.1);
+      popIn(tl, A(card, 'cw-attach'), t + 2.55);
+      return green(tl, card, t + 3.15);
+    }
+
+    const stories = [storySlack, storyWeb, storyEmail, storySupport, storyProduct, storyApi];
 
     // ---------- reset ----------
     function resetAll() {
@@ -728,8 +1017,8 @@ const CELLS = Array.from({ length: 11 * 7 });
           }
         });
       });
-      // email/slack typing rows: restore flow + hidden
-      ['.c-email [data-a="em-draft"]', '.c-slack [data-a="sl-typing"]'].forEach((s) => {
+      // email/slack/support typing rows: restore flow + hidden
+      ['.c-email [data-a="em-draft"]', '.c-slack [data-a="sl-typing"]', '.c-support [data-a="cw-typing"]'].forEach((s) => {
         const el = $(s); gsap.set(el, { clearProps: 'all' });
       });
       // product chips back to Queued
