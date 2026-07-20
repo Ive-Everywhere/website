@@ -38,7 +38,6 @@ const CELLS = Array.from({ length: 11 * 7 });
             order-form-v3.pdf
           </div>
         </div>
-        <div class="em-meta h0" data-a="em-meta"><span class="eyebrow">Sent · 90s</span></div>
       </div>
     </div>
 
@@ -81,7 +80,6 @@ const CELLS = Array.from({ length: 11 * 7 });
           </div>
         </div>
       </div>
-      <div class="sl-meta h0" data-a="sl-meta"><span class="eyebrow" style="color:var(--mint)">Done · 2 min</span></div>
       <div class="sl-input">Message #legal</div>
     </div>
 
@@ -107,7 +105,7 @@ const CELLS = Array.from({ length: 11 * 7 });
       </div>
       <div class="pr-foot h0" data-a="pr-foot">
         <span class="mark"></span>
-        <span><b>Finance agent</b> reconciled 214 invoices. 1 needs review.</span><span class="eyebrow" style="margin-left:auto;color:var(--mint)">Done · 20s</span>
+        <span><b>Finance agent</b> reconciled 214 invoices. 1 needs review.</span>
       </div>
     </div>
 
@@ -125,7 +123,6 @@ const CELLS = Array.from({ length: 11 * 7 });
         <div class="h0" data-a="api-r1"><span class="c-mint">202</span> <span class="c-dim">·</span> <span class="c-cmd">task accepted</span> <span class="c-dim">·</span> <span class="c-key">tsk_8H2M</span></div>
         <div class="h0" data-a="api-r2"><span class="c-dim">→</span> <span class="c-cmd">200 enriched</span> <span class="c-dim">·</span> <span class="c-orange">12 flagged as duplicates</span></div>
         <div class="h0" data-a="api-r3"><span class="c-dim">→</span> <span class="c-cmd">report ready</span> <span class="c-dim">·</span> <span class="c-key">/v1/tasks/tsk_8H2M/report</span> <span class="c-mint">✓</span></div>
-        <div class="h0" data-a="api-meta" style="margin-top:6px"><span class="eyebrow" style="color:var(--mint)">Done · 45s</span></div>
       </div>
     </div>
 
@@ -154,7 +151,6 @@ const CELLS = Array.from({ length: 11 * 7 });
           </div>
         </div>
       </div>
-      <div class="wb-meta h0" data-a="wb-meta"><span class="eyebrow" style="color:var(--mint)">Done · 3 min</span></div>
       <div class="wb-input">Message your agent…
         <div class="send"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#14110b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div>
       </div>
@@ -645,7 +641,6 @@ const CELLS = Array.from({ length: 11 * 7 });
         .set(A(card, 'em-draft'), { position: 'absolute', visibility: 'hidden' }, t + 2.05);
       popIn(tl, A(card, 'em-reply'), t + 2.1);
       popIn(tl, A(card, 'em-attach'), t + 2.55);
-      popIn(tl, A(card, 'em-meta'), t + 2.95, 4);
       return green(tl, card, t + 3.45);
     }
 
@@ -658,7 +653,6 @@ const CELLS = Array.from({ length: 11 * 7 });
       popIn(tl, A(card, 'sl-bot'), t + 2.15);
       popIn(tl, A(card, 'sl-attach'), t + 2.6);
       popIn(tl, A(card, 'sl-react'), t + 3.05, 4);
-      popIn(tl, A(card, 'sl-meta'), t + 3.45, 4);
       return green(tl, card, t + 3.95);
     }
 
@@ -700,7 +694,6 @@ const CELLS = Array.from({ length: 11 * 7 });
       popIn(tl, A(card, 'api-r1'), t + 2.3, 4);
       popIn(tl, A(card, 'api-r2'), t + 2.75, 4);
       popIn(tl, A(card, 'api-r3'), t + 3.2, 4);
-      popIn(tl, A(card, 'api-meta'), t + 3.6, 4);
       return green(tl, card, t + 4.0);
     }
 
@@ -712,7 +705,6 @@ const CELLS = Array.from({ length: 11 * 7 });
       popIn(tl, A(card, 'wb-artifact'), t + 2.75);
       popIn(tl, A(card, 'wb-sched'), t + 3.15, 4);
       tl.call(() => { A(card, 'wb-status').textContent = 'Done'; }, null, t + 3.55);
-      popIn(tl, A(card, 'wb-meta'), t + 3.6, 4);
       return green(tl, card, t + 4.0);
     }
 
