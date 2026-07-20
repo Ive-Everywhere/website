@@ -37,6 +37,7 @@ const CELLS = Array.from({ length: 11 * 7 });
         <div class="gm-body">Can you send the updated order form and confirm the start date?</div>
       </div>
       <hr class="gm-sep" />
+      <div class="swap">
       <div class="gm-draft h0" data-a="em-draft"><span class="tdots"><i></i><i></i><i></i></span><span class="drafting">drafting reply</span></div>
       <div class="gm-msg h0" data-a="em-reply">
         <div class="gm-head">
@@ -58,6 +59,7 @@ const CELLS = Array.from({ length: 11 * 7 });
             <div class="fsize">98 KB</div>
           </div>
         </div>
+      </div>
       </div>
       <div class="gm-actions h0" data-a="em-actions" style="padding-bottom:16px">
         <span class="gm-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14l-5-5 5-5"/><path d="M4 9h10a6 6 0 0 1 6 6v3"/></svg>Reply</span>
@@ -89,6 +91,7 @@ const CELLS = Array.from({ length: 11 * 7 });
             <div class="sx-text"><span class="mention">@Eluu</span> review the Acme MSA and draft a negotiation brief before the 2pm call</div>
           </div>
         </div>
+        <div class="swap">
         <div class="sx-msg h0" data-a="sl-typing">
           <div class="sx-avatar eluu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="8" y="7" width="3.4" height="10" rx="1" fill="#fff"/><rect x="13.2" y="7" width="3.4" height="6.5" rx="1" fill="#fff"/></svg></div>
           <span class="tdots" style="margin-top:8px"><i></i><i></i><i></i></span>
@@ -107,6 +110,7 @@ const CELLS = Array.from({ length: 11 * 7 });
             </div>
             <span class="sx-react h0" data-a="sl-react">✅ 2</span>
           </div>
+        </div>
         </div>
       </div>
       <div class="sx-input">
@@ -130,6 +134,7 @@ const CELLS = Array.from({ length: 11 * 7 });
         <div class="cw-row visitor h0" data-a="cw-visitor">
           <div class="cw-bubble visitor">Where's the refund for order #10432? It's been 9 days.</div>
         </div>
+        <div class="swap">
         <div class="cw-row h0" data-a="cw-typing">
           <div class="cw-mini"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="8" y="7" width="3.4" height="10" rx="1" fill="#fff"/><rect x="13.2" y="7" width="3.4" height="6.5" rx="1" fill="#fff"/></svg></div>
           <div class="cw-bubble agent"><span class="tdots"><i></i><i></i><i></i></span></div>
@@ -137,6 +142,7 @@ const CELLS = Array.from({ length: 11 * 7 });
         <div class="cw-row h0" data-a="cw-agent">
           <div class="cw-mini"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="8" y="7" width="3.4" height="10" rx="1" fill="#fff"/><rect x="13.2" y="7" width="3.4" height="6.5" rx="1" fill="#fff"/></svg></div>
           <div class="cw-bubble agent">Checked Stripe. Your refund cleared this morning. Receipt attached.</div>
+        </div>
         </div>
         <div class="cw-attach h0" data-a="cw-attach">
           <div class="ficon">PDF</div>
@@ -681,6 +687,9 @@ const CELLS = Array.from({ length: 11 * 7 });
   }
   .cw-power b { color: #7A8194; font-weight: 600; }
 
+.swap { display: grid; }
+  .swap > * { grid-area: 1 / 1; }
+
   /* integration tweaks for animated faithful cards */
   .gmail, .slackx, .chatw { box-shadow: 0 24px 64px -32px rgba(0,0,0,0.85); }
   .gmail { border: 1px solid #E4E2DD; }
@@ -914,8 +923,7 @@ const CELLS = Array.from({ length: 11 * 7 });
       popIn(tl, A(card, 'em-in'), t + 0.25);
       popIn(tl, A(card, 'em-draft'), t + 0.95);
       dotsWave(tl, A(card, 'em-draft'), t + 1.0, 0.9);
-      tl.to(A(card, 'em-draft'), { autoAlpha: 0, duration: 0.15, ease: 'power1.in' }, t + 1.9)
-        .set(A(card, 'em-draft'), { position: 'absolute', visibility: 'hidden' }, t + 2.05);
+      tl.to(A(card, 'em-draft'), { autoAlpha: 0, duration: 0.15, ease: 'power1.in' }, t + 1.9);
       popIn(tl, A(card, 'em-reply'), t + 2.1);
       popIn(tl, A(card, 'em-attach'), t + 2.55);
       popIn(tl, A(card, 'em-actions'), t + 2.9, 4);
@@ -926,8 +934,7 @@ const CELLS = Array.from({ length: 11 * 7 });
       popIn(tl, A(card, 'sl-user'), t + 0.25);
       popIn(tl, A(card, 'sl-typing'), t + 0.95);
       dotsWave(tl, A(card, 'sl-typing'), t + 1.0, 0.95);
-      tl.to(A(card, 'sl-typing'), { autoAlpha: 0, duration: 0.15 }, t + 1.95)
-        .set(A(card, 'sl-typing'), { position: 'absolute', visibility: 'hidden' }, t + 2.1);
+      tl.to(A(card, 'sl-typing'), { autoAlpha: 0, duration: 0.15 }, t + 1.95);
       popIn(tl, A(card, 'sl-bot'), t + 2.15);
       popIn(tl, A(card, 'sl-attach'), t + 2.6);
       popIn(tl, A(card, 'sl-react'), t + 3.05, 4);
@@ -990,8 +997,7 @@ const CELLS = Array.from({ length: 11 * 7 });
       popIn(tl, A(card, 'cw-visitor'), t + 0.25);
       popIn(tl, A(card, 'cw-typing'), t + 0.95);
       dotsWave(tl, A(card, 'cw-typing'), t + 1.0, 0.9);
-      tl.to(A(card, 'cw-typing'), { autoAlpha: 0, duration: 0.15, ease: 'power1.in' }, t + 1.9)
-        .set(A(card, 'cw-typing'), { position: 'absolute', visibility: 'hidden' }, t + 2.05);
+      tl.to(A(card, 'cw-typing'), { autoAlpha: 0, duration: 0.15, ease: 'power1.in' }, t + 1.9);
       popIn(tl, A(card, 'cw-agent'), t + 2.1);
       popIn(tl, A(card, 'cw-attach'), t + 2.55);
       return green(tl, card, t + 3.15);
