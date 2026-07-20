@@ -1,0 +1,801 @@
+---
+// Vignette — tinted media panel with a minimal inset UI mockup, per ona's
+// vignette language (audit v2 "media vignette inventory", ona-case/ona-home
+// refs): soft-tinted mat + small legible product artifact. Pure HTML/CSS,
+// static, no JS. All variants share the same inset-card language; only the
+// tint changes with the prop.
+// Props:
+//   variant — which mockup to render (8 variants, see below)
+//   tint    — 'orange' | 'mint' | 'sky' | 'cream' (mat + accent color)
+//   size    — 'sm' | 'md' | 'lg' (inset mockup scale, default 'md')
+//   ratio   — optional CSS aspect-ratio; when omitted the panel fills its
+//             parent's height (FeatureRail's fixed-height media slot).
+
+export type VignetteVariant = 'workflow' | 'prompt' | 'terminal' | 'connections' | 'table' | 'schedule' | 'audit' | 'chat';
+export type VignetteTint = 'orange' | 'mint' | 'sky' | 'cream';
+
+interface Props {
+  variant: VignetteVariant;
+  tint?: VignetteTint;
+  size?: 'sm' | 'md' | 'lg';
+  ratio?: string;
+}
+const { variant, tint = 'orange', size = 'md', ratio } = Astro.props;
+
+const eluuMark = `<rect x="8" y="7" width="3.4" height="10" rx="1"/><rect x="13.2" y="7" width="3.4" height="6.5" rx="1"/>`;
+const tick = `<polyline points="20 6 9 17 4 12"/>`;
+
+// Small stroke glyphs for tool nodes / step icons (24-unit viewBox).
+const glyphs: Record<string, string> = {
+  chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  card: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+  grid: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>',
+  cloud: '<path d="M17.5 19a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.6 1.6A4 4 0 0 0 7 19z"/>',
+  mail: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6L22 7"/>',
+  db: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  doc: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+  chart: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+  send: '<path d="M3 11l18-8-8 18-2-8z"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>',
+  clip: '<path d="M21 12l-8.5 8.5a5 5 0 0 1-7-7L14 5a3.3 3.3 0 0 1 4.7 4.7L10 18.4a1.7 1.7 0 0 1-2.4-2.4L15.5 8"/>',
+};
+
+// connections variant: 6 tool nodes, 3 per side (percent coords match the
+// stretched SVG connector lines below).
+const connLeft = [
+  { glyph: 'chat', label: 'Slack' },
+  { glyph: 'card', label: 'Stripe' },
+  { glyph: 'grid', label: 'Sheets' },
+];
+const connRight = [
+  { glyph: 'cloud', label: 'Salesforce' },
+  { glyph: 'mail', label: 'Gmail' },
+  { glyph: 'db', label: 'Postgres' },
+];
+
+const workflowSteps = [
+  { glyph: 'db', label: 'Gather the data' },
+  { glyph: 'chart', label: 'Run the checks' },
+  { glyph: 'doc', label: 'Draft the summary' },
+  { glyph: 'chat', label: 'Deliver to Slack', last: true },
+];
+
+const terminalLines = [
+  { t: '07:00:02', text: 'run started · weekly-reconcile' },
+  { t: '07:00:04', text: 'pulled 1,847 lines from 3 sources' },
+  { t: '07:00:11', text: 'matched 1,845 line pairs' },
+  { t: '07:00:11', text: 'flagged 2 exceptions' },
+  { t: '07:00:12', text: 'posted summary to #finance ✓', ok: true },
+  { t: '07:00:12', text: 'run complete' },
+];
+
+const tableRows = [
+  { w1: 72, w2: 58, status: 'ok' },
+  { w1: 56, w2: 66, status: 'ok' },
+  { w1: 64, w2: 48, status: 'warn' },
+  { w1: 78, w2: 62, status: 'ok' },
+];
+
+const scheduleRuns = [
+  { date: 'Jul 16', note: 'Delivered 7:00 AM' },
+  { date: 'Jul 9', note: 'Delivered 7:00 AM' },
+  { date: 'Jul 2', note: 'Delivered 7:01 AM' },
+];
+
+const auditToggles = [
+  { label: 'Scoped credentials', on: true },
+  { label: 'Approval required', on: true },
+  { label: 'Data boundary', on: true },
+];
+---
+
+<div
+  class:list={['vg', `vg--${tint}`, `vg--${size}`, { 'vg--fill': !ratio }]}
+  style={ratio ? `aspect-ratio: ${ratio};` : undefined}
+  aria-hidden="true"
+>
+  <div class="vg-inner">
+    {variant === 'workflow' && (
+      <div class="vg-card vg-workflow">
+        <div class="vg-wf-trigger">
+          <span class="vg-wf-dot"></span>
+          <span>Slack message received</span>
+          <span class="vg-wf-tag">Trigger</span>
+        </div>
+        <div class="vg-wf-steps">
+          {workflowSteps.map((step) => (
+            <div class:list={['vg-wf-step', { 'is-last': step.last }]}>
+              <span class="vg-wf-icon">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={glyphs[step.glyph]} />
+              </span>
+              <span class="vg-wf-label">{step.label}</span>
+              <svg class="vg-wf-tick" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" set:html={tick} />
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {variant === 'prompt' && (
+      <div class="vg-card vg-prompt">
+        <div class="vg-pr-head">
+          <span class="vg-pr-avatar">
+            <svg width="13" height="13" viewBox="0 0 24 24" set:html={eluuMark} />
+          </span>
+          <span class="vg-pr-name">Ledger agent</span>
+          <span class="vg-pr-status">Ready</span>
+        </div>
+        <div class="vg-pr-body">
+          <span class="vg-bar" style="width: 92%"></span>
+          <span class="vg-bar" style="width: 76%"></span>
+          <span class="vg-bar" style="width: 55%"></span>
+        </div>
+        <div class="vg-pr-foot">
+          <span class="vg-pr-chip">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={glyphs.clip} />
+          </span>
+          <span class="vg-pr-chip">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={glyphs.grid} />
+          </span>
+          <span class="vg-pr-run">
+            Run task
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" set:html={glyphs.send} />
+          </span>
+        </div>
+      </div>
+    )}
+
+    {variant === 'terminal' && (
+      <div class="vg-card vg-terminal">
+        <div class="vg-tm-head">
+          <span class="vg-tm-winbtn"></span>
+          <span class="vg-tm-winbtn"></span>
+          <span class="vg-tm-winbtn"></span>
+          <span class="vg-tm-title">run.log</span>
+        </div>
+        <div class="vg-tm-body">
+          {terminalLines.map((line) => (
+            <div class:list={['vg-tm-line', { 'is-ok': line.ok }]}>
+              <span class="vg-tm-time">{line.t}</span>
+              <span class="vg-tm-text">{line.text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {variant === 'connections' && (
+      <div class="vg-conn">
+        <svg class="vg-conn-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <line x1="10" y1="16" x2="50" y2="50" />
+          <line x1="10" y1="50" x2="50" y2="50" />
+          <line x1="10" y1="84" x2="50" y2="50" />
+          <line x1="90" y1="16" x2="50" y2="50" />
+          <line x1="90" y1="50" x2="50" y2="50" />
+          <line x1="90" y1="84" x2="50" y2="50" />
+        </svg>
+        <div class="vg-conn-hub">
+          <svg width="18" height="18" viewBox="0 0 24 24" set:html={eluuMark} />
+        </div>
+        {connLeft.map((node, i) => (
+          <div class="vg-conn-node" style={`left: 10%; top: ${16 + i * 34}%;`}>
+            <span class="vg-conn-sq">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" set:html={glyphs[node.glyph]} />
+            </span>
+            <span class="vg-conn-label">{node.label}</span>
+          </div>
+        ))}
+        {connRight.map((node, i) => (
+          <div class="vg-conn-node" style={`left: 90%; top: ${16 + i * 34}%;`}>
+            <span class="vg-conn-sq">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" set:html={glyphs[node.glyph]} />
+            </span>
+            <span class="vg-conn-label">{node.label}</span>
+          </div>
+        ))}
+      </div>
+    )}
+
+    {variant === 'table' && (
+      <div class="vg-card vg-table">
+        <div class="vg-tb-row vg-tb-row--head">
+          <span class="vg-tb-col">Source</span>
+          <span class="vg-tb-col">Ledger</span>
+          <span class="vg-tb-col vg-tb-col--end">Status</span>
+        </div>
+        {tableRows.map((row) => (
+          <div class:list={['vg-tb-row', { 'is-flagged': row.status === 'warn' }]}>
+            <span class="vg-bar" style={`width: ${row.w1}%`}></span>
+            <span class="vg-bar" style={`width: ${row.w2}%`}></span>
+            <span class:list={['vg-chip', row.status === 'warn' ? 'vg-chip--warn' : 'vg-chip--ok']}>
+              {row.status === 'warn' ? 'Review' : 'Matched'}
+            </span>
+          </div>
+        ))}
+      </div>
+    )}
+
+    {variant === 'schedule' && (
+      <div class="vg-card vg-schedule">
+        <div class="vg-sc-head">
+          <span class="vg-sc-clock">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={glyphs.clock} />
+          </span>
+          <span class="vg-sc-when">Every Thursday · 7:00 AM</span>
+          <span class="vg-chip vg-chip--ok">Active</span>
+        </div>
+        <div class="vg-sc-runs">
+          {scheduleRuns.map((run) => (
+            <div class="vg-sc-run">
+              <span class="vg-sc-date">{run.date}</span>
+              <span class="vg-sc-note">{run.note}</span>
+              <svg class="vg-sc-tick" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" set:html={tick} />
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {variant === 'audit' && (
+      <div class="vg-audit">
+        <div class="vg-card vg-au-panel">
+          {auditToggles.map((row) => (
+            <div class="vg-au-row">
+              <span class="vg-au-label">{row.label}</span>
+              <span class:list={['vg-au-toggle', { 'is-on': row.on }]}></span>
+            </div>
+          ))}
+        </div>
+        <div class="vg-au-log">
+          <div class="vg-tm-line"><span class="vg-tm-time">09:41</span><span class="vg-tm-text">credential scope verified</span></div>
+          <div class="vg-tm-line is-ok"><span class="vg-tm-time">09:42</span><span class="vg-tm-text">action logged · audit trail ✓</span></div>
+        </div>
+      </div>
+    )}
+
+    {variant === 'chat' && (
+      <div class="vg-card vg-chat">
+        <div class="vg-ch-body">
+          <div class="vg-ch-row vg-ch-row--user">
+            <span class="vg-ch-bubble vg-ch-bubble--user">Can you pull the Q3 numbers?</span>
+          </div>
+          <div class="vg-ch-row">
+            <span class="vg-ch-avatar">
+              <svg width="11" height="11" viewBox="0 0 24 24" set:html={eluuMark} />
+            </span>
+            <span class="vg-ch-bubble">Done — 3 systems checked, summary attached.</span>
+          </div>
+        </div>
+        <div class="vg-ch-input">
+          <span>Reply…</span>
+          <span class="vg-ch-send">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" set:html={glyphs.send} />
+          </span>
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  /* ── mat ── */
+  .vg {
+    position: relative;
+    width: 100%;
+    border-radius: 2px;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    padding: 28px;
+    background:
+      radial-gradient(ellipse 75% 65% at 50% 42%, var(--vg-glow), transparent 72%),
+      var(--vg-bg);
+  }
+  .vg::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 2px;
+    border: 1px solid rgba(237, 233, 227, 0.06);
+  }
+  .vg--fill {
+    height: 100%;
+    min-height: 240px;
+  }
+
+  /* tints — very dark tint of the accent over the raised surface */
+  .vg--orange { --vg-bg: #241B13; --vg-glow: rgba(237, 115, 59, 0.14); --vg-accent: #ED733B; --vg-accent-soft: rgba(237, 115, 59, 0.14); }
+  .vg--mint   { --vg-bg: #14201A; --vg-glow: rgba(99, 207, 158, 0.12); --vg-accent: #63cf9e; --vg-accent-soft: rgba(99, 207, 158, 0.13); }
+  .vg--sky    { --vg-bg: #131B22; --vg-glow: rgba(109, 183, 240, 0.12); --vg-accent: #6db7f0; --vg-accent-soft: rgba(109, 183, 240, 0.13); }
+  .vg--cream  { --vg-bg: #1e1d1b; --vg-glow: rgba(237, 233, 227, 0.07); --vg-accent: #ede9e3; --vg-accent-soft: rgba(237, 233, 227, 0.12); }
+
+  .vg-inner {
+    width: 100%;
+    display: grid;
+    place-items: center;
+  }
+  .vg--sm .vg-inner { transform: scale(0.85); }
+  .vg--lg .vg-inner { transform: scale(1.1); }
+
+  /* ── shared inset-card language ── */
+  .vg-card {
+    background: #26231F;
+    border: 1px solid rgba(237, 233, 227, 0.08);
+    border-radius: 4px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    font-family: 'Söhne', sans-serif;
+    color: #ede9e3;
+    box-sizing: border-box;
+  }
+  .vg-bar {
+    display: block;
+    height: 7px;
+    border-radius: 2px;
+    background: rgba(237, 233, 227, 0.14);
+  }
+  .vg-chip {
+    font-size: 9.5px;
+    font-weight: 500;
+    line-height: 1;
+    padding: 4px 7px;
+    border-radius: 2px;
+    letter-spacing: 0.01em;
+    justify-self: end;
+  }
+  .vg-chip--ok { color: #63cf9e; background: rgba(99, 207, 158, 0.12); }
+  .vg-chip--warn { color: #ED733B; background: rgba(237, 115, 59, 0.14); }
+
+  /* ── workflow ── */
+  .vg-workflow {
+    width: min(300px, 92%);
+    padding: 12px;
+  }
+  .vg-wf-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    color: rgba(237, 233, 227, 0.85);
+    background: #13100a;
+    border: 1px solid rgba(237, 233, 227, 0.08);
+    border-radius: 3px;
+    padding: 8px 10px;
+  }
+  .vg-wf-dot {
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--vg-accent);
+  }
+  .vg-wf-tag {
+    margin-left: auto;
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--vg-accent);
+  }
+  .vg-wf-steps {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+  }
+  .vg-wf-step {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: 3px;
+    font-size: 11.5px;
+    color: rgba(237, 233, 227, 0.7);
+  }
+  .vg-wf-step + .vg-wf-step {
+    border-top: 1px solid rgba(237, 233, 227, 0.06);
+  }
+  .vg-wf-icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    background: #13100a;
+    border: 1px solid rgba(237, 233, 227, 0.08);
+    color: rgba(237, 233, 227, 0.55);
+  }
+  .vg-wf-tick {
+    margin-left: auto;
+    color: #63cf9e;
+  }
+  .vg-wf-step.is-last {
+    background: var(--vg-accent-soft);
+    color: #ede9e3;
+    border-top-color: transparent;
+  }
+  .vg-wf-step.is-last .vg-wf-icon { color: var(--vg-accent); }
+  .vg-wf-step.is-last .vg-wf-tick { color: var(--vg-accent); }
+
+  /* ── prompt ── */
+  .vg-prompt {
+    width: min(280px, 92%);
+    padding: 14px;
+  }
+  .vg-pr-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .vg-pr-avatar {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 3px;
+    background: #13100a;
+    border: 1px solid rgba(237, 233, 227, 0.1);
+  }
+  .vg-pr-avatar svg { fill: var(--vg-accent); }
+  .vg-pr-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: #ede9e3;
+  }
+  .vg-pr-status {
+    margin-left: auto;
+    font-size: 9.5px;
+    color: #63cf9e;
+  }
+  .vg-pr-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .vg-pr-foot {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(237, 233, 227, 0.07);
+  }
+  .vg-pr-chip {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    background: #13100a;
+    border: 1px solid rgba(237, 233, 227, 0.08);
+    color: rgba(237, 233, 227, 0.5);
+  }
+  .vg-pr-run {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #13100a;
+    background: var(--vg-accent);
+    border-radius: 3px;
+    padding: 5px 9px;
+  }
+
+  /* ── terminal ── */
+  .vg-terminal {
+    width: min(320px, 92%);
+    background: #0C0E0A;
+    padding: 0;
+    overflow: hidden;
+  }
+  .vg-tm-head {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 11px;
+    border-bottom: 1px solid rgba(237, 233, 227, 0.07);
+  }
+  .vg-tm-winbtn {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(237, 233, 227, 0.14);
+  }
+  .vg-tm-title {
+    margin-left: 6px;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 9.5px;
+    color: rgba(237, 233, 227, 0.4);
+  }
+  .vg-tm-body {
+    padding: 10px 11px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .vg-tm-line {
+    display: flex;
+    gap: 9px;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 10.5px;
+    line-height: 1.5;
+    color: rgba(237, 233, 227, 0.55);
+    white-space: nowrap;
+  }
+  .vg-tm-time { color: rgba(237, 233, 227, 0.28); }
+  .vg-tm-line.is-ok .vg-tm-text { color: #63cf9e; }
+
+  /* ── connections ── */
+  .vg-conn {
+    position: relative;
+    width: min(360px, 94%);
+    height: 200px;
+  }
+  .vg-conn-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .vg-conn-lines line {
+    stroke: rgba(237, 233, 227, 0.16);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .vg-conn-hub {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 4px;
+    background: #13100a;
+    border: 1px solid var(--vg-accent);
+    box-shadow: 0 0 24px var(--vg-accent-soft), 0 16px 32px rgba(0, 0, 0, 0.35);
+  }
+  .vg-conn-hub svg { fill: var(--vg-accent); }
+  .vg-conn-node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .vg-conn-sq {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    background: #26231F;
+    border: 1px solid rgba(237, 233, 227, 0.1);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+    color: rgba(237, 233, 227, 0.65);
+  }
+  .vg-conn-label {
+    font-family: 'Söhne', sans-serif;
+    font-size: 9px;
+    color: rgba(237, 233, 227, 0.45);
+    white-space: nowrap;
+  }
+
+  /* ── table ── */
+  .vg-table {
+    width: min(330px, 92%);
+    padding: 6px 12px 8px;
+  }
+  .vg-tb-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 58px;
+    align-items: center;
+    gap: 14px;
+    padding: 9px 2px;
+  }
+  .vg-tb-row + .vg-tb-row {
+    border-top: 1px solid rgba(237, 233, 227, 0.06);
+  }
+  .vg-tb-row--head {
+    padding: 8px 2px 7px;
+  }
+  .vg-tb-col {
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: rgba(237, 233, 227, 0.35);
+  }
+  .vg-tb-col--end { text-align: right; }
+  .vg-tb-row.is-flagged {
+    background: var(--vg-accent-soft);
+    border-radius: 3px;
+    border-top-color: transparent;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin: 0 -6px;
+  }
+  .vg-tb-row.is-flagged + .vg-tb-row { border-top-color: transparent; }
+
+  /* ── schedule ── */
+  .vg-schedule {
+    width: min(290px, 92%);
+    padding: 12px 14px 8px;
+  }
+  .vg-sc-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 11px;
+    border-bottom: 1px solid rgba(237, 233, 227, 0.07);
+  }
+  .vg-sc-clock {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    background: #13100a;
+    border: 1px solid rgba(237, 233, 227, 0.08);
+    color: var(--vg-accent);
+  }
+  .vg-sc-when {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #ede9e3;
+  }
+  .vg-sc-head .vg-chip { margin-left: auto; }
+  .vg-sc-runs {
+    display: flex;
+    flex-direction: column;
+  }
+  .vg-sc-run {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 0;
+    font-size: 11px;
+  }
+  .vg-sc-run + .vg-sc-run {
+    border-top: 1px solid rgba(237, 233, 227, 0.06);
+  }
+  .vg-sc-date {
+    flex: none;
+    width: 38px;
+    color: rgba(237, 233, 227, 0.8);
+    font-weight: 500;
+  }
+  .vg-sc-note { color: rgba(237, 233, 227, 0.45); }
+  .vg-sc-tick {
+    margin-left: auto;
+    color: #63cf9e;
+  }
+
+  /* ── audit ── */
+  .vg-audit {
+    width: min(290px, 92%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .vg-au-panel { padding: 4px 14px; }
+  .vg-au-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 11.5px;
+    color: rgba(237, 233, 227, 0.8);
+  }
+  .vg-au-row + .vg-au-row {
+    border-top: 1px solid rgba(237, 233, 227, 0.06);
+  }
+  .vg-au-toggle {
+    position: relative;
+    flex: none;
+    width: 26px;
+    height: 15px;
+    border-radius: 999px;
+    background: rgba(237, 233, 227, 0.12);
+  }
+  .vg-au-toggle::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: rgba(237, 233, 227, 0.5);
+  }
+  .vg-au-toggle.is-on { background: var(--vg-accent); }
+  .vg-au-toggle.is-on::after {
+    left: auto;
+    right: 2px;
+    background: #13100a;
+  }
+  .vg-au-log {
+    background: #0C0E0A;
+    border: 1px solid rgba(237, 233, 227, 0.08);
+    border-radius: 4px;
+    padding: 9px 11px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+  }
+
+  /* ── chat ── */
+  .vg-chat {
+    width: min(280px, 92%);
+    padding: 0;
+    overflow: hidden;
+  }
+  .vg-ch-body {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 14px 12px;
+  }
+  .vg-ch-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 7px;
+  }
+  .vg-ch-row--user { justify-content: flex-end; }
+  .vg-ch-avatar {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    background: #13100a;
+    border: 1px solid rgba(237, 233, 227, 0.1);
+  }
+  .vg-ch-avatar svg { fill: var(--vg-accent); }
+  .vg-ch-bubble {
+    font-size: 11px;
+    line-height: 1.45;
+    color: rgba(237, 233, 227, 0.85);
+    background: #13100a;
+    border: 1px solid rgba(237, 233, 227, 0.08);
+    border-radius: 4px 4px 4px 2px;
+    padding: 7px 10px;
+    max-width: 82%;
+  }
+  .vg-ch-bubble--user {
+    background: var(--vg-accent-soft);
+    border-color: transparent;
+    border-radius: 4px 4px 2px 4px;
+    color: #ede9e3;
+  }
+  .vg-ch-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-top: 1px solid rgba(237, 233, 227, 0.07);
+    font-size: 10.5px;
+    color: rgba(237, 233, 227, 0.35);
+  }
+  .vg-ch-send {
+    margin-left: auto;
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    background: var(--vg-accent);
+    color: #13100a;
+  }
+</style>

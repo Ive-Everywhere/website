@@ -4,13 +4,13 @@ import Layout from '../../layouts/Layout.astro';
 import OnaNav from '../../components/ona/OnaNav.astro';
 import OnaHero from '../../components/ona/OnaHero.astro';
 import Explanation from '../../components/ona/Explanation.astro';
+import Vignette from '../../components/ona/Vignette.astro';
 import StatsBand from '../../components/ona/StatsBand.astro';
-import FeatureCards from '../../components/ona/FeatureCards.astro';
+import FeatureRail from '../../components/ona/FeatureRail.astro';
 import QuoteBlock from '../../components/ona/QuoteBlock.astro';
 import PoweredBy from '../../components/ona/PoweredBy.astro';
 import LogoBar from '../../components/ona/LogoBar.astro';
 import ComplianceBadges from '../../components/ona/ComplianceBadges.astro';
-import ResourceCards from '../../components/ona/ResourceCards.astro';
 import FinalCTA from '../../components/ona/FinalCTA.astro';
 import MegaFooter from '../../components/ona/MegaFooter.astro';
 
@@ -30,32 +30,42 @@ const stats = [
   },
 ];
 
-// §4 — Feature blocks (5)
-const featureCards = [
+// §4 — Feature rail (sticky rail + full-width blocks, per ona case-page anatomy)
+const features = [
   {
-    headline: 'It reads every system',
-    eyebrowQuote: 'One pass across your whole stack.',
+    name: 'Reads every system',
+    title: 'It reads every system',
+    eyebrow: 'One pass across your whole stack.',
     body: "Stripe, the ledger, the CRM, the spreadsheet. It pulls from all of them, so you're not copying between tabs.",
+    vignette: { variant: 'connections', tint: 'sky' },
   },
   {
-    headline: 'It matches line by line',
-    eyebrowQuote: 'Record by record, not just the totals.',
+    name: 'Matches line by line',
+    title: 'It matches line by line',
+    eyebrow: 'Record by record, not just the totals.',
     body: 'It compares the way an analyst would, field by field, and catches the mismatch a totals check would miss.',
+    vignette: { variant: 'table', tint: 'mint' },
   },
   {
-    headline: "It only flags what's off",
-    eyebrowQuote: "Look at what's wrong, skip what's right.",
+    name: 'Flags the exceptions',
+    title: "It only flags what's off",
+    eyebrow: "Look at what's wrong, skip what's right.",
     body: 'It clears everything that matches and hands you the short list that needs a look.',
+    vignette: { variant: 'table', tint: 'orange' },
   },
   {
-    headline: 'It runs on a schedule',
-    eyebrowQuote: 'Every night, or every few hours.',
+    name: 'Runs on a schedule',
+    title: 'It runs on a schedule',
+    eyebrow: 'Every night, or every few hours.',
     body: 'Runs on its own, and the result is in Slack before you open the sheet.',
+    vignette: { variant: 'schedule', tint: 'mint' },
   },
   {
-    headline: 'Every match is logged',
-    eyebrowQuote: 'You can see how it got there.',
+    name: 'Every match logged',
+    title: 'Every match is logged',
+    eyebrow: 'You can see how it got there.',
     body: 'What it compared, what it matched, and what it flagged.',
+    vignette: { variant: 'terminal', tint: 'cream' },
   },
 ];
 
@@ -80,13 +90,6 @@ const poweredBy = [
     href: '/security',
   },
 ];
-
-// §9 — Resource cards (placeholders until recipe/demo/docs land)
-const resourceCards = [
-  { placeholder: true, placeholderLabel: 'Recipe' },
-  { placeholder: true, placeholderLabel: 'Demo' },
-  { placeholder: true, placeholderLabel: 'Docs' },
-];
 ---
 
 <Layout
@@ -109,14 +112,15 @@ const resourceCards = [
       subhead="The month-end grind, done every night. You look at what's wrong, not everything that's right."
       linkLabel="See it in the cookbook"
       linkHref="/cookbook"
-      mediaLabel="Product visual — reconciliation run (systems in, exceptions out)"
-    />
+    >
+      <Vignette variant="table" tint="orange" ratio="16 / 10" />
+    </Explanation>
 
     <!-- §3 STATS -->
     <StatsBand stats={stats} />
 
-    <!-- §4 FEATURE BLOCKS -->
-    <FeatureCards cards={featureCards} />
+    <!-- §4 FEATURE RAIL -->
+    <FeatureRail features={features} />
 
     <!-- §5 TESTIMONIAL -->
     <QuoteBlock />
@@ -128,10 +132,7 @@ const resourceCards = [
     <LogoBar label="Aggregate proof" />
 
     <!-- §8 COMPLIANCE -->
-    <ComplianceBadges badges={['SOC 2', 'GDPR']} />
-
-    <!-- §9 RESOURCE CARDS -->
-    <ResourceCards heading="Resources." cards={resourceCards} />
+    <ComplianceBadges />
 
     <!-- §10 FINAL CTA -->
     <FinalCTA headline="Put reconciliation on autopilot." />

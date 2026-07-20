@@ -10,11 +10,8 @@ import LogoBar from '../components/ona/LogoBar.astro';
 import PillarGrid from '../components/ona/PillarGrid.astro';
 import MediaCards from '../components/ona/MediaCards.astro';
 import CookbookStrip from '../components/ona/CookbookStrip.astro';
-import FeaturedBanner from '../components/ona/FeaturedBanner.astro';
 import QuoteBlock from '../components/ona/QuoteBlock.astro';
-import FeaturedGuide from '../components/ona/FeaturedGuide.astro';
 import ComplianceBadges from '../components/ona/ComplianceBadges.astro';
-import ResourceCards from '../components/ona/ResourceCards.astro';
 import FinalCTA from '../components/ona/FinalCTA.astro';
 import MegaFooter from '../components/ona/MegaFooter.astro';
 
@@ -57,7 +54,7 @@ const mediaCards = [
       { label: 'Reconcile data across systems', href: '/use-cases/reconcile-data', icon: 'chart' },
       { label: 'Build dashboards and internal apps', href: '/use-cases/build-apps', icon: 'box' },
     ],
-    mediaLabel: 'Product visual — connected-tools flow',
+    vignette: { variant: 'connections', tint: 'sky' },
     mediaSide: 'left',
   },
   {
@@ -69,7 +66,7 @@ const mediaCards = [
       { label: 'Run as many agents as you need, in parallel', href: '/workspace', icon: 'parallel' },
       { label: 'Hand it off in Slack and close your laptop', href: '/agents', icon: 'chat' },
     ],
-    mediaLabel: 'Product visual — scheduled-run workflow',
+    vignette: { variant: 'schedule', tint: 'orange' },
     mediaSide: 'right',
   },
   {
@@ -81,7 +78,7 @@ const mediaCards = [
       { label: 'See what data each agent can touch', href: '/connections', icon: 'eye' },
       { label: 'Keep an audit trail of every action', href: '/security', icon: 'audit' },
     ],
-    mediaLabel: 'Product visual — access and audit panel',
+    vignette: { variant: 'audit', tint: 'mint' },
     mediaSide: 'left',
   },
 ];
@@ -103,13 +100,6 @@ const storyStats = [
   { label: 'hours a week saved' },
   { label: 'tasks completed on their own' },
   { label: 'tools connected' },
-];
-
-// §10 — Blog highlights (placeholder, three latest posts)
-const blogCards = [
-  { placeholder: true, placeholderLabel: 'Latest post' },
-  { placeholder: true, placeholderLabel: 'Latest post' },
-  { placeholder: true, placeholderLabel: 'Latest post' },
 ];
 ---
 
@@ -146,19 +136,6 @@ const blogCards = [
     <!-- §5 COOKBOOK STRIP -->
     <CookbookStrip heading="Deploy an agent today." recipes={recipes} />
 
-    <!-- §6 SEE IT IN ACTION -->
-    <FeaturedBanner
-      heading="Watch teams put agents to work."
-      body="Short recorded walkthroughs. A legal agent redlining a contract, a finance agent closing the month, a sales agent flagging at-risk accounts."
-      ctaLabel="Watch the demos"
-      ctaHref="#"
-      thumbnails={[
-        'Demo — legal agent redlining a contract',
-        'Demo — finance agent closing the month',
-        'Demo — sales agent flagging at-risk accounts',
-      ]}
-    />
-
     <!-- §7 CUSTOMER STORY -->
     <QuoteBlock
       quote="This is indispensable for me now."
@@ -167,24 +144,11 @@ const blogCards = [
       ctaHref="#"
     />
 
-    <!-- §8 FEATURED GUIDE -->
-    <FeaturedGuide
-      headline="An operator's guide to AI agents."
-      body="What to automate first, how to keep your data in your control, and how to scale from one agent to a whole team."
-      ctaLabel="Read the guide"
-      ctaHref="#"
-      coverLabel="Guide cover — An operator's guide to AI agents"
-    />
-
     <!-- §9 ENTERPRISE-READY -->
     <ComplianceBadges
       heading="Enterprise-ready."
       body="Your data, your rules. See what every agent can access, restrict what they can do, and keep a full audit trail of every action. Works alongside Claude, OpenAI, and any harness your team already uses."
-      badges={['SOC 2', 'GDPR']}
     />
-
-    <!-- §10 BLOG HIGHLIGHTS -->
-    <ResourceCards heading="Recent highlights from our blog." variant="list" cards={blogCards} />
 
     <!-- §11 FINAL CTA -->
     <FinalCTA headline="Start with one agent. Scale to a workforce." />

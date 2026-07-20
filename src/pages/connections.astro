@@ -1,13 +1,14 @@
 ---
 // /connections — product pillar page, content per research/website-content/connections.md.
 // PillarPage pattern: OnaNav → OnaHero(eyebrow) → Explanation → StatsBand →
-// FeatureCards(5) → QuoteBlock([VERIFY] placeholder) → TechDetails(3) → FinalCTA → MegaFooter.
+// FeatureRail(5) → QuoteBlock([VERIFY] placeholder) → TechDetails(3) → FinalCTA → MegaFooter.
 import Layout from '../layouts/Layout.astro';
 import OnaNav from '../components/ona/OnaNav.astro';
 import OnaHero from '../components/ona/OnaHero.astro';
 import Explanation from '../components/ona/Explanation.astro';
+import Vignette from '../components/ona/Vignette.astro';
 import StatsBand from '../components/ona/StatsBand.astro';
-import FeatureCards from '../components/ona/FeatureCards.astro';
+import FeatureRail from '../components/ona/FeatureRail.astro';
 import QuoteBlock from '../components/ona/QuoteBlock.astro';
 import TechDetails from '../components/ona/TechDetails.astro';
 import FinalCTA from '../components/ona/FinalCTA.astro';
@@ -20,32 +21,42 @@ const stats = [
   { value: 'Full visibility', label: 'see what each agent can reach' },
 ];
 
-// §4 — Feature cards
-const featureCards = [
+// §4 — Feature rail (sticky rail + full-width blocks, per ona case-page anatomy)
+const features = [
   {
-    headline: 'Connect any tool',
-    eyebrowQuote: 'Native connections to the tools you already use.',
+    name: 'Connect any tool',
+    title: 'Connect any tool',
+    eyebrow: 'Native connections to the tools you already use.',
     body: 'Slack, Gmail, Salesforce, Stripe, Sheets, and 100+ more, connected directly. No glue code, no third-party automation tool sitting in the middle.',
+    vignette: { variant: 'connections', tint: 'sky' },
   },
   {
-    headline: 'Agents act, not just read',
-    eyebrowQuote: 'They do the work inside your tools.',
+    name: 'Agents act',
+    title: 'Agents act, not just read',
+    eyebrow: 'They do the work inside your tools.',
     body: 'Update the CRM record, send the email, post to Slack, file the ticket. Not just pull data out and hand it back.',
+    vignette: { variant: 'workflow', tint: 'orange' },
   },
   {
-    headline: 'See what each agent can touch',
-    eyebrowQuote: 'No hidden access.',
+    name: 'See every grant',
+    title: 'See what each agent can touch',
+    eyebrow: 'No hidden access.',
     body: 'Open any agent and see its exact tool list and the data it was granted, tool by tool.',
+    vignette: { variant: 'audit', tint: 'mint' },
   },
   {
-    headline: 'Watch how tools get used',
-    eyebrowQuote: 'Know which integrations your agents lean on.',
+    name: 'Watch tool usage',
+    title: 'Watch how tools get used',
+    eyebrow: 'Know which integrations your agents lean on.',
     body: 'Usage across every connected tool, so you can see what is working and what is sitting idle.',
+    vignette: { variant: 'table', tint: 'cream' },
   },
   {
-    headline: 'They learn your tools',
-    eyebrowQuote: 'The same job gets faster each time.',
+    name: 'They learn your tools',
+    title: 'They learn your tools',
+    eyebrow: 'The same job gets faster each time.',
     body: 'The first time, an agent works out your field names and where things live. After that it reuses what it learned, so it stops re-figuring out the same tool on every run.',
+    vignette: { variant: 'terminal', tint: 'mint' },
   },
 ];
 
@@ -86,14 +97,15 @@ const techRows = [
       subhead="Connect Slack, Gmail, Salesforce, Stripe, Sheets, and 100+ more, natively. Agents don't just pull data out, they take action inside your tools. And they get better at those tools the more they use them."
       linkLabel="Explore the docs"
       linkHref="#"
-      mediaLabel="Connected-tools view — an agent working across several systems"
-    />
+    >
+      <Vignette variant="connections" tint="sky" ratio="16 / 10" />
+    </Explanation>
 
     <!-- §3 THREE NUMBERS -->
     <StatsBand stats={stats} />
 
-    <!-- §4 FEATURE CARDS -->
-    <FeatureCards cards={featureCards} />
+    <!-- §4 FEATURE RAIL -->
+    <FeatureRail features={features} />
 
     <!-- §5 TESTIMONIAL ([VERIFY] — placeholder) -->
     <QuoteBlock />

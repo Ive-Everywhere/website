@@ -2,13 +2,14 @@
 // /security — product pillar page, content per research/website-content/security.md.
 // (The old legal security notice now lives at /legal/security.)
 // PillarPage pattern: OnaNav → OnaHero(eyebrow) → Explanation → StatsBand →
-// FeatureCards(5) → QuoteBlock([VERIFY] placeholder) → TechDetails(3) → FinalCTA → MegaFooter.
+// FeatureRail(5) → QuoteBlock([VERIFY] placeholder) → TechDetails(3) → FinalCTA → MegaFooter.
 import Layout from '../layouts/Layout.astro';
 import OnaNav from '../components/ona/OnaNav.astro';
 import OnaHero from '../components/ona/OnaHero.astro';
 import Explanation from '../components/ona/Explanation.astro';
+import Vignette from '../components/ona/Vignette.astro';
 import StatsBand from '../components/ona/StatsBand.astro';
-import FeatureCards from '../components/ona/FeatureCards.astro';
+import FeatureRail from '../components/ona/FeatureRail.astro';
 import QuoteBlock from '../components/ona/QuoteBlock.astro';
 import TechDetails from '../components/ona/TechDetails.astro';
 import FinalCTA from '../components/ona/FinalCTA.astro';
@@ -21,32 +22,42 @@ const stats = [
   { value: 'Every action logged', label: 'a full audit trail' },
 ];
 
-// §4 — Feature cards
-const featureCards = [
+// §4 — Feature rail (sticky rail + full-width blocks, per ona case-page anatomy)
+const features = [
   {
-    headline: 'Control what reaches the model',
-    eyebrowQuote: 'Decide what an agent can send to an LLM.',
+    name: 'Your keys, your data',
+    title: 'Control what reaches the model',
+    eyebrow: 'Decide what an agent can send to an LLM.',
     body: 'Bring your own model key, or self-host, so your data flows through your account and not ours.',
+    vignette: { variant: 'connections', tint: 'sky' },
   },
   {
-    headline: 'Restrict each agent',
-    eyebrowQuote: 'Give each agent only the tools it needs.',
+    name: 'Restrict each agent',
+    title: 'Restrict each agent',
+    eyebrow: 'Give each agent only the tools it needs.',
     body: 'Limit the tools and data an agent can reach. Routine actions run on their own; risky ones wait for a person to approve.',
+    vignette: { variant: 'audit', tint: 'mint' },
   },
   {
-    headline: 'Audit every action',
-    eyebrowQuote: 'A full record of what every agent did.',
+    name: 'Audit every action',
+    title: 'Audit every action',
+    eyebrow: 'A full record of what every agent did.',
     body: 'What it accessed, what it changed, and when. The trail is there when finance, legal, or a customer asks.',
+    vignette: { variant: 'terminal', tint: 'cream' },
   },
   {
-    headline: 'See and control cost',
-    eyebrowQuote: 'Know what every agent and team is spending.',
+    name: 'Control cost',
+    title: 'See and control cost',
+    eyebrow: 'Know what every agent and team is spending.',
     body: 'See spend per agent and per team, and set a hard cap that stops an agent when it hits the limit.',
+    vignette: { variant: 'table', tint: 'orange' },
   },
   {
-    headline: 'Works with any harness',
-    eyebrowQuote: 'Your coding harnesses, under the same controls.',
+    name: 'Any harness',
+    title: 'Works with any harness',
+    eyebrow: 'Your coding harnesses, under the same controls.',
     body: 'Claude Code, Codex, and Cline connect through the same permission and audit layer, so agents built on them follow the same rules as everything else.',
+    vignette: { variant: 'workflow', tint: 'sky' },
   },
 ];
 
@@ -87,14 +98,15 @@ const techRows = [
       subhead="An agent that can reach your tools needs limits, the same way a new hire does. Bring your own model key or self-host so your data stays in your account, and give each agent only the tools and actions you approve."
       linkLabel="Explore the docs"
       linkHref="#"
-      mediaLabel="Access and audit view — agent permissions, action log"
-    />
+    >
+      <Vignette variant="audit" tint="mint" ratio="16 / 10" />
+    </Explanation>
 
     <!-- §3 THREE STATEMENTS -->
     <StatsBand stats={stats} />
 
-    <!-- §4 FEATURE CARDS -->
-    <FeatureCards cards={featureCards} />
+    <!-- §4 FEATURE RAIL -->
+    <FeatureRail features={features} />
 
     <!-- §5 TESTIMONIAL ([VERIFY] — placeholder) -->
     <QuoteBlock />

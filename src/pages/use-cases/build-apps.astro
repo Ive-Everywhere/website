@@ -4,13 +4,13 @@ import Layout from '../../layouts/Layout.astro';
 import OnaNav from '../../components/ona/OnaNav.astro';
 import OnaHero from '../../components/ona/OnaHero.astro';
 import Explanation from '../../components/ona/Explanation.astro';
+import Vignette from '../../components/ona/Vignette.astro';
 import StatsBand from '../../components/ona/StatsBand.astro';
-import FeatureCards from '../../components/ona/FeatureCards.astro';
+import FeatureRail from '../../components/ona/FeatureRail.astro';
 import QuoteBlock from '../../components/ona/QuoteBlock.astro';
 import PoweredBy from '../../components/ona/PoweredBy.astro';
 import LogoBar from '../../components/ona/LogoBar.astro';
 import ComplianceBadges from '../../components/ona/ComplianceBadges.astro';
-import ResourceCards from '../../components/ona/ResourceCards.astro';
 import FinalCTA from '../../components/ona/FinalCTA.astro';
 import MegaFooter from '../../components/ona/MegaFooter.astro';
 
@@ -30,32 +30,42 @@ const stats = [
   },
 ];
 
-// §4 — Feature cards (5)
-const featureCards = [
+// §4 — Feature rail (sticky rail + full-width blocks, per ona case-page anatomy)
+const features = [
   {
-    headline: 'You describe it, the agent builds it',
-    eyebrowQuote: 'No code, no engineering ticket.',
+    name: 'Describe it',
+    title: 'You describe it, the agent builds it',
+    eyebrow: 'No code, no engineering ticket.',
     body: 'Tell the agent the tracker or dashboard you want, in plain English. It builds it.',
+    vignette: { variant: 'prompt', tint: 'orange' },
   },
   {
-    headline: 'Connected to your data',
-    eyebrowQuote: 'It reads and writes your real systems.',
+    name: 'Connected to data',
+    title: 'Connected to your data',
+    eyebrow: 'It reads and writes your real systems.',
     body: "The app isn't a copy of your data. It pulls live from your tools and writes back to them.",
+    vignette: { variant: 'connections', tint: 'sky' },
   },
   {
-    headline: 'The data stays live',
-    eyebrowQuote: 'Current values every time, not a frozen export.',
+    name: 'Data stays live',
+    title: 'The data stays live',
+    eyebrow: 'Current values every time, not a frozen export.',
     body: 'The dashboard is right when you open it, because it reads your systems on the spot.',
+    vignette: { variant: 'table', tint: 'mint' },
   },
   {
-    headline: 'Boards that trigger tasks',
-    eyebrowQuote: 'It can start the work, not only track it.',
+    name: 'Boards trigger tasks',
+    title: 'Boards that trigger tasks',
+    eyebrow: 'It can start the work, not only track it.',
     body: "A board can kick off the work it's tracking, so a kanban column moves the job forward instead of just displaying it.",
+    vignette: { variant: 'workflow', tint: 'cream' },
   },
   {
-    headline: 'Governed like everything else',
-    eyebrowQuote: 'Same access controls and audit.',
+    name: 'Governed by default',
+    title: 'Governed like everything else',
+    eyebrow: 'Same access controls and audit.',
     body: 'The app runs under the same permissions and audit trail as your agents.',
+    vignette: { variant: 'audit', tint: 'mint' },
   },
 ];
 
@@ -81,12 +91,6 @@ const poweredBy = [
   },
 ];
 
-// §9 — Resource cards (placeholders until recipe/demo/docs land)
-const resourceCards = [
-  { placeholder: true, placeholderLabel: 'Recipe' },
-  { placeholder: true, placeholderLabel: 'Demo' },
-  { placeholder: true, placeholderLabel: 'Docs' },
-];
 ---
 
 <Layout
@@ -109,14 +113,15 @@ const resourceCards = [
       subhead="Not a static export you refresh by hand. A live tool, with its own data and storage, that reads your systems every time it's opened."
       linkLabel="See it in the cookbook"
       linkHref="/cookbook"
-      mediaLabel="Product visual — a live dashboard an agent built, updating"
-    />
+    >
+      <Vignette variant="workflow" tint="orange" ratio="16 / 10" />
+    </Explanation>
 
     <!-- §3 NUMBERS -->
     <StatsBand stats={stats} />
 
-    <!-- §4 FEATURE CARDS -->
-    <FeatureCards cards={featureCards} />
+    <!-- §4 FEATURE RAIL -->
+    <FeatureRail features={features} />
 
     <!-- §5 TESTIMONIAL -->
     <QuoteBlock />
@@ -128,10 +133,7 @@ const resourceCards = [
     <LogoBar label="Aggregate proof" />
 
     <!-- §8 COMPLIANCE -->
-    <ComplianceBadges badges={['SOC 2', 'GDPR']} />
-
-    <!-- §9 RESOURCE CARDS -->
-    <ResourceCards heading="Resources." cards={resourceCards} />
+    <ComplianceBadges />
 
     <!-- §10 FINAL CTA -->
     <FinalCTA headline="Build the internal tool yourself." />

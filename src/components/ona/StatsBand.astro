@@ -1,7 +1,7 @@
 ---
 // StatsBand — 3 stat cards per ona ref (case frame-01: "10x / 0% / 24/7"):
-// three rounded panels in a row, HUGE display numeral top-left, small muted
-// label under it, generous vertical padding.
+// three FILLED #1e1d1b cards in a row (same family as QuoteBlock stats),
+// HUGE accent display numeral top-left, small muted label under it.
 // Missing values ([VERIFY] slots) render as em-dashes — never invented numbers.
 interface Stat {
   value?: string;
@@ -47,7 +47,6 @@ const { stats } = Astro.props;
   }
 
   .osb-item {
-    position: relative;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -55,22 +54,12 @@ const { stats } = Astro.props;
     border-radius: 2px;
     padding: 40px 32px 44px;
     box-sizing: border-box;
-    overflow: hidden;
-  }
-  .osb-item::before {
-    content: "";
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    border-radius: 2px;
-    border: 1px solid rgba(237, 233, 227, 0.06);
-    z-index: 30;
   }
   .osb-value {
     font-family: 'Söhne', sans-serif;
-    font-size: clamp(36px, 4vw, 56px);
+    font-size: clamp(34px, 3.4vw, 48px);
     font-weight: 600;
-    color: #ede9e3;
+    color: #ED733B;
     line-height: 1;
     letter-spacing: -0.025em;
     font-variant-numeric: tabular-nums;

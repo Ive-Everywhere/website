@@ -6,9 +6,13 @@
 // body sub, then 3 full-width link ROWS — leading icon, label, trailing arrow
 // at far right, hairline divider between rows.
 // Props: heading, sub?, cards ({ titleLine1, titleLine2, sub,
-//   links: [{ label, href, icon? }], mediaLabel?, mediaSide? }).
-// Named slots media-1/media-2/media-3 can replace a card's placeholder.
+//   links: [{ label, href, icon? }], vignette?, mediaLabel?, mediaSide? }).
+// `vignette: { variant, tint }` renders a Vignette in the media slot;
+// mediaLabel placeholder remains the fallback. Named slots media-1/media-2/
+// media-3 still override everything.
 import MediaPlaceholder from './MediaPlaceholder.astro';
+import Vignette from './Vignette.astro';
+import type { VignetteVariant, VignetteTint } from './Vignette.astro';
 
 interface CardLink {
   label: string;
@@ -20,6 +24,7 @@ interface Card {
   titleLine2: string;
   sub: string;
   links: CardLink[];
+  vignette?: { variant: VignetteVariant; tint?: VignetteTint };
   mediaLabel?: string;
   mediaSide?: 'left' | 'right';
 }
@@ -62,6 +67,7 @@ const icons: Record<string, string> = {
               {i === 0 && Astro.slots.has('media-1') ? <slot name="media-1" />
                 : i === 1 && Astro.slots.has('media-2') ? <slot name="media-2" />
                 : i === 2 && Astro.slots.has('media-3') ? <slot name="media-3" />
+                : card.vignette ? <Vignette variant={card.vignette.variant} tint={card.vignette.tint} ratio="4 / 3" />
                 : <MediaPlaceholder label={card.mediaLabel ?? 'Product visual'} ratio="4 / 3" />}
             </div>
             <div class="omc-text-col">

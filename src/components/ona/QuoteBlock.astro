@@ -1,9 +1,9 @@
 ---
 // QuoteBlock — customer quote per ona ref (frame-06 / case frame-05):
-// a full-container-width band with a small centered eyebrow attribution on
-// top and a BIG centered display-size quote, optional CTA pill below.
-// Optional stats render as a separate 3-card row under the band (ona frame-07).
-// Ona uses a colored band; we keep our card bg #1e1d1b.
+// a true FILLED full-bleed band (solid #221A12, edge to edge) with a small
+// centered small-caps eyebrow attribution, a BIG centered display quote,
+// optional CTA below. Optional stats render as a 3-card row of FILLED
+// #1e1d1b cards (big orange numerals) under the band — no hairline-only boxes.
 // Missing quote renders as a designed placeholder — never invented copy.
 interface Stat {
   value?: string;
@@ -20,8 +20,8 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
 ---
 
 <section class="oqb">
-  <div class="oqb-container">
-    <div class="oqb-band reveal">
+  <div class="oqb-band reveal">
+    <div class="oqb-band-inner">
       <p class="oqb-attr">{attribution ?? 'Customer story'}</p>
       {quote ? (
         <blockquote class="oqb-quote">&ldquo;{quote}&rdquo;</blockquote>
@@ -37,8 +37,10 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
         </div>
       )}
     </div>
+  </div>
 
-    {stats.length > 0 && (
+  {stats.length > 0 && (
+    <div class="oqb-container">
       <div class="oqb-stats reveal">
         {stats.map((stat) => (
           <div class="oqb-stat">
@@ -47,8 +49,8 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
           </div>
         ))}
       </div>
-    )}
-  </div>
+    </div>
+  )}
 </section>
 
 <style>
@@ -63,44 +65,39 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
     box-sizing: border-box;
   }
 
-  /* ── Full-width centered band ── */
+  /* ── Full-bleed FILLED band ── */
   .oqb-band {
-    position: relative;
-    background: #1e1d1b;
-    border-radius: 2px;
-    overflow: hidden;
+    background: #221A12;
+    width: 100%;
+  }
+  .oqb-band-inner {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 110px 32px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 88px 32px;
-    box-sizing: border-box;
-  }
-  .oqb-band::before {
-    content: "";
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    border-radius: 2px;
-    border: 1px solid rgba(237, 233, 227, 0.06);
-    z-index: 30;
   }
   @media (min-width: 900px) {
-    .oqb-band { padding: 120px 64px; }
+    .oqb-band-inner { padding: 120px 64px; }
   }
 
   .oqb-attr {
     font-family: 'Söhne', sans-serif;
-    font-size: 0.8125rem;
-    font-weight: 400;
-    color: rgba(237, 233, 227, 0.4);
-    letter-spacing: 0.01em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(237, 233, 227, 0.45);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-variant: small-caps;
     line-height: 1.5;
     margin: 0 0 28px;
   }
   .oqb-quote {
     font-family: 'Söhne', sans-serif;
-    font-size: clamp(24px, 3.2vw, 44px);
+    font-size: clamp(26px, 3vw, 40px);
     font-weight: 600;
     color: #ede9e3;
     line-height: 1.25;
@@ -110,7 +107,7 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
     text-wrap: balance;
   }
   .oqb-quote--placeholder {
-    color: rgba(237, 233, 227, 0.25);
+    color: rgba(237, 233, 227, 0.3);
     font-weight: 400;
     font-style: italic;
   }
@@ -137,7 +134,7 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
   }
   .oqb-cta:hover svg { transform: translateX(2px); }
 
-  /* ── Stats row under the band (3 cards, big numeral + muted label) ── */
+  /* ── Stats row under the band (FILLED cards, big accent numerals) ── */
   .oqb-stats {
     display: grid;
     grid-template-columns: 1fr;
@@ -148,30 +145,19 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
     .oqb-stats { grid-template-columns: repeat(3, 1fr); }
   }
   .oqb-stat {
-    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     background: #1e1d1b;
     border-radius: 2px;
-    padding: 32px 28px 36px;
+    padding: 36px 28px 40px;
     box-sizing: border-box;
-    overflow: hidden;
-  }
-  .oqb-stat::before {
-    content: "";
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    border-radius: 2px;
-    border: 1px solid rgba(237, 233, 227, 0.06);
-    z-index: 30;
   }
   .oqb-stat-value {
     font-family: 'Söhne', sans-serif;
-    font-size: clamp(28px, 3vw, 44px);
+    font-size: clamp(34px, 3.4vw, 48px);
     font-weight: 600;
-    color: #ede9e3;
+    color: #ED733B;
     line-height: 1;
     letter-spacing: -0.025em;
     font-variant-numeric: tabular-nums;
@@ -180,13 +166,13 @@ const { quote, attribution, stats = [], ctaLabel, ctaHref } = Astro.props;
     font-family: 'Söhne', sans-serif;
     font-size: 0.875rem;
     font-weight: 400;
-    color: rgba(237, 233, 227, 0.4);
+    color: rgba(237, 233, 227, 0.5);
     line-height: 1.4;
   }
 
   @media (max-width: 639px) {
     .oqb { padding: 64px 0 0; }
-    .oqb-band { padding: 64px 20px; }
-    .oqb-stat { padding: 24px 20px 28px; }
+    .oqb-band-inner { padding: 80px 20px; }
+    .oqb-stat { padding: 28px 22px 32px; }
   }
 </style>

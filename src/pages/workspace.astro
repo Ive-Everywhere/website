@@ -1,13 +1,14 @@
 ---
 // /workspace — product pillar page, content per research/website-content/workspace.md.
 // PillarPage pattern: OnaNav → OnaHero(eyebrow) → Explanation → StatsBand →
-// FeatureCards(5) → QuoteBlock([VERIFY] placeholder) → TechDetails(3) → FinalCTA → MegaFooter.
+// FeatureRail(5) → QuoteBlock([VERIFY] placeholder) → TechDetails(3) → FinalCTA → MegaFooter.
 import Layout from '../layouts/Layout.astro';
 import OnaNav from '../components/ona/OnaNav.astro';
 import OnaHero from '../components/ona/OnaHero.astro';
 import Explanation from '../components/ona/Explanation.astro';
+import Vignette from '../components/ona/Vignette.astro';
 import StatsBand from '../components/ona/StatsBand.astro';
-import FeatureCards from '../components/ona/FeatureCards.astro';
+import FeatureRail from '../components/ona/FeatureRail.astro';
 import QuoteBlock from '../components/ona/QuoteBlock.astro';
 import TechDetails from '../components/ona/TechDetails.astro';
 import FinalCTA from '../components/ona/FinalCTA.astro';
@@ -20,32 +21,42 @@ const stats = [
   { value: '24/7', label: 'scheduled jobs run on their own' },
 ];
 
-// §4 — Feature cards
-const featureCards = [
+// §4 — Feature rail (sticky rail + full-width blocks, per ona case-page anatomy)
+const features = [
   {
-    headline: 'Run many at once',
-    eyebrowQuote: 'A whole team of agents, working in parallel.',
+    name: 'Run many at once',
+    title: 'Run many at once',
+    eyebrow: 'A whole team of agents, working in parallel.',
     body: "Hand the work to as many agents as it takes. They run at the same time, so ten tasks don't sit in a queue behind each other.",
+    vignette: { variant: 'connections', tint: 'sky' },
   },
   {
-    headline: 'Infinite context, built in',
-    eyebrowQuote: 'Every agent keeps everything it learns.',
+    name: 'Infinite context',
+    title: 'Infinite context, built in',
+    eyebrow: 'Every agent keeps everything it learns.',
     body: 'The workspace stores it all with no limit. An agent keeps what it learned months ago instead of hitting a context ceiling and dropping it.',
+    vignette: { variant: 'chat', tint: 'cream' },
   },
   {
-    headline: 'Shared skills',
-    eyebrowQuote: 'Build a skill once, every agent can use it.',
+    name: 'Shared skills',
+    title: 'Shared skills',
+    eyebrow: 'Build a skill once, every agent can use it.',
     body: 'A team skill library, so a workflow that works spreads across your agents instead of getting rebuilt each time.',
+    vignette: { variant: 'prompt', tint: 'mint' },
   },
   {
-    headline: 'One place for the work',
-    eyebrowQuote: 'Files, outputs, and dashboards in one home.',
+    name: 'One place for work',
+    title: 'One place for the work',
+    eyebrow: 'Files, outputs, and dashboards in one home.',
     body: 'Every file, report, and dashboard an agent makes is saved and searchable in the workspace, not buried in a chat log.',
+    vignette: { variant: 'table', tint: 'orange' },
   },
   {
-    headline: 'Agents build live apps',
-    eyebrowQuote: 'Dashboards, trackers, and boards that stay current.',
+    name: 'Live apps',
+    title: 'Agents build live apps',
+    eyebrow: 'Dashboards, trackers, and boards that stay current.',
     body: 'Agents build working apps that connect to your tools. Scheduled jobs keep them updated as the work happens, so the tracker is right when you open it.',
+    vignette: { variant: 'schedule', tint: 'mint' },
   },
 ];
 
@@ -86,14 +97,15 @@ const techRows = [
       subhead="Hand the work to as many agents as it takes, and they run together in parallel. They share a skills library, each keeps its own memory, and every file, output, and dashboard lands in one place. Some agents belong to the team, some are yours."
       linkLabel="Explore the docs"
       linkHref="#"
-      mediaLabel="Workspace view — agents running in parallel, files and dashboards"
-    />
+    >
+      <Vignette variant="workflow" tint="orange" ratio="16 / 10" />
+    </Explanation>
 
     <!-- §3 THREE NUMBERS -->
     <StatsBand stats={stats} />
 
-    <!-- §4 FEATURE CARDS -->
-    <FeatureCards cards={featureCards} />
+    <!-- §4 FEATURE RAIL -->
+    <FeatureRail features={features} />
 
     <!-- §5 TESTIMONIAL ([VERIFY] — placeholder) -->
     <QuoteBlock />

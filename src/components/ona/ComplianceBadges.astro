@@ -1,14 +1,25 @@
 ---
-// ComplianceBadges — quiet trust strip: heading/body intro, then a
-// left-aligned row of compact inline badges (icon + label side by side).
-// Badges render muted pending certification verification — never a claimed fact.
-// Props: heading?, body?, badges (string[]).
+// ComplianceBadges — full 4-tile trust row: equal FILLED tiles (#1e1d1b,
+// 2px radius, ~96px min-height), each with a distinct inline SVG mark in
+// muted cream + a small bold label. Default tiles: SOC 2, GDPR, BYOK,
+// Self-host (BYOK/self-host are stated product facts on /security).
+// Props: heading?, body?, badges? (string[] — mapped to marks by name).
 interface Props {
   heading?: string;
   body?: string;
   badges?: string[];
 }
-const { heading, body, badges = ['SOC 2', 'GDPR'] } = Astro.props;
+const { heading, body, badges = ['SOC 2', 'GDPR', 'BYOK', 'Self-host'] } = Astro.props;
+
+// Distinct mark per badge: shield (SOC 2), star-circle (GDPR), key (BYOK),
+// server (Self-host). Unknown labels fall back to the shield.
+const marks: Record<string, string> = {
+  'SOC 2': 'shield',
+  GDPR: 'star',
+  BYOK: 'key',
+  'Self-host': 'server',
+};
+const tiles = badges.map((label) => ({ label, mark: marks[label] ?? 'shield' }));
 ---
 
 <section class="ocb">
@@ -20,12 +31,37 @@ const { heading, body, badges = ['SOC 2', 'GDPR'] } = Astro.props;
       </div>
     )}
     <div class="ocb-row reveal">
-      {badges.map((badge) => (
-        <div class="ocb-badge">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
-          <span>{badge}</span>
+      {tiles.map((tile) => (
+        <div class="ocb-tile">
+          {tile.mark === 'shield' && (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          )}
+          {tile.mark === 'star' && (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 7l1.45 2.94 3.25.47-2.35 2.29.55 3.23L12 14.4l-2.9 1.53.55-3.23L7.3 10.41l3.25-.47L12 7z"/>
+            </svg>
+          )}
+          {tile.mark === 'key' && (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="7.5" cy="15.5" r="4.5"/>
+              <path d="M10.7 12.3L21 2"/>
+              <path d="M17 6l3 3"/>
+              <path d="M14 9l2 2"/>
+            </svg>
+          )}
+          {tile.mark === 'server' && (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="7" rx="1.5"/>
+              <rect x="3" y="13" width="18" height="7" rx="1.5"/>
+              <line x1="6.5" y1="7.5" x2="6.51" y2="7.5"/>
+              <line x1="6.5" y1="16.5" x2="6.51" y2="16.5"/>
+            </svg>
+          )}
+          <span>{tile.label}</span>
         </div>
       ))}
     </div>
@@ -71,37 +107,39 @@ const { heading, body, badges = ['SOC 2', 'GDPR'] } = Astro.props;
     text-wrap: pretty;
   }
 
-  /* ── Quiet trust strip: compact inline badges ── */
+  /* ── Full 4-tile row of equal filled tiles ── */
   .ocb-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
-  .ocb-badge {
-    display: inline-flex;
+  @media (min-width: 900px) {
+    .ocb-row { grid-template-columns: repeat(4, 1fr); }
+  }
+  .ocb-tile {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    padding: 14px 22px;
+    justify-content: center;
+    gap: 12px;
+    min-height: 96px;
+    padding: 22px 16px;
     background: #1e1d1b;
-    border: 1px solid rgba(237, 233, 227, 0.06);
     border-radius: 2px;
     box-sizing: border-box;
     font-family: 'Söhne', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: -0.005em;
-    color: rgba(237, 233, 227, 0.55);
+    color: rgba(237, 233, 227, 0.6);
     line-height: 1;
-    transition: border-color 0.18s ease-out, color 0.18s ease-out;
+    transition: color 0.18s ease-out;
   }
-  .ocb-badge:hover {
-    border-color: rgba(237, 233, 227, 0.14);
-    color: rgba(237, 233, 227, 0.75);
-  }
-  .ocb-badge svg { color: rgba(237, 233, 227, 0.3); flex-shrink: 0; }
+  .ocb-tile:hover { color: rgba(237, 233, 227, 0.8); }
+  .ocb-tile svg { color: rgba(237, 233, 227, 0.45); flex-shrink: 0; }
 
   @media (max-width: 639px) {
     .ocb { padding: 64px 0 0; }
-    .ocb-badge { padding: 12px 18px; }
+    .ocb-row { gap: 12px; }
   }
 </style>

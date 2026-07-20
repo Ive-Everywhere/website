@@ -4,13 +4,13 @@ import Layout from '../../layouts/Layout.astro';
 import OnaNav from '../../components/ona/OnaNav.astro';
 import OnaHero from '../../components/ona/OnaHero.astro';
 import Explanation from '../../components/ona/Explanation.astro';
+import Vignette from '../../components/ona/Vignette.astro';
 import StatsBand from '../../components/ona/StatsBand.astro';
-import FeatureCards from '../../components/ona/FeatureCards.astro';
+import FeatureRail from '../../components/ona/FeatureRail.astro';
 import QuoteBlock from '../../components/ona/QuoteBlock.astro';
 import PoweredBy from '../../components/ona/PoweredBy.astro';
 import LogoBar from '../../components/ona/LogoBar.astro';
 import ComplianceBadges from '../../components/ona/ComplianceBadges.astro';
-import ResourceCards from '../../components/ona/ResourceCards.astro';
 import FinalCTA from '../../components/ona/FinalCTA.astro';
 import MegaFooter from '../../components/ona/MegaFooter.astro';
 
@@ -30,32 +30,42 @@ const stats = [
   },
 ];
 
-// §4 — Feature cards (5)
-const featureCards = [
+// §4 — Feature rail (sticky rail + full-width blocks, per ona case-page anatomy)
+const features = [
   {
-    headline: 'Rebuild the tool',
-    eyebrowQuote: 'The reporting, review, or tracker you were renting.',
+    name: 'Rebuild the tool',
+    title: 'Rebuild the tool',
+    eyebrow: 'The reporting, review, or tracker you were renting.',
     body: 'An agent builds the thing you were paying a vendor for, on the platform you already have.',
+    vignette: { variant: 'workflow', tint: 'orange' },
   },
   {
-    headline: 'No migration project',
-    eyebrowQuote: 'It reads your systems in place.',
+    name: 'No migration',
+    title: 'No migration project',
+    eyebrow: 'It reads your systems in place.',
     body: 'Nothing to export out of the old vendor. The rebuild runs against your live systems from day one.',
+    vignette: { variant: 'connections', tint: 'sky' },
   },
   {
-    headline: 'Only the features you use',
-    eyebrowQuote: "Not the vendor's one-size version.",
+    name: 'Only what you use',
+    title: 'Only the features you use',
+    eyebrow: "Not the vendor's one-size version.",
     body: 'You spec what your team actually needs, and the agent builds only that, not the bloat you were paying for.',
+    vignette: { variant: 'prompt', tint: 'cream' },
   },
   {
-    headline: 'Cancel the subscription',
-    eyebrowQuote: 'The recurring bill stops.',
+    name: 'Cancel the bill',
+    title: 'Cancel the subscription',
+    eyebrow: 'The recurring bill stops.',
     body: 'Once the rebuild is doing the job, the per-seat charge goes away.',
+    vignette: { variant: 'table', tint: 'orange' },
   },
   {
-    headline: "Your data stays off the vendor's servers",
-    eyebrowQuote: 'It lives in your workspace.',
+    name: 'Data stays yours',
+    title: "Your data stays off the vendor's servers",
+    eyebrow: 'It lives in your workspace.',
     body: "The tool and its data run in your account, not on a third party's infrastructure.",
+    vignette: { variant: 'audit', tint: 'mint' },
   },
 ];
 
@@ -81,12 +91,6 @@ const poweredBy = [
   },
 ];
 
-// §9 — Resource cards (placeholders until recipe/demo/docs land)
-const resourceCards = [
-  { placeholder: true, placeholderLabel: 'Recipe' },
-  { placeholder: true, placeholderLabel: 'Demo' },
-  { placeholder: true, placeholderLabel: 'Docs' },
-];
 ---
 
 <Layout
@@ -109,14 +113,15 @@ const resourceCards = [
       subhead="You keep the features your team actually uses and drop the ones you were paying for and ignoring."
       linkLabel="See it in the cookbook"
       linkHref="/cookbook"
-      mediaLabel="Product visual — an in-house tool replacing a paid one"
-    />
+    >
+      <Vignette variant="table" tint="sky" ratio="16 / 10" />
+    </Explanation>
 
     <!-- §3 NUMBERS -->
     <StatsBand stats={stats} />
 
-    <!-- §4 FEATURE CARDS -->
-    <FeatureCards cards={featureCards} />
+    <!-- §4 FEATURE RAIL -->
+    <FeatureRail features={features} />
 
     <!-- §5 TESTIMONIAL -->
     <QuoteBlock />
@@ -128,10 +133,7 @@ const resourceCards = [
     <LogoBar label="Aggregate proof" />
 
     <!-- §8 COMPLIANCE -->
-    <ComplianceBadges badges={['SOC 2', 'GDPR']} />
-
-    <!-- §9 RESOURCE CARDS -->
-    <ResourceCards heading="Resources." cards={resourceCards} />
+    <ComplianceBadges />
 
     <!-- §10 FINAL CTA -->
     <FinalCTA headline="Own the tool instead of renting it." />
