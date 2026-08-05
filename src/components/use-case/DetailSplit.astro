@@ -85,14 +85,26 @@ const {
         </div>
 
         {/* 147:3008 — gap 12. Choosing a row changes the visual beside it; the
-            row's own destination is a separate link inside it. */}
-        <div class="flex flex-col gap-3">
+            row's own destination is a separate link inside it.
+
+            `relative` because this element is the offsetParent the sliding fill
+            is measured against — see `lib/slide-indicator.ts`. */}
+        <div class="relative flex flex-col gap-3" data-detail-list>
+          {/* The drawn fill on the active row, as ONE element for the whole
+              list, so the selection travels between rows rather than switching
+              off in one place and on in another. */}
+          <div
+            data-slide-indicator
+            class="bg-card-surface pointer-events-none absolute inset-x-0 top-0 rounded-[8px] opacity-0"
+            aria-hidden="true"
+          >
+          </div>
           {
             details.map((detail, index) => (
               <div
                 data-detail-row={index}
                 aria-current={index === 0 ? 'true' : 'false'}
-                class="aria-[current=true]:bg-card-surface rounded-[8px] transition-colors"
+                class="relative z-10 rounded-[8px]"
               >
                 <button
                   type="button"
@@ -155,6 +167,8 @@ const {
 </section>
 
 <script>
+  import { mountSlideIndicator } from '../../lib/slide-indicator';
+
   /**
    * Choosing a row highlights it and swaps the visual beside it. Scoped per
    * section so a page can carry more than one of these without them fighting.
@@ -165,7 +179,13 @@ const {
     const visuals = Array.from(root.querySelectorAll<HTMLElement>('[data-detail-visual]'));
     if (!rows.length) continue;
 
+    const list = root.querySelector<HTMLElement>('[data-detail-list]');
+    const fill = list ? mountSlideIndicator(list, rows) : null;
+
     const select = (index: number) => {
+      fill?.moveTo(index);
+      // `aria-current` still moves. It is what a screen reader announces, and
+      // the fill is decorative, so the two must not be collapsed into one.
       for (const row of rows) {
         row.setAttribute('aria-current', String(Number(row.dataset.detailRow) === index));
       }
@@ -178,5 +198,9 @@ const {
     for (const pick of picks) {
       pick.addEventListener('click', () => select(Number(pick.dataset.detailPick)));
     }
+
+    // The markup marks row 0 as current, but the fill is placed by measurement
+    // and so starts hidden. This puts it under row 0 before the first paint.
+    select(0);
   }
 </script>

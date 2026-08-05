@@ -64,22 +64,46 @@ const { features, heading, headingNeedsCopy = false, id = 'features' } = Astro.p
           cards cannot fit, and a horizontal version of this reads as tabs,
           which is a different control. Each card carries its own heading
           there, so nothing is lost. */}
+      {/* `sticky` also makes this the offsetParent the sliding fill measures
+          against, so no `relative` is needed — and adding one would fight it. */}
       <nav
         class="sticky top-24 hidden w-[272px] shrink-0 flex-col gap-3 lg:flex"
         aria-label="Features"
+        data-rail-list
       >
+        {/* The active row's fill, as ONE element for the whole rail, so a
+            scroll slides it from row to row. See `lib/slide-indicator.ts`. */}
+        <div
+          data-slide-indicator
+          class="bg-bg-sub-300 pointer-events-none absolute inset-x-0 top-0 rounded-[8px] opacity-0"
+          aria-hidden="true"
+        >
+        </div>
         {
           features.map((feature, index) => (
             <button
               type="button"
               data-rail-item={index}
               aria-current="false"
-              class="group text-text-soft-400 aria-[current=true]:bg-bg-sub-300 aria-[current=true]:text-text-strong-950 focus-visible:outline-primary-base flex items-center gap-2 rounded-[8px] p-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+              class="group text-text-soft-400 aria-[current=true]:text-text-strong-950 focus-visible:outline-primary-base relative z-10 flex min-h-[52px] items-center gap-2 rounded-[8px] p-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
             >
-              {/* 147:2930 — the icon appears on the active row only, so the
-                  inactive rows stay a clean list of labels. */}
+              {/* 147:2930 — the icon marks the active row.
+
+                  DEVIATION, deliberate: Figma removes the icon from the
+                  inactive rows, so the label would start 36px further left.
+                  Measured consequence — at 272px the label then fits on one
+                  line while inactive and wraps to two while active, so the row
+                  grows 52px -> 72px and EVERY row below it jumps 20px at the
+                  moment the selection arrives. The fill would slide onto a
+                  target that moved under it.
+
+                  So the icon keeps its box at all times and only its opacity
+                  changes. Row heights are then fixed, and the active row is
+                  still marked three ways: the fill, the icon, and the stronger
+                  label colour. Figma draws one static state and carries no
+                  prototype data, so it does not rule on this. */}
               <i
-                class={`${feature.icon ?? 'ri-checkbox-circle-line'} hidden shrink-0 text-[28px] group-aria-[current=true]:block`}
+                class={`${feature.icon ?? 'ri-checkbox-circle-line'} size-7 shrink-0 text-[28px] leading-none opacity-0 transition-opacity duration-200 group-aria-[current=true]:opacity-100`}
                 aria-hidden="true"
               />
               <span class="t-label-lg">{feature.headline}</span>
@@ -139,6 +163,8 @@ const { features, heading, headingNeedsCopy = false, id = 'features' } = Astro.p
 </section>
 
 <script>
+  import { mountSlideIndicator } from '../../lib/slide-indicator';
+
   /**
    * Scroll drives the rail; clicking the rail drives the scroll.
    *
@@ -161,6 +187,9 @@ const { features, heading, headingNeedsCopy = false, id = 'features' } = Astro.p
     const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-rail-card]'));
     if (!items.length || !cards.length) continue;
 
+    const list = root.querySelector<HTMLElement>('[data-rail-list]');
+    const fill = list ? mountSlideIndicator(list, items) : null;
+
     let current = -1;
     /** Set while a rail click animates, so cards flying past do not light up. */
     let lockUntil = 0;
@@ -168,6 +197,7 @@ const { features, heading, headingNeedsCopy = false, id = 'features' } = Astro.p
     const setActive = (index: number) => {
       if (index === current) return;
       current = index;
+      fill?.moveTo(index);
       for (const item of items) {
         item.setAttribute('aria-current', String(Number(item.dataset.railItem) === index));
       }
