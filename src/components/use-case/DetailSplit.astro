@@ -167,7 +167,7 @@ const {
 </section>
 
 <script>
-  import { mountSlideIndicator } from '../../lib/slide-indicator';
+  import { mountSlideIndicator, watchLayout } from '../../lib/slide-indicator';
 
   /**
    * Choosing a row highlights it and swaps the visual beside it. Scoped per
@@ -181,6 +181,7 @@ const {
 
     const list = root.querySelector<HTMLElement>('[data-detail-list]');
     const fill = list ? mountSlideIndicator(list, rows) : null;
+    if (list && fill) watchLayout(list, fill);
 
     const select = (index: number) => {
       fill?.moveTo(index);

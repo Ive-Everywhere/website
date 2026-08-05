@@ -163,7 +163,7 @@ const { features, heading, headingNeedsCopy = false, id = 'features' } = Astro.p
 </section>
 
 <script>
-  import { mountSlideIndicator } from '../../lib/slide-indicator';
+  import { mountSlideIndicator, watchLayout } from '../../lib/slide-indicator';
 
   /**
    * Scroll drives the rail; clicking the rail drives the scroll.
@@ -189,6 +189,7 @@ const { features, heading, headingNeedsCopy = false, id = 'features' } = Astro.p
 
     const list = root.querySelector<HTMLElement>('[data-rail-list]');
     const fill = list ? mountSlideIndicator(list, items) : null;
+    if (list && fill) watchLayout(list, fill);
 
     let current = -1;
     /** Set while a rail click animates, so cards flying past do not light up. */

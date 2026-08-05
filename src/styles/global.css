@@ -95,6 +95,17 @@
   --color-accent-peach-800: var(--accent-peach-800);
   --color-success-light: var(--success-light);
 
+  /* The contrast band's own ramp. Only `PrivateCloud.astro` may use these —
+   * they are meaningless anywhere the surface is not the maroon band. */
+  --color-band-surface: var(--band-surface);
+  --color-band-ink: var(--band-ink);
+  --color-band-muted: var(--band-muted);
+  --color-band-well: var(--band-well);
+  --color-band-card: var(--band-card);
+  --color-band-card-ink: var(--band-card-ink);
+  --color-band-card-body: var(--band-card-body);
+  --color-band-step: var(--band-step);
+
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'DM Mono', ui-monospace, monospace;
 

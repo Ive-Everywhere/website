@@ -135,6 +135,28 @@
   --accent-peach-200: #ffd9c0;
   --accent-peach-800: #71330a;
   --success-light: #c2f5da;
+
+  /* ---- Contrast band ----
+   * The private-cloud section (Figma `210:7505` light / `217:2880` dark) is a
+   * FILLED MAROON band, drawn to break the long run of `bg-white-0` sections.
+   *
+   * It cannot use the page ramp. On this band the page's own `text-strong-950`
+   * would be near-black ink on dark maroon in light mode. So the band carries
+   * its own eight-token ramp, and the components inside it use only these.
+   *
+   * Three of the eight are IDENTICAL in both modes, because the band is dark in
+   * both and its ink must not follow the page. The other five do flip — the band
+   * lightens in dark mode (maroon-800 -> maroon-600), so everything sitting on
+   * it has to move with it.
+   */
+  --band-surface: var(--maroon-800); /* #5D374B */
+  --band-ink: var(--static-white); /* both modes */
+  --band-muted: var(--neutral-400); /* both modes */
+  --band-well: var(--neutral-800); /* #2B272C — the 600px visual well */
+  --band-card: var(--neutral-50); /* #F7F7F4 — the selected row */
+  --band-card-ink: var(--neutral-950);
+  --band-card-body: var(--neutral-600);
+  --band-step: var(--neutral-300); /* #DDDBD1 — the unselected rows */
 }
 
 .dark,
@@ -190,6 +212,24 @@
   --badge-mid: var(--neutral-500);
   --badge-soft: var(--neutral-200);
   --badge-field: var(--neutral-300);
+
+  /* ---- Contrast band, dark ----
+   * The band LIGHTENS in dark mode — maroon-800 -> maroon-600 — because the page
+   * behind it is already near-black, so the darker maroon disappeared into it.
+   * Everything on the band inverts to match, EXCEPT `band-ink` and `band-muted`:
+   * the band is dark in both modes, so its ink is light in both.
+   *
+   * `--band-card` is the one value with no design-system token. Figma draws
+   * #29232B, a maroon-tinted near-black; the nearest token, `neutral-800`
+   * #2B272C, is a green-tinted grey that reads as dirty on a maroon band. The
+   * drawn value is kept and flagged. PROVISIONAL — needs a Figma token.
+   */
+  --band-surface: var(--maroon-600); /* #755A68 */
+  --band-well: var(--neutral-200); /* #EDEDE9 — the well inverts with the band */
+  --band-card: #29232B; /* PROVISIONAL: not in the design system */
+  --band-card-ink: var(--static-white);
+  --band-card-body: var(--neutral-400);
+  --band-step: var(--neutral-400);
 
   /* ---- state/faded ----
    * faded-light and faded-lighter use #A3A3A3, the stock AlignUI grey.

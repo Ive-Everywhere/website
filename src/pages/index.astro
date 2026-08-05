@@ -6,11 +6,22 @@ import FeatureCards from '../components/home/FeatureCards.astro';
 import Recipes from '../components/home/Recipes.astro';
 import Proof from '../components/home/Proof.astro';
 import Security from '../components/home/Security.astro';
+import PrivateCloud from '../components/home/PrivateCloud.astro';
+import Decal from '../components/site/Decal.astro';
 
 /**
  * Home — Figma frame `147:3069` ("Home", 1600px).
  * Sections 5 (CTA band) and 6 (footer) are component instances and live in
  * `Base.astro`, so only the four page-specific sections are composed here.
+ *
+ * The decal straddles the quadrants/cards boundary, as measured off Krishna's
+ * export. It is out of flow, so it changes no spacing.
+ *
+ * `PrivateCloud` sits directly above `Proof`, the testimonial — Krishna's call
+ * (2026-08-05). It reads better than my first guess of "before Security": the
+ * filled band now breaks the light run EARLIER, and the page argues capability
+ * (cards) → control (own cloud) → proof (quote, stats) rather than deferring the
+ * only dark section to the end.
  */
 ---
 
@@ -20,7 +31,9 @@ import Security from '../components/home/Security.astro';
 >
   <Hero />
   <FeatureQuadrants />
+  <Decal />
   <FeatureCards />
+  <PrivateCloud />
   <Proof />
   <Recipes />
   <Security />
