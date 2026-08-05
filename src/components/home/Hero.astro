@@ -20,18 +20,26 @@ import LiveArt from '../site/LiveArt.astro';
   <div class="page-shell gutter-187 flex flex-col items-center gap-10 pt-16 pb-16 lg:gap-14">
     {/* 147:3086 → 147:3087 → 147:3088 */}
     <div class="flex w-full flex-col items-center gap-7">
-      <div class="flex w-full max-w-[742px] flex-col gap-3">
-        {/* 147:3089. Figma stores the break as a literal backslash-n (spec gap
-            #9); the intended break is after "agents". It renders as a real line
-            break here, never as the two characters. The break is suppressed
-            below `lg`, where "Specialist agents" alone is already two lines. */}
-        <h1 class="t-landing-h1 text-text-strong-950 text-center text-balance">
-          Specialist agents<br class="hidden lg:inline" />{' '}to run your business.
+      {/* 147:3088 caps the whole block at 742px, which fitted Figma's shorter
+          headline. Krishna's copy needs a wider measure than that or its second
+          line wraps a third time, so the cap now sits on each child: the
+          heading gets the room it needs, the paragraph keeps the drawn 742. */}
+      <div class="flex w-full flex-col items-center gap-3">
+        {/* 147:3089 drew "Specialist agents / to run your business." This is
+            Krishna's replacement copy (2026-08-05) and supersedes Figma, so it
+            is authored rather than transcribed — no `copy-needed` marker.
+
+            The break he wrote falls after "scale,". It is suppressed below
+            `lg`, where each half already wraps on its own and a forced break
+            would produce four ragged lines. */}
+        <h1 class="t-landing-h1 text-text-strong-950 max-w-[920px] text-center text-balance">
+          Run agentic work at scale,<br class="hidden lg:inline" />{' '}with your tools, in your
+          cloud.
         </h1>
 
         {/* 147:3090. The break is a literal U+2028 LINE SEPARATOR after
             "…whole tool stack. " — rendered as a real break above `lg` only. */}
-        <p class="t-paragraph-md text-text-sub-600 text-center text-pretty">
+        <p class="t-paragraph-md text-text-sub-600 max-w-[742px] text-center text-pretty">
           Deploy a team of AI specialists that work across your whole tool stack.<br
             class="hidden lg:inline"
           />{' '}In the cloud, in your Slack, on your schedule.
