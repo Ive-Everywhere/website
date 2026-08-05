@@ -1,0 +1,182 @@
+---
+import LiveArt from '../site/LiveArt.astro';
+
+/**
+ * The split detail section — Figma `147:3006`.
+ *
+ * Used for the product pages' "technical details → docs" and the use-case
+ * pages' "powered by" block. Both are three items, and both are drawn as this
+ * one layout — NOT as a row of flat cards, which is what was here before.
+ *
+ * Transcribed geometry:
+ *   row     `147:3007` — gap 24
+ *   left    `147:3049` — FIXED 520px, column, justify center, gap 36
+ *     text  `147:3045` — column, gap 20:
+ *                        `Landing Title/H4` heading (#1E1C1E),
+ *                        `Label/Medium` body (#58564D),
+ *                        `Label/Medium` link (#755A68 = primary-base)
+ *     list  `147:3008` — column, gap 12; each row padding 16, radius 8.
+ *                        The ACTIVE row is filled `#EDEDE9`; the others carry
+ *                        no fill. Every row shows its title and its body — the
+ *                        fill is the only difference, so this is a selector,
+ *                        not a collapse.
+ *   right   `147:3017` — column, justify center, gap 24
+ *     well  `147:3050` — padding 24, gap 28, FIXED 600px tall, fill `#DDDBD1`
+ *
+ * Selecting a row swaps the right-hand visual. Figma carries no prototype data,
+ * so the interaction is ours; the fill on one row is what implies it.
+ */
+interface Detail {
+  title: string;
+  body?: string;
+  href: string;
+  linkLabel?: string;
+  icon?: string;
+}
+
+interface Props {
+  heading: string;
+  /** Set when the heading is ours rather than the source's. */
+  headingNeedsCopy?: boolean;
+  body?: string;
+  linkLabel?: string;
+  linkHref?: string;
+  details: Detail[];
+  /** Shown in the well when the section has a matching animation. */
+  art?: 'c1-a-compose' | 'c2-b-plan' | 'c3-b-audit';
+  id?: string;
+}
+
+const {
+  heading,
+  headingNeedsCopy = false,
+  body,
+  linkLabel,
+  linkHref,
+  details,
+  art,
+  id = 'detail',
+} = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 py-14">
+    {/* 147:3007 — row, gap 24. Stacks below `lg`, where a 520px column beside
+        a 600px well does not fit. */}
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-stretch lg:gap-6" data-detail-root={id}>
+      {/* 147:3049 — fixed 520px, centred, gap 36. */}
+      <div class="flex flex-col justify-center gap-9 lg:w-[520px] lg:shrink-0">
+        {/* 147:3045 — gap 20. */}
+        <div class="flex flex-col gap-5">
+          <h2 class="t-landing-h4 text-text-strong-950 text-balance">
+            {headingNeedsCopy ? <span class="copy-needed">{heading}</span> : heading}
+          </h2>
+          {body && <p class="t-label-md text-text-sub-600 text-pretty">{body}</p>}
+          {
+            linkLabel && linkHref && (
+              <a
+                href={linkHref}
+                class="t-label-md text-primary-base hover:text-primary-dark focus-visible:outline-primary-base inline-flex min-h-11 w-fit items-center gap-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 lg:min-h-0"
+              >
+                {linkLabel} <span aria-hidden="true">→</span>
+              </a>
+            )
+          }
+        </div>
+
+        {/* 147:3008 — gap 12. Choosing a row changes the visual beside it; the
+            row's own destination is a separate link inside it. */}
+        <div class="flex flex-col gap-3">
+          {
+            details.map((detail, index) => (
+              <div
+                data-detail-row={index}
+                aria-current={index === 0 ? 'true' : 'false'}
+                class="aria-[current=true]:bg-card-surface rounded-[8px] transition-colors"
+              >
+                <button
+                  type="button"
+                  data-detail-pick={index}
+                  class="focus-visible:outline-primary-base flex w-full flex-col gap-2 p-4 text-left focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  <span class="t-label-md text-text-strong-950 flex items-center gap-2">
+                    {detail.icon && (
+                      <i class={`${detail.icon} text-icon-sub-600 text-[20px]`} aria-hidden="true" />
+                    )}
+                    {detail.title}
+                  </span>
+                  {detail.body && (
+                    <span class="t-paragraph-sm text-text-sub-600 text-pretty">{detail.body}</span>
+                  )}
+                </button>
+                <a
+                  href={detail.href}
+                  class="t-paragraph-sm text-primary-base hover:text-primary-dark focus-visible:outline-primary-base inline-flex min-h-11 items-center gap-1 px-4 pb-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 lg:min-h-0"
+                >
+                  {detail.linkLabel ?? 'Docs'} <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* 147:3017 → 147:3050 — 600px tall well, padding 24, fill #DDDBD1. */}
+      <div class="flex min-w-0 flex-1 flex-col justify-center gap-6">
+        <div
+          class="bg-art-surface flex items-center justify-center overflow-hidden rounded-[16px] p-6 max-lg:aspect-[957/599] lg:h-[600px]"
+        >
+          {
+            art ? (
+              <LiveArt
+                src={art}
+                surface="var(--art-surface)"
+                zoom={1.3}
+                speed={1.35}
+                title={`Illustration for ${heading}`}
+                class="w-full"
+              />
+            ) : (
+              details.map((detail, index) => (
+                <span
+                  data-detail-visual={index}
+                  class="t-paragraph-sm copy-needed text-center aria-[hidden=true]:hidden"
+                  aria-hidden={index === 0 ? 'false' : 'true'}
+                >
+                  Visual needed — {detail.title}
+                </span>
+              ))
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /**
+   * Choosing a row highlights it and swaps the visual beside it. Scoped per
+   * section so a page can carry more than one of these without them fighting.
+   */
+  for (const root of document.querySelectorAll<HTMLElement>('[data-detail-root]')) {
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('[data-detail-row]'));
+    const picks = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-detail-pick]'));
+    const visuals = Array.from(root.querySelectorAll<HTMLElement>('[data-detail-visual]'));
+    if (!rows.length) continue;
+
+    const select = (index: number) => {
+      for (const row of rows) {
+        row.setAttribute('aria-current', String(Number(row.dataset.detailRow) === index));
+      }
+      // Only present when the section has no animation of its own.
+      for (const visual of visuals) {
+        visual.setAttribute('aria-hidden', String(Number(visual.dataset.detailVisual) !== index));
+      }
+    };
+
+    for (const pick of picks) {
+      pick.addEventListener('click', () => select(Number(pick.dataset.detailPick)));
+    }
+  }
+</script>

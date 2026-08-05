@@ -1,0 +1,57 @@
+---
+import Button from '../ui/Button.astro';
+
+/**
+ * Product-pillar hero.
+ *
+ * The use-case hero (`use-case/Hero.astro`, Figma `144:2692`) is the same
+ * centred stack — H1, subhead, two buttons — and would have been reused
+ * verbatim, but a pillar page opens with an EYEBROW ("Agents", "Workspace",
+ * "Connections", "Security") that the use-case frame has no slot for. That one
+ * extra line is the only difference, so the shell, gutter and spacing below are
+ * kept identical to it on purpose.
+ *
+ * The eyebrow takes the mono treatment already established by
+ * `compare/SplitHero.astro` (`.t-mono-md`, stored in sentence case and
+ * uppercased by the class).
+ */
+interface Props {
+  eyebrow: string;
+  headline: string;
+  subhead: string;
+  primaryCta: { label: string; href: string };
+  secondaryCta: { label: string; href: string };
+}
+
+const { eyebrow, headline, subhead, primaryCta, secondaryCta } = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-187 flex flex-col items-center gap-10 pt-16 pb-16 lg:gap-14">
+    <div class="flex w-full flex-col items-center gap-7">
+      <div class="flex w-full max-w-[742px] flex-col items-center gap-3">
+        <p class="t-mono-md text-text-sub-600 text-center">{eyebrow}</p>
+
+        {/* `.t-landing-h1` is fluid, so no size is restated here. */}
+        <h1 class="t-landing-h1 text-text-strong-950 text-center text-balance">{headline}</h1>
+
+        <p class="t-paragraph-md text-text-sub-600 text-center text-pretty">{subhead}</p>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <Button
+          variant="primary-fancy"
+          label={primaryCta.label}
+          href={primaryCta.href}
+          rightIcon="ri-arrow-right-up-long-line"
+        />
+        <Button
+          variant="neutral-lighter"
+          label={secondaryCta.label}
+          href={secondaryCta.href}
+          leftIcon="ri-play-mini-fill"
+        />
+      </div>
+    </div>
+  </div>
+</section>

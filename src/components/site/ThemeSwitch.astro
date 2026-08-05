@@ -1,0 +1,75 @@
+---
+/**
+ * Footer theme switch — three states, because "follow my system" is a real
+ * preference and a two-state toggle silently destroys it. Choosing System
+ * removes the stored value so the page tracks the OS again.
+ */
+const options = [
+  { value: 'light', icon: 'ri-sun-line', label: 'Light' },
+  { value: 'dark', icon: 'ri-moon-line', label: 'Dark' },
+  { value: 'system', icon: 'ri-computer-line', label: 'System' },
+];
+---
+
+<div
+  class="border-stroke-soft-200 bg-bg-white-0 inline-flex items-center gap-0.5 rounded-full border p-0.5"
+  role="radiogroup"
+  aria-label="Colour theme"
+  data-theme-switch
+>
+  {
+    options.map((option) => (
+      <button
+        type="button"
+        role="radio"
+        aria-checked="false"
+        data-theme-option={option.value}
+        title={option.label}
+        {/* The 28px dot is the drawn size and stays the painted size at `lg`.
+            Below it the button grows to 44px so the tap target clears the
+            minimum; the group's own padding keeps the pill shape. */}
+        class="text-icon-soft-400 hover:text-icon-strong-950 aria-checked:bg-bg-soft-200 aria-checked:text-icon-strong-950 flex size-11 items-center justify-center rounded-full transition-colors lg:size-7"
+      >
+        <i class={`${option.icon} text-[16px]`} aria-hidden="true" />
+        <span class="sr-only">{option.label}</span>
+      </button>
+    ))
+  }
+</div>
+
+<script>
+  const group = document.querySelector<HTMLElement>('[data-theme-switch]');
+  if (group) {
+    const buttons = Array.from(
+      group.querySelectorAll<HTMLButtonElement>('[data-theme-option]'),
+    );
+
+    const theme = () => window.__eluuTheme;
+
+    function sync() {
+      const api = theme();
+      if (!api) return;
+      const active = api.isExplicit() ? api.get() : 'system';
+      for (const button of buttons) {
+        button.setAttribute(
+          'aria-checked',
+          String(button.dataset.themeOption === active),
+        );
+      }
+    }
+
+    for (const button of buttons) {
+      button.addEventListener('click', () => {
+        const api = theme();
+        if (!api) return;
+        const choice = button.dataset.themeOption;
+        if (choice === 'system') api.clear();
+        else if (choice) api.set(choice);
+        sync();
+      });
+    }
+
+    window.addEventListener('eluu:themechange', sync);
+    sync();
+  }
+</script>

@@ -1,0 +1,63 @@
+---
+import Copy from './Copy.astro';
+
+/**
+ * The one card shell sections 2, 4 and 5 all reuse. Figma calls it
+ * "Testimonial" in all three places, which it is not.
+ *
+ * Shell: column, padding 40, gap 16, fill `#EDEDE9` → `bg-bg-soft-200`,
+ * radius 28. Identical in `151:2780`, `151:5499`, `151:5620`.
+ *
+ * Two shapes:
+ *  - stacked  — icon above the heading (section 2, the pillars)
+ *  - inline   — icon beside the heading in an 8px row (sections 4 and 5)
+ * `body2` adds the hairline divider and the second paragraph (section 4 only).
+ */
+interface Props {
+  card: {
+    icon: string;
+    heading: { text: string; node?: string; needed?: boolean };
+    body: { text: string; node?: string; needed?: boolean };
+    body2?: { text: string; node?: string; needed?: boolean };
+  };
+  /** Figma stacks the icon in the pillars and inlines it everywhere else. */
+  layout?: 'stacked' | 'inline';
+  note?: string;
+}
+
+const { card, layout = 'inline', note } = Astro.props;
+---
+
+{/* The drawn padding is 40. It steps down to 24 on a phone, where 40 on both
+    sides of a 342px card leaves only 262px of measure. */}
+<article class="bg-card-surface flex h-full flex-col gap-4 rounded-[28px] p-6 sm:p-8 lg:p-10">
+  {
+    layout === 'stacked' ? (
+      <Fragment>
+        <i class={`${card.icon} text-icon-strong-950 text-[28px]`} aria-hidden="true" />
+        <Copy value={card.heading} as="h3" class="t-label-lg text-text-strong-950" note={note} />
+      </Fragment>
+    ) : (
+      <div class="flex items-center gap-2">
+        <i class={`${card.icon} text-icon-strong-950 shrink-0 text-[28px]`} aria-hidden="true" />
+        <Copy value={card.heading} as="h3" class="t-label-lg text-text-strong-950" note={note} />
+      </div>
+    )
+  }
+
+  <Copy value={card.body} class="t-paragraph-md text-text-soft-400" />
+
+  {
+    card.body2 && (
+      <Fragment>
+        {/* Figma `151:5548` — LINE, height 1.7, stroke #DDDBD1 at 2px. */}
+        <hr class="border-stroke-sub-300 border-t-2" />
+        <Copy
+          value={card.body2}
+          class="t-paragraph-md text-text-soft-400"
+          note="repeats this card's own first paragraph verbatim"
+        />
+      </Fragment>
+    )
+  }
+</article>

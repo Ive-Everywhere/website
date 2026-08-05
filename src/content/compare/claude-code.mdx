@@ -1,0 +1,274 @@
+---
+title: 'Eluu vs Claude Code'
+description: 'Eluu runs background agents inside your VPC, in isolated environments with guardrails and audit logs.'
+publishedAt: 2026-08-03
+competitor: 'Claude Code'
+
+# ---------------------------------------------------------------------------
+# Transcribed verbatim from Figma file V4eoKtfRI3dkWXk9tW5u3v, frame "VS pages"
+# (151:2677). Every `needed: true` string is real content in the Figma file
+# that is placeholder, duplicated, or names the wrong competitor. Nothing here
+# has been rewritten. See ../../../specs/compare-spec.md for the full gap list.
+#
+# THE PAGE NAMES THE WRONG COMPETITORS. The eyebrow says "Eluu vs Claude Code"
+# but every body string names Devin, Cognition and Ona. Both cannot be right.
+# This must be settled by the copywriter before the page is published.
+#
+# Roughly 60% of the page is unwritten. Marked strings, by section:
+#   hero    — all 3 stat captions identical; all 3 field placeholders generic;
+#             the fine print duplicates the card subheading
+#   pillars — cards 2 and 3 duplicate card 1 exactly
+#   table   — row 2 duplicates row 1 on both sides; rows 3-6 are generic SaaS
+#             filler whose "them" column describes positive features while
+#             carrying a ✗ icon, so the semantics are inverted
+#   proof   — all 4 cards identical, and each repeats its own paragraph twice
+#   closing — all 3 cards identical
+# ---------------------------------------------------------------------------
+
+hero:
+  eyebrow:
+    node: '151:5124'
+    # Stored in sentence case; `textCase: UPPER` in Figma is applied by CSS.
+    text: 'Eluu vs Claude Code'
+    needed: true
+  # Figma breaks the H1 with two literal U+2028 LINE SEPARATOR characters.
+  # Node 151:2697.
+  headingLines:
+    - 'Autonomous'
+    - 'agents are here.'
+    - 'Where does yours run?'
+  sub:
+    node: '151:2698'
+    text: 'Eluu runs background agents inside your VPC, in isolated environments with guardrails and audit logs. Scale engineering capacity without turning engineers into the bottleneck.'
+  # No source is cited anywhere in the Figma file for any of these three
+  # numbers, and all three captions are the same string (spec gap A.7).
+  stats:
+    - value: '4x'
+      caption:
+        node: '151:5114'
+        text: 'throughput on repeatable work'
+    - value: '92%'
+      caption:
+        node: '151:5117'
+        text: 'throughput on repeatable work'
+        needed: true
+    - value: '10-20x'
+      caption:
+        node: '151:5120'
+        text: 'throughput on repeatable work'
+        needed: true
+  form:
+    heading: 'See it in your VPC'
+    subheading:
+      node: '151:5044'
+      text: '15-min walkthrough. No slide deck.'
+    # All three fields keep the default `user-6-line` icon and the default
+    # `Placeholder text...` string (spec gap A.8).
+    fields:
+      - label: 'Full name'
+        icon: 'ri-user-6-line'
+        type: 'text'
+        placeholder:
+          node: '151:5045'
+          text: 'Placeholder text...'
+          needed: true
+      - label: 'Work email'
+        icon: 'ri-user-6-line'
+        type: 'email'
+        placeholder:
+          node: '151:5046'
+          text: 'Placeholder text...'
+          needed: true
+      - label: 'Company'
+        icon: 'ri-user-6-line'
+        type: 'text'
+        placeholder:
+          node: '151:5047'
+          text: 'Placeholder text...'
+          needed: true
+    submit: 'Book a demo'
+    finePrint:
+      node: '151:5049'
+      text: '15-min walkthrough. No slide deck.'
+      needed: true
+
+pillars:
+  heading:
+    title:
+      node: '151:5167'
+      text: 'Autonomous agents ship code. The question is where.'
+    sub:
+      node: '151:5168'
+      text: "Devin runs the orchestration layer on Cognition's cloud. Ona runs the entire stack inside your VPC."
+      needed: true
+  cards:
+    - icon: 'ri-lock-2-line'
+      heading: { node: '151:2781', text: 'Isolated environments' }
+      body:
+        node: '151:2782'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+    - icon: 'ri-lock-2-line'
+      heading: { node: '151:5154', text: 'Isolated environments', needed: true }
+      body:
+        node: '151:5155'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+    - icon: 'ri-lock-2-line'
+      heading: { node: '151:5161', text: 'Isolated environments', needed: true }
+      body:
+        node: '151:5162'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+
+table:
+  # The whole title block is duplicated from the pillars section.
+  heading:
+    title:
+      node: '151:5312'
+      text: 'Autonomous agents ship code. The question is where.'
+      needed: true
+    sub:
+      node: '151:5313'
+      text: "Devin runs the orchestration layer on Cognition's cloud. Ona runs the entire stack inside your VPC."
+      needed: true
+
+rows:
+  # Row 1 is the only genuinely written row on the page.
+  - label: 'Where it runs'
+    labelNode: '151:5411'
+    eluuNode: '151:5415'
+    eluu: 'Inside your VPC. Code, inference, and orchestration never leave your perimeter.'
+    themNode: '151:5418'
+    # Names Cognition, and asserts a specific technical fact about a
+    # competitor's architecture with no source cited (spec gap B.14).
+    them: "The execution sandbox runs in your VPC. The orchestration layer stays on Cognition's cloud and requires a persistent outbound connection."
+    themNeeded: true
+  # Row 2 repeats row 1 verbatim on both sides. Only the label differs.
+  - label: 'Scalability'
+    labelNode: '151:5422'
+    eluuNode: '151:5426'
+    eluu: 'Inside your VPC. Code, inference, and orchestration never leave your perimeter.'
+    eluuNeeded: true
+    themNode: '151:5429'
+    them: "The execution sandbox runs in your VPC. The orchestration layer stays on Cognition's cloud and requires a persistent outbound connection."
+    themNeeded: true
+  # Rows 3-6 are generic SaaS filler. They are not about Eluu and not
+  # comparative, and every "them" string describes a positive capability while
+  # carrying the ✗ icon (spec gaps A.5 and A.6).
+  - label: 'Security'
+    labelNode: '151:5439'
+    eluuNode: '151:5443'
+    eluu: 'End-to-end encryption protects your data in transit and at rest.'
+    eluuNeeded: true
+    themNode: '151:5446'
+    them: 'Multi-factor authentication ensures only authorized access to your resources.'
+    themNeeded: true
+  - label: 'Performance'
+    labelNode: '151:5453'
+    eluuNode: '151:5457'
+    eluu: 'Optimized algorithms reduce latency and improve response times for real-time tasks.'
+    eluuNeeded: true
+    themNode: '151:5460'
+    them: 'Auto-scaling adjusts resources based on demand, ensuring smooth performance.'
+    themNeeded: true
+  - label: 'Integration'
+    labelNode: '151:5467'
+    eluuNode: '151:5471'
+    eluu: 'Seamless connections with existing tools and APIs enhance your workflow.'
+    eluuNeeded: true
+    themNode: '151:5474'
+    them: 'Custom connectors allow integration with niche applications tailored to your business.'
+    themNeeded: true
+  - label: 'Cost Efficiency'
+    labelNode: '151:5481'
+    eluuNode: '151:5485'
+    eluu: 'Pay only for what you use, with transparent pricing models to manage expenses.'
+    eluuNeeded: true
+    themNode: '151:5488'
+    them: 'Spot instances and reserved capacity options help optimize your budget.'
+    themNeeded: true
+
+proof:
+  # Third occurrence of the same title block.
+  heading:
+    title:
+      node: '151:5495'
+      text: 'Autonomous agents ship code. The question is where.'
+      needed: true
+    sub:
+      node: '151:5496'
+      text: "Devin runs the orchestration layer on Cognition's cloud. Ona runs the entire stack inside your VPC."
+      needed: true
+  # Four identical cards, each repeating its own paragraph above and below the
+  # divider. Eight paragraph nodes, one unique sentence. Subject unknown.
+  cards:
+    - icon: 'ri-lock-2-line'
+      heading: { node: '151:5544', text: 'Isolated environments', needed: true }
+      body:
+        node: '151:5502'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+      body2:
+        node: '151:5552'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+    - icon: 'ri-lock-2-line'
+      heading: { node: '151:5586', text: 'Isolated environments', needed: true }
+      body:
+        node: '151:5587'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+      body2:
+        node: '151:5589'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+    - icon: 'ri-lock-2-line'
+      heading: { node: '151:5597', text: 'Isolated environments', needed: true }
+      body:
+        node: '151:5598'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+      body2:
+        node: '151:5600'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+    - icon: 'ri-lock-2-line'
+      heading: { node: '151:5605', text: 'Isolated environments', needed: true }
+      body:
+        node: '151:5606'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+      body2:
+        node: '151:5608'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+
+closing:
+  title:
+    node: '151:5615'
+    text: 'You want autonomous agents. You need them inside your boundary.'
+  sub:
+    node: '151:5616'
+    text: "The question isn't whether AI agents can ship code. It's whether the orchestration layer belongs on someone else's cloud."
+  # Three identical cards. No divider and no second paragraph here, unlike the
+  # proof grid.
+  cards:
+    - icon: 'ri-lock-2-line'
+      heading: { node: '151:5623', text: 'Isolated environments', needed: true }
+      body:
+        node: '151:5624'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+    - icon: 'ri-lock-2-line'
+      heading: { node: '151:5661', text: 'Isolated environments', needed: true }
+      body:
+        node: '151:5662'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+    - icon: 'ri-lock-2-line'
+      heading: { node: '151:5669', text: 'Isolated environments', needed: true }
+      body:
+        node: '151:5670'
+        text: 'Every task runs in a fresh, isolated environment. No long-lived state. If something goes wrong, you throw the environment away.'
+        needed: true
+---

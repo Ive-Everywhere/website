@@ -1,0 +1,463 @@
+---
+import { primaryNav } from '../../lib/navigation';
+import Button from '../ui/Button.astro';
+
+/**
+ * Nav — Figma 147:3071 draws an 840px centred card holding everything.
+ *
+ * DEPARTURE FROM THE DRAWING (Krishna, reference: ona.com): the bar spans the
+ * page instead. The logo sits at the left gutter, the links sit in their own
+ * tinted pill, and the actions sit at the right gutter. Only the link group
+ * carries a background — a card around the whole header read as a floating
+ * widget rather than as site chrome.
+ *
+ * Figma defines no sticky behaviour, no dropdown contents and no mobile
+ * variant; all three are ours (contract rule 7).
+ *
+ * RESPONSIVE STRATEGY
+ * The drawn pill holds a logo, five links, a search button and a CTA. That
+ * needs roughly 900px, so below `lg` the pill keeps only the logo and a menu
+ * button, and everything else moves into a full-width panel underneath it.
+ *
+ * The desktop dropdowns open on hover, which does not exist on a touch screen.
+ * The panel therefore does not reuse them: each section with children is a
+ * real `<button aria-expanded>` disclosure that opens on tap.
+ *
+ * The panel is a modal surface while open — Escape closes it, a click outside
+ * closes it, focus is trapped inside it, and the page behind it cannot scroll.
+ */
+const menuId = 'site-nav-panel';
+---
+
+{/*
+  Opaque, or the page scrolls through the sticky header. Stickiness itself is
+  applied by the `<header>` in Base.astro — see the note there.
+*/}
+<div class="nav-shell bg-bg-white-0">
+  {/*
+    Scrim. While a dropdown is open the rest of the page dims, which is what
+    separates the panel from the page — the panel and the page share the same
+    surface token, so a shadow alone was not enough to tell them apart. It sits
+    under the header and over everything else, and never takes a click.
+  */}
+  <div class="nav-scrim pointer-events-none fixed inset-0 -z-10 bg-static-black opacity-0"></div>
+
+  <div class="page-shell gutter-188 py-4">
+    {/* The positioning context for the panel, and the outside-click boundary. */}
+    <div class="relative" data-nav-root>
+    <nav class="flex w-full items-center gap-4" aria-label="Main">
+      {/*
+        Full lockup at the left gutter, mark alone on a phone where the row is
+        tight. The lockup is flat artwork rather than `currentColor`, so it
+        ships in two polarities and one is hidden per theme.
+      */}
+      <a
+        href="/"
+        class="focus-visible:outline-primary-base flex min-h-11 shrink-0 items-center rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 lg:min-h-0"
+        aria-label="Eluu home"
+      >
+        <img
+          src="/brand/mark-256-light.svg"
+          alt=""
+          width="28"
+          height="28"
+          class="size-7 sm:hidden"
+        />
+        <img
+          src="/brand/logotext-256-light.svg"
+          alt=""
+          width="80"
+          height="28"
+          class="hidden h-7 w-auto sm:block dark:sm:hidden"
+        />
+        <img
+          src="/brand/logotext-256-dark.svg"
+          alt=""
+          width="80"
+          height="28"
+          class="hidden h-7 w-auto dark:sm:block"
+        />
+      </a>
+
+      {/* Desktop link row. Hidden below `lg`, where it cannot fit. */}
+      {/*
+        Only the link group is tinted, not the whole bar. A card around the
+        entire header made the nav look like a floating widget; tinting just
+        the links reads as one control, and lets the logo and the actions sit
+        on the page itself at the far edges.
+      */}
+      <ul class="nav-links bg-bg-soft-200 dark:bg-bg-weak-50 hidden items-center rounded-[14px] px-1.5 py-1 lg:flex">
+        {
+          primaryNav.map((item) => (
+            <li class="group relative">
+              <a
+                href={item.href ?? item.children?.[0]?.href}
+                class="nav-link t-label-sm flex items-center gap-0.5 px-3 py-2 transition-colors"
+                aria-haspopup={item.children ? 'true' : undefined}
+              >
+                <span>{item.label}</span>
+                {item.children && (
+                  <i
+                    class="ri-arrow-down-s-line nav-chevron text-[18px] transition-transform duration-200"
+                    aria-hidden="true"
+                  />
+                )}
+              </a>
+
+              {item.children && (
+                <div class="nav-panel invisible absolute top-full left-0 z-20 pt-4 opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                  <ul class="bg-bg-white-0 ring-stroke-soft-200 shadow-card-large w-[340px] rounded-[20px] p-3 ring-1">
+                    {item.children.map((child) => (
+                      <li>
+                        <a
+                          href={child.href}
+                          class="hover:bg-bg-soft-200 flex items-start gap-3 rounded-[14px] px-3 py-2.5 transition-colors"
+                        >
+                          {child.icon && (
+                            <span class="bg-bg-soft-200 text-icon-sub-600 mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-[10px]">
+                              <i class={`${child.icon} text-[18px]`} aria-hidden="true" />
+                            </span>
+                          )}
+                          <span class="min-w-0">
+                            <span class="text-text-strong-950 t-label-sm block">{child.label}</span>
+                            {child.description && (
+                              <span class="text-text-sub-600 t-paragraph-sm mt-0.5 block">
+                                {child.description}
+                              </span>
+                            )}
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="ml-auto flex items-center gap-2">
+        <div class="hidden items-center gap-2 lg:flex">
+          <Button
+            variant="neutral-ghost"
+            size="xs"
+            iconOnly
+            leftIcon="ri-search-line"
+            label="Search"
+          />
+          <Button
+            variant="neutral-soft"
+            size="xs"
+            label="Sign in"
+            href="https://app.eluu.ai"
+          />
+          <Button
+            variant="neutral-soft"
+            size="xs"
+            label="Request a demo"
+            href="/demo"
+          />
+          <Button
+            variant="primary-fancy"
+            size="xs"
+            label="Start for free"
+            href="https://app.eluu.ai/signup"
+          />
+        </div>
+
+        {/* 44px square, so the tap target clears the minimum on its own. */}
+        <button
+          type="button"
+          data-nav-toggle
+          aria-expanded="false"
+          aria-controls={menuId}
+          class="text-icon-sub-600 hover:bg-bg-weak-50 focus-visible:outline-primary-base flex size-11 shrink-0 items-center justify-center rounded-xl transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 lg:hidden"
+        >
+          <i class="ri-menu-line text-[24px]" aria-hidden="true" data-nav-toggle-icon></i>
+          <span class="sr-only">Menu</span>
+        </button>
+      </div>
+    </nav>
+
+      {/*
+      The panel. `hidden` rather than an opacity transition so it is genuinely
+      out of the accessibility tree and the tab order while closed.
+    */}
+    <div
+      id={menuId}
+      data-nav-panel
+      hidden
+      class="absolute top-full right-0 left-0 z-40 mt-2 lg:hidden"
+    >
+      <div
+        class="bg-bg-weak-50 ring-stroke-soft-200 shadow-card-large max-h-[calc(100dvh-7rem)] overflow-y-auto rounded-[20px] p-2 ring-1"
+      >
+        <ul class="flex flex-col">
+          {
+            primaryNav.map((item, index) => {
+              const panelId = `${menuId}-section-${index}`;
+              return (
+                <li class="border-stroke-soft-200 border-b last:border-b-0">
+                  {item.children ? (
+                    <>
+                      <button
+                        type="button"
+                        data-nav-disclosure
+                        aria-expanded="false"
+                        aria-controls={panelId}
+                        class="text-text-strong-950 hover:bg-bg-weak-50 focus-visible:outline-primary-base t-label-md flex min-h-11 w-full items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+                      >
+                        <span>{item.label}</span>
+                        <i
+                          class="ri-arrow-down-s-line text-icon-soft-400 shrink-0 text-[24px] transition-transform"
+                          aria-hidden="true"
+                          data-nav-disclosure-icon
+                        />
+                      </button>
+
+                      <ul id={panelId} hidden class="flex flex-col pb-2">
+                        {item.children.map((child) => (
+                          <li>
+                            <a
+                              href={child.href}
+                              class="hover:bg-card-surface focus-visible:outline-primary-base flex min-h-11 items-center gap-3 rounded-xl py-2 pr-3 pl-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+                            >
+                              {child.icon && (
+                                <i
+                                  class={`${child.icon} text-icon-sub-600 shrink-0 text-[18px]`}
+                                  aria-hidden="true"
+                                />
+                              )}
+                              <span class="min-w-0">
+                              <span class="text-text-sub-600 t-label-sm block">{child.label}</span>
+                              {child.description && (
+                                <span class="text-text-sub-600 t-paragraph-sm block">
+                                  {child.description}
+                                </span>
+                              )}
+                              </span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    <a
+                      href={item.href}
+                      class="text-text-strong-950 hover:bg-bg-weak-50 focus-visible:outline-primary-base t-label-md flex min-h-11 items-center rounded-xl px-3 py-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+                    >
+                      {item.label}
+                    </a>
+                  )}
+                </li>
+              );
+            })
+          }
+        </ul>
+
+        {/* The two actions the pill drops below `lg`. `min-h-11` because the
+            drawn button padding gives 40px, under the 44px tap-target floor. */}
+        <div class="flex flex-col gap-2 px-1 pt-3 pb-1">
+          <Button
+            variant="neutral-lighter"
+            leftIcon="ri-search-line"
+            label="Search"
+            class="min-h-11 w-full justify-start"
+          />
+          <Button
+            variant="primary-stroke"
+            label="Request a demo"
+            href="/demo"
+            class="min-h-11 w-full justify-center"
+          />
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /**
+   * Panel behaviour. Everything here is mobile-only by construction: the
+   * toggle and the panel are `lg:hidden`, so at desktop the toggle can never
+   * receive a click and the panel is never shown.
+   */
+  const root = document.querySelector<HTMLElement>('[data-nav-root]');
+  const toggle = root?.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const panel = root?.querySelector<HTMLElement>('[data-nav-panel]');
+  const toggleIcon = toggle?.querySelector<HTMLElement>('[data-nav-toggle-icon]');
+
+  if (root && toggle && panel) {
+    const FOCUSABLE =
+      'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+    /** Only the items actually on screen — a collapsed section is `hidden`. */
+    const focusable = (): HTMLElement[] =>
+      Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+        (el) => el.offsetParent !== null || el === document.activeElement,
+      );
+
+    const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
+
+    function open() {
+      panel.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+      toggleIcon?.classList.replace('ri-menu-line', 'ri-close-line');
+      // The panel scrolls internally, so the page behind it must not.
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close(restoreFocus = false) {
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggleIcon?.classList.replace('ri-close-line', 'ri-menu-line');
+      document.body.style.overflow = '';
+      if (restoreFocus) toggle.focus();
+    }
+
+    toggle.addEventListener('click', () => (isOpen() ? close() : open()));
+
+    /* Tap-toggle disclosures. The desktop menus open on hover, which no touch
+       screen can do, so the panel's sections are ordinary buttons. */
+    for (const button of panel.querySelectorAll<HTMLButtonElement>('[data-nav-disclosure]')) {
+      button.addEventListener('click', () => {
+        const list = document.getElementById(button.getAttribute('aria-controls') ?? '');
+        if (!list) return;
+        const next = button.getAttribute('aria-expanded') !== 'true';
+        button.setAttribute('aria-expanded', String(next));
+        list.hidden = !next;
+        button
+          .querySelector<HTMLElement>('[data-nav-disclosure-icon]')
+          ?.classList.toggle('rotate-180', next);
+      });
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (!isOpen()) return;
+
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        close(true);
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      // Focus trap. The toggle stays in the loop: it is the panel's control
+      // and the visible close affordance, so tabbing to it must be possible.
+      const items = [toggle, ...focusable()];
+      const first = items[0];
+      const last = items[items.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      } else if (active instanceof Node && !root.contains(active)) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    document.addEventListener('pointerdown', (event) => {
+      if (!isOpen()) return;
+      if (event.target instanceof Node && !root.contains(event.target)) close();
+    });
+
+    /* Resizing past `lg` reveals the desktop row and hides the toggle. Leaving
+       the panel open there would strand `overflow: hidden` on the body. */
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    desktop.addEventListener('change', (event) => {
+      if (event.matches && isOpen()) close();
+    });
+  }
+</script>
+
+<style>
+  /**
+   * While a dropdown is open the page behind dims and the header stays bright.
+   * Without this the panel and the page share a surface token and the panel has
+   * no edge to read against — a shadow alone was not enough.
+   *
+   * `:has()` keeps the whole thing in CSS, so it works before any JS runs.
+   */
+  .nav-scrim {
+    transition: opacity 0.18s ease-out;
+  }
+  .nav-shell:has(.nav-links li:hover) .nav-scrim,
+  .nav-shell:has(.nav-links li:focus-within) .nav-scrim {
+    opacity: 0.28;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-scrim {
+      transition: none;
+    }
+  }
+
+  /**
+   * Hover treatment, taken from the reference rather than from Figma, which
+   * draws only the default state.
+   *
+   * A filled pill behind one item made the bar read as a segmented control.
+   * Instead the whole row dims and the item under the cursor stays at full
+   * strength, so the emphasis comes from contrast between siblings rather than
+   * from a background. Nothing moves and no box appears.
+   */
+  .nav-link {
+    color: var(--text-sub-600);
+  }
+
+  /* Dim every item while the row is hovered.
+     `text-disabled-300` read as genuinely disabled rather than de-emphasised,
+     so the dimmed state is one step below strongest, not four. The contrast
+     that carries the hover is strong-950 against sub-600. */
+  .nav-links:hover .nav-link,
+  .nav-links:focus-within .nav-link {
+    color: var(--text-sub-600);
+  }
+
+  /* ...then bring the hovered one back to full strength. */
+  .nav-links .nav-link:hover,
+  .nav-links li:focus-within .nav-link {
+    color: var(--text-strong-950);
+  }
+
+  .nav-chevron {
+    color: var(--icon-soft-400);
+  }
+
+  /* The chevron points at its own panel: down when closed, up when open. */
+  .nav-links li:hover .nav-chevron,
+  .nav-links li:focus-within .nav-chevron {
+    color: var(--icon-strong-950);
+    transform: rotate(180deg);
+  }
+
+  /* The panel rises a few pixels as it appears. Opacity alone reads as a
+     flicker; a short travel ties the panel to the item it belongs to. */
+  .nav-panel {
+    transform: translateY(-4px);
+    transition:
+      opacity 0.16s ease-out,
+      transform 0.16s ease-out,
+      visibility 0.16s;
+  }
+  .group:hover .nav-panel,
+  .group:focus-within .nav-panel {
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-panel,
+    .nav-chevron {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>

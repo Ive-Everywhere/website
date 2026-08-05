@@ -1,0 +1,93 @@
+---
+import Button from '../ui/Button.astro';
+import LiveArt from '../site/LiveArt.astro';
+
+/**
+ * Hero — Figma `147:3084` (§1b of home-spec.md).
+ * Section: column, gap 56, padding 32/187/64, fill #F8F8F3 → `bg-bg-white-0`.
+ *
+ * Figma is desktop-1600 only (contract rule 7), so every fixed width below is a
+ * `max-w-` with a fluid fallback.
+ *
+ * The product mock Figma draws statically is supplied by the `hero-stack`
+ * animation instead (see below), so this file holds only the copy block.
+ */
+---
+
+<section class="bg-bg-white-0">
+  {/* Figma's 32px top padding sits under a sticky header, so the H1 crowded the
+      nav. Doubled to 64px. */}
+  <div class="page-shell gutter-187 flex flex-col items-center gap-10 pt-16 pb-16 lg:gap-14">
+    {/* 147:3086 → 147:3087 → 147:3088 */}
+    <div class="flex w-full flex-col items-center gap-7">
+      <div class="flex w-full max-w-[742px] flex-col gap-3">
+        {/* 147:3089. Figma stores the break as a literal backslash-n (spec gap
+            #9); the intended break is after "agents". It renders as a real line
+            break here, never as the two characters. The break is suppressed
+            below `lg`, where "Specialist agents" alone is already two lines. */}
+        <h1 class="t-landing-h1 text-text-strong-950 text-center text-balance">
+          Specialist agents<br class="hidden lg:inline" />{' '}to run your business.
+        </h1>
+
+        {/* 147:3090. The break is a literal U+2028 LINE SEPARATOR after
+            "…whole tool stack. " — rendered as a real break above `lg` only. */}
+        <p class="t-paragraph-md text-text-sub-600 text-center text-pretty">
+          Deploy a team of AI specialists that work across your whole tool stack.<br
+            class="hidden lg:inline"
+          />{' '}In the cloud, in your Slack, on your schedule.
+        </p>
+      </div>
+
+      {/* 147:3091 */}
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <Button
+          variant="primary-fancy"
+          label="Start for free"
+          rightIcon="ri-arrow-right-up-long-line"
+          href="https://app.eluu.ai/signup"
+        />
+        <Button
+          variant="neutral-lighter"
+          label="See how it works"
+          leftIcon="ri-play-mini-fill"
+          href="#how-it-works"
+        />
+      </div>
+    </div>
+
+    {/*
+        147:3094 "Hero Image" → 147:3095 "Content", 1224 × 591.
+
+        Figma draws this as three static stacked task cards. The real thing is
+        the `hero-stack` animation: the same deck, but the front card works
+        through its plan and then drops away as the next rises.
+
+        The well behind it is Figma 147:3096 "BG" — a linear fill whose top stop
+        is `bg/white-0`, i.e. the page background, so the well dissolves into
+        the page at the top and only the `bg/sub-300` foot is visible. Both
+        stops are tokens, so it inverts with the theme. Radius 0 0 40 40, and
+        the front card sits flush on that bottom edge.
+    */}
+    {/*
+        Below `lg` the well spans the full viewport instead of sitting inside
+        the 24px gutter. The stage is scaled to fit by WIDTH at phone size, so
+        the gutter was costing the art 12% of its size for no compositional
+        gain — the well is a full-bleed band in the drawing anyway. The
+        negative margins cancel the shell's own padding; `rounded-b` is dropped
+        with them, since a full-bleed band has no side edges to round.
+    */}
+    <div class="-mx-6 w-auto self-stretch sm:-mx-10 lg:mx-0 lg:w-full lg:max-w-[1224px]">
+      <div class="overflow-hidden lg:rounded-b-[40px]">
+        <LiveArt
+          src="hero-stack"
+          width={900}
+          height={440}
+          eager
+          speed={1.6}
+          surface="linear-gradient(to top, var(--bg-sub-300) 0%, var(--bg-white-0) 100%)"
+          title="A deck of agent task cards. The front card works through its checklist item by item, then drops away as the next card rises into its place."
+        />
+      </div>
+    </div>
+  </div>
+</section>

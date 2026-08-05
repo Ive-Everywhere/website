@@ -1,0 +1,186 @@
+---
+import Copy from './Copy.astro';
+import Button from '../ui/Button.astro';
+
+/**
+ * Section 1 — split hero + inline demo form. Figma `151:2692`.
+ *
+ * Figma names five sibling frames "Hero". Only this one is a hero; the other
+ * four are ordinary page sections (spec, Root frame).
+ *
+ * Fill `#DDDBD1` → `bg-bg-sub-300`. This is the ONLY section on the page with
+ * that fill; every other section is `bg-bg-white-0`. Gap E.27 flags it as
+ * possibly a leftover, so it is transcribed as drawn.
+ *
+ * Layout: row, padding 32px 187px 64px, space-between, no gap key.
+ * Left column 620px of text; right card fixed 508px.
+ */
+interface Props {
+  hero: {
+    eyebrow: { text: string; node?: string; needed?: boolean };
+    headingLines: string[];
+    sub: { text: string; node?: string; needed?: boolean };
+    stats: { value: string; caption: { text: string; node?: string; needed?: boolean } }[];
+    form: {
+      heading: string;
+      subheading: { text: string; node?: string; needed?: boolean };
+      fields: {
+        label: string;
+        icon: string;
+        placeholder: { text: string; node?: string; needed?: boolean };
+        type: string;
+      }[];
+      submit: string;
+      finePrint: { text: string; node?: string; needed?: boolean };
+    };
+  };
+}
+
+const { hero } = Astro.props;
+const { form } = hero;
+---
+
+<section class="bg-bg-sub-300">
+  {/* Copy column and demo form sit side by side at `lg` (620 + 508) and stack
+      below it. */}
+  <div
+    class="page-shell gutter-187 flex flex-col gap-10 pt-8 pb-16 lg:flex-row lg:items-start lg:justify-between lg:gap-8"
+  >
+    <!-- 1a. Left column `151:2693` — column, gap 56. -->
+    <div class="flex min-w-0 flex-col gap-10 lg:max-w-[620px] lg:gap-14">
+      <div class="flex flex-col gap-6">
+        {/* Eyebrow `151:5124`. DM Mono/Medium with textCase UPPER, so the string
+            is stored in sentence case and uppercased by `.t-mono-md`. */}
+        <Copy
+          value={hero.eyebrow}
+          class="t-mono-md text-text-strong-950"
+          note="the eyebrow names Claude Code, but every body string on this page names Devin / Cognition / Ona. The page does not know which competitor it is about"
+        />
+
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-3">
+            {/* H1 `151:2697`. Figma breaks the line with two U+2028 separators;
+                they are kept as explicit line breaks above `lg` only, so the
+                heading can reflow on narrow screens. */}
+            <h1 class="t-landing-h1 text-text-strong-950 text-balance">
+              {
+                hero.headingLines.map((line, i) => (
+                  <Fragment>
+                    {i > 0 && <br class="hidden lg:inline" />}
+                    {i > 0 ? ' ' : ''}
+                    {line}
+                  </Fragment>
+                ))
+              }
+            </h1>
+          </div>
+
+          <Copy value={hero.sub} class="t-paragraph-md text-text-sub-600" />
+        </div>
+
+        {/* Rule `151:5094` — LINE 620 × 2, stroke #AAA89E. */}
+        <hr class="border-icon-soft-400 border-t-2" />
+      </div>
+
+      {/* Stat row `151:5111` — three blocks, space-between. Two-up at 390px
+          rather than one long column, then a single row from `sm`. */}
+      <dl class="grid grid-cols-2 gap-6 sm:flex sm:flex-row sm:justify-between">
+        {
+          hero.stats.map((stat) => (
+            <div class="flex flex-col gap-2">
+              <dt class="sr-only">{stat.caption.text}</dt>
+              <dd class="flex flex-col gap-2">
+                <span class="t-h4 text-text-strong-950 block">{stat.value}</span>
+                <Copy value={stat.caption} as="span" class="t-paragraph-xs text-text-sub-600 block" />
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    {/*
+      1b. Demo-form card `151:5039` — fixed 508px, fill #EDEDE9, radius 16.
+      Figma pins every input to `State=Placeholder` and sets `Hint Text: false`,
+      so there is nowhere for a validation message to appear, and what happens
+      after submit is undefined (spec gap D.21). The form posts nowhere here.
+    */}
+    <div class="bg-card-surface w-full min-w-0 shrink-0 rounded-2xl lg:max-w-[508px]">
+      <form class="flex flex-col gap-6 p-5 sm:p-[30px]" method="post" action="#" novalidate>
+        <div class="flex flex-col gap-3 lg:max-w-[372px]">
+          <div class="flex flex-col gap-2">
+            <h2 class="t-h4 text-text-strong-950">{form.heading}</h2>
+            <Copy value={form.subheading} class="t-label-md text-text-sub-600" />
+          </div>
+        </div>
+
+        {
+          form.fields.map((field, i) => {
+            const id = `demo-field-${i}`;
+            return (
+              <div class="flex flex-col gap-1">
+                <label for={id} class="t-label-sm text-text-strong-950 flex items-center gap-px">
+                  {field.label}
+                  {/* Figma stores the required marker as the literal `\*`
+                      (backslash + asterisk), spec gap A.11. Rendered as `*`. */}
+                  <span class="text-primary-base" aria-hidden="true">
+                    *
+                  </span>
+                  <span class="sr-only">(required)</span>
+                </label>
+
+                {/*
+                  The drawn 10px vertical padding lives on the INPUT, not on
+                  this wrapper. Kept on the wrapper it padded the input away
+                  from the field's own edges, so a tap in the top 11px of the
+                  field landed on the wrapper and focused nothing. The field
+                  looks identical either way.
+                */}
+                <div class="bg-bg-weak-50 border-stroke-soft-200 focus-within:outline-primary-base flex min-h-11 items-stretch gap-2 rounded-[10px] border pr-2.5 pl-3 focus-within:outline-2 focus-within:outline-offset-2">
+                  <i
+                    class={`${field.icon} text-icon-soft-400 flex shrink-0 items-center text-[20px]`}
+                    aria-hidden="true"
+                  />
+                  {/* The drawn 14/20 is `.t-paragraph-sm`. It is overridden to
+                      16px below `sm` only: iOS zooms the whole page in when a
+                      focused input is smaller than 16px, which is itself a
+                      horizontal-overflow bug. 1600px renders the drawn size. */}
+                  <input
+                    id={id}
+                    name={id}
+                    type={field.type}
+                    required
+                    placeholder={field.placeholder.text}
+                    class="t-paragraph-sm text-text-strong-950 placeholder:text-text-soft-400 w-full min-w-0 bg-transparent py-2.5 text-[16px] outline-none sm:text-[14px]"
+                  />
+                </div>
+
+                {/* The placeholder string is `Placeholder text...` on all three
+                    fields, and all three keep the same `user-6-line` icon
+                    (spec gap A.8). A placeholder attribute cannot carry the
+                    `.copy-needed` marker, so it is repeated visibly here. */}
+                {field.placeholder.needed && (
+                  <Copy
+                    value={field.placeholder}
+                    class="t-paragraph-sm text-text-sub-600"
+                    note="placeholder never customised for this field"
+                  />
+                )}
+              </div>
+            );
+          })
+        }
+
+        <Button variant="primary-fancy" label={form.submit} class="w-full" />
+
+        {/* Fine print `151:5049` — the same sentence as the card subheading
+            `151:5044`, twice in one card (spec gap A.9). */}
+        <Copy
+          value={form.finePrint}
+          class="t-label-md text-text-soft-400 text-center"
+          note="duplicate of the card subheading 151:5044"
+        />
+      </form>
+    </div>
+  </div>
+</section>

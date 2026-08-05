@@ -1,0 +1,16 @@
+---
+/**
+ * Product pillar — `/agents`. Route table: finalized-pages/INDEX.md.
+ *
+ * An explicit route, not a `[...slug]` catch-all: the four pillars are a fixed
+ * set with top-level URLs, and each is one line of glue over the shared
+ * template so the four cannot drift apart.
+ */
+import { getEntry } from 'astro:content';
+import PillarPage from '../components/platform/PillarPage.astro';
+
+const entry = await getEntry('platform', 'agents');
+if (!entry) throw new Error('Missing content entry: src/content/platform/agents.mdx');
+---
+
+<PillarPage entry={entry} />

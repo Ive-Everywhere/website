@@ -1,0 +1,83 @@
+---
+import LiveArt from '../site/LiveArt.astro';
+
+/**
+ * The "explanation" section — heading, subhead, a link out, and a product
+ * visual.
+ *
+ * The shell is the home page's wide feature card (`home/FeatureCards.astro`,
+ * Figma `147:3232`) reused line for line: `bg-card-surface`, radius 16,
+ * padding 10, an inner 30px row that stacks below `lg`, and the animation in a
+ * 12px-radius well on the right. The only change is the heading step: this is
+ * the section's own statement rather than one of three sibling cards, so it
+ * takes `.t-h4` where the home card takes `.t-h6`.
+ *
+ * `use-case/Automations.astro` draws the same copy-plus-visual row, but it also
+ * carries three accordion rows that this section has no copy for, so the home
+ * card is the closer match.
+ */
+interface Props {
+  heading: string;
+  body: string;
+  linkLabel?: string;
+  linkHref?: string;
+  art?: 'c1-a-compose' | 'c2-b-plan' | 'c3-b-audit';
+  /** Read aloud in place of the animation, or printed in the placeholder. */
+  artTitle: string;
+}
+
+const { heading, body, linkLabel, linkHref, art, artTitle } = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col gap-10 py-14">
+    <div class="bg-card-surface rounded-[16px] p-2.5">
+      <div
+        class="flex flex-col justify-between gap-8 p-5 lg:flex-row lg:items-center lg:gap-14 lg:p-[30px]"
+      >
+        <div class="flex flex-col justify-center gap-8 lg:max-w-[460px] lg:gap-10">
+          <div class="flex flex-col gap-3">
+            <h2 class="t-h4 text-text-strong-950 text-balance">{heading}</h2>
+            <p class="t-label-md text-text-sub-600 text-pretty">{body}</p>
+          </div>
+
+          {
+            linkLabel && linkHref && (
+              <a
+                href={linkHref}
+                class="t-label-md text-primary-base hover:text-primary-dark focus-visible:outline-primary-base inline-flex min-h-11 w-fit items-center gap-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 lg:min-h-0"
+              >
+                {linkLabel} <span aria-hidden="true">→</span>
+              </a>
+            )
+          }
+        </div>
+
+        {/* Same well as the home card: it sits inside the card's own padding
+            and bleeds only at `lg`, so the art never overhangs the card. */}
+        <div class="w-full min-w-0 shrink-0 overflow-hidden rounded-[12px] lg:w-[720px] lg:shrink">
+          {
+            art ? (
+              <LiveArt
+                src={art}
+                title={artTitle}
+                speed={1.35}
+                zoom={1.3}
+                surface="var(--art-surface)"
+                class="w-full"
+              />
+            ) : (
+              /* Contract rule 6: no stock art. A labelled block at the same
+                 900x440 ratio the animations use. */
+              <div class="bg-bg-sub-300 relative aspect-[900/440] w-full">
+                <div class="text-text-sub-600 t-paragraph-sm absolute inset-0 flex items-center justify-center p-4 text-center">
+                  <span class="copy-needed">Visual needed — {artTitle}</span>
+                </div>
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

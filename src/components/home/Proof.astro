@@ -1,0 +1,67 @@
+---
+/**
+ * Testimonial + outcome stats — Figma `178:2964`.
+ *
+ * Section: column, padding 96/188, gap 48, fill `#F8F8F3` -> `bg-white-0`.
+ * A full-width quote card, then three equal stat cards.
+ *
+ * Every number here is a `[verify]` claim: none is sourced anywhere in the
+ * file, and the attribution is a role, not a named customer. Both render inside
+ * `copy-needed` so they cannot ship unverified.
+ */
+const stats = [
+  {
+    node: '178:2969',
+    icon: 'ri-plug-fill',
+    value: '5x',
+    label: 'Agents moved off laptops',
+  },
+  {
+    node: '178:2973',
+    icon: 'ri-robot-2-line',
+    value: '80%',
+    label: 'Manual tasks migrated to Eluu',
+  },
+  {
+    node: '178:2977',
+    icon: 'ri-plug-fill',
+    value: '50+',
+    label: 'Agents running per team',
+  },
+];
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col gap-8 py-14 lg:gap-12">
+    {/* 178:2965 — padding 60/40, gap 40, radius 28. */}
+    <figure
+      class="bg-card-surface flex flex-col items-center justify-center gap-6 rounded-[28px] px-6 py-10 text-center lg:gap-10 lg:px-10 lg:py-[60px]"
+    >
+      <figcaption class="t-label-md text-text-sub-600">
+        {/* 178:2966 — a role, not a named customer. */}
+        <span class="copy-needed">CRO at a leading SaaS</span>
+      </figcaption>
+      {/* 178:2967 — fixed 1042px in Figma. */}
+      <blockquote class="t-h4 text-text-strong-950 max-w-[1042px] text-balance">
+        My team has tens of agents constantly running. We are able to move at 5x the normal
+        execution speed without compromising quality
+      </blockquote>
+    </figure>
+
+    {/* 178:2968 — row, gap 36, stretch. */}
+    <div class="grid gap-6 sm:grid-cols-3 lg:gap-9">
+      {
+        stats.map((stat) => (
+          <div class="bg-card-surface flex flex-col gap-5 rounded-[28px] p-6 lg:p-10">
+            <i class={`${stat.icon} text-icon-strong-950 text-[28px]`} aria-hidden="true" />
+            {/* Unsourced — see the file header. */}
+            <p class="t-h4 text-text-strong-950">
+              <span class="copy-needed">{stat.value}</span>
+            </p>
+            <p class="t-h6 text-text-soft-400">{stat.label}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

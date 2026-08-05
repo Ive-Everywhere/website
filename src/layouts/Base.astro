@@ -1,0 +1,94 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/site/Navbar.astro';
+import Footer from '../components/site/Footer.astro';
+import CtaBand from '../components/site/CtaBand.astro';
+import ThemeScript from '../components/site/ThemeScript.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  /**
+   * Forces a theme and disables the switch. Only the `/dark` review route uses
+   * it — normally the theme follows the OS or the visitor's stored choice.
+   */
+  theme?: 'light' | 'dark' | null;
+  ogImage?: string;
+  /** Set false on pages that supply their own closing section. */
+  cta?: boolean;
+}
+
+const {
+  title,
+  description,
+  theme = null,
+  ogImage = '/brand/logotext-256-light.png',
+  cta = true,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+/**
+ * Staging must never be indexed. `PUBLIC_INDEXABLE` is unset everywhere except
+ * the production Pages project, so the safe state is the DEFAULT: any build
+ * that forgets to set it is no-index rather than accidentally public.
+ *
+ * `noimageindex` and `nosnippet` are included because `noindex` alone still
+ * lets an engine surface images and cached text from a page it has already
+ * fetched.
+ */
+const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true';
+const robots = indexable
+  ? 'index, follow'
+  : 'noindex, nofollow, noarchive, nosnippet, noimageindex';
+---
+
+<!doctype html>
+<html lang="en" data-theme={theme ?? 'light'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Resolves the theme before first paint. Skipped on a pinned page. */}
+    {theme === null && <ThemeScript />}
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <meta name="googlebot" content={robots} />
+    {/* Canonical points at the production origin, so even if a staging URL is
+        somehow fetched it credits the real page rather than competing with it. */}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/brand/mark-256-light.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+
+  {/*
+    `overflow-x-clip` is a backstop, not the fix — every section is built to
+    fit — but a single mis-sized child should degrade to a clipped edge rather
+    than to a page the visitor can drag sideways. `clip` rather than `hidden`
+    because `hidden` on the body makes `position: sticky` stop working.
+  */}
+  <body class="bg-bg-white-0 text-text-strong-950 min-h-dvh overflow-x-clip">
+    <a
+      href="#main"
+      class="bg-bg-white-0 text-text-strong-950 sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-2 focus:rounded-xl focus:px-4 focus:py-2"
+    >
+      Skip to content
+    </a>
+
+    {/*
+      Sticky lives here, not inside Navbar. A sticky element only travels
+      within its own parent's box, and `<header>` is exactly as tall as the
+      nav — so a sticky child of it can never move and silently does nothing.
+    */}
+    <header class="sticky top-0 z-40"><Navbar /></header>
+    <main id="main"><slot /></main>
+    {cta && <CtaBand />}
+    <Footer showThemeSwitch={theme === null} />
+  </body>
+</html>

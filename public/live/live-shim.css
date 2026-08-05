@@ -1,0 +1,67 @@
+/**
+ * live-shim.css — PROVISIONAL variables for the animated illustrations only.
+ *
+ * The illustrations in this folder were authored against the product app's CSS
+ * and use variables the Figma design system does NOT define. Figma's {state}
+ * page is empty, so there is no success / warning / error / information /away
+ * ramp there at all, and no shadow tokens.
+ *
+ * Rather than invent those tokens in the site's Figma-derived token layer, they
+ * are quarantined here and loaded ONLY inside the illustration iframes. Nothing
+ * on the marketing pages themselves may use these.
+ *
+ * When Figma gains a {state} ramp and shadow styles, delete this file and
+ * re-point the illustrations at tokens.css. Tracked in tokens/GAPS.md.
+ */
+
+:root {
+  --away-base: #f6b51e;
+  --away-dark: #624c18;
+  --away-light: #ffecc0;
+  --away-lighter: #fff4d6;
+  --bg-weak-25: #fafaf8;
+  --ease-out-app: cubic-bezier(0.16, 1, 0.3, 1);
+  --error-base: #fb3748;
+  --error-dark: #681219;
+  --error-lighter: #ffebec;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --information-base: #335cff;
+  --information-dark: #122368;
+  --information-light: #c0d5ff;
+  --information-lighter: #ebf1ff;
+  --primary-darkest: #5d374b;
+  --primary-light: #f9f2f6;
+  --shadow-composer: 0px 10px 10px -5px rgba(23, 23, 23, 0.02),
+    0px 6px 6px -3px rgba(23, 23, 23, 0.04),
+    0px 3px 3px -1.5px rgba(23, 23, 23, 0.04),
+    0px 1px 1px -0.5px rgba(23, 23, 23, 0.04),
+    0px 0px 0px 1px rgba(23, 23, 23, 0.02);
+  --shadow-regular-lg: 0 4px 16px -2px rgba(10, 13, 20, 0.12);
+  --shadow-regular-md: 0 2px 8px 0 rgba(10, 13, 20, 0.08);
+  --shadow-regular-sm: 0 2px 6px 0 rgba(10, 13, 20, 0.06);
+  --success-base: #1fc16b;
+  --success-dark: #0b4627;
+  --success-lighter: #e0faec;
+  --warning-base: #fa7319;
+}
+
+[data-theme="dark"] {
+  --away-base: #e6a819;
+  --away-dark: #ffd268;
+  --away-light: #3a3019;
+  --away-lighter: #382e1e;
+  --bg-weak-25: #29232b;
+  --error-base: #ef4444;
+  --error-dark: #f87171;
+  --error-lighter: #3a2024;
+  --information-base: #335cff;
+  --information-dark: #6895ff;
+  --information-light: #1c2340;
+  --information-lighter: #1e243d;
+  --primary-light: #3d2a35;
+  --success-base: #1daf61;
+  --success-dark: #3ee089;
+  --success-lighter: #1e3b2e;
+  --warning-base: #e16614;
+}

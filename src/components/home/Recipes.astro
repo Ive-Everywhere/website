@@ -1,0 +1,92 @@
+---
+/**
+ * Recipes card — Figma `147:3302` (§4 of home-spec.md).
+ * Section: column, gap 48, padding 96/188, fill #F8F8F3 → `bg-bg-white-0`.
+ * This section has NO title block; it goes straight to a single card.
+ *
+ * Card 147:3303: fill #EDEDE9 → `bg-bg-soft-200`, radius 16, padding 10/10/0.
+ * Inner "Text" 147:3304: row, padding 30, space-between.
+ */
+
+/**
+ * List 147:3309 — nine rows. Figma cycles three icons (plug / arrows /
+ * dashboard) that do not match the label meanings; that is transcribed as
+ * drawn. These rows carry no trailing arrow, unlike section 3's bullets.
+ */
+const recipes = [
+  { node: '147:3310', icon: 'ri-plug-fill', label: 'Connect every tool your team uses' },
+  { node: '147:3314', icon: 'ri-arrow-left-right-line', label: 'Reconcile data across systems' },
+  { node: '147:3318', icon: 'ri-dashboard-line', label: 'Build dashboards and internal apps' },
+  { node: '147:3322', icon: 'ri-plug-fill', label: 'Automate repetitive tasks effortlessly' },
+  {
+    node: '147:3326',
+    icon: 'ri-arrow-left-right-line',
+    label: 'Enhance collaboration with real-time updates',
+  },
+  { node: '147:3330', icon: 'ri-dashboard-line', label: 'Access insights anytime, anywhere' },
+  {
+    node: '147:3334',
+    icon: 'ri-plug-fill',
+    label: 'Share reports and analytics with stakeholders',
+  },
+  {
+    node: '147:3338',
+    icon: 'ri-arrow-left-right-line',
+    label: 'Secure sensitive information with ease',
+  },
+  { node: '147:3342', icon: 'ri-dashboard-line', label: 'Receive notifications for key activities' },
+];
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col gap-10 py-14">
+    <div class="bg-card-surface rounded-[16px] px-2.5 pt-2.5">
+      <div class="flex flex-col justify-between gap-8 p-5 lg:flex-row lg:items-start lg:gap-12 lg:p-[30px]">
+        {/* 147:3305 "Title" → 147:3307, fixed 365px. */}
+        <div class="flex flex-col gap-4 lg:w-[365px] lg:shrink-0">
+          {/* The break between "are" and "cooking" is a literal U+2028 LINE
+              SEPARATOR in Figma (spec gap #10) — rendered as a real break above
+              `lg` only, so the heading can reflow in the narrow column. */}
+          <h2 class="t-landing-h3 text-text-strong-950 text-balance">
+            What users are<br class="hidden lg:inline" />{' '}cooking with Eluu.
+          </h2>
+        </div>
+
+        {/* 147:3308 — fill #F8F8F3, radius 24, padding 36/24, fixed 554px.
+            `max-w` + `flex-1` rather than a rigid `w` + `shrink-0`: at 1024 the
+            365px title column and a fixed 554px card together exceeded the
+            shell and pushed this card off the right edge. It reaches the drawn
+            554px as soon as the row is wide enough, so 1600 is unaffected. */}
+        <div
+          class="bg-bg-white-0 flex w-full min-w-0 flex-col gap-8 rounded-[24px] px-5 py-7 lg:max-w-[554px] lg:flex-1 lg:gap-12 lg:px-6 lg:py-9"
+        >
+          <ul class="flex flex-col gap-6">
+            {
+              recipes.map((recipe) => (
+                <li class="flex items-center gap-4">
+                  <i
+                    class={`${recipe.icon} text-icon-sub-600 shrink-0 text-[28px]`}
+                    aria-hidden="true"
+                  />
+                  <span class="t-label-md text-text-sub-600">{recipe.label}</span>
+                </li>
+              ))
+            }
+          </ul>
+
+          {/* 147:3348. Verbatim Figma misspelling "recipies" — wrapped per
+              contract rule 5, not corrected. Figma colours it #335CFF, for
+              which no token exists (tokens/GAPS.md §1); `text-primary-base`
+              stands in until the information ramp lands. */}
+          <a
+            href="/cookbook"
+            class="t-label-md text-primary-base hover:text-primary-dark focus-visible:outline-primary-base inline-flex w-fit min-h-11 items-center gap-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 lg:min-h-0"
+          >
+            <span class="copy-needed">Explore all recipies</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

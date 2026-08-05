@@ -1,0 +1,201 @@
+/* Eluu Design System — colour tokens
+ * Source: Figma JTxPqUxNWvS1AqDvLEf8Yz "Eluu Design System ✦ Align UI"
+ * Extracted 2026-08-03 from the Color Tiles frames only. The Figma Table
+ * frames hold stale stock AlignUI greys and were not read.
+ * Names are the exact Figma token names, kebab-cased. See tokens.md.
+ */
+
+:root {
+  /* ---- Neutral / Maroon raw scale ---- */
+  --maroon-950: #451F33;
+  --maroon-900: #522B40;
+  --maroon-800: #5D374B;
+  --maroon-700: #614051;
+  --maroon-600: #755A68;
+  --maroon-500: #8D7581;
+  --maroon-400: #AF9AA5;
+  --maroon-300: #CAB7C1;
+  --maroon-200: #E3D3DB;
+  --maroon-100: #EFE2E9;
+  --maroon-50: #F9F2F6;
+
+  /* ---- Neutral raw scale ----
+   * Derived from the alias captions on the light-mode tiles.
+   * neutral-700 and neutral-900 are not attested anywhere in Figma. */
+  --neutral-0: #F8F8F3;
+  --neutral-50: #F7F7F4;
+  --neutral-100: #F5F5F0;
+  --neutral-200: #EDEDE9;
+  --neutral-300: #DDDBD1;
+  --neutral-400: #AAA89E;
+  --neutral-500: #7C7A71;
+  --neutral-600: #58564D;
+  /* --neutral-700: not defined in Figma */
+  --neutral-800: #2B272C;
+  /* --neutral-900: not defined in Figma */
+  --neutral-950: #1E1C1E;
+
+  /* ---- Alpha ----
+   * The third Figma tile is mislabelled neutral-alpha-16; its fill is 10%.
+   * Named neutral-alpha-10 here, to match primary-alpha-10. */
+  --neutral-alpha-24: rgba(93, 55, 75, 0.24);
+  --neutral-alpha-16: rgba(93, 55, 75, 0.16);
+  --neutral-alpha-10: rgba(93, 55, 75, 0.1);
+
+  /* ---- primary ----
+   * Figma aliases still read blue-*; the fills are the Maroon ramp.
+   * primary-darker is lighter than primary-dark. That inversion is as drawn. */
+  --primary-dark: #5D374B;
+  --primary-darker: #614051;
+  --primary-base: #755A68;
+  --primary-alpha-16: rgba(93, 55, 75, 0.16);
+  --primary-alpha-10: rgba(93, 55, 75, 0.1);
+
+  /* ---- static (identical in both modes) ---- */
+  --static-black: #1E1C1E;
+  --static-white: #F8F8F3;
+
+  /* ---- bg ----
+   * bg-white-0: the Figma tile fill is #FFFFFF, an un-migrated stock white.
+   * Its own alias is neutral-0 = #F8F8F3, which every other *-white-0 token
+   * uses. #F8F8F3 is used here. Fix the Figma tile. */
+  --bg-strong-950: #1E1C1E;
+  --bg-surface-800: #2B272C;
+  --bg-sub-300: #DDDBD1;
+  --bg-soft-200: #EDEDE9;
+  --bg-weak-50: #F7F7F4;
+  --bg-white-0: #F8F8F3;
+
+  /* ---- text ---- */
+  --text-strong-950: #1E1C1E;
+  --text-sub-600: #58564D;
+  --text-soft-400: #AAA89E;
+  --text-disabled-300: #DDDBD1;
+  --text-white-0: #F8F8F3;
+
+  /* ---- stroke ---- */
+  --stroke-strong-950: #1E1C1E;
+  --stroke-sub-300: #DDDBD1;
+  --stroke-soft-200: #EDEDE9;
+  --stroke-white-0: #F8F8F3;
+
+  /* ---- icon ---- */
+  --icon-strong-950: #1E1C1E;
+  --icon-sub-600: #58564D;
+  --icon-soft-400: #AAA89E;
+  --icon-disabled-300: #DDDBD1;
+  --icon-white-0: #F8F8F3;
+
+  /* ---- state/faded ---- */
+  --faded-dark: #2B272C;
+  --faded-base: #7C7A71;
+  --faded-light: #EDEDE9;
+  --faded-lighter: #F5F5F0;
+
+  /* ---- state ----
+   * The {state} group is EMPTY in Figma. There is no success, warning,
+   * error, or information ramp. See GAPS.md. */
+
+  /* ---- PROVISIONAL: not in the Figma design system ----
+   * These four colours are used by the marketing pages but have no token.
+   * They are named here so no component carries a raw hex, and they are
+   * pending a decision to add them to Figma. Do not extend this block.
+   * accent-peach-*  : the CTA band, its heading and its button.
+   * success-light   : the "us" card in the comparison table. */
+  /* ---- Card-art surface (CHOSEN) ----
+   * The well the three home feature animations sit on.
+   * Light is a step deeper than the card (`bg-soft-200` #EDEDE9) so the art
+   * reads as recessed. Dark does NOT mirror that: `bg-white-0` there is the
+   * page colour and swallowed the well, so dark sits one step up instead.
+   */
+  /* ---- Card surface ----
+   * Every card on the site. Named separately from `bg-soft-200` because the
+   * cards need to move independently of the other things that token paints
+   * (nav chips, hover states). */
+  --card-surface: var(--bg-soft-200);
+
+  --art-surface: var(--bg-sub-300);
+
+  /* ---- Compliance badge artwork ----
+   * The badges are medallions: dark ink on a light disc. That relationship must
+   * NOT invert with the theme, or the artwork reads as a photographic negative.
+   * So these do not follow the bg ramp — dark stays dark and light stays light
+   * in both modes, and dark mode simply picks duller steps so a bright white
+   * disc does not glare on a dark card.
+   */
+  /* The disc takes the CARD colour, not a brighter one, so all three read as
+   * line art sitting on the card — the SOC treatment Krishna picked. A lighter
+   * field turned ISO and GDPR into solid pucks that popped off the surface. */
+  --badge-ink: var(--neutral-950);
+  --badge-mid: var(--neutral-400);
+  --badge-soft: var(--neutral-200);
+  --badge-field: var(--bg-soft-200);
+
+  --accent-peach-100: #ffe6d5;
+  --accent-peach-200: #ffd9c0;
+  --accent-peach-800: #71330a;
+  --success-light: #c2f5da;
+}
+
+.dark,
+[data-theme="dark"] {
+  /* The Maroon scale, the Neutral scale, the Alpha ramp, the primary ramp,
+   * and the static tokens are identical in dark mode. They are not redeclared.
+   * Only the semantic tokens below change. */
+
+  /* ---- bg ---- */
+  --bg-strong-950: #F8F8F3;
+  --bg-surface-800: #EDEDE9;
+  --bg-sub-300: #58564D;
+  --bg-soft-200: #3D393E;
+  --bg-weak-50: #2B272C;
+  --bg-white-0: #1E1C1E;
+
+  /* ---- text ---- */
+  --text-strong-950: #F8F8F3;
+  --text-sub-600: #AAA89E;
+  --text-soft-400: #7C7A71;
+  --text-disabled-300: #58564D;
+  --text-white-0: #1E1C1E;
+
+  /* ---- stroke ---- */
+  --stroke-strong-950: #F8F8F3;
+  --stroke-sub-300: #58564D;
+  --stroke-soft-200: #2B272C;
+  --stroke-white-0: #1E1C1E;
+
+  /* ---- icon ---- */
+  --icon-strong-950: #F8F8F3;
+  --icon-sub-600: #AAA89E;
+  --icon-soft-400: #7C7A71;
+  --icon-disabled-300: #58564D;
+  --icon-white-0: #1E1C1E;
+
+  /* ---- Card-art surface, dark ----
+   * One step up from light's mirror image. `bg-white-0` (#1E1C1E) is the page
+   * colour and read as a hole rather than a well. */
+  /* ---- Card surface, dark ----
+   * One step darker than the light mirror: `bg-soft-200` in dark is #3D393E,
+   * which sat too high off the page. The art well moves down with it so the
+   * well stays deeper than the card it sits in. */
+  --card-surface: var(--bg-weak-50);
+
+  --art-surface: var(--bg-white-0);
+
+  /* ---- Compliance badge artwork, dark ----
+   * Line art cannot survive here: dark ink on a dark card is invisible. So dark
+   * keeps the medallion as a dimmed light disc with dark ink — the relationship
+   * still does not invert, it is just carried on its own surface. */
+  --badge-ink: var(--neutral-950);
+  --badge-mid: var(--neutral-500);
+  --badge-soft: var(--neutral-200);
+  --badge-field: var(--neutral-300);
+
+  /* ---- state/faded ----
+   * faded-light and faded-lighter use #A3A3A3, the stock AlignUI grey.
+   * They are not in the Eluu neutral family. Migrate them. */
+  --faded-dark: #DDDBD1;
+  --faded-base: #7C7A71;
+  --faded-light: rgba(163, 163, 163, 0.24);
+  --faded-lighter: rgba(163, 163, 163, 0.1);
+}

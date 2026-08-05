@@ -1,0 +1,67 @@
+---
+/**
+ * Sections 6 and 9 — the two three-card cross-link rows.
+ *
+ * "Powered by" points at the product pillars (`/connections`, `/workspace`,
+ * `/security`); "Resources" points at the recipe, the demo and the docs. Both
+ * are the same row of three linked cards, so they are one component with a
+ * heading prop rather than two near-identical files.
+ *
+ * The card is the home page's card again: `bg-card-surface`, radius 28, padding
+ * 40, a 28px Remix icon, then heading and body. The whole card is the hit area,
+ * so the trailing link label is decorative and carries `aria-hidden`.
+ */
+
+interface Card {
+  title: string;
+  body?: string;
+  href: string;
+  linkLabel?: string;
+  icon?: string;
+}
+
+interface Props {
+  heading: string;
+  cards: Card[];
+}
+
+const { heading, cards } = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col gap-8 py-14 lg:gap-12">
+    <h2 class="t-landing-h3 text-text-strong-950 text-balance">{heading}</h2>
+
+    <ul class="grid gap-6 sm:grid-cols-3 lg:gap-9">
+      {
+        cards.map((card) => (
+          <li class="flex">
+            <a
+              href={card.href}
+              class="bg-card-surface focus-visible:outline-primary-base flex w-full flex-col gap-6 rounded-[28px] p-6 transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 sm:p-8 lg:gap-8 lg:p-10"
+            >
+              <i
+                class={`${card.icon ?? 'ri-arrow-right-up-long-line'} text-icon-strong-950 text-[28px]`}
+                aria-hidden="true"
+              />
+
+              <div class="flex flex-col gap-3">
+                <h3 class="t-h4 text-text-strong-950 text-balance">{card.title}</h3>
+                {card.body && <p class="t-label-md text-text-sub-600 text-pretty">{card.body}</p>}
+              </div>
+
+              {/* The card itself is the link, so this line only labels it. */}
+              <span
+                class="t-label-md text-primary-base mt-auto inline-flex items-center gap-1"
+                aria-hidden="true"
+              >
+                {card.linkLabel ?? 'Learn more'}
+                <span>→</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

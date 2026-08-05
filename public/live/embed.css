@@ -1,0 +1,44 @@
+/**
+ * embed.css — loaded LAST, only by the copies of these illustrations that are
+ * embedded in the marketing site.
+ *
+ * Standalone, each illustration paints its own tinted "field" so it reads as a
+ * finished picture. Embedded, that tint is wrong: the animation has to sit on
+ * whatever surface the section gives it.
+ *
+ * Making the document transparent and letting the page show through does NOT
+ * work: when an iframe's html and body are both transparent the browser paints
+ * its own canvas, which is white regardless of the page behind it. So instead
+ * the parent tells the frame what surface to paint, as a token expression, via
+ * `?surface=` — and the field paints that. One opaque layer, no canvas, and the
+ * value still comes from the design tokens so it follows the theme.
+ */
+
+.a-field {
+  --field: transparent !important;
+  background: var(--embed-surface, transparent) !important;
+}
+
+/* The top-left wash assumes a light, opaque tint — a milky haze on anything
+   else. The top fade (`::after`) fades into the old field colour, which no
+   longer exists. Both go. */
+.a-field::before,
+.a-field::after {
+  display: none !important;
+}
+
+/**
+ * The stage is scaled to fit by `contain`, and that scale lands on a fraction:
+ * measured at 1600px the field is 561px tall while the scaled stage renders
+ * 558–560px. The front card is pinned to the stage's bottom, so those 1–3px
+ * leave a sliver of the well visible under it and the card stops reading as
+ * flush — which is the whole point of the flush treatment.
+ *
+ * The card therefore overshoots the stage. The embedding wrapper clips with
+ * `overflow-hidden`, so the overshoot is never visible; it only guarantees the
+ * card reaches the bottom edge at every scale and device pixel ratio.
+ */
+.tcard[data-slot='0'] {
+  bottom: -6px !important;
+  padding-bottom: 6px;
+}

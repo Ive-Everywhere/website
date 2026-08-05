@@ -1,0 +1,60 @@
+---
+/**
+ * Section 7 — the aggregate proof.
+ *
+ * The content pack asks for "one honest cross-customer anchor" plus an
+ * anonymized logo band with tenure, and marks the whole section `[VERIFY]`.
+ * There is no confirmed figure and there are no cleared logos today, so:
+ *
+ *  - the anchor renders inside `.copy-needed`, number and caption both;
+ *  - the logo band is a labelled placeholder, not a row of invented marks.
+ *
+ * The card shell is the home page's stat card (`bg-card-surface`, radius 28,
+ * padding 40), so the section sits beside `home/Proof.astro` without a seam.
+ */
+
+interface Props {
+  heading: string;
+  value: string;
+  label: string;
+  needsVerify?: boolean;
+  /** Names the band so a reviewer knows what is still to be supplied. */
+  logoNote?: string;
+}
+
+const {
+  heading,
+  value,
+  label,
+  needsVerify = true,
+  logoNote = 'Anonymized customer logo band with tenure — logos not cleared yet',
+} = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col gap-8 py-14 lg:gap-12">
+    <h2 class="t-landing-h3 text-text-strong-950 text-balance">{heading}</h2>
+
+    <div class="flex flex-col gap-6 lg:flex-row lg:gap-9">
+      <div
+        class="bg-card-surface flex flex-col gap-5 rounded-[28px] p-6 sm:p-8 lg:w-[420px] lg:shrink-0 lg:p-10"
+      >
+        <p class="t-landing-h2 text-text-strong-950">
+          {needsVerify ? <span class="copy-needed">{value}</span> : value}
+        </p>
+        <p class="t-h6 text-text-soft-400 text-pretty">
+          {needsVerify ? <span class="copy-needed">{label}</span> : label}
+        </p>
+      </div>
+
+      {/* Contract rule 6: a placeholder block, never stock or invented marks. */}
+      <div
+        class="bg-card-surface flex min-h-[160px] min-w-0 flex-1 items-center justify-center rounded-[28px] p-6 text-center sm:p-8 lg:p-10"
+      >
+        <p class="t-paragraph-sm text-text-sub-600">
+          <span class="copy-needed">{logoNote}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

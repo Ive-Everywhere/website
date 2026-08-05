@@ -1,0 +1,134 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import Copy from './Copy.astro';
+
+/**
+ * Section 3 — the feature comparison table. Figma `151:5309` (named "Hero").
+ * This is the core of the page.
+ *
+ * Row template: a fixed 272px label column, then the "us" card
+ * (fill #C2F5DA → `bg-success-light`, `check-fill`) and the "them" card
+ * (fill #EDEDE9 → `bg-bg-soft-200`, `close-line`). Both radius 28, padding 40,
+ * gap 16. Row gap 24.
+ *
+ * STRUCTURAL DEFECT, transcribed deliberately differently (spec gap E.25):
+ * in Figma every green card sits inside an extra `space-between` wrapper frame
+ * (`151:5412`, `151:5423`, `151:5440`, `151:5454`, `151:5468`, `151:5482`)
+ * while the grey card is a direct sibling of that wrapper. The two columns are
+ * therefore at different tree depths and will not resolve to equal widths.
+ * That is a source defect, not an intent. Both cards are direct grid children
+ * here, so the columns are symmetrical and equal-width by construction.
+ *
+ * ACCESSIBILITY (spec gap G.43): Figma carries the yes/no meaning entirely in
+ * the icon shape and the card colour, which is invisible to a screen reader.
+ * Each card therefore carries a "Eluu:" / "<competitor>:" label plus a
+ * "Supported" / "Not supported" text equivalent for the icon.
+ *
+ * MOBILE (spec gap G.40 — Figma has no mobile strategy at all): below `lg`
+ * each row stacks into its label as a heading and two full-width cards, and
+ * the side labels that are visually hidden on desktop become visible.
+ */
+interface Props {
+  table: {
+    heading: {
+      title: { text: string; node?: string; needed?: boolean };
+      sub: { text: string; node?: string; needed?: boolean };
+    };
+  };
+  competitor: string;
+  rows: {
+    label: string;
+    eluu: string;
+    them: string;
+    labelNode?: string;
+    eluuNode?: string;
+    themNode?: string;
+    eluuNeeded?: boolean;
+    themNeeded?: boolean;
+  }[];
+}
+
+const { table, competitor, rows } = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-187 flex flex-col items-center gap-10 pt-8 pb-16 lg:gap-14">
+    <SectionHeading heading={table.heading} />
+
+    <!-- Row stack `151:5435` — column, gap 24. -->
+    <ul class="flex w-full list-none flex-col gap-8 p-0 lg:gap-6">
+      {
+        rows.map((row, i) => {
+          const labelId = `compare-row-${i}`;
+          return (
+            <li
+              aria-labelledby={labelId}
+              class="grid gap-3 lg:grid-cols-[272px_1fr_1fr] lg:items-stretch lg:gap-6"
+            >
+              {/*
+                Label column `151:5409`. Its inner frame is named "Active" and
+                carries radius 8 and padding 12 but no fill (spec gap D.22) —
+                an apparent selected state with the fill missing. The padding
+                and radius are kept; no fill is invented.
+
+                Stacked, this is the row's heading above its two cards, so the
+                horizontal padding is dropped to align it with the card edges.
+              */}
+              <h3 id={labelId} class="flex items-center rounded-lg py-1 lg:p-3">
+                {row.labelNode && <Fragment set:html={`<!-- Figma ${row.labelNode} -->`} />}
+                <span class="t-h5 text-text-strong-950 text-balance">{row.label}</span>
+              </h3>
+
+              {/* b) Our card. Figma wraps this one in an extra frame; see above.
+                  Padding steps 24 → 32 → the drawn 40. */}
+              <div class="bg-success-light flex items-start gap-3 rounded-[28px] p-6 sm:gap-4 sm:p-8 lg:p-10">
+                <i
+                  class="ri-check-fill text-icon-strong-950 shrink-0 text-[24px]"
+                  aria-hidden="true"
+                />
+                <div class="flex min-w-0 flex-col gap-1">
+                  {/* Visible only in the stacked state, where the columns no
+                      longer say which side is which. `sr-only` at `lg`, so the
+                      meaning still reaches a screen reader on the desktop
+                      layout, where Figma carries it in colour alone. */}
+                  <p class="t-label-sm text-text-strong-950 lg:sr-only">
+                    Eluu: <span class="sr-only">Supported.</span>
+                  </p>
+                  <Copy
+                    value={{ text: row.eluu, node: row.eluuNode, needed: row.eluuNeeded }}
+                    class="t-paragraph-md text-text-strong-950"
+                    note={i === 1 ? 'verbatim copy of row 1; only the label differs' : undefined}
+                  />
+                </div>
+              </div>
+
+              {/* c) Their card. */}
+              <div class="bg-card-surface flex items-start gap-3 rounded-[28px] p-6 sm:gap-4 sm:p-8 lg:p-10">
+                <i
+                  class="ri-close-line text-icon-strong-950 shrink-0 text-[24px]"
+                  aria-hidden="true"
+                />
+                <div class="flex min-w-0 flex-col gap-1">
+                  <p class="t-label-sm text-text-strong-950 lg:sr-only">
+                    {competitor}: <span class="sr-only">Not supported.</span>
+                  </p>
+                  <Copy
+                    value={{ text: row.them, node: row.themNode, needed: row.themNeeded }}
+                    class="t-paragraph-md text-text-strong-950"
+                    note={
+                      i === 1
+                        ? 'verbatim copy of row 1; only the label differs'
+                        : i > 1
+                          ? 'inverted semantics: this describes a positive capability but carries the ✗ icon'
+                          : undefined
+                    }
+                  />
+                </div>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

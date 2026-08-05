@@ -1,0 +1,29 @@
+---
+import Copy from './Copy.astro';
+
+/**
+ * The 706px centred title block that opens sections 2, 3 and 4
+ * (`151:5165`, `151:5310`, `151:5493`).
+ *
+ * All three are the same two strings pasted three times — see the spec Gaps
+ * A.10. The duplication is transcribed rather than de-duplicated, so it stays
+ * visible in the render; each instance carries its own node id.
+ */
+interface Props {
+  heading: {
+    title: { text: string; node?: string; needed?: boolean };
+    sub: { text: string; node?: string; needed?: boolean };
+  };
+  /** Heading level. The page has one h1, so these are h2 by default. */
+  as?: string;
+}
+
+const { heading, as = 'h2' } = Astro.props;
+---
+
+<div class="mx-auto flex w-full max-w-[706px] flex-col gap-6 text-center">
+  <div class="flex flex-col gap-2">
+    <Copy value={heading.title} as={as} class="t-landing-h3 text-text-strong-950" />
+    <Copy value={heading.sub} class="t-label-md text-text-sub-600" />
+  </div>
+</div>

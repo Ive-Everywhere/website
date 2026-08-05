@@ -1,0 +1,81 @@
+---
+/**
+ * The five feature cards.
+ *
+ * This is the home page's "4 products in one box" grid (`home/FeatureQuadrants.astro`,
+ * Figma `147:3168`) at five cells: one rounded block, hairline gutters in the
+ * page colour, `bg-card-surface` panels. INDEX.md names that grid as one of the
+ * three section formats to implement, and the pillar cards carry exactly the
+ * same parts — an icon cluster, a title, a body and an optional text link.
+ *
+ * Five is odd, so the last card spans both columns and the block stays a
+ * complete rectangle rather than ending on a hole.
+ *
+ * The source writes each card as `**N. Headline** — "eyebrow"` then a body
+ * line, so the quoted eyebrow renders as the lead sentence under the title and
+ * the body follows it one step lighter.
+ */
+interface Props {
+  heading: string;
+  /**
+   * True when the heading is not in the source copy. The finalized pages label
+   * this section "FEATURE CARDS" and give it no title, but the home page opens
+   * every section with one. Contract rule 5 settles the conflict: render the
+   * string and mark it, never invent copy silently.
+   */
+  headingNeedsCopy?: boolean;
+  features: {
+    headline: string;
+    eyebrow: string;
+    body: string;
+    icon: string;
+    linkHref?: string;
+    linkLabel?: string;
+  }[];
+}
+
+const { heading, headingNeedsCopy = false, features } = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col gap-10 py-14">
+    <h2 class="t-landing-h3 text-text-strong-950 text-balance">
+      {headingNeedsCopy ? <span class="copy-needed">{heading}</span> : heading}
+    </h2>
+
+    {/* One rounded block with 1px gutters in the page colour, as on the home
+        page. A single column below `lg`. */}
+    <div class="bg-bg-white-0 grid gap-px overflow-hidden rounded-[16px] lg:grid-cols-2">
+      {
+        features.map((feature, index) => (
+          <div
+            class:list={[
+              'bg-card-surface flex flex-col gap-6 p-6 sm:p-8 lg:px-9 lg:py-10',
+              /* The fifth card has no partner, so it takes the full row. */
+              index === features.length - 1 && features.length % 2 === 1 && 'lg:col-span-2',
+            ]}
+          >
+            <i class={`${feature.icon} text-icon-sub-600 text-[40px] leading-none`} aria-hidden="true" />
+
+            <div class="flex flex-col gap-2">
+              <h3 class="t-h6 text-text-strong-950 text-balance">{feature.headline}</h3>
+              <p class="t-label-md text-text-strong-950 text-pretty">{feature.eyebrow}</p>
+              <p class="t-label-md text-text-sub-600 text-pretty">{feature.body}</p>
+            </div>
+
+            {
+              feature.linkHref && (
+                <a
+                  href={feature.linkHref}
+                  class="t-label-md text-primary-base hover:text-primary-dark focus-visible:outline-primary-base mt-auto inline-flex min-h-11 w-fit items-center gap-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 lg:min-h-0"
+                >
+                  {feature.linkLabel ?? 'Learn more'} <span aria-hidden="true">→</span>
+                </a>
+              )
+            }
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

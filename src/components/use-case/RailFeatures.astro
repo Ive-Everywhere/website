@@ -1,0 +1,224 @@
+---
+/**
+ * The feature section — Figma `144:2835`.
+ *
+ * NOT a grid of cards. It is a scroll-linked switcher, the pattern ona.com uses
+ * on its product pages: a fixed rail on the left listing every feature, and a
+ * column of cards on the right. Scrolling the cards moves the rail's active
+ * row; clicking a rail row scrolls to its card.
+ *
+ * Transcribed geometry:
+ *   row            `147:2923` — gap 24
+ *   rail           `147:2922` — fixed 272px, column, gap 12
+ *     inactive row `147:2924` — padding 12, radius 8, no fill,
+ *                               `Label/Large` (18/24, -0.015em) at #A3A3A3
+ *     active row   `147:2911` — same box, fill #DDDBD1, gap 8, a 28px icon
+ *                               before the label, label at full strength
+ *   cards          `147:2956` — column, gap 24
+ *     card         `147:2948` — radius 16, fill #EDEDE9, padding 10/10/0,
+ *                               inner text row padding 30, space-between
+ *
+ * Figma draws three rows; the content gives five, so the pattern extends.
+ *
+ * Behaviour is ours — Figma carries no prototype data.
+ */
+interface FeatureCard {
+  headline: string;
+  eyebrow: string;
+  body: string;
+  icon?: string;
+  linkHref?: string;
+  linkLabel?: string;
+}
+
+interface Props {
+  features: FeatureCard[];
+  /** Rendered above the row when the page supplies a section title. */
+  heading?: string;
+  /**
+   * The pillar pages label this section but never title it, so their heading is
+   * ours rather than the source's. Marked, per contract rule 5.
+   */
+  headingNeedsCopy?: boolean;
+  id?: string;
+}
+
+const { features, heading, headingNeedsCopy = false, id = 'features' } = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col gap-8 py-14 lg:gap-12">
+    {
+      heading && (
+        <h2 class="t-landing-h3 text-text-strong-950 text-balance">
+          {headingNeedsCopy ? <span class="copy-needed">{heading}</span> : heading}
+        </h2>
+      )
+    }
+
+    {/* 147:2923 — the rail and the cards are siblings in one row so the rail
+        can stick against the FULL height of the card column. Sticky only
+        travels inside its own parent's box, so this row must be that box. */}
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-6" data-rail-root>
+      {/* 147:2922 — 272px fixed. Hidden below `lg`: a 272px column beside the
+          cards cannot fit, and a horizontal version of this reads as tabs,
+          which is a different control. Each card carries its own heading
+          there, so nothing is lost. */}
+      <nav
+        class="sticky top-24 hidden w-[272px] shrink-0 flex-col gap-3 lg:flex"
+        aria-label="Features"
+      >
+        {
+          features.map((feature, index) => (
+            <button
+              type="button"
+              data-rail-item={index}
+              aria-current="false"
+              class="group text-text-soft-400 aria-[current=true]:bg-bg-sub-300 aria-[current=true]:text-text-strong-950 focus-visible:outline-primary-base flex items-center gap-2 rounded-[8px] p-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              {/* 147:2930 — the icon appears on the active row only, so the
+                  inactive rows stay a clean list of labels. */}
+              <i
+                class={`${feature.icon ?? 'ri-checkbox-circle-line'} hidden shrink-0 text-[28px] group-aria-[current=true]:block`}
+                aria-hidden="true"
+              />
+              <span class="t-label-lg">{feature.headline}</span>
+            </button>
+          ))
+        }
+      </nav>
+
+      {/* 147:2956 — the cards. `scroll-mt` clears the sticky site header when a
+          rail click scrolls one into view. */}
+      <div class="flex min-w-0 flex-1 flex-col gap-6">
+        {
+          features.map((feature, index) => (
+            <article
+              id={`${id}-${index}`}
+              data-rail-card={index}
+              class="bg-card-surface scroll-mt-28 flex flex-col gap-6 rounded-[16px] px-2.5 pt-2.5 lg:min-h-[500px] lg:flex-row lg:items-stretch lg:gap-8"
+            >
+              {/* 147:2949 — padding 30, space-between. The copy sits in the
+                  card's own padding; the well below bleeds to the bottom edge,
+                  which is what the shell's 10/10/0 padding is for. */}
+              <div class="flex min-w-0 flex-col gap-4 p-5 lg:max-w-[420px] lg:flex-1 lg:justify-center lg:p-[30px]">
+                <i
+                  class={`${feature.icon ?? 'ri-checkbox-circle-line'} text-icon-sub-600 text-[40px]`}
+                  aria-hidden="true"
+                />
+                <h3 class="t-h4 text-text-strong-950 text-balance">{feature.headline}</h3>
+                <p class="t-h6 text-text-soft-400 text-pretty">{feature.eyebrow}</p>
+                <p class="t-label-md text-text-sub-600 text-pretty">{feature.body}</p>
+                {feature.linkHref && (
+                  <a
+                    href={feature.linkHref}
+                    class="t-label-md text-primary-base hover:text-primary-dark focus-visible:outline-primary-base mt-1 inline-flex min-h-11 w-fit items-center gap-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 lg:min-h-0"
+                  >
+                    {feature.linkLabel ?? 'Learn more'} <span aria-hidden="true">→</span>
+                  </a>
+                )}
+              </div>
+
+              {/* 147:2954 "Form" — a 440 x 460 well holding the feature's
+                  visual. The artwork for these is not produced yet, so the well
+                  is drawn and labelled rather than filled with stock art. It
+                  bleeds to the card's bottom edge, as drawn. */}
+              <div
+                class="bg-art-surface flex items-center justify-center self-end rounded-t-[10px] p-6 max-lg:mx-2.5 max-lg:aspect-[440/300] max-lg:w-[calc(100%-1.25rem)] lg:min-h-[460px] lg:w-[440px] lg:shrink-0"
+              >
+                <span class="t-paragraph-sm copy-needed text-center">
+                  Visual needed — {feature.headline}
+                </span>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /**
+   * Scroll drives the rail; clicking the rail drives the scroll.
+   *
+   * WHY THIS IS NOT AN IntersectionObserver.
+   * It was, and it jittered: the rail would jump forward then snap back
+   * whenever two cards shared the screen. Two reasons, both fatal.
+   *  1. The observer callback receives only the entries that CHANGED, not all
+   *     of them, so picking a winner from that batch compares an arbitrary
+   *     subset against each other rather than against every card.
+   *  2. `intersectionRatio` is relative to each card's OWN height, so a card
+   *     half in view scores the same as a different card half in view, and the
+   *     two swap ranks repeatedly as you scroll across the boundary.
+   *
+   * Nearest-midpoint-to-an-anchor-line is deterministic instead: every card is
+   * measured against one fixed line each frame, so the winner changes exactly
+   * once as you cross between two cards, and never changes back.
+   */
+  for (const root of document.querySelectorAll<HTMLElement>('[data-rail-root]')) {
+    const items = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-rail-item]'));
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-rail-card]'));
+    if (!items.length || !cards.length) continue;
+
+    let current = -1;
+    /** Set while a rail click animates, so cards flying past do not light up. */
+    let lockUntil = 0;
+
+    const setActive = (index: number) => {
+      if (index === current) return;
+      current = index;
+      for (const item of items) {
+        item.setAttribute('aria-current', String(Number(item.dataset.railItem) === index));
+      }
+    };
+
+    const update = () => {
+      if (performance.now() < lockUntil) return;
+      // The anchor sits above centre so the active row matches the card you are
+      // reading, not the one you are scrolling towards.
+      const anchor = window.innerHeight * 0.42;
+      let best = 0;
+      let bestDistance = Infinity;
+      for (let i = 0; i < cards.length; i += 1) {
+        const box = cards[i].getBoundingClientRect();
+        // Distance from the anchor to the card's span: zero while the anchor is
+        // inside the card, so a tall card holds the rail for its whole height.
+        const distance =
+          anchor < box.top ? box.top - anchor : anchor > box.bottom ? anchor - box.bottom : 0;
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          best = i;
+        }
+      }
+      setActive(best);
+    };
+
+    // One measurement per frame at most; scroll fires far more often than that.
+    let queued = false;
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        update();
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    for (const item of items) {
+      item.addEventListener('click', () => {
+        const index = Number(item.dataset.railItem);
+        setActive(index);
+        // Hold the selection while the smooth scroll runs, or every card it
+        // passes would claim the rail on the way.
+        lockUntil = performance.now() + (reduced ? 0 : 700);
+        cards[index]?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+      });
+    }
+  }
+</script>

@@ -1,0 +1,61 @@
+---
+/**
+ * Third-party brand marks.
+ *
+ * Figma names most icons after their Remix glyph (contract rule 3), but the
+ * home page also uses vendor logos — Jira, Gmail, Zendesk, Linear, Google
+ * Calendar, Mailchimp — that have no Remix glyph and no exported asset in the
+ * payload (home-spec gap #2: every IMAGE-SVG node returns a name and a box
+ * size, no path data and no fill).
+ *
+ * Where Remix ships the mark we use it. Everything else renders as a visible,
+ * correctly-sized placeholder per contract rule 6, so a missing vendor logo can
+ * never ship silently.
+ */
+interface Props {
+  /** The Figma node name, e.g. `Slack`, `Google Calendar`. */
+  name: string;
+  /** Figma box size in px. */
+  size?: number;
+  /** Figma node id, surfaced in the placeholder tooltip. */
+  node?: string;
+}
+
+const { name, size = 28, node } = Astro.props;
+
+/** Only these vendor marks exist in Remix Icon. */
+const remixBrands: Record<string, string> = {
+  Slack: 'ri-slack-fill',
+  'slack-line': 'ri-slack-line',
+};
+
+const glyph = remixBrands[name];
+
+const initials = name
+  .split(/[\s-]+/)
+  .map((word) => word[0])
+  .join('')
+  .slice(0, 2)
+  .toUpperCase();
+---
+
+{
+  glyph ? (
+    <i
+      class={`${glyph} text-icon-sub-600 inline-flex shrink-0 items-center justify-center`}
+      style={`font-size:${size}px;width:${size}px;height:${size}px;line-height:1`}
+      role="img"
+      aria-label={name}
+    />
+  ) : (
+    <span
+      class="border-stroke-sub-300 text-text-soft-400 inline-flex shrink-0 items-center justify-center rounded-[6px] border border-dashed font-medium"
+      style={`width:${size}px;height:${size}px;font-size:${Math.max(9, Math.round(size * 0.34))}px;line-height:1`}
+      title={`Brand asset needed: ${name}${node ? ` (Figma ${node})` : ''}, ${size}×${size}`}
+      role="img"
+      aria-label={name}
+    >
+      {initials}
+    </span>
+  )
+}

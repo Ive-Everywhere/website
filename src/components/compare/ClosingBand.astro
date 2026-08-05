@@ -1,0 +1,55 @@
+---
+import Copy from './Copy.astro';
+import FeatureCard from './FeatureCard.astro';
+
+/**
+ * Section 5 — the closing positioning band. Figma `151:5612` (named "Hero").
+ *
+ * Layout: row, padding 32px 187px 64px, justify center, gap 56.
+ * Left copy column fixed 502px; right stack of three cards, gap 12.
+ *
+ * This is the only section whose H3 and Label resolve LEFT rather than CENTER
+ * (spec gaps F.31 and F.32), so it does not use `SectionHeading`.
+ *
+ * All three cards are identical and unwritten (spec gap A.3). Unlike the proof
+ * grid, these cards carry no divider and no second paragraph.
+ */
+interface Props {
+  closing: {
+    title: { text: string; node?: string; needed?: boolean };
+    sub: { text: string; node?: string; needed?: boolean };
+    cards: {
+      icon: string;
+      heading: { text: string; node?: string; needed?: boolean };
+      body: { text: string; node?: string; needed?: boolean };
+    }[];
+  };
+}
+
+const { closing } = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  {/* Copy column beside the card stack at `lg`, stacked below it. */}
+  <div
+    class="page-shell gutter-187 flex flex-col gap-10 pt-8 pb-16 lg:flex-row lg:justify-center lg:gap-14"
+  >
+    <div class="flex flex-col gap-6 lg:max-w-[502px] lg:shrink-0">
+      <div class="flex flex-col gap-2">
+        <Copy value={closing.title} as="h2" class="t-landing-h3 text-text-strong-950" />
+        <Copy value={closing.sub} class="t-label-md text-text-sub-600" />
+      </div>
+    </div>
+
+    <div class="flex min-w-0 flex-1 flex-col gap-3">
+      {
+        closing.cards.map((card, i) => (
+          <FeatureCard
+            card={card}
+            note={i > 0 ? 'identical to closing card 1 in Figma; never written' : undefined}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
