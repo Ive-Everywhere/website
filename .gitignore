@@ -22,5 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
-.vercel
-backup-animations/
+
+# Cloudflare local state, written by any wrangler invocation.
+.wrangler/

@@ -1,0 +1,34 @@
+---
+/**
+ * One string transcribed from Figma.
+ *
+ * Two jobs, both required by the build contract:
+ *  1. Emit the Figma node id as an HTML comment beside the string, so any word
+ *     on the page can be traced back to the drawing.
+ *  2. Wrap unwritten copy in `.copy-needed`, so placeholder, duplicated and
+ *     wrong-competitor strings stay visible in the render and can never ship
+ *     silently. The string itself is always verbatim — never rewritten.
+ */
+interface Props {
+  value: { text: string; node?: string; needed?: boolean };
+  /** Tag to render. Use a real heading level, not the Figma style name. */
+  as?: string;
+  /** Extra note appended to the HTML comment, e.g. why the copy is flagged. */
+  note?: string;
+  class?: string;
+  id?: string;
+}
+
+const { value, as: Tag = 'p', note, class: className = '', id } = Astro.props;
+
+const comment = [value.node ? `Figma ${value.node}` : null, note]
+  .filter(Boolean)
+  .join(' — ')
+  // An HTML comment cannot contain `--`, and cannot end with `-`.
+  .replace(/--+/g, '—');
+---
+
+<Tag class={className} id={id}>
+  {comment && <Fragment set:html={`<!-- ${comment} -->`} />}
+  {value.needed ? <span class="copy-needed">{value.text}</span> : value.text}
+</Tag>

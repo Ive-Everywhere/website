@@ -1,0 +1,287 @@
+/* ════════════════════════════════════════════════════════════════════════
+   LIVE COMPONENT CHROME — app-accurate pieces for the animated section art.
+   Anatomy read off the REAL exported app screens in designs/products/:
+     chat-state-typing     → composer, model pill, send button, user bubble
+     chat-state-approval   → collapsed tool-call row, Approval Required card
+     jobs                  → filter chips, job rows, segmented control
+     sessions-list         → session rows with status
+   Layered on top of art.css (panels, chips, rails). Namespaced `l-` because
+   eluu.css owns the generic names.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ─── chat surface ──────────────────────────────────────────────────────── */
+.l-chat { display: flex; flex-direction: column; gap: 10px; }
+
+.l-bubble {
+  align-self: flex-end; max-width: 78%;
+  background: var(--bg-weak-50); border: 1px solid var(--stroke-soft-200);
+  border-radius: 12px; padding: 9px 13px;
+  font-size: 12.5px; line-height: 1.45; letter-spacing: -0.008em;
+}
+.l-prose { font-size: 12.5px; line-height: 1.5; letter-spacing: -0.008em; color: var(--text-strong-950); }
+.l-prose b { font-weight: 600; }
+
+/* collapsed tool call — the `>_ command` row */
+.l-tool {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--stroke-soft-200); background: var(--bg-weak-25);
+  border-radius: 8px; padding: 7px 10px;
+}
+.l-tool-caret { font-family: var(--font-mono); font-size: 11px; color: var(--text-soft-400); flex: none; }
+.l-tool-cmd {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: -0.01em;
+  color: var(--text-sub-600); flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.l-tool-meta { font-size: 10px; color: var(--text-soft-400); flex: none; }
+.l-tool-ok { color: var(--success-base); font-size: 13px; flex: none; opacity: 0; transition: opacity .3s; }
+.l-tool.is-done .l-tool-ok { opacity: 1; }
+.l-tool.is-run .l-tool-cmd { color: var(--text-strong-950); }
+
+/* composer */
+.l-composer {
+  background: var(--bg-white-0); border: 1px solid var(--stroke-soft-200);
+  border-radius: 14px; box-shadow: var(--shadow-composer); overflow: hidden;
+}
+.l-composer-text {
+  padding: 13px 14px 4px; font-size: 12.5px; line-height: 1.45;
+  letter-spacing: -0.008em; min-height: 34px; color: var(--text-strong-950);
+}
+.l-composer-text:empty::before { content: "Ask anything"; color: var(--text-soft-400); }
+.l-caret {
+  display: inline-block; width: 1.5px; height: 13px; vertical-align: -2px;
+  background: var(--text-strong-950); margin-left: 1px; animation: l-blink 1s steps(1) infinite;
+}
+@keyframes l-blink { 0%,50% { opacity: 1 } 50.01%,100% { opacity: 0 } }
+.l-composer-bar { display: flex; align-items: center; gap: 7px; padding: 8px 10px 10px; }
+.l-cbtn {
+  width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center;
+  color: var(--icon-sub-600); font-size: 14px; flex: none;
+}
+.l-cpill {
+  display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 8px;
+  border-radius: 8px; font-size: 11px; color: var(--text-sub-600); letter-spacing: -0.005em;
+}
+.l-send {
+  margin-left: auto; width: 26px; height: 26px; border-radius: 999px;
+  background: var(--bg-strong-950); color: var(--text-white-0);
+  display: grid; place-items: center; font-size: 14px; flex: none;
+  transition: transform .18s var(--ease-out-app);
+}
+.l-send.is-hit { transform: scale(.86); }
+
+/* thinking shimmer, as in the real app */
+.l-musing { font-size: 11px; color: var(--text-soft-400); letter-spacing: -0.005em; }
+.l-musing span {
+  background: linear-gradient(90deg, var(--text-soft-400) 20%, var(--text-strong-950) 50%, var(--text-soft-400) 80%);
+  background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: l-shimmer 1.6s linear infinite;
+}
+@keyframes l-shimmer { to { background-position: -200% 0 } }
+
+/* ─── approval card (real component) ────────────────────────────────────── */
+.l-approval {
+  background: var(--bg-white-0); border: 1px solid var(--stroke-soft-200);
+  border-radius: 12px; padding: 12px 14px; box-shadow: var(--shadow-regular-lg);
+}
+.l-appr-head { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; letter-spacing: -0.01em; }
+.l-appr-tool { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-sub-600); margin-top: 7px; }
+.l-appr-warn { font-size: 10.5px; color: var(--text-soft-400); margin-top: 3px; line-height: 1.4; }
+.l-code {
+  font-family: var(--font-mono); font-size: 10px; line-height: 1.5;
+  background: var(--bg-weak-50); border-radius: 7px; padding: 8px 10px; margin-top: 8px;
+  color: var(--text-sub-600); white-space: pre; overflow: hidden;
+}
+.l-appr-actions { display: flex; align-items: center; gap: 7px; margin-top: 10px; }
+.l-btn {
+  display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px;
+  border-radius: 8px; font-size: 11px; font-weight: 500; letter-spacing: -0.005em;
+}
+.l-btn--primary { background: var(--primary-base); color: var(--static-white); }
+.l-btn--ghost { border: 1px solid var(--stroke-soft-200); color: var(--text-sub-600); }
+.l-btn--text { color: var(--text-soft-400); }
+.l-btn.is-focus { box-shadow: 0 0 0 3px var(--primary-alpha-16); }
+
+/* ─── jobs ──────────────────────────────────────────────────────────────── */
+.l-filters { display: flex; align-items: center; gap: 6px; }
+.l-filter {
+  display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px;
+  border: 1px solid var(--stroke-soft-200); border-radius: 999px;
+  font-size: 11px; color: var(--text-sub-600); background: var(--bg-white-0);
+}
+.l-filter b { font-weight: 500; color: var(--text-strong-950); font-variant-numeric: tabular-nums; }
+.l-seg { display: inline-flex; border: 1px solid var(--stroke-soft-200); border-radius: 8px; overflow: hidden; margin-left: auto; }
+.l-seg span { font-size: 10.5px; padding: 4px 9px; color: var(--text-soft-400); }
+.l-seg span.is-on { background: var(--bg-weak-50); color: var(--text-strong-950); }
+
+.l-job {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border-top: 1px solid var(--stroke-soft-200);
+}
+.l-job:first-child { border-top: 0; }
+.l-job-ico {
+  width: 26px; height: 26px; border-radius: 8px; flex: none; display: grid; place-items: center;
+  background: var(--bg-weak-50); color: var(--icon-sub-600); font-size: 13px;
+}
+.l-job-name { font-size: 12px; font-weight: 500; letter-spacing: -0.008em; }
+.l-job-when { font-size: 10.5px; color: var(--text-soft-400); margin-top: 1px; }
+.l-job.is-run { background: var(--primary-light); }
+.l-job.is-run .l-job-ico { background: var(--primary-base); color: var(--static-white); }
+
+/* ─── progress ──────────────────────────────────────────────────────────── */
+.l-track { height: 5px; border-radius: 999px; background: var(--bg-soft-200); overflow: hidden; }
+.l-fill { height: 100%; width: 0; border-radius: 999px; background: var(--primary-base); transition: width .45s linear; }
+.l-fill--ok { background: var(--success-base); }
+
+/* ─── session / parallel lane ───────────────────────────────────────────── */
+.l-lane { display: flex; align-items: center; gap: 9px; padding: 9px 0; border-top: 1px solid var(--stroke-soft-200); }
+.l-lane:first-child { border-top: 0; }
+.l-lane-body { flex: 1; min-width: 0; }
+.l-lane-top { display: flex; align-items: baseline; gap: 6px; }
+.l-lane-name { font-size: 11.5px; font-weight: 600; letter-spacing: -0.008em; }
+.l-lane-role { font-size: 10px; color: var(--text-soft-400); }
+.l-lane-task { font-size: 11px; color: var(--text-sub-600); margin: 2px 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.l-lane-done { color: var(--success-base); font-size: 13px; opacity: 0; transition: opacity .3s; flex: none; }
+.l-lane.is-done .l-lane-done { opacity: 1; }
+
+/* ─── slack ─────────────────────────────────────────────────────────────── */
+.l-slack {
+  background: var(--bg-white-0); border: 1px solid var(--stroke-soft-200);
+  border-radius: 12px; box-shadow: var(--shadow-regular-lg); overflow: hidden;
+  /* the delivered message is the payoff — it must sit ABOVE the panel that
+     produced it, or the panel's z-index:2 quietly paints over its left edge */
+  z-index: 4;
+}
+.l-slack-head { display: flex; align-items: center; gap: 7px; padding: 9px 12px; border-bottom: 1px solid var(--stroke-soft-200); }
+.l-slack-body { padding: 10px 12px; display: flex; gap: 8px; }
+
+/* ─── connection tile ───────────────────────────────────────────────────── */
+.l-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.l-tile {
+  border: 1px solid var(--stroke-soft-200); background: var(--bg-white-0);
+  border-radius: 10px; padding: 9px; display: flex; flex-direction: column; gap: 6px;
+  transition: border-color .3s, box-shadow .3s, opacity .3s;
+}
+.l-tile img { width: 16px; height: 16px; }
+.l-tile-name { font-size: 10.5px; font-weight: 500; letter-spacing: -0.005em; }
+.l-tile-state { font-size: 9.5px; color: var(--text-soft-400); font-variant-numeric: tabular-nums; }
+.l-tile.is-idle { opacity: .45; }
+.l-tile.is-live { border-color: var(--primary-base); box-shadow: 0 0 0 3px var(--primary-alpha-10); }
+.l-tile.is-live .l-tile-state { color: var(--primary-base); }
+.l-tile.is-done .l-tile-state { color: var(--success-base); }
+
+/* ─── carousel (centre card sharp, neighbours blurred + drifting) ───────── */
+.l-carousel { position: relative; height: 100%; }
+.l-cslot {
+  position: absolute; left: 50%; top: 50%; width: 430px;
+  transition: transform .7s var(--ease-out-app), opacity .7s var(--ease-out-app), filter .7s var(--ease-out-app);
+}
+.l-cslot[data-slot="0"]  { transform: translate(-50%, -50%) scale(1);    opacity: 1;   filter: blur(0); z-index: 3; }
+.l-cslot[data-slot="-1"] { transform: translate(-50%, -152%) scale(.88); opacity: .55; filter: blur(2.5px); z-index: 2; }
+.l-cslot[data-slot="1"]  { transform: translate(-50%, 52%)   scale(.88); opacity: .55; filter: blur(2.5px); z-index: 2; }
+.l-cslot[data-slot="-2"] { transform: translate(-50%, -240%) scale(.78); opacity: .22; filter: blur(5px); z-index: 1; }
+.l-cslot[data-slot="2"]  { transform: translate(-50%, 140%)  scale(.78); opacity: .22; filter: blur(5px); z-index: 1; }
+
+/* ─── cost meter ────────────────────────────────────────────────────────── */
+.l-meter { height: 7px; border-radius: 999px; background: var(--bg-soft-200); overflow: hidden; }
+.l-meter i { display: block; height: 100%; width: 0; background: var(--primary-base); transition: width .5s linear, background .3s; }
+.l-meter.is-warn i { background: var(--warning-base); }
+.l-meter.is-cap i { background: var(--error-base); }
+
+/* ─── pointer ───────────────────────────────────────────────────────────── */
+.l-cursor {
+  position: absolute; width: 15px; height: 15px; z-index: 40; pointer-events: none;
+  opacity: 0; transition: transform .55s var(--ease-out-app), opacity .3s;
+  filter: drop-shadow(0 1px 2px rgba(10,13,20,.25));
+}
+
+/* ─── entrances ─────────────────────────────────────────────────────────── */
+.l-in { opacity: 0; transform: translateY(8px); transition: opacity .35s var(--ease-out-app), transform .35s var(--ease-out-app); }
+.l-in.is-on { opacity: 1; transform: none; }
+.l-rise { opacity: 0; transform: translateY(22px) scale(.98); transition: opacity .45s var(--ease-out-app), transform .45s var(--ease-out-app); }
+.l-rise.is-on { opacity: 1; transform: none; }
+
+
+/* ─── scrolling item stack ──────────────────────────────────────────────────
+   A fixed-height viewport whose inner track is TRANSLATED (not scrollTop'd).
+   Two reasons: `scroll-behavior:smooth` gives no control over duration or
+   easing, and inside an iframe srcdoc it can be ignored entirely — whereas a
+   transform transition eases exactly like the rest of the app's motion.
+   Items animate their own height in, so the stack visibly grows and then
+   starts to scroll once it outgrows the viewport. */
+.l-scroll { position: relative; overflow: hidden; flex: 1; min-height: 0; }
+.l-scroll-inner { transition: transform .5s var(--ease-out-app); will-change: transform; }
+
+.l-slot {
+  max-height: 0; opacity: 0; overflow: hidden; margin-top: 0;
+  transition: max-height .45s var(--ease-out-app),
+              opacity .3s var(--ease-out-app),
+              margin-top .45s var(--ease-out-app);
+}
+.l-slot.is-on { max-height: 96px; opacity: 1; margin-top: 12px; }
+.l-slot:first-child.is-on { margin-top: 0; }
+
+/* the newest item is what the eye should land on; older ones recede slightly */
+.l-scroll-inner .l-slot { transition-property: max-height, opacity, margin-top; }
+
+/* fade the top edge so items scrolling out don't cut abruptly */
+.l-scroll::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 28px; z-index: 3;
+  background: linear-gradient(var(--bg-white-0), rgba(255,255,255,0));
+  pointer-events: none; opacity: 0; transition: opacity .3s;
+}
+.l-scroll.is-scrolled::before { opacity: 1; }
+
+/* ─── composer collapse ─────────────────────────────────────────────────────
+   Collapsing max-height (not display:none) so the panel reflows smoothly
+   instead of jumping the moment the message is sent. */
+.l-composer-collapse {
+  max-height: 120px; opacity: 1; overflow: hidden;
+  transition: max-height .45s var(--ease-out-app), opacity .25s var(--ease-out-app);
+}
+.l-composer-collapse.is-gone { max-height: 0; opacity: 0; pointer-events: none; }
+
+
+/* Cross-fade asymmetry: the OUTGOING layer must clear faster than the box
+   resizes, or it ghosts behind the incoming one while the card is shrinking.
+   Fade out quickly, fade in on the card's own easing. */
+.layer:not(.is-on) { transition-duration: .14s; }
+
+
+/* ─── RING CAROUSEL ─────────────────────────────────────────────────────────
+   Krishna's original idea: biggest card in the middle, the ones above and
+   below smaller and slightly blurred, drifting in a circular motion.
+
+   Slot positions are driven by data-slot (-2…2) computed as the SHORTEST
+   signed distance around the ring, so the list wraps continuously instead of
+   snapping back to the top after the last card. Offsets are in % of the card's
+   own height, so the rhythm holds whatever the card contains. */
+.l-ring { position: absolute; inset: 0; }
+.l-ring-slot {
+  position: absolute; left: 50%; top: 50%; width: var(--ring-w, 430px);
+  transition: transform .75s var(--ease-out-app),
+              opacity .75s var(--ease-out-app),
+              filter .75s var(--ease-out-app);
+}
+.l-ring-slot[data-slot="0"]  { transform: translate(-50%,-50%) scale(1);    opacity: 1;   filter: blur(0);     z-index: 4; }
+.l-ring-slot[data-slot="-1"] { transform: translate(-50%,-168%) scale(.86); opacity: .52; filter: blur(2.2px); z-index: 3; }
+.l-ring-slot[data-slot="1"]  { transform: translate(-50%,68%)   scale(.86); opacity: .52; filter: blur(2.2px); z-index: 3; }
+.l-ring-slot[data-slot="-2"] { transform: translate(-50%,-278%) scale(.74); opacity: .2;  filter: blur(4.5px); z-index: 2; }
+.l-ring-slot[data-slot="2"]  { transform: translate(-50%,178%)  scale(.74); opacity: .2;  filter: blur(4.5px); z-index: 2; }
+
+/* trigger badge — says where the work came from; none of them is "you" */
+.l-trigger {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--text-soft-400); white-space: nowrap;
+}
+.l-trigger img { width: 12px; height: 12px; }
+.l-trigger i { font-size: 12px; }
+
+
+/* ─── instant reset ─────────────────────────────────────────────────────────
+   A looping demo's RESET must never animate. When a cycle restarts, elements
+   with different transition durations unwind at different rates and you get a
+   flash of an impossible in-between state (in C3-B: requests whose children had
+   already faded, i.e. headless rows). Add this for one frame while resetting. */
+.l-noanim, .l-noanim * { transition: none !important; }

@@ -1,95 +1,359 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import './tokens.css';
 
-@font-face {
-  font-family: 'Jersey 10';
-  src: url('/fonts/jersey-10.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: block;
-}
+/* Inter carries an optical-size axis, which is what Figma calls "Inter Display". */
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/inter/opsz.css';
+@import '@fontsource/dm-mono/400.css';
+@import '@fontsource/dm-mono/500.css';
 
-/* Söhne — body font (Buch = Book, ~400) */
-@font-face {
-  font-family: 'Söhne';
-  src: url('/fonts/sohne-buch.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-/* Söhne — heading font (Halbfett = Semi-bold, ~600) */
-@font-face {
-  font-family: 'Söhne';
-  src: url('/fonts/sohne-halbfett.otf') format('opentype');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
+/* Figma names every icon after its Remix Icon glyph, so we use Remix directly. */
+@import 'remixicon/fonts/remixicon.css';
 
+/* Dark mode is driven by an explicit attribute, not the OS preference. */
+@custom-variant dark ([data-theme='dark'] &);
+
+/**
+ * Every design token is exposed to Tailwind here, so components use
+ * `bg-soft-200` / `text-strong-950` and never a raw hex.
+ * A raw hex in a component is a review failure.
+ */
 @theme inline {
-  --font-sans: "Söhne", sans-serif;
-  --font-heading: "Söhne", sans-serif;
-  --font-serif: serif;
-  --font-mono: monospace;
+  /* Raw scales. neutral-700 and neutral-900 are not defined in Figma. */
+  --color-neutral-0: var(--neutral-0);
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-950: var(--neutral-950);
 
-  --color-bg: #13100a;
-  --color-bg-card: #1e1d1b;
-  --color-bg-warm: #1e1d1b;
-  --color-bg-dark: #13100a;
-  --color-tx: #ede9e3;
-  --color-tx-2: rgba(237, 233, 227, 0.6);
-  --color-tx-3: rgba(237, 233, 227, 0.4);
-  --color-tx-4: rgba(237, 233, 227, 0.25);
-  --color-border: rgba(237, 233, 227, 0.06);
-  --color-border-mid: rgba(237, 233, 227, 0.1);
-  --color-dark: #ede9e3;
-  --color-dark-2: #d7d3cd;
-  --color-dark-3: #b5b1ab;
-  --color-accent: #ED733B;
-  --max-w: 1380px;
+  --color-maroon-50: var(--maroon-50);
+  --color-maroon-100: var(--maroon-100);
+  --color-maroon-200: var(--maroon-200);
+  --color-maroon-300: var(--maroon-300);
+  --color-maroon-400: var(--maroon-400);
+  --color-maroon-500: var(--maroon-500);
+  --color-maroon-600: var(--maroon-600);
+  --color-maroon-700: var(--maroon-700);
+  --color-maroon-800: var(--maroon-800);
+  --color-maroon-900: var(--maroon-900);
+  --color-maroon-950: var(--maroon-950);
+
+  --color-neutral-alpha-24: var(--neutral-alpha-24);
+  --color-neutral-alpha-16: var(--neutral-alpha-16);
+  --color-neutral-alpha-10: var(--neutral-alpha-10);
+
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-darker: var(--primary-darker);
+  --color-primary-base: var(--primary-base);
+  --color-primary-alpha-16: var(--primary-alpha-16);
+  --color-primary-alpha-10: var(--primary-alpha-10);
+
+  --color-static-black: var(--static-black);
+  --color-static-white: var(--static-white);
+
+  --color-bg-strong-950: var(--bg-strong-950);
+  --color-bg-surface-800: var(--bg-surface-800);
+  --color-bg-sub-300: var(--bg-sub-300);
+  --color-bg-soft-200: var(--bg-soft-200);
+  --color-bg-weak-50: var(--bg-weak-50);
+  --color-bg-white-0: var(--bg-white-0);
+
+  --color-text-strong-950: var(--text-strong-950);
+  --color-text-sub-600: var(--text-sub-600);
+  --color-text-soft-400: var(--text-soft-400);
+  --color-text-disabled-300: var(--text-disabled-300);
+  --color-text-white-0: var(--text-white-0);
+
+  --color-stroke-strong-950: var(--stroke-strong-950);
+  --color-stroke-sub-300: var(--stroke-sub-300);
+  --color-stroke-soft-200: var(--stroke-soft-200);
+  --color-stroke-white-0: var(--stroke-white-0);
+
+  --color-icon-strong-950: var(--icon-strong-950);
+  --color-icon-sub-600: var(--icon-sub-600);
+  --color-icon-soft-400: var(--icon-soft-400);
+  --color-icon-disabled-300: var(--icon-disabled-300);
+  --color-icon-white-0: var(--icon-white-0);
+
+  --color-card-surface: var(--card-surface);
+  --color-art-surface: var(--art-surface);
+
+  --color-faded-dark: var(--faded-dark);
+  --color-faded-base: var(--faded-base);
+  --color-faded-light: var(--faded-light);
+  --color-faded-lighter: var(--faded-lighter);
+
+  /* Provisional. These four appear in the marketing designs but have no token
+   * in the Figma design system. See tokens/GAPS.md — do not add more here. */
+  --color-accent-peach-100: var(--accent-peach-100);
+  --color-accent-peach-200: var(--accent-peach-200);
+  --color-accent-peach-800: var(--accent-peach-800);
+  --color-success-light: var(--success-light);
+
+  /* The contrast band's own ramp. Only `PrivateCloud.astro` may use these —
+   * they are meaningless anywhere the surface is not the maroon band. */
+  --color-band-surface: var(--band-surface);
+  --color-band-ink: var(--band-ink);
+  --color-band-muted: var(--band-muted);
+  --color-band-well: var(--band-well);
+  --color-band-card: var(--band-card);
+  --color-band-card-ink: var(--band-card-ink);
+  --color-band-card-body: var(--band-card-body);
+  --color-band-step: var(--band-step);
+
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, monospace;
+
+  /* The site is designed at 1600px with 187–188px side padding. */
+  --container-page: 1600px;
+
+  --shadow-card-large:
+    0 0 0 1px rgba(23, 23, 23, 0.08), 0 1px 1px -0.5px rgba(23, 23, 23, 0.04),
+    0 3px 3px -1.5px rgba(23, 23, 23, 0.04), 0 6px 6px -3px rgba(23, 23, 23, 0.04),
+    0 10px 10px -5px rgba(23, 23, 23, 0.04), 0 20px 20px -10px rgba(23, 23, 23, 0.04),
+    inset 0 -1px 1px -0.5px rgba(23, 23, 23, 0.06);
+  --shadow-button-primary:
+    0 0 0 1px rgba(117, 90, 104, 1), 0 1px 2px 0 rgba(14, 18, 27, 0.24);
+  /* Hero product-mock cards — Figma 147:3099 / 147:3112 / 147:3131. */
+  --shadow-widget-card: 0 1.125px 2.25px 0 rgba(10, 13, 20, 0.03);
 }
 
-html {
-  scroll-behavior: auto;
-  scroll-padding-top: 80px;
-}
-@media (min-width: 640px) {
-  html { scroll-padding-top: 96px; }
-}
-@media (min-width: 1024px) {
-  html { scroll-padding-top: 110px; }
+/**
+ * Type scale, transcribed from the Figma text styles.
+ * `Landing Title/*` use Inter Variable at weight 550 and do NOT carry ss11.
+ * `Title/*` use the Display optical size. Everything else carries ss11.
+ */
+@layer base {
+  :root {
+    --opsz-text: 'opsz' 14;
+    --opsz-display: 'opsz' 32;
+  }
+
+  html {
+    /* The header is sticky, so an in-page anchor would land underneath it. */
+    scroll-padding-top: 5.5rem;
+    font-family: var(--font-sans);
+    font-variation-settings: var(--opsz-text);
+    font-feature-settings: 'ss11' 1;
+    background-color: var(--bg-white-0);
+    color: var(--static-black);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /**
+   * RESPONSIVE TYPE — one definition, no per-component overrides.
+   *
+   * Figma is desktop-1600 only (contract rule 7), so the display sizes below
+   * are the value AT 1600px and nothing smaller. Each headline class therefore
+   * carries a `clamp()` that reaches the exact Figma size at 1024px and holds
+   * it from there up, and steps down to a readable phone size at 390px:
+   *
+   *   size(vw) = intercept + slope·vw, slope = (max − min) / (1280 − 390)
+   *
+   * The upper clamp bound is the Figma value, so 1600px is byte-identical to
+   * the drawing. Line height is a unitless ratio taken from the Figma pair
+   * (64/56, 56/48, 48/40, 40/32, 32/24), so it also resolves exactly at 1600.
+   *
+   * Components must never restate a size. A `max-lg:text-[36px]` one-off is a
+   * review failure — change the step here instead.
+   */
+
+  /* Landing titles: the only styles without ss11. */
+  .t-landing-h1,
+  .t-landing-h2,
+  .t-landing-h3,
+  .t-landing-h4 {
+    font-weight: 400;
+    font-feature-settings: normal;
+  }
+  /* 56/64 at 1600 → 36px at 390. */
+  .t-landing-h1 {
+    font-size: clamp(36px, 27.24px + 2.247vw, 56px);
+    line-height: 1.142857;
+    letter-spacing: -0.02em;
+  }
+  /* `Landing Title/H2` — 48/56. Used by the stat cards and the pull quote,
+   * which previously set the pair inline. → 32px at 390. */
+  .t-landing-h2 {
+    font-size: clamp(32px, 24.99px + 1.798vw, 48px);
+    line-height: 1.166667;
+    letter-spacing: -0.015em;
+  }
+  /* `Landing Title/H4` — 32/40, -0.005em. Distinct from `.t-h4`, which is
+   * `Title/H4` (Inter Display 500, ss11 on). This one is Inter Variable 550
+   * with ss11 off, like the other landing titles. → 24px at 390. */
+  .t-landing-h4 {
+    font-size: clamp(24px, 20.49px + 0.899vw, 32px);
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+  }
+  /* 40/48 at 1600 → 28px at 390. */
+  .t-landing-h3 {
+    font-size: clamp(28px, 22.74px + 1.348vw, 40px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  /* Display titles use the Display optical size. */
+  .t-h4,
+  .t-h5,
+  .t-h6 {
+    font-weight: 450;
+    font-variation-settings: var(--opsz-display);
+  }
+  /* 32/40 at 1600 → 24px at 390. */
+  .t-h4 {
+    font-size: clamp(24px, 20.49px + 0.899vw, 32px);
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+  }
+  /* `Title/H5 Title` — the compare table's row labels. Carries no
+   * letterSpacing key in Figma, so it stays `normal`. 24/32 → 20px at 390. */
+  .t-h5 {
+    font-size: clamp(20px, 18.25px + 0.449vw, 24px);
+    line-height: 1.333333;
+  }
+  /* 20/28 already reads at phone size, so it takes no step. */
+  .t-h6 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .t-paragraph-lg {
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.015em;
+  }
+  .t-paragraph-md {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.011em;
+  }
+  .t-paragraph-sm {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.006em;
+  }
+
+  /* `Paragraph/X Small` — the hero stat captions. No letterSpacing key. */
+  .t-paragraph-xs {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  /* `Label/Large` — every card heading on the compare page. Same metrics as
+   * `.t-paragraph-lg` but Medium rather than Regular. */
+  .t-label-lg {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.015em;
+  }
+  .t-label-md {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.011em;
+  }
+  .t-label-sm {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.006em;
+  }
+
+  .t-subheading-md,
+  .t-subheading-sm {
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .t-subheading-md {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .t-subheading-sm {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .t-mono-sm {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    text-transform: uppercase;
+  }
+  /* `DM Mono/Medium` — 16/24 with textCase UPPER. The compare-page eyebrow.
+   * The string is stored in sentence case and uppercased here, so the copy
+   * stays readable in the CMS. */
+  .t-mono-md {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    text-transform: uppercase;
+  }
 }
 
-body {
-  background: #13100a;
-  color: #ede9e3;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-family: "Söhne", sans-serif;
+/**
+ * PAGE GUTTERS — one definition per Figma value, no per-section arbitrary
+ * padding. Figma draws 187px, 188px and 292px of side padding at 1600px wide.
+ * Carried over literally those numbers eat a phone screen whole, so each
+ * gutter is a three-step ramp:
+ *
+ *   ≤ 639px   24px   phone
+ *   ≥ 640px   40px   tablet
+ *   ≥ 1024px  fluid  40px at 1024 → the exact Figma value at 1600, then held
+ *
+ * The desktop leg is linear in `vw` so the composition opens up smoothly
+ * instead of snapping, and the clamp's upper bound is the Figma number, so the
+ * 1600px rendering is byte-identical to the drawing.
+ *
+ * `.page-shell` also applies the 1600px cap and the auto margins that every
+ * section repeated by hand.
+ */
+@layer components {
+  .page-shell {
+    margin-inline: auto;
+    max-width: var(--container-page);
+    padding-inline: 24px;
+  }
+  @media (min-width: 640px) {
+    .page-shell {
+      padding-inline: 40px;
+    }
+  }
+  /* 40px at 1024 → 188px at 1600: 148 / 576 = 25.6944vw. */
+  @media (min-width: 1024px) {
+    .gutter-188 {
+      padding-inline: clamp(40px, 25.6944vw - 223.111px, 188px);
+    }
+    /* 147 / 576 = 25.5208vw. */
+    .gutter-187 {
+      padding-inline: clamp(40px, 25.5208vw - 221.333px, 187px);
+    }
+    /* 252 / 576 = 43.75vw. */
+    .gutter-292 {
+      padding-inline: clamp(40px, 43.75vw - 408px, 292px);
+    }
+  }
 }
 
-/* All headings default to Söhne Halbfett (600) — semi-bold */
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Söhne", sans-serif;
+/**
+ * Copy that has not been written yet renders as a visible marker so it can
+ * never ship silently. Used wherever the Figma still holds placeholder text.
+ */
+@layer components {
+  .copy-needed {
+    background-color: var(--maroon-100);
+    color: var(--maroon-900);
+    border-bottom: 2px dotted var(--maroon-600);
+    padding-inline: 0.25em;
+  }
 }
-
-::selection { background: rgba(237, 233, 227, 0.15); }
-
-/* --- Scroll reveal animations --- */
-.reveal {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-
-/* Premium button hover */
-a[href], button {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-}
-
-

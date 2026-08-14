@@ -1,0 +1,101 @@
+---
+/**
+ * Use-case index, `/use-cases`.
+ *
+ * Figma draws no index page for this route, so the layout here is ours. It
+ * reuses the section shell of `144:2835` (padding 96/188) and the card of
+ * `home/Security.astro` (radius 28, `bg-card-surface`, 28px Remix icon), so the
+ * index reads as the same family as the eight pages it links to.
+ *
+ * Cards are ordered by the `order` field, which follows the content pack's
+ * INDEX.md listing rather than a publication date.
+ */
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const entries = (await getCollection('useCases', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+/**
+ * The collection schema carries no per-page icon and is owned by another
+ * workstream, so the index keeps its own map. Each glyph matches the one the
+ * page's own "powered by" row leads with. An unlisted slug falls back rather
+ * than breaking the grid.
+ */
+const icons: Record<string, string> = {
+  'reconcile-data': 'ri-arrow-left-right-line',
+  'recurring-reports': 'ri-calendar-schedule-line',
+  'build-apps': 'ri-dashboard-line',
+  'replace-saas': 'ri-hand-coin-line',
+  'analyze-data': 'ri-line-chart-line',
+  'process-documents': 'ri-file-text-line',
+  'connect-ai': 'ri-plug-2-line',
+  'ai-cost': 'ri-money-dollar-circle-line',
+};
+---
+
+<Base
+  title="Use cases — Eluu"
+  description="Specialist agents that work across your whole tool stack, one job at a time."
+>
+  <section class="bg-bg-white-0">
+    <div class="page-shell gutter-188 flex flex-col gap-10 pt-16 pb-14">
+      <div class="flex flex-col items-center gap-7">
+        <p class="t-mono-md text-text-soft-400">Use cases</p>
+        <div class="flex w-full flex-col items-center gap-4">
+          <h1 class="t-landing-h1 text-text-strong-950 max-w-[742px] text-center text-balance">
+            One agent for every job you keep doing by hand.
+          </h1>
+          <p class="t-paragraph-md text-text-sub-600 max-w-[742px] text-center text-pretty">
+            {/* Not written by Krishna — an index line the content pack does not
+                supply, so it is marked rather than presented as final copy. */}
+            <span class="copy-needed">
+              Eight jobs Eluu agents already run, from reconciliation to AI spend.
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-bg-white-0">
+    <div class="page-shell gutter-188 py-14">
+      {
+        entries.length === 0 ? (
+          <p class="t-paragraph-md text-text-sub-600">No use cases are published yet.</p>
+        ) : (
+          <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-9">
+            {entries.map((entry) => (
+              <li class="flex">
+                <a
+                  href={`/use-cases/${entry.id}`}
+                  class="bg-card-surface focus-visible:outline-primary-base flex w-full flex-col gap-6 rounded-[28px] p-6 transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 sm:p-8 lg:gap-8 lg:p-10"
+                >
+                  <i
+                    class={`${icons[entry.id] ?? 'ri-apps-2-line'} text-icon-strong-950 text-[28px]`}
+                    aria-hidden="true"
+                  />
+
+                  <div class="flex flex-col gap-3">
+                    <h2 class="t-h4 text-text-strong-950 text-balance">{entry.data.title}</h2>
+                    <p class="t-label-md text-text-sub-600 text-pretty">{entry.data.description}</p>
+                  </div>
+
+                  {/* The card itself is the link, so this line only labels it. */}
+                  <span
+                    class="t-label-md text-primary-base mt-auto inline-flex items-center gap-1"
+                    aria-hidden="true"
+                  >
+                    See the use case
+                    <span>→</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </section>
+</Base>

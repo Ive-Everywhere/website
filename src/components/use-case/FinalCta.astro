@@ -1,0 +1,52 @@
+---
+import Button from '../ui/Button.astro';
+
+/**
+ * Section 10 — the page's own closing line.
+ *
+ * Every use-case page ends on a headline of its own plus the two site-wide
+ * CTAs. The peach `CtaBand` in `Base.astro` takes one button and one fixed
+ * heading, so it cannot carry this copy; it still closes the page underneath
+ * as the site-wide band. This section is therefore quiet — page surface,
+ * centred, the same button pair as the hero — so the two do not compete.
+ */
+
+interface Props {
+  headline: string;
+  primaryCta?: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+}
+
+const { headline, primaryCta, secondaryCta } = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col items-center gap-8 py-14 lg:gap-10">
+    <h2 class="t-landing-h3 text-text-strong-950 max-w-[742px] text-center text-balance">
+      {headline}
+    </h2>
+
+    <div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+      {
+        primaryCta && (
+          <Button
+            variant="primary-fancy"
+            href={primaryCta.href}
+            label={primaryCta.label}
+            rightIcon="ri-arrow-right-up-long-line"
+          />
+        )
+      }
+      {
+        secondaryCta && (
+          <Button
+            variant="neutral-lighter"
+            href={secondaryCta.href}
+            label={secondaryCta.label}
+            leftIcon="ri-play-mini-fill"
+          />
+        )
+      }
+    </div>
+  </div>
+</section>

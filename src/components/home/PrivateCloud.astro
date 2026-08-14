@@ -1,0 +1,399 @@
+---
+/**
+ * Private cloud — Figma `210:7505` (light) / `217:2880` (dark).
+ *
+ * The one FILLED section on the page. Every other section is `bg-white-0`, so
+ * this band exists to break that run — Krishna's words: "cuts the contrast".
+ * It is drawn maroon in BOTH themes (`maroon-800` light, `maroon-600` dark),
+ * which is why it uses the `--band-*` ramp and not the page ramp. Using
+ * `text-strong-950` here would put near-black ink on dark maroon in light mode.
+ *
+ * Transcribed geometry:
+ *   section  `210:7505` — column, padding 96/188, gap 48, fill #5D374B
+ *   head row `210:7543` — row, space-between, align flex-END
+ *     title  `210:7546` — `Landing Title/H3`, #F8F8F3, two lines split on a
+ *                         U+2028 LINE SEPARATOR
+ *     aside  `210:7547` — FIXED 391px, #AAA89E, `Label/Medium`, aligned RIGHT
+ *                         and BOTTOM, which is what pins the head row to flex-end
+ *   content  `210:7562` — row, gap 48
+ *     well   `210:7590` — FIXED 600 x 600, radius 36, fill #2B272C
+ *     list   `214:3044` — column, gap 8, fill (flex-1), radius 20
+ *       sel  `214:3045` — row, padding 24, gap 24, radius 20, fill #F7F7F4.
+ *                         Holds a 28px icon + `Label/Large` title (#1E1C1E) and
+ *                         a `Paragraph/Medium` body (#58564D).
+ *       step `214:3052` — row, padding 24, gap 12, align center, NO fill.
+ *                         Icon + `Label/Large` label (#DDDBD1), and NO body.
+ *
+ * WHY THIS IS A SELECTOR. Figma draws row 1 filled and with a body, rows 2 and 3
+ * flat and without one. That is one row in a selected state and two in a resting
+ * state, the same pattern as `DetailSplit.astro` (`147:3006`) — so selecting a
+ * row moves the fill and the body to it. Figma carries no prototype data, so the
+ * behaviour is ours; the single filled row is what implies it.
+ *
+ * The body copy for rows 2 and 3 does not exist — Figma never draws those rows
+ * selected, so there is nothing to transcribe. They are marked rather than
+ * invented (contract rule: no fabricated copy).
+ */
+interface Props {
+  /**
+   * Seconds each row holds before the section advances to the next one. Krishna
+   * set 4. Drives BOTH the ring and the advance, because the ring's completion is
+   * what triggers the advance — so there is only ever one number to change.
+   */
+  dwellSeconds?: number;
+}
+
+const { dwellSeconds = 4 } = Astro.props;
+
+interface Row {
+  node: string;
+  icon: string;
+  title: string;
+  /** Absent when Figma never draws the row in its selected state. */
+  body?: string;
+}
+
+const rows: Row[] = [
+  {
+    node: '214:3045',
+    icon: 'ri-cloud-line',
+    title: 'Deploy agents in your VPC',
+    body: 'Agents running inside your own cloud environment',
+  },
+  {
+    node: '214:3052',
+    icon: 'ri-git-branch-line',
+    title: 'Connect to private inference',
+  },
+  {
+    node: '214:3055',
+    icon: 'ri-eye-line',
+    title: 'Build and host apps on your cloud',
+  },
+];
+
+/**
+ * Figma stores the heading as ONE text node broken by a U+2028 LINE SEPARATOR.
+ * It is held as two strings here, deliberately: a raw U+2028 inside a source
+ * literal is invalid in an Astro/TS file and takes the whole compiler down.
+ * Never paste one in — split the string instead.
+ */
+const headingLines = ['Agents in your own cloud', 'Under your lock and key.'];
+---
+
+<section class="bg-band-surface">
+  <div class="page-shell gutter-188 flex flex-col gap-8 py-14 lg:gap-12">
+    {/* 210:7543 — the aside is bottom-aligned in Figma, so the row is flex-end. */}
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+      <h2 class="t-landing-h3 text-band-ink text-balance">
+        {headingLines[0]}<br />{headingLines[1]}
+      </h2>
+      {/* 210:7547 — 391px fixed, right-aligned. Left-aligned below `lg`, where
+          it stacks under the heading and a right edge has nothing to align to. */}
+      <p class="t-label-md text-band-muted lg:w-[391px] lg:shrink-0 lg:text-right">
+        {/* Figma reads "For engineer and developers." — a probable typo, so it
+            is wrapped rather than silently corrected, as with `147:3167`. */}
+        <span class="copy-needed">For engineer and developers.</span>
+      </p>
+    </div>
+
+    {/* 210:7562 — row, gap 48. Stacks below `lg`: a 600px well beside the list
+        does not fit, and the well is the first thing to lose its fixed size. */}
+    <div
+      class="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12"
+      data-cloud-root
+      style={`--cloud-dwell:${dwellSeconds}s`}
+    >
+      {/* 210:7590 — 600 x 600, radius 36. The artwork is not produced yet, so
+          the well is drawn and labelled rather than filled with stock art. */}
+      <div
+        class="bg-band-well flex items-center justify-center rounded-[36px] p-6 max-lg:aspect-square lg:size-[600px] lg:shrink-0"
+      >
+        <span class="t-paragraph-sm copy-needed text-center">
+          Visual needed — private cloud
+        </span>
+      </div>
+
+      {/* 214:3044 — column, gap 8. `relative` because it is the offsetParent
+          the sliding card is measured against. */}
+      <div class="relative flex min-w-0 flex-1 flex-col gap-2" data-cloud-list>
+        {/*
+          214:3045 — the filled card, as ONE element for the whole list.
+
+          It was a per-row background. Colour cannot travel: the old row went
+          flat where it stood and the new one filled where it stood, so the
+          selection did not move, it teleported. This block slides from row to
+          row and grows into the new row's height as the body opens.
+        */}
+        <div
+          data-slide-indicator
+          class="bg-band-card pointer-events-none absolute inset-x-0 top-0 rounded-[20px] opacity-0"
+          aria-hidden="true"
+        >
+        </div>
+        {
+          rows.map((row, index) => (
+            <button
+              type="button"
+              data-cloud-row={index}
+              aria-current={index === 0 ? 'true' : 'false'}
+              class="focus-visible:outline-band-ink relative z-10 flex flex-col rounded-[20px] p-6 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              {/* 214:3047 — icon + title, gap 12. The icon and the title take the
+                  card ink when selected and the step colour when not, so the
+                  whole row lifts together rather than the text alone. */}
+              <span class="flex items-center gap-3">
+                {/* No colour utility: the icon is a font glyph, so it inherits
+                    the button's `color`, which the style block drives. */}
+                <i class={`${row.icon} shrink-0 text-[28px] leading-none`} aria-hidden="true" />
+                <span class="t-label-lg">{row.title}</span>
+
+                {/*
+                  The dwell ring. Shown on the SELECTED row only, and only while
+                  the section is still advancing on its own — one click removes it
+                  for the rest of the page's life.
+
+                  `pathLength="1"` renormalises the circle's length to 1, so the
+                  dash pair is a plain 0-1 fraction and the keyframes do not have
+                  to know the radius. `currentColor` inherits the row's ink, which
+                  is what keeps the ring correct on the light card in light mode
+                  and the dark card in dark mode without a second token.
+                */}
+                <span class="ml-auto shrink-0" data-cloud-timer aria-hidden="true">
+                  <svg viewBox="0 0 20 20" class="size-5 -rotate-90" fill="none">
+                    <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" opacity="0.2" />
+                    <circle
+                      cx="10"
+                      cy="10"
+                      r="8"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      pathLength="1"
+                      stroke-dasharray="1"
+                      stroke-dashoffset="1"
+                      data-cloud-sweep
+                    />
+                  </svg>
+                </span>
+              </span>
+
+              {/*
+                214:3050 — the body, shown on the selected row only.
+
+                Opened with a grid track rather than `display`, so the row
+                CHANGES HEIGHT OVER TIME instead of in one frame. That matters
+                for more than this row: the rows under it are pushed down by the
+                same amount, and the card sliding onto this row is growing into
+                its new height at the same moment. A `display` toggle makes all
+                three happen in a single frame and the whole band snaps.
+
+                The 12px that used to be the button's `gap-3` lives inside the
+                collapsing box, or the resting rows would keep the gap of a body
+                they are not showing.
+              */}
+              <span class="grid" data-cloud-body-wrap>
+                <span class="overflow-hidden">
+                  <span class="t-paragraph-md block pt-3" data-cloud-body>
+                    {row.body ?? <span class="copy-needed">Body copy needed for this row.</span>}
+                  </span>
+                </span>
+              </span>
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /*
+   * Written here rather than as utilities because the colour depends on the
+   * PARENT button's `aria-current`, and Tailwind's `group-*` variants need a
+   * `group` class on that parent — which would then fight the `aria-[current]`
+   * background utility already on it. One selector is clearer than two.
+   */
+  [data-cloud-row] {
+    color: var(--band-step);
+  }
+  [data-cloud-row][aria-current='true'] {
+    color: var(--band-card-ink);
+  }
+  [data-cloud-row][aria-current='true'] [data-cloud-body] {
+    color: var(--band-card-body);
+  }
+  /*
+   * THE BODY REVEAL.
+   *
+   * `grid-template-rows: 0fr -> 1fr` on a wrapper whose child is
+   * `overflow: hidden` animates to the content's OWN height without anyone
+   * measuring it, so nothing here has to know how many lines the copy runs to
+   * or re-measure it when the column reflows. A `max-height` guess would have
+   * to be too large, and would then ease at the wrong speed.
+   *
+   * `visibility` rather than `display`, so a resting row's body stays out of
+   * the accessibility tree and out of tab order while still being animatable.
+   * It flips to `visible` at the START of the opening transition and holds
+   * until the END of the closing one, which is the behaviour we want.
+   *
+   * The duration MUST match `DURATION` in `lib/slide-indicator.ts`. The card
+   * grows into this row while this row is growing; if the two disagree, one
+   * finishes early and the card visibly corrects itself.
+   */
+  [data-cloud-body-wrap] {
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition:
+      grid-template-rows 340ms cubic-bezier(0.22, 1, 0.36, 1),
+      visibility 340ms;
+  }
+  [data-cloud-row][aria-current='true'] [data-cloud-body-wrap] {
+    grid-template-rows: 1fr;
+    visibility: visible;
+  }
+
+  /*
+   * THE DWELL RING.
+   *
+   * The advance is driven by this animation's `animationend`, not by a
+   * `setInterval`. An interval and a CSS animation started at slightly different
+   * moments drift apart, and the ring then completes visibly before or after the
+   * row actually changes. Making the animation the clock removes the second
+   * clock, so the two cannot disagree.
+   *
+   * The restart is also free. The selector only matches the SELECTED row, so a
+   * row that loses `aria-current` drops the animation and its `stroke-dashoffset`
+   * falls back to the attribute value (1, empty). The next row to gain it starts a
+   * fresh animation from 0. No JS reflow trick, no `getAnimations()` reset.
+   */
+  [data-cloud-timer] {
+    display: none;
+  }
+  /*
+   * `:not([data-cloud-stopped])` is carried on the SHOW rule rather than written as
+   * a separate hide rule. A standalone `[data-cloud-root][data-cloud-stopped]
+   * [data-cloud-timer]` scores (0,3,0) and loses to this selector's (0,5,0), so the
+   * ring would have survived the click that is supposed to remove it. Encode the
+   * condition in the winning rule instead of trying to out-order it.
+   */
+  [data-cloud-root][data-cloud-live]:not([data-cloud-stopped])
+    [data-cloud-row][aria-current='true']
+    [data-cloud-timer] {
+    display: block;
+  }
+
+  @keyframes cloud-sweep {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  [data-cloud-root][data-cloud-live]:not([data-cloud-stopped])
+    [data-cloud-row][aria-current='true']
+    [data-cloud-sweep] {
+    animation: cloud-sweep var(--cloud-dwell, 4s) linear forwards;
+  }
+
+  /*
+   * Motion off means no ring and no advance. The JS checks the same query and
+   * never starts, so the section is a plain three-row selector there. Content
+   * that moves on its own with no way to stop it fails WCAG 2.2.2; a click stops
+   * it, which satisfies the rule, but honouring the OS setting is the better
+   * default and costs nothing.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    [data-cloud-sweep] {
+      animation: none !important;
+    }
+    [data-cloud-timer] {
+      display: none !important;
+    }
+    /* The row still opens, it just does not travel there. */
+    [data-cloud-body-wrap] {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { mountSlideIndicator, watchLayout } from '../../lib/slide-indicator';
+
+  /**
+   * One row is selected at a time. The section advances itself every 4s until the
+   * visitor picks a row, and then stops for good.
+   *
+   * Scoped per section so a page can carry more than one band without the two
+   * fighting over `aria-current`.
+   */
+  const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-cloud-root]')) {
+    const rows = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-cloud-row]'));
+    if (!rows.length) continue;
+
+    const list = root.querySelector<HTMLElement>('[data-cloud-list]');
+    const card = list ? mountSlideIndicator(list, rows) : null;
+    if (list && card) watchLayout(list, card);
+
+    const select = (index: number) => {
+      card?.moveTo(index);
+      rows.forEach((row, i) => row.setAttribute('aria-current', String(i === index)));
+    };
+
+    // The markup marks row 0 as current, but the card is placed by measurement,
+    // so it starts hidden. This puts it under row 0 before the first paint.
+    select(0);
+
+    /**
+     * A click is a commitment: the visitor is now reading, so nothing may move
+     * under them again. `data-cloud-stopped` is never removed, which is what
+     * "until refresh" means — there is no path back to autoplay.
+     */
+    const stop = () => root.setAttribute('data-cloud-stopped', '');
+
+    rows.forEach((row, index) =>
+      row.addEventListener('click', () => {
+        stop();
+        select(index);
+      })
+    );
+
+    if (REDUCED) continue;
+
+    /**
+     * The ring's own completion advances the row. Matched on the TARGET rather
+     * than `animationName`, because Astro rewrites keyframe names in a scoped
+     * `<style>` and the literal 'cloud-sweep' would stop matching after a build.
+     */
+    root.addEventListener('animationend', (event) => {
+      if (root.hasAttribute('data-cloud-stopped')) return;
+      if (!(event.target as HTMLElement).matches?.('[data-cloud-sweep]')) return;
+      const current = rows.findIndex((row) => row.getAttribute('aria-current') === 'true');
+      select((current + 1) % rows.length);
+    });
+
+    /**
+     * Autoplay does not begin until the section has been SEEN. Without this the
+     * band spends the whole time above the fold cycling to nobody, and the visitor
+     * arrives mid-sweep on an arbitrary row.
+     *
+     * A one-shot boolean, deliberately — not the ranking-by-ratio observer that
+     * made the feature rail jitter. There is one target and one transition, so the
+     * failure mode that has does not exist here.
+     */
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          root.setAttribute('data-cloud-live', '');
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(root);
+  }
+</script>

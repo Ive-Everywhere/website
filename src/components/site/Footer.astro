@@ -1,0 +1,115 @@
+---
+import { footerColumns, socialLinks } from '../../lib/navigation';
+import ThemeSwitch from './ThemeSwitch.astro';
+
+interface Props {
+  /** Hidden on the pinned `/dark` review route, where the theme is forced. */
+  showThemeSwitch?: boolean;
+}
+
+const { showThemeSwitch = true } = Astro.props;
+
+/**
+ * Footer — Figma component `Footer Sections [Landing]` (133:38563,
+ * variant `Type=12, Mobile=Off`). Identical instance on every page.
+ *
+ * Two deliberate departures from the drawing, both recorded in the spec gaps:
+ *  - Figma mixes CENTER and LEFT alignment across sibling footer links, which
+ *    reads as an authoring accident. All links are left-aligned here.
+ *  - The 372px "Eluu" watermark is absolutely placed so that it overflows the
+ *    footer by 72px with no clip flag in the data. It is clipped here and sits
+ *    behind the content.
+ *
+ * The watermark is decorative and desktop-only. It used to sit in the same
+ * stacking context as the content row above it, so the social icons landed on
+ * top of the "l"s. It is now `-z-10` inside an explicitly isolated footer, and
+ * the bottom row reserves the height the watermark occupies, so the two can
+ * never collide at any width.
+ */
+const year = 2026;
+---
+
+<footer class="bg-bg-white-0 relative isolate overflow-hidden">
+  <div class="page-shell gutter-188 relative z-10 pt-16 pb-12 lg:pt-24">
+    {/* Stacks below `lg`: at tablet width the H1 and the 32px link fought for
+        the same line and the link wrapped mid-phrase. */}
+    <div class="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:gap-12">
+      <div class="flex flex-col gap-10 lg:flex-1">
+        <p class="t-landing-h1 text-text-sub-600">Reach out today!</p>
+      </div>
+      <a
+        href="/contact"
+        class="text-text-strong-950 focus-visible:outline-primary-base flex min-h-11 shrink-0 items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-4"
+      >
+        <span class="t-h4 underline">Schedule a call</span>
+        <i class="ri-arrow-right-up-long-line shrink-0 text-[24px]" aria-hidden="true"></i>
+      </a>
+    </div>
+
+    <hr class="border-stroke-soft-200 mt-12 border-t" />
+
+    {/*
+      Figma sets `justifyContent: flex-end` on this row (`I…;15077`), which
+      pushes the three link columns to the right edge. In the drawing they read
+      as left-aligned under "Reach out today!", with the giant wordmark
+      occupying the right. Left-aligned here, deliberately against the flag.
+    */}
+    {/* Three columns side by side from `sm` up; a phone gets one column. The
+        24px gap at `sm` opens to the drawn 96px at `lg`. */}
+    <div class="grid gap-10 py-12 sm:grid-cols-3 sm:gap-6 lg:flex lg:flex-row lg:gap-24">
+      {
+        footerColumns.map((column) => (
+          <div class="flex flex-col gap-4">
+            <p class="t-label-md text-text-soft-400">{column.heading}</p>
+            {column.links.map((link) => (
+              <a
+                href={link.href}
+                class="t-label-md text-text-sub-600 hover:text-text-strong-950 focus-visible:outline-primary-base flex min-h-11 items-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:min-h-0"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+
+    {/*
+      LIVE BUG, fixed here: the social icons used to be pushed to the right by
+      `justify-between`, which put them directly on top of the 372px watermark.
+      The watermark is right-aligned and decorative, so the controls now share
+      one left-hand cluster and the right half of the row is left to it. The
+      watermark is additionally sent behind the content with `-z-10`.
+    */}
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-4">
+      {showThemeSwitch && <ThemeSwitch />}
+      <div class="flex items-center gap-2">
+        {
+          socialLinks.map((social) => (
+            <a
+              href={social.href}
+              class="text-icon-sub-600 hover:text-icon-strong-950 focus-visible:outline-primary-base flex size-11 items-center justify-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+              aria-label={social.label}
+            >
+              <i class={`${social.icon} text-[20px]`} aria-hidden="true" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <p class="t-label-sm text-text-soft-400 mt-8">
+      {year} Eluu AI Inc. © All rights reserved.
+    </p>
+  </div>
+
+  {/* Decorative watermark. `-z-10` keeps it behind every row above, and the
+      footer's `isolate` stops it escaping into the page's stacking context. */}
+  <span
+    aria-hidden="true"
+    class="text-text-sub-600 pointer-events-none absolute right-0 -bottom-24 -z-10 hidden leading-none font-medium tracking-[-0.026em] select-none lg:block"
+    style="font-size:372px"
+  >
+    Eluu
+  </span>
+</footer>

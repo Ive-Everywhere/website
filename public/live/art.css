@@ -1,0 +1,241 @@
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 3 ILLUSTRATION PRIMITIVES  —  "Put agents to work across your business"
+   Composition system: Option C (hybrid) — one legible foreground run object,
+   plus cropped context panels from other departments behind it, on a tinted field.
+
+   Mechanic decoded from Ona's SDLC section:
+     standardize-agent-execution.webp  = field of real panels, cropped at edges
+     automated-cve-remediation.webp    = one run as a descending, fading card stack
+
+   HARD RULES
+     - tokens only (eluu.css). No raw hex except the per-card --field tint,
+       which is itself a token value assigned to a variable.
+     - real example data only. No lorem, no invented metrics presented as fact.
+     - at least one panel bleeds off each frame edge (crop, don't fit).
+     - depth is exactly 2 layers: foreground 1.0, context .5. Never a third.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ─── stage ─────────────────────────────────────────────────────────────── */
+.a-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--field, var(--bg-weak-50));
+  font-family: var(--font-sans);
+  color: var(--text-strong-950);
+  -webkit-font-smoothing: antialiased;
+}
+/* soft light source, top-left — gives the flat tint depth without a gradient wash */
+.a-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 18% 0%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 62%);
+  pointer-events: none;
+}
+/* FIXED DESIGN STAGE — 700 × 438. Every panel is positioned in absolute px
+   against these dimensions, so the stage must never be resized: it is SCALED
+   to fit whatever well it lands in (`fit-stage.js` sets --s). Letting the stage
+   stretch instead of scale is what made the isolated art and the in-context art
+   disagree — panels stayed anchored to the edges while the field shrank. */
+.a-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 700px;
+  height: 438px;
+  transform-origin: 50% 50%;
+  transform: translate(-50%, -50%) scale(var(--s, 1));
+}
+
+/* ─── panels ────────────────────────────────────────────────────────────── */
+.a-panel {
+  position: absolute;
+  background: var(--bg-white-0);
+  border: 1px solid var(--stroke-soft-200);
+  border-radius: 12px;
+  box-shadow: var(--shadow-regular-lg);
+  overflow: hidden;
+}
+/* context layer — other departments, cropped at the frame edge */
+.a-panel--ghost {
+  opacity: 0.5;
+  box-shadow: var(--shadow-regular-sm);
+}
+
+.a-p-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--stroke-soft-200);
+}
+.a-p-body { padding: 12px 14px; }
+.a-p-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--stroke-soft-200);
+  background: var(--bg-weak-25);
+}
+
+.a-av {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+}
+.a-who { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.a-who-name { font-size: 13px; font-weight: 600; letter-spacing: -0.01em; }
+.a-who-role { font-size: 11px; color: var(--text-soft-400); }
+
+.a-p-title {
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  line-height: 1.35;
+  margin: 0 0 2px;
+}
+.a-p-sub {
+  font-size: 11px;
+  color: var(--text-soft-400);
+  letter-spacing: -0.005em;
+  margin: 0;
+}
+
+/* ─── chips / tags ──────────────────────────────────────────────────────── */
+.a-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  background: var(--bg-weak-50);
+  color: var(--text-sub-600);
+}
+.a-chip--ok      { background: var(--success-lighter); color: var(--success-dark); }
+.a-chip--blocked { background: var(--error-lighter);   color: var(--error-dark); }
+.a-chip--live    { background: var(--information-lighter); color: var(--information-dark); }
+.a-chip--time    { background: var(--away-lighter);    color: var(--away-dark); }
+.a-chip--brand   { background: var(--primary-light);   color: var(--primary-darkest); }
+.a-chip .a-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+.a-mono { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: -0.01em; }
+
+/* ─── step rail — the cross-stack primitive ─────────────────────────────── */
+.a-rail { display: flex; flex-direction: column; }
+.a-step {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 0;
+  border-top: 1px solid var(--stroke-soft-200);
+}
+.a-step:first-child { border-top: 0; padding-top: 2px; }
+.a-step:last-child  { padding-bottom: 2px; }
+
+.a-logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1px solid var(--stroke-soft-200);
+  background: var(--bg-white-0);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.a-logo img { width: 13px; height: 13px; display: block; }
+
+.a-step-label {
+  font-size: 12px;
+  letter-spacing: -0.008em;
+  color: var(--text-strong-950);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.a-step-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-sub-600);
+  flex: none;
+}
+.a-step-ok { color: var(--success-base); flex: none; display: grid; place-items: center; }
+.a-step-ok i { font-size: 13px; }
+
+.a-step--blocked .a-step-label { color: var(--text-soft-400); text-decoration: line-through; }
+
+/* ─── KPI strip (deliverable panel) ─────────────────────────────────────── */
+.a-kpis { display: grid; grid-template-columns: repeat(3, 1fr); }
+.a-kpi { padding: 2px 12px 2px 0; }
+.a-kpi-l { font-size: 10px; color: var(--text-soft-400); letter-spacing: 0.01em; text-transform: uppercase; }
+.a-kpi-v { font-size: 17px; font-weight: 500; letter-spacing: -0.02em; margin-top: 1px; }
+
+/* ─── phase cascade (autonomy primitive, Ona row-2 mechanic) ────────────── */
+.a-phase {
+  position: absolute;
+  background: var(--bg-white-0);
+  border: 1px solid var(--stroke-soft-200);
+  border-radius: 12px;
+  padding: 11px 16px;
+  box-shadow: var(--shadow-regular-md);
+}
+.a-phase-t { font-size: 12.5px; font-weight: 500; letter-spacing: -0.01em; display: flex; align-items: center; gap: 7px; }
+.a-phase-s { font-size: 10.5px; color: var(--text-soft-400); margin-top: 2px; letter-spacing: -0.005em; }
+.a-phase img.a-tool { width: 13px; height: 13px; }
+
+/* ─── toggle row (governance primitive) ─────────────────────────────────── */
+.a-perm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  border-top: 1px solid var(--stroke-soft-200);
+}
+.a-perm:first-child { border-top: 0; }
+.a-perm-l { font-size: 11.5px; letter-spacing: -0.008em; flex: 1; }
+.a-sw {
+  width: 26px; height: 15px; border-radius: 999px; flex: none;
+  background: var(--primary-base); position: relative;
+}
+.a-sw::after {
+  content: ""; position: absolute; top: 2px; left: 13px;
+  width: 11px; height: 11px; border-radius: 50%; background: var(--static-white);
+}
+.a-sw--off { background: var(--bg-sub-300); }
+.a-sw--off::after { left: 2px; }
+
+/* ─── scope pills ───────────────────────────────────────────────────────── */
+.a-scopes { display: flex; flex-wrap: wrap; gap: 5px; }
+.a-scope {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 22px; padding: 0 8px; border-radius: 6px;
+  background: var(--bg-weak-50); border: 1px solid var(--stroke-soft-200);
+  font-size: 10.5px; color: var(--text-sub-600); letter-spacing: -0.005em;
+}
+.a-scope img { width: 11px; height: 11px; }
+.a-scope--off { color: var(--text-disabled-300); background: transparent; border-style: dashed; }
+.a-scope--off img { opacity: 0.35; }
+
+/* ─── section label above a panel group ─────────────────────────────────── */
+.a-p-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-soft-400); font-weight: 500; margin: 0 0 7px;
+}
+
+/* ─── layering: context always sits behind foreground ───────────────────── */
+.a-panel { z-index: 2; }
+.a-panel--ghost { z-index: 1; }
+.a-phase { z-index: 2; }
+
+/* audit timestamp column */
+.a-step-t { font-family: var(--font-mono); font-size: 10px; color: var(--text-soft-400); flex: none; width: 32px; }

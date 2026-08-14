@@ -1,0 +1,134 @@
+---
+/**
+ * Feature quadrants — Figma `147:3163` (§2 of home-spec.md).
+ * Section: column, gap 48, padding 96/188, fill #F8F8F3 → `bg-bg-white-0`.
+ *
+ * The four panels are 280px tall, `#EDEDE9` (`bg-bg-soft-200`), and each
+ * carries a 1px stroke in the *page background* colour plus one rounded outer
+ * corner, so together they read as a single rounded 2×2 block with hairline
+ * gutters. The stroke sides differ per panel (spec table) — reproduced with a
+ * 1px gap grid whose background is the page colour, which is the same result
+ * and survives the dark-mode token flip.
+ */
+
+interface Quadrant {
+  node: string;
+  title: string;
+  body: string;
+  link: string;
+  href: string;
+  /** Remix glyph names, exactly as Figma names them. */
+  icons: string[];
+  /** `147:3181` has no gap key; the other three clusters use gap 8. */
+  iconGap: boolean;
+  radius: string;
+}
+
+const quadrants: Quadrant[] = [
+  {
+    node: '147:3173',
+    title: 'Agents',
+    body: 'Pre-built specialists for every role, ready to work on day one. Or build your own for any job.',
+    link: 'Explore how agents work',
+    href: '/agents',
+    icons: ['ri-robot-3-line', 'ri-robot-3-line', 'ri-robot-3-line', 'ri-robot-3-line'],
+    iconGap: false,
+    radius: 'lg:rounded-tl-[16px]',
+  },
+  {
+    node: '147:3200',
+    title: 'Workspace',
+    body: 'Run as many agents as you need, all in parallel, with shared memory, files, and team skills.',
+    link: 'The platform for agentic work',
+    href: '/workspace',
+    icons: ['ri-folder-3-line', 'ri-global-line', 'ri-mind-map', 'ri-plug-2-line'],
+    iconGap: true,
+    radius: 'lg:rounded-tr-[16px]',
+  },
+  {
+    node: '147:3186',
+    title: 'Connections',
+    body: 'Connect every tool your team uses, and see exactly what data each agent can touch.',
+    link: 'Connect agents to your systems',
+    href: '/connections',
+    /* Figma uses the Zendesk / Slack / Gmail / Linear vendor marks here. Only
+       Slack exists in Remix Icon, so the cluster below uses the closest Remix
+       glyphs and the vendor set is flagged in the report. */
+    icons: ['ri-customer-service-2-line', 'ri-slack-line', 'ri-mail-line', 'ri-list-check-2'],
+    iconGap: true,
+    radius: 'lg:rounded-bl-[16px]',
+  },
+  {
+    node: '147:3214',
+    title: 'Security',
+    body: 'Control access, restrict risky actions, and audit every step. Enterprise-grade by default.',
+    link: 'Learn how agents are secured',
+    href: '/security',
+    icons: ['ri-id-card-line', 'ri-file-lock-line', 'ri-mist-fill', 'ri-lock-password-line'],
+    iconGap: true,
+    radius: 'lg:rounded-br-[16px]',
+  },
+];
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col gap-10 py-14">
+    {/* 147:3164 → 147:3165 */}
+    <div class="flex flex-col gap-3">
+      <h2 class="t-landing-h3 text-text-strong-950 text-balance">
+        Everything you need for an AI workforce.
+      </h2>
+      {/* 147:3167. Figma reads "Allocate agent." (singular) — spec gap #14
+          flags it as a probable typo, so it is wrapped, not corrected. */}
+      <p class="t-landing-h3 text-text-soft-400 text-balance">
+        <span class="copy-needed">Allocate agent.</span> Connect to systems. Get work done.
+      </p>
+    </div>
+
+    {/* 147:3168 — one rounded 2×2 block, hairline gutters in the page colour.
+        A single column below `lg`; the outer radius is applied to the block at
+        every width so the corners are never square. */}
+    <div class="bg-bg-white-0 grid gap-px overflow-hidden rounded-[16px] lg:grid-cols-2">
+      {
+        quadrants.map((quadrant) => (
+          <div
+            class={`bg-card-surface flex flex-col items-start justify-between gap-6 p-6 sm:flex-row sm:items-center sm:gap-8 sm:p-8 lg:h-[280px] lg:px-9 ${quadrant.radius}`}
+          >
+            {/* Text column — fixed 360px in Figma, fluid below `lg`. `max-w`
+                rather than `w` + `shrink-0`: at 1024 the panel is only ~470px
+                wide, so a rigid 360px column plus the icon cluster pushed the
+                icons past the panel edge. It reaches 360px once there is room. */}
+            <div class="flex min-w-0 flex-col gap-6 lg:max-w-[360px] lg:flex-1">
+              <div class="flex flex-col gap-2">
+                <h3 class="t-h6 text-text-strong-950">{quadrant.title}</h3>
+                <p class="t-label-md text-text-sub-600 text-pretty">{quadrant.body}</p>
+              </div>
+
+              {/* Plain text link in Figma — no button frame, no fill, no radius.
+                  The `→` is part of the string (U+2192). */}
+              <a
+                href={quadrant.href}
+                class="t-label-md text-primary-base hover:text-primary-dark focus-visible:outline-primary-base inline-flex w-fit min-h-11 items-center gap-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 lg:min-h-0"
+              >
+                {quadrant.link} <span aria-hidden="true">→</span>
+              </a>
+            </div>
+
+            {/* Icon cluster — 2x2 as drawn. On a phone the panel is narrow and
+                tall, so the cluster becomes a single row: four glyphs read as a
+                caption under the copy, whereas a 2x2 block eats vertical space
+                and reads as a second column that is not there. */}
+            <div
+              class={`flex shrink-0 gap-2 sm:grid sm:grid-cols-2 ${quadrant.iconGap ? 'sm:gap-2' : 'sm:gap-0'}`}
+              aria-hidden="true"
+            >
+              {quadrant.icons.map((icon) => (
+                <i class={`${icon} text-icon-sub-600 flex size-10 items-center justify-center text-[40px] leading-none`} />
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

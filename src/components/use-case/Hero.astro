@@ -1,0 +1,101 @@
+---
+/**
+ * Use-case hero — Figma `144:2692` (FRAME "Hero", first of three siblings).
+ *
+ * Shell: column, padding 32/187/64, gap 56, fill #F8F8F3 (= bg-bg-white-0).
+ * Inner: Title(gap 28) > Content(gap 16) > [H1 742px, Paragraph/Medium], then
+ * Actions(row, gap 16) with two buttons.
+ *
+ * The eyebrow is not drawn in that frame; every use-case page in the content
+ * pack carries one ("Use case"). It takes the same `.t-mono-md` treatment the
+ * compare-page eyebrow uses, so the two long-form page types stay siblings.
+ *
+ * Figma's 32px top padding sits under a sticky header, so it is doubled here,
+ * exactly as `home/Hero.astro` does.
+ */
+import Button from '../ui/Button.astro';
+
+interface Props {
+  eyebrow: string;
+  headline: string;
+  subhead: string;
+  primaryCta?: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+}
+
+const { eyebrow, headline, subhead, primaryCta, secondaryCta } = Astro.props;
+
+/**
+ * Figma stores the H1 break as a literal backslash-n escape (spec gap 10) and
+ * the body break as U+2028 LINE SEPARATOR (spec gap 11). The finalized copy
+ * holds plain sentences, but the split stays so a content file can still ask
+ * for a drawn break without either character ever printing on the page.
+ */
+const toLines = (value: string): string[] =>
+  value
+    .split(/\\n|\u2028|\n/g)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+const headlineLines = toLines(headline);
+const subheadLines = toLines(subhead);
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-187 flex flex-col gap-10 pt-16 pb-12 lg:gap-14 lg:pb-16">
+    <div class="flex flex-col items-center gap-7">
+      <p class="t-mono-md text-text-soft-400">{eyebrow}</p>
+
+      <div class="flex w-full flex-col items-center gap-4">
+        {/* `.t-landing-h1` is fluid, so no size is restated here. A drawn break
+            applies above `lg` only — below it the heading reflows. */}
+        <h1 class="t-landing-h1 text-text-strong-950 max-w-[742px] text-center text-balance">
+          {
+            headlineLines.map((line, index) => (
+              <>
+                {index > 0 && <br class="hidden lg:inline" />}
+                {index > 0 && ' '}
+                {line}
+              </>
+            ))
+          }
+        </h1>
+
+        <p class="t-paragraph-md text-text-sub-600 max-w-[742px] text-center text-pretty">
+          {
+            subheadLines.map((line, index) => (
+              <>
+                {index > 0 && <br class="hidden lg:inline" />}
+                {index > 0 && ' '}
+                {line}
+              </>
+            ))
+          }
+        </p>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+      {
+        primaryCta && (
+          <Button
+            variant="primary-fancy"
+            href={primaryCta.href}
+            label={primaryCta.label}
+            rightIcon="ri-arrow-right-up-long-line"
+          />
+        )
+      }
+      {
+        secondaryCta && (
+          <Button
+            variant="neutral-lighter"
+            href={secondaryCta.href}
+            label={secondaryCta.label}
+            leftIcon="ri-play-mini-fill"
+          />
+        )
+      }
+    </div>
+  </div>
+</section>

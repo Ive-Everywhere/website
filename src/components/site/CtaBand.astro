@@ -1,0 +1,81 @@
+---
+import Button from '../ui/Button.astro';
+
+/**
+ * CTA band — Figma component `Custom CTA Sections [Landing]` (131:36,
+ * variant `Type=03, Mobile=Off`). Byte-identical on the light Home, dark Home,
+ * use-case and compare pages, including on the dark page where the band stays
+ * peach. That is transcribed as drawn — flagged for confirmation.
+ */
+interface Props {
+  heading?: string;
+  eyebrow?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  /**
+   * A second, quieter CTA beside the pill. Figma draws only one button, so this
+   * is off unless a page asks for it. The product-pillar pages do: their source
+   * copy ends every page with "Start for free · Book a demo", and dropping the
+   * demo link would lose a line of finished copy.
+   */
+  secondaryLabel?: string;
+  secondaryHref?: string;
+}
+
+const {
+  heading = 'The best human teams have agentic teams.',
+  eyebrow = 'Your AI team is ready, are you?',
+  ctaLabel = 'Build yours today',
+  ctaHref = 'https://app.eluu.ai/signup',
+  secondaryLabel,
+  secondaryHref,
+} = Astro.props;
+---
+
+<section class="bg-accent-peach-200">
+  {/* The 292px Figma gutter is the widest on the site, so it ramps from 24px
+      rather than being applied literally. Row from `md`, stacked below. */}
+  <div
+    class="page-shell gutter-292 flex flex-col items-start gap-8 py-12 md:flex-row md:items-center md:gap-12 lg:py-16"
+  >
+    <img
+      src="/brand/mark-256-light.svg"
+      alt=""
+      width="80"
+      height="80"
+      class="size-16 shrink-0 lg:size-20"
+    />
+
+    <div class="flex flex-1 flex-col gap-3">
+      <p class="t-h4 text-accent-peach-800">{heading}</p>
+      {/* Pass `eyebrow=""` on a page whose copy has no second line, so nothing
+          is invented to fill the slot. */}
+      {eyebrow && <p class="t-h6 text-accent-peach-800 opacity-64">{eyebrow}</p>}
+    </div>
+
+    {/* `max-w-full` so the pill wraps its label rather than pushing the band
+        wider than the viewport at 390px. */}
+    <div class="flex max-w-full flex-wrap items-center gap-4 md:shrink-0">
+      <Button
+        variant="peach"
+        href={ctaHref}
+        label={ctaLabel}
+        rightIcon="ri-arrow-right-up-long-line"
+        chipIcon
+        class="max-w-full shrink-0"
+      />
+      {
+        secondaryLabel && secondaryHref && (
+          /* No token pairs the peach band with an outlined button, so the
+             second CTA is a plain text link in the band's own ink. */
+          <a
+            href={secondaryHref}
+            class="t-h6 text-accent-peach-800 focus-visible:outline-accent-peach-800 inline-flex min-h-11 items-center gap-1 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            {secondaryLabel} <span aria-hidden="true">→</span>
+          </a>
+        )
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,138 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PillarHero from './PillarHero.astro';
+import Explanation from './Explanation.astro';
+import StatBand from './StatBand.astro';
+import RailFeatures from '../use-case/RailFeatures.astro';
+import Testimonial from '../use-case/Testimonial.astro';
+import DetailSplit from '../use-case/DetailSplit.astro';
+import CtaBand from '../site/CtaBand.astro';
+
+/**
+ * The one template all four product-pillar pages render.
+ *
+ * Section order is fixed by `finalized-pages/INDEX.md`:
+ *   hero → explanation → 3 numbers → feature cards → testimonial →
+ *   up to 3 technical details → final CTA.
+ *
+ * Every page is a thin route file that hands its `platform` entry here, so the
+ * four cannot drift apart. `src/pages/[...slug].astro` is deliberately not used.
+ *
+ * `Base` renders its own CTA band by default. This page supplies its own from
+ * the entry's `finalCta`, so the default is switched off.
+ */
+interface Props {
+  entry: CollectionEntry<'platform'>;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+/**
+ * Read aloud in place of the animation. The source names the intended visual
+ * per page ("product clip (an agent running a real task end to end)"); these
+ * describe what the chosen animation actually shows, which is what a screen
+ * reader needs.
+ */
+const artTitles: Record<string, string> = {
+  'c1-a-compose':
+    'An agent composer: a request is typed, the agent runs across connected tools, and a finished result appears.',
+  'c2-b-plan':
+    'A carousel of triggers — a schedule, a Slack message, an email and an API call — each starting an agent run without a person present.',
+  'c3-b-audit':
+    'A live security stream showing each agent action as it is checked against permissions and written to an audit trail.',
+};
+
+const artTitle = data.pitch.art
+  ? artTitles[data.pitch.art]
+  : (data.pitch.visualNote ?? `a product visual for “${data.pitch.heading}”`);
+---
+
+<Base
+  title={`${data.title} — Eluu`}
+  description={data.description}
+  ogImage={data.ogImage}
+  cta={false}
+>
+  {/* 1. HERO */}
+  <PillarHero
+    eyebrow={data.hero.eyebrow}
+    headline={data.hero.headline}
+    subhead={data.hero.subhead}
+    primaryCta={data.hero.primaryCta}
+    secondaryCta={data.hero.secondaryCta}
+  />
+
+  {/* 2. EXPLANATION */}
+  <Explanation
+    heading={data.pitch.heading}
+    body={data.pitch.body}
+    linkLabel={data.pitch.linkLabel}
+    linkHref={data.pitch.linkHref}
+    art={data.pitch.art}
+    artTitle={artTitle}
+  />
+
+  {/* 3. THREE NUMBERS. Security calls this slot "three statements" — same
+       section, word values instead of figures. */}
+  {data.stats.length > 0 && <StatBand stats={data.stats} />}
+
+  {/* 4. FEATURE CARDS. The source gives this section no heading, but every
+       home-page section opens with one. The string below is OURS, so it is
+       marked as copy-needed rather than passing as finished copy. */}
+  {
+    data.features.length > 0 && (
+      <RailFeatures
+        heading={`What you get with ${data.hero.eyebrow}.`}
+        headingNeedsCopy
+        features={data.features}
+      />
+    )
+  }
+
+  {/* 5. TESTIMONIAL — `use-case/Testimonial.astro`, reused as-is. Every pillar
+       page's quote is still `[VERIFY]`, so both slots render marked. */}
+  {
+    data.testimonial && (
+      <Testimonial
+        quote={data.testimonial.quote}
+        attribution={data.testimonial.attribution}
+        needsVerify={data.testimonial.needsVerify}
+      />
+    )
+  }
+
+  {/* 6. TECHNICAL DETAILS → docs. The heading is ours, as above, so it is
+       marked too. */}
+  {
+    data.technical.length > 0 && (
+      <DetailSplit
+        id="technical"
+        heading="Under the hood."
+        headingNeedsCopy
+        body={data.pitch.body}
+        details={data.technical}
+      />
+    )
+  }
+
+  {/* Optional long-form body. The source files draw none. */}
+  <div class="page-shell gutter-188 empty:hidden">
+    <Content />
+  </div>
+
+  {/* 7. FINAL CTA — the site-wide band, carrying this page's headline and both
+       of its CTAs. The source gives the band no second line, so the eyebrow is
+       cleared rather than filled with an invented one. */}
+  <CtaBand
+    heading={data.finalCta.headline}
+    eyebrow=""
+    ctaLabel={data.finalCta.primaryCta.label}
+    ctaHref={data.finalCta.primaryCta.href}
+    secondaryLabel={data.finalCta.secondaryCta.label}
+    secondaryHref={data.finalCta.secondaryCta.href}
+  />
+</Base>

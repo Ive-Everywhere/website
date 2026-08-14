@@ -1,10 +1,13 @@
-/// <reference types="astro/client" />
+/// <reference path="../.astro/types.d.ts" />
+
+interface EluuThemeApi {
+  key: string;
+  get(): 'light' | 'dark';
+  isExplicit(): boolean;
+  set(theme: 'light' | 'dark'): void;
+  clear(): void;
+}
 
 interface Window {
-  posthog?: {
-    capture: (event: string, properties?: Record<string, unknown>) => void;
-    opt_out_capturing: () => void;
-    opt_in_capturing: () => void;
-    [key: string]: unknown;
-  };
+  __eluuTheme?: EluuThemeApi;
 }

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" height="35" preserveAspectRatio="xMidYMid meet" viewBox="0 0 45.5 35" width="45.5">
-<g id="zendesk">
-<path d="M24.375 0L24.375 25L45.5 0H24.375Z" fill="var(--fill-0, white)"/>
-<path d="M10.5625 11.1364C16.3413 11.1364 21.125 5.43421 21.125 3.21933e-05H3.88721e-05C3.88721e-05 5.43421 4.78376 11.1364 10.5625 11.1364Z" fill="var(--fill-0, white)"/>
-<path d="M24.375 35C24.375 29.5658 29.1587 23.8636 34.9375 23.8636C40.7163 23.8636 45.5 29.5658 45.5 35H24.375Z" fill="var(--fill-0, white)"/>
-<path d="M21.125 35V10L0 35H21.125Z" fill="var(--fill-0, white)"/>
-</g>
-</svg>

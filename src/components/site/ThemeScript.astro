@@ -1,0 +1,93 @@
+---
+/**
+ * Theme bootstrap. Must run in <head>, before first paint, or the page flashes
+ * the wrong theme.
+ *
+ * Storage choice: `localStorage`. It survives browser restarts, and it is wiped
+ * when the visitor clears site data — which is exactly the behaviour asked for.
+ * A cookie would be sent on every request for no reason; `sessionStorage` would
+ * not survive a restart.
+ *
+ * With no stored choice we follow the operating system and keep following it,
+ * so a visitor who switches their OS to dark mid-session sees the page follow.
+ * Once they use the switch, their choice wins until they clear site data.
+ */
+---
+
+<script is:inline>
+  (function () {
+    var KEY = 'eluu-theme';
+
+    function system() {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light';
+    }
+
+    function stored() {
+      try {
+        var v = localStorage.getItem(KEY);
+        return v === 'dark' || v === 'light' ? v : null;
+      } catch (e) {
+        // Private mode or storage disabled: fall back to the OS, never throw.
+        return null;
+      }
+    }
+
+    function apply(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.colorScheme = theme;
+    }
+
+    var explicit = stored();
+    apply(explicit || system());
+
+    // Exposed so the footer switch and the illustration iframes share one path.
+    window.__eluuTheme = {
+      key: KEY,
+      get: function () {
+        return document.documentElement.getAttribute('data-theme') || 'light';
+      },
+      isExplicit: function () {
+        return stored() !== null;
+      },
+      set: function (theme) {
+        try {
+          localStorage.setItem(KEY, theme);
+        } catch (e) {
+          /* storage unavailable — the choice simply will not persist */
+        }
+        apply(theme);
+        document.querySelectorAll('iframe[data-live-art]').forEach(function (frame) {
+          if (frame.contentWindow) {
+            frame.contentWindow.postMessage({ type: 'eluu:theme', theme: theme }, location.origin);
+          }
+        });
+        window.dispatchEvent(new CustomEvent('eluu:themechange', { detail: theme }));
+      },
+      clear: function () {
+        try {
+          localStorage.removeItem(KEY);
+        } catch (e) {
+          /* nothing to clear */
+        }
+        this.set(system());
+        try {
+          localStorage.removeItem(KEY);
+        } catch (e) {
+          /* keep following the OS */
+        }
+      },
+    };
+
+    // Keep following the OS until the visitor makes an explicit choice.
+    if (window.matchMedia) {
+      var mq = window.matchMedia('(prefers-color-scheme: dark)');
+      var onChange = function (e) {
+        if (stored() === null) apply(e.matches ? 'dark' : 'light');
+      };
+      if (mq.addEventListener) mq.addEventListener('change', onChange);
+      else if (mq.addListener) mq.addListener(onChange);
+    }
+  })();
+</script>

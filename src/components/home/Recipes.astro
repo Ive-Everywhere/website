@@ -1,0 +1,57 @@
+---
+/**
+ * Recipes — the cookbook teaser. The list is cross-tool work the four teams do
+ * that eats time, ranked by how many / how complex the tools involved are
+ * (most cross-tool first). Each row names the workflow and the systems it spans.
+ */
+const recipes = [
+  { icon: 'ri-arrow-left-right-line', label: 'Reconcile month-end close' },
+  { icon: 'ri-git-pull-request-line', label: 'Fix incidents, ship the PR' },
+  { icon: 'ri-user-search-line', label: 'Source and screen candidates' },
+  { icon: 'ri-file-chart-line', label: 'Draft the board pack' },
+  { icon: 'ri-line-chart-line', label: 'Forecast the quarter' },
+  { icon: 'ri-customer-service-2-line', label: 'Triage the ticket queue' },
+  { icon: 'ri-file-user-line', label: 'Prep every account brief' },
+  { icon: 'ri-team-line', label: 'Synthesize interview debriefs' },
+];
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col gap-10 py-14">
+    <div class="bg-card-surface rounded-[16px] px-2.5 pt-2.5">
+      <div class="flex flex-col justify-between gap-8 p-5 lg:flex-row lg:items-start lg:gap-12 lg:p-[30px]">
+        <div class="flex flex-col gap-4 lg:w-[365px] lg:shrink-0">
+          <h2 class="t-landing-h3 text-text-strong-950 text-balance">
+            The cross-tool work your teams<br class="hidden lg:inline" />{' '}do by hand, on autopilot.
+          </h2>
+        </div>
+
+        <div
+          class="bg-bg-white-0 flex w-full min-w-0 flex-col gap-8 rounded-[24px] px-5 py-7 lg:max-w-[554px] lg:flex-1 lg:gap-12 lg:px-6 lg:py-9"
+        >
+          <ul class="flex flex-col">
+            {
+              recipes.map((recipe) => (
+                <li class="border-stroke-soft-200 flex items-center gap-4 border-b py-4 last:border-b-0">
+                  <i
+                    class={`${recipe.icon} text-icon-sub-600 shrink-0 text-[24px]`}
+                    aria-hidden="true"
+                  />
+                  <span class="t-label-md text-text-strong-950">{recipe.label}</span>
+                </li>
+              ))
+            }
+          </ul>
+
+          <a
+            href="/cookbook"
+            class="t-label-md text-primary-base hover:text-primary-dark focus-visible:outline-primary-base inline-flex w-fit min-h-11 items-center gap-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 lg:min-h-0"
+          >
+            Explore all recipes
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

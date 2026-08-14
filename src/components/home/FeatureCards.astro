@@ -1,0 +1,187 @@
+---
+import LiveArt from '../site/LiveArt.astro';
+
+interface Props {
+  /** The surface the animations paint behind themselves. See `--art-surface`. */
+  artSurface?: string;
+}
+
+const { artSurface = 'var(--art-surface)' } = Astro.props;
+
+/**
+ * Wide feature cards — Figma `147:3227` (§3 of home-spec.md).
+ * Section: column, gap 48, padding 96/188, fill #F8F8F3 → `bg-bg-white-0`.
+ *
+ * Card shell (147:3232 / 147:3256 / 147:3279): fill #EDEDE9 → `bg-bg-soft-200`,
+ * radius 16, padding 10/10/0. The bottom padding is 0 by design, so the inner
+ * visual bleeds to the card's bottom edge (spec gap #33).
+ */
+
+interface Bullet {
+  icon: string;
+  label: string;
+  /** Destination, per home.md §4 — nine unique links across product and use cases. */
+  href: string;
+}
+
+interface Card {
+  node: string;
+  title: string;
+  body: string;
+  bullets: Bullet[];
+  /**
+   * The animated illustration that fills the card's right half.
+   * Figma left `147:3278` and `147:3301` empty; these three illustrations were
+   * designed separately and are the intended content for all three slots.
+   */
+  art: 'c1-a-compose' | 'c2-b-plan' | 'c3-b-audit';
+  /** Read aloud in place of the animation. */
+  artTitle: string;
+  visualNode: string;
+  /**
+   * Figma gives card 1 padding 30 all round and cards 2–3 padding 30/30/0, so a
+   * static visual could bleed off the bottom. The animations are transparent
+   * and have no edge to bleed, so all three cards are padded evenly and the
+   * field is no longer needed.
+   */
+}
+
+const cards: Card[] = [
+  {
+    node: '147:3232',
+    title: 'Agents that act across your whole stack',
+    body: 'Agents pull data, combine it, and take action across every system you use, from Slack to Salesforce to your spreadsheets.',
+    bullets: [
+      { icon: 'ri-plug-fill', label: 'Connect every tool your team uses', href: '/connections' },
+      { icon: 'ri-arrow-left-right-line', label: 'Reconcile data across systems', href: '/use-cases/reconcile-data' },
+      { icon: 'ri-dashboard-line', label: 'Build dashboards and internal apps', href: '/use-cases/build-apps' },
+    ],
+    art: 'c1-a-compose',
+    artTitle:
+      'An agent composer: a request is typed, the agent runs across connected tools, and a finished result appears.',
+    visualNode: '147:3255',
+  },
+  {
+    node: '147:3256',
+    title: 'Agents that run without you',
+    body: 'Assign the work and close your laptop. Agents run in the cloud around the clock and deliver finished results to your Slack.',
+    bullets: [
+      { icon: 'ri-robot-3-line', label: 'Automate recurring reports and briefs', href: '/use-cases/recurring-reports' },
+      { icon: 'ri-funds-box-line', label: 'Run as many agents as you need, in parallel', href: '/workspace' },
+      { icon: 'ri-slack-line', label: 'Hand it off in Slack and close your laptop', href: '/agents' },
+    ],
+    art: 'c2-b-plan',
+    artTitle:
+      'A carousel of triggers — a schedule, a Slack message, an email and an API call — each starting an agent run without a person present.',
+    visualNode: '147:3278',
+  },
+  {
+    node: '147:3279',
+    title: 'Agents you stay in control of',
+    body: 'Full visibility over what every agent can see, do, change, and cost, with an audit trail for every action.',
+    bullets: [
+      { icon: 'ri-lock-2-line', label: 'Control what every agent can do', href: '/security' },
+      { icon: 'ri-file-list-3-line', label: 'See what data each agent can touch', href: '/connections' },
+      { icon: 'ri-eye-line', label: 'Keep an audit trail of every action', href: '/security' },
+    ],
+    art: 'c3-b-audit',
+    artTitle:
+      'A live security stream showing each agent action as it is checked against permissions and written to an audit trail.',
+    visualNode: '147:3301',
+  },
+];
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col gap-10 py-14">
+    {/* 147:3228 → 147:3229 */}
+    <div class="flex flex-col gap-3">
+      <h2 class="t-landing-h3 text-text-strong-950 text-balance">
+        Put agents to work across your business.
+      </h2>
+      <p class="t-landing-h3 text-text-soft-400 text-balance">With every action monitored.</p>
+    </div>
+
+    <div class="flex flex-col gap-6">
+      {
+        cards.map((card) => (
+          <div class="bg-card-surface rounded-[16px] p-2.5">
+            {/* Text and animation sit side by side at `lg` and stack below it —
+                the drawn row needs about 1100px before the 500px copy column
+                and the animation stop crushing each other. Inner padding drops
+                from the drawn 30px to 20px on a phone, where 30px on top of the
+                card's own 10px leaves too little room for the copy. */}
+            <div
+              class="flex flex-col justify-between gap-8 p-5 lg:flex-row lg:items-center lg:gap-14 lg:p-[30px]"
+            >
+              {/* Left column — 554 / 610 / fill in Figma; fluid here. */}
+              <div class="flex flex-col justify-center gap-8 lg:max-w-[460px] lg:gap-10">
+                <div class="flex flex-col gap-2">
+                  <h3 class="t-h6 text-text-strong-950">{card.title}</h3>
+                  <p class="t-label-md text-text-sub-600 text-pretty">{card.body}</p>
+                </div>
+
+                <ul class="flex flex-col gap-5 lg:gap-6">
+                  {card.bullets.map((bullet) => (
+                    <li>
+                      <a
+                        href={bullet.href}
+                        class="text-text-sub-600 hover:text-text-strong-950 focus-visible:outline-primary-base group/row flex min-h-11 items-center justify-between gap-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 lg:min-h-0"
+                      >
+                        <span class="flex items-center gap-3 lg:gap-4">
+                          <i class={`${bullet.icon} shrink-0 text-[28px]`} aria-hidden="true" />
+                          <span class="t-label-md text-pretty">{bullet.label}</span>
+                        </span>
+                        {/* Figma draws the arrow as a TEXT node, not an icon. It
+                            nudges on hover so the row reads as a link. */}
+                        <span
+                          class="t-label-md shrink-0 transition-transform group-hover/row:translate-x-1"
+                          aria-hidden="true"
+                        >
+                          →
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Right visual — 147:3254 / 147:3278 / 147:3301 "Form".
+                  It sits INSIDE the card's padding, so the space above, below
+                  and to the right of it is the same 30px as everywhere else.
+                  It previously bled past the padding on two sides, which both
+                  squared off its corners and made the card look unevenly
+                  padded. Rounded to 12px, one step tighter than the card's 16.
+                  Figma wraps it in a 528 × 355 tinted well. The animations paint
+                  their own scene and sit on a transparent background, so a well
+                  would only box them in. Dropped, and the slot is wider than the
+                  drawn 528 so the animation reads at a legible size.
+
+                  The negative margins bleed the art to the card's inner edge and
+                  must track the padding above, or the art overhangs the card and
+                  the page scrolls sideways.
+
+                  Stacked, the art bleeds LEFT as well. The stage is scaled to
+                  fit by width on a phone, so every pixel of frame width is
+                  stage size: bleeding both edges takes the frame from 282px to
+                  322px and the art with it. At `lg` the drawn right/bottom-only
+                  bleed returns. */}
+              <div
+                class="w-full min-w-0 shrink-0 overflow-hidden rounded-[12px] lg:w-[720px] lg:shrink"
+              >
+                <LiveArt
+                  src={card.art}
+                  title={card.artTitle}
+                  speed={1.35}
+                  zoom={1.3}
+                  surface={artSurface}
+                  class="w-full"
+                />
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

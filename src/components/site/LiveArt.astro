@@ -1,0 +1,130 @@
+---
+/**
+ * Embeds one of the animated illustrations from `public/live/`.
+ *
+ * They are separate documents in an iframe on purpose. Each was authored as a
+ * standalone stage with its own runtime, keyframes and generic class names
+ * (`.tcard`, `.a-stage`). Inlining them into the page would leak that CSS into
+ * the marketing components and couple two independent animation systems. The
+ * iframe keeps them isolated and lets `live-shim.css` — the provisional
+ * variables Figma does not define — stay quarantined.
+ *
+ * The runtime already handles `prefers-reduced-motion` by jumping to the final
+ * frame, and pauses when scrolled out of view.
+ */
+interface Props {
+  /** File name in `public/live/`, without the extension. */
+  src: 'hero-stack' | 'c1-a-compose' | 'c2-b-plan' | 'c3-b-audit';
+  /** Describes the animation for anyone who cannot see it. Required. */
+  title: string;
+  /** Design stage size, from `data-w`/`data-h` on the illustration's `.a-stage`. */
+  width?: number;
+  height?: number;
+  class?: string;
+  /** The hero is above the fold, so it must not be lazy-loaded. */
+  eager?: boolean;
+  /**
+   * Multiplies every delay in the illustration's timeline. Standalone pacing
+   * reads as hurried once the animation is embedded in a page someone is
+   * reading, so values above 1 slow the story down.
+   */
+  speed?: number;
+  /**
+   * CSS the illustration paints behind itself, so it sits on the same surface
+   * as the section that contains it. Must be a token expression — never a
+   * literal colour — so it follows the theme.
+   */
+  surface?: string;
+  /**
+   * Multiplies the stage's contain scale, so the illustration's own panels
+   * render larger inside the same box. The frame clips, and the stages carry
+   * internal margin, so a modest zoom eats that margin rather than the content.
+   */
+  zoom?: number;
+}
+
+const {
+  src,
+  title,
+  width = 700,
+  height = 438,
+  class: className = '',
+  eager = false,
+  speed = 1,
+  surface = 'var(--bg-white-0)',
+  zoom = 1,
+} = Astro.props;
+
+/**
+ * Built by hand rather than with `URLSearchParams`, which serialises a space as
+ * `+`. The frame decodes with `decodeURIComponent`, which does NOT turn `+` back
+ * into a space, so a value like `linear-gradient(to top, …)` arrived as
+ * `linear-gradient(to+top,+…)` — invalid CSS, silently dropped, gradient gone.
+ */
+const query = [`surface=${encodeURIComponent(surface)}`];
+if (speed !== 1) query.push(`speed=${speed}`);
+if (zoom !== 1) query.push(`zoom=${zoom}`);
+const frameSrc = `/live/${src}.html?${query.join('&')}`;
+
+/**
+ * The frame always carries the stage's own aspect, at every width.
+ *
+ * That is deliberately NOT a taller box on narrow screens. The runtime scales
+ * the stage by CONTAIN (`public/live/live.js`), i.e. `min(frameW/stageW,
+ * frameH/stageH)`, so below `lg` the frame's WIDTH is always the binding term
+ * — a 900×440 stage in a 390px-wide frame scales to 0.43 whatever its height
+ * is. Making the box taller therefore cannot enlarge the art; it only pads
+ * empty tint above and below it. Measured: a 4:3 box at 390px leaves a 102px
+ * band and the art is exactly the same size as with the drawn aspect.
+ *
+ * Matching the aspect is the one case that leaves no band on any edge, so the
+ * frames stay short and dense on a phone and the 1600px composition is
+ * untouched. The art itself is out of scope (`public/live/` is not modified).
+ */
+const aspect = width / height;
+---
+
+<div
+  class:list={['live-art relative w-full overflow-hidden', className]}
+  style={`--art-aspect:${aspect}`}
+>
+  <iframe
+    data-live-art={src}
+    src={frameSrc}
+    title={title}
+    loading={eager ? 'eager' : 'lazy'}
+    scrolling="no"
+    tabindex="-1"
+    class="absolute inset-0 size-full border-0"
+  ></iframe>
+</div>
+
+<style>
+  /* Scoped to the component, so the aspect travels with the instance. */
+  .live-art {
+    aspect-ratio: var(--art-aspect);
+  }
+</style>
+
+<script>
+  /**
+   * The initial theme cannot go in the `src` at build time — the page is static
+   * and the visitor's theme is only known in the browser. So each frame is
+   * pointed at its themed URL on mount, before it loads.
+   */
+  const frames = document.querySelectorAll<HTMLIFrameElement>('iframe[data-live-art]');
+  const theme = window.__eluuTheme?.get() ?? 'light';
+
+  for (const frame of frames) {
+    const src = frame.getAttribute('src')!;
+    if (src.includes(`theme=${theme}`)) continue;
+    /**
+     * Appended as a string on purpose. Reading or writing `url.searchParams`
+     * re-serialises the WHOLE query as form-encoded, which turns the spaces in
+     * the `surface` gradient back into `+` and breaks it. Never round-trip this
+     * URL through `URLSearchParams`.
+     */
+    const base = src.replace(/[?&]theme=(dark|light)/, '');
+    frame.setAttribute('src', `${base}${base.includes('?') ? '&' : '?'}theme=${theme}`);
+  }
+</script>

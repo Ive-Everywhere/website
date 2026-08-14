@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import FeatureQuadrants from '../components/home/FeatureQuadrants.astro';
+import FeatureCards from '../components/home/FeatureCards.astro';
+import Recipes from '../components/home/Recipes.astro';
+import PrivateCloud from '../components/home/PrivateCloud.astro';
+import Decal from '../components/site/Decal.astro';
+
+/**
+ * Home, dark — Figma frame `119:4672`.
+ *
+ * The dark frame is a pure recolour of `147:3069`: identical copy, identical
+ * structure, identical component variants and image refs. So it is the same
+ * composition with `theme="dark"`, and the token layer does the rest. If this
+ * page ever needs its own components, the recolour assumption has broken.
+ *
+ * This is a review route, not a shipping page. The real site will flip theme
+ * from a toggle or a user preference rather than serving a second URL.
+ */
+---
+
+<Base
+  title="Eluu — Specialist agents to run your business"
+  description="Deploy a team of AI specialists that work across your whole tool stack. In the cloud, in your Slack, on your schedule."
+  theme="dark"
+>
+  <Hero />
+  <FeatureQuadrants />
+  <Decal />
+  <FeatureCards />
+  <PrivateCloud />
+  <Recipes />
+</Base>

@@ -1,0 +1,47 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SplitHero from '../../components/compare/SplitHero.astro';
+import Pillars from '../../components/compare/Pillars.astro';
+import ComparisonTable from '../../components/compare/ComparisonTable.astro';
+import ProofGrid from '../../components/compare/ProofGrid.astro';
+import ClosingBand from '../../components/compare/ClosingBand.astro';
+
+/**
+ * The competitor-comparison template. Figma frame `VS pages` (151:2677).
+ *
+ * Every section is driven by the `compare` collection entry, so a second
+ * competitor page is a content file and no new code. `ComparisonTable` is
+ * driven by the entry's `rows` array.
+ *
+ * The five Figma frames named "Hero" are five sequential sections, and they
+ * are children of a frame called "Header". Neither name is followed here: the
+ * page renders as five ordinary sections inside `<main>`.
+ */
+export async function getStaticPaths() {
+  const entries = await getCollection('compare', ({ data }) => !data.draft);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+---
+
+<Base title={data.title} description={data.description} ogImage={data.ogImage}>
+  {data.hero && <SplitHero hero={data.hero} />}
+  {data.pillars && <Pillars pillars={data.pillars} />}
+  {
+    data.table && data.rows.length > 0 && (
+      <ComparisonTable table={data.table} competitor={data.competitor} rows={data.rows} />
+    )
+  }
+  {data.proof && <ProofGrid proof={data.proof} />}
+  {data.closing && <ClosingBand closing={data.closing} />}
+
+  {/* The body is optional — Figma draws no prose block on this page. It is
+      rendered so a content file can add notes below the drawn sections. */}
+  <div class="mx-auto max-w-[706px] px-6 pb-16 sm:px-10">
+    <Content />
+  </div>
+</Base>

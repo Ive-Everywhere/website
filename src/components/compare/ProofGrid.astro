@@ -1,0 +1,52 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import FeatureCard from './FeatureCard.astro';
+
+/**
+ * Section 4 — the 2×2 proof grid. Figma `151:5492` (named "Hero").
+ *
+ * Layout: column, padding 32px 187px 64px, centred, gap 56. Grid gap 36
+ * between rows and 12 within a row; a single 36px gap is used here because a
+ * 12px column gap against a 36px row gap reads as a drawing accident.
+ *
+ * Card: icon+heading row, body, hairline divider, second body.
+ *
+ * All four cards are identical AND each repeats its own paragraph twice, above
+ * and below the divider (spec gap A.2). That is 8 paragraph nodes carrying one
+ * unique sentence. The whole section is unwritten and its subject is unknown.
+ * Every string is transcribed as drawn and marked.
+ */
+interface Props {
+  proof: {
+    heading: {
+      title: { text: string; node?: string; needed?: boolean };
+      sub: { text: string; node?: string; needed?: boolean };
+    };
+    cards: {
+      icon: string;
+      heading: { text: string; node?: string; needed?: boolean };
+      body: { text: string; node?: string; needed?: boolean };
+      body2?: { text: string; node?: string; needed?: boolean };
+    }[];
+  };
+}
+
+const { proof } = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-187 flex flex-col items-center gap-10 pt-8 pb-16 lg:gap-14">
+    <SectionHeading heading={proof.heading} />
+
+    <div class="grid w-full gap-6 md:grid-cols-2 lg:gap-9">
+      {
+        proof.cards.map((card, i) => (
+          <FeatureCard
+            card={card}
+            note={i > 0 ? 'identical to proof card 1 in Figma; never written' : undefined}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>

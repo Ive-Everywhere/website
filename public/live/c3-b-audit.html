@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>C3-B — Live control plane: request, then its verdict and its log entry</title>
+<link href="tokens.css" rel="stylesheet">
+<link href="live-shim.css" rel="stylesheet">
+<link href="art.css" rel="stylesheet">
+<link href="live.css" rel="stylesheet">
+<link href="fonts/remixicon.css" rel="stylesheet">
+<link href="embed.css" rel="stylesheet">
+<style>
+  html,body { margin:0; height:100%; background:var(--bg-soft-200); }
+  .a-frame { position:absolute; inset:0; }
+
+  /* ── C3-B · THE LIVE CONTROL PLANE ───────────────────────────────────────
+     One fact per line, but now GROUPED into a tree: the request is the parent,
+     its verdict and its audit entry branch off it. The hierarchy is the point —
+     it says the verdict and the log BELONG to that request rather than being
+     three unrelated events that happen to be adjacent.
+
+         09:02:04  ● Iris wants to read June payouts        [stripe]
+                     ├─ approved   scope payouts:read
+                     └─ logged     audit entry #4808
+
+     Timestamps live on the parent only; the children inherit it. That removes a
+     column of repeated numbers and lets the branch carry the structure.
+
+     Cadence is deliberately slow — a group lands over ~2.7s and there is a beat
+     between groups, so you read one decision at a time rather than watching a
+     ticker. Seeded full so it scrolls from frame one (a bottom-anchored stream
+     only scrolls once content exceeds the panel).
+
+     Motion completes the set: Card 1 grows, Card 2 orbits, this one streams.  */
+  .a-field { --field: color-mix(in srgb, var(--maroon-200) 42%, #fff); }
+
+  .panel {
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:508px; height:300px;
+    background:var(--bg-white-0); border:1px solid var(--stroke-soft-200);
+    border-radius:14px; box-shadow:var(--shadow-regular-lg); overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .p-head { display:flex; align-items:center; gap:8px; padding:11px 15px;
+            border-bottom:1px solid var(--stroke-soft-200); flex:none; }
+
+  .stream { flex:1; min-height:0; position:relative; overflow:hidden;
+            display:flex; flex-direction:column; justify-content:flex-end;
+            padding:0 16px 14px; }
+  .stream::before {
+    content:""; position:absolute; top:0; left:0; right:0; height:46px; z-index:3;
+    background:linear-gradient(var(--bg-white-0) 14%, rgba(255,255,255,0));
+    pointer-events:none;
+  }
+
+  /* ─ a group: one request and everything that belongs to it ─ */
+  /* flex:none is LOAD-BEARING. .stream is a flex column, and flex items shrink
+     by default — once the groups exceeded the panel height flexbox compressed
+     every one of them instead of letting the stack overflow, which clipped the
+     children away and made the gap close rather than the content scroll. */
+  .grp { flex:none; max-height:0; opacity:0; overflow:hidden;
+         transition:max-height .4s var(--ease-out-app), opacity .34s var(--ease-out-app); }
+  .grp.is-on { max-height:140px; opacity:1; }
+  .grp + .grp.is-on { margin-top:14px; }
+
+  .g-req { display:flex; align-items:center; gap:9px; }
+  .g-time { font-family:var(--font-mono); font-size:10.5px; font-variant-numeric:tabular-nums;
+            color:var(--text-soft-400); width:52px; flex:none; }
+  .g-dot { width:7px; height:7px; border-radius:50%; flex:none; background:var(--text-soft-400); }
+  .g-fact { font-size:12.5px; letter-spacing:-.008em; color:var(--text-strong-950);
+            flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .g-logo { width:15px; height:15px; flex:none; }
+
+  /* ─ children, hung off a branch line under the request ─ */
+  /* stem sits under the request dot's centre: time(52) + gap(9) + half-dot(3.5) */
+  .g-kids { margin-left:64px; margin-top:2px; }
+  .g-kid {
+    position:relative; padding-left:19px; height:23px;
+    display:flex; align-items:center; gap:9px;
+    opacity:0; transition:opacity .3s var(--ease-out-app);
+  }
+  .g-kid.is-on { opacity:1; }
+  /* vertical stem — stops at the last child's centre so it reads as └ */
+  .g-kid::before { content:""; position:absolute; left:0; top:0; bottom:0; width:1px;
+                   background:var(--stroke-soft-200); }
+  .g-kid:first-child::before { top:-9px; }
+  .g-kid:last-child::before { bottom:50%; }
+  /* elbow into the row */
+  .g-kid::after { content:""; position:absolute; left:0; top:50%; width:12px; height:1px;
+                  background:var(--stroke-soft-200); }
+
+  .k-tag { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.05em;
+           text-transform:uppercase; font-weight:500; flex:none; width:62px; }
+  .k-tag--ok  { color:var(--success-base); }
+  .k-tag--no  { color:var(--error-base); }
+  .k-tag--log { color:var(--primary-base); }
+  .k-fact { font-size:11.5px; letter-spacing:-.005em; color:var(--text-sub-600);
+            flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  .pulse { width:6px; height:6px; border-radius:50%; background:var(--success-base);
+           box-shadow:0 0 0 3px var(--success-lighter); animation:l-pulse 1.2s infinite; }
+  @keyframes l-pulse { 50% { opacity:.35 } }
+</style>
+</head>
+<body>
+<div class="a-frame"><div class="a-field"><div class="a-stage">
+
+  <div class="panel">
+    <div class="p-head">
+      <i class="ri-shield-check-line" style="font-size:15px;color:var(--primary-base)"></i>
+      <span class="a-who"><span class="a-who-name">Agent security</span></span>
+      <span style="flex:1"></span>
+      <span class="a-chip"><span class="pulse"></span>Monitoring</span>
+    </div>
+    <div class="stream" id="stream"></div>
+  </div>
+
+  <!-- Logo source list. These MUST be real elements in the markup: a relative
+       src assembled in JS cannot resolve inside an iframe srcdoc, so the JS
+       clones from here instead of building a path. -->
+  <div id="logos" hidden>
+    <img data-k="stripe" src="assets/stripe.svg" alt="">
+    <img data-k="salesforce" src="assets/salesforce.svg" alt="">
+    <img data-k="gmail" src="assets/gmail.svg" alt="">
+    <img data-k="zendesk" src="assets/zendesk.svg" alt="">
+    <img data-k="slack" src="assets/slack.svg" alt="">
+    <img data-k="googlesheets" src="assets/googlesheets.svg" alt="">
+  </div>
+
+</div></div></div>
+
+<script src="live.js"></script>
+<script>
+(function () {
+  function logoFor(k) {
+    var src = document.querySelector('#logos img[data-k="' + k + '"]');
+    return src ? src.cloneNode(true) : null;
+  }
+
+  var GROUPS = [
+    ['09:02:04','Iris wants to read June payouts','stripe','ok','scope <span class="a-mono">payouts:read</span>','#4808'],
+    ['09:02:07','Nia wants to open the Acme contract','gmail','ok','scope <span class="a-mono">mail:read</span>','#4809'],
+    ['09:02:11','Lewis wants to read support tickets','zendesk','ok','scope <span class="a-mono">tickets:read</span>','#4810'],
+    ['09:02:14','Iris wants to read closed-won opportunities','salesforce','ok','scope <span class="a-mono">opportunities:read</span>','#4811'],
+    ['09:02:18','Lewis wants to export customer emails',null,'no','policy <span class="a-mono">pii-export</span>','#4812'],
+    ['09:02:22','Priya wants to post to <span class="a-mono">#ops</span>','slack','ok','scope <span class="a-mono">chat:write</span>','#4813'],
+    ['09:02:26','Iris wants to write <span class="a-mono">Revenue FY26</span>','googlesheets','ok','scope <span class="a-mono">sheets:write</span>','#4814'],
+    ['09:02:30','Iris wants to delete 24 unmatched records',null,'no','policy <span class="a-mono">no-deletes</span>','#4815']
+  ];
+
+  var stream = document.getElementById('stream');
+  var groups = GROUPS.map(function (g) {
+    var time = g[0], fact = g[1], logo = g[2], verdict = g[3], detail = g[4], entry = g[5];
+    var el = document.createElement('div');
+    el.className = 'grp';
+    el.innerHTML =
+      '<div class="g-req">' +
+        '<span class="g-time">' + time + '</span>' +
+        '<span class="g-dot"></span>' +
+        '<span class="g-fact">' + fact + '</span>' +
+      '</div>' +
+      '<div class="g-kids">' +
+        '<div class="g-kid"><span class="k-tag ' + (verdict === 'ok' ? 'k-tag--ok' : 'k-tag--no') + '">' +
+          (verdict === 'ok' ? 'Approved' : 'Blocked') + '</span><span class="k-fact">' + detail + '</span></div>' +
+        '<div class="g-kid"><span class="k-tag k-tag--log">Logged</span>' +
+          '<span class="k-fact">audit entry <span class="a-mono">' + entry + '</span></span></div>' +
+      '</div>';
+    if (logo) {
+      var img = logoFor(logo);
+      if (img) { img.className = 'g-logo'; el.querySelector('.g-req').appendChild(img); }
+    }
+    stream.appendChild(el);
+    return el;
+  });
+
+  // seed enough groups that the panel is already overflowing on frame one
+  var SEED = 3;
+
+  function reset() {
+    // snap, don't unwind — see .l-noanim
+    stream.classList.add('l-noanim');
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { stream.classList.remove('l-noanim'); });
+    });
+    groups.forEach(function (g, i) {
+      var on = i < SEED;
+      g.classList.toggle('is-on', on);
+      [].forEach.call(g.querySelectorAll('.g-kid'), function (k) { k.classList.toggle('is-on', on); });
+    });
+  }
+
+  function openGroup(i) { return function () { groups[i].classList.add('is-on'); }; }
+  function openKid(i, k) {
+    return function () { groups[i].querySelectorAll('.g-kid')[k].classList.add('is-on'); };
+  }
+
+  // slow, readable cadence: the request lands, a beat, the verdict, a beat, the
+  // log entry — then a longer pause before the next decision
+  var steps = [];
+  for (var i = SEED; i < groups.length; i++) {
+    steps.push([i === SEED ? 1100 : 1600, openGroup(i)]);
+    steps.push([760, openKid(i, 0)]);
+    steps.push([700, openKid(i, 1)]);
+  }
+
+  var seq = Live.Seq(steps, { reset: reset, hold: 2800 });
+  reset();
+  Live.autoplay(seq);
+})();
+</script>
+</body>
+</html>

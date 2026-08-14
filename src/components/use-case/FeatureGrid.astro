@@ -1,0 +1,79 @@
+---
+/**
+ * Section 4 — the five feature cards.
+ *
+ * The source content gives five facets of one job, each written as
+ * `**N. Headline** — "eyebrow"` plus a body sentence. The `[Advantage]`,
+ * `[Speed]`, `[Cost]` and `[Risk]` tags at the end of each body are internal
+ * value drivers, so they are stripped in the content files and never reach the
+ * page.
+ *
+ * The card is the home page's card, not a new one: `bg-card-surface`, radius 28,
+ * padding 40, a 28px Remix icon on top, then the three text levels the home page
+ * already uses — `.t-h6` strong for the heading, `.t-h6` soft for the quoted
+ * line, `.t-label-md` sub for the body. Compare `home/Security.astro` and
+ * `home/Proof.astro`.
+ *
+ * Five cards do not divide into three columns, so the grid is a 12-column track
+ * at `lg`: two half-width cards, then three third-width cards. The row of two
+ * carries the two strongest facets, which is the order the copy is written in.
+ */
+
+interface FeatureCard {
+  headline: string;
+  eyebrow: string;
+  body: string;
+  icon?: string;
+  linkHref?: string;
+  linkLabel?: string;
+}
+
+interface Props {
+  features: FeatureCard[];
+}
+
+const { features } = Astro.props;
+
+/**
+ * Column spans for the 2-then-3 arrangement. Anything past the fifth card falls
+ * back to a third-width cell, so a longer list still lays out.
+ */
+const spans = ['lg:col-span-6', 'lg:col-span-6', 'lg:col-span-4', 'lg:col-span-4', 'lg:col-span-4'];
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 py-14">
+    <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-12 lg:gap-9">
+      {
+        features.map((feature, index) => (
+          <li class:list={['flex', spans[index] ?? 'lg:col-span-4']}>
+            <article class="bg-card-surface flex w-full flex-col gap-6 rounded-[28px] p-6 sm:p-8 lg:gap-8 lg:p-10">
+              <i
+                class={`${feature.icon ?? 'ri-checkbox-circle-line'} text-icon-strong-950 text-[28px]`}
+                aria-hidden="true"
+              />
+
+              <div class="flex flex-col gap-3">
+                <h3 class="t-h6 text-text-strong-950 text-balance">{feature.headline}</h3>
+                <p class="t-h6 text-text-soft-400 text-balance">{feature.eyebrow}</p>
+              </div>
+
+              <p class="t-label-md text-text-sub-600 text-pretty">{feature.body}</p>
+
+              {feature.linkHref && (
+                <a
+                  href={feature.linkHref}
+                  class="t-label-md text-primary-base hover:text-primary-dark focus-visible:outline-primary-base mt-auto inline-flex w-fit min-h-11 items-center gap-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 lg:min-h-0"
+                >
+                  <span>{feature.linkLabel ?? 'Learn more'}</span>
+                  {/* Figma draws the arrow as a TEXT node, not an icon. */}
+                  <span aria-hidden="true">→</span>
+                </a>
+              )}
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

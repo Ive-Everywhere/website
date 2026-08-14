@@ -1,0 +1,110 @@
+---
+/**
+ * Buttons, transcribed from the Figma component sets:
+ *   `Buttons [1.1]`        (104:712)
+ *   `Fancy Buttons [1.1]`  (104:732)
+ *
+ * Only the `State=Default` variants exist in the marketing frames. Hover and
+ * focus are defined here, not in Figma — see specs gap list.
+ */
+interface Props {
+  variant?:
+    | 'primary-fancy'
+    | 'primary-stroke'
+    | 'neutral-lighter'
+    | 'neutral-soft'
+    | 'neutral-ghost'
+    | 'peach';
+  size?: 'xs' | 'md';
+  href?: string;
+  leftIcon?: string;
+  rightIcon?: string;
+  /** Renders the right icon inside a filled circular chip (CTA band button). */
+  chipIcon?: boolean;
+  iconOnly?: boolean;
+  label?: string;
+  class?: string;
+}
+
+const {
+  variant = 'neutral-lighter',
+  size = 'md',
+  href,
+  leftIcon,
+  rightIcon,
+  chipIcon = false,
+  iconOnly = false,
+  label,
+  class: className = '',
+} = Astro.props;
+
+/**
+ * The drawn padding resolves to a 40px-tall `md` button and a 32px `xs` one,
+ * both under the 44px minimum tap target. `min-h-11` raises them on touch-sized
+ * screens only and is dropped at `lg`, so the 1600px composition keeps the
+ * Figma heights exactly.
+ */
+const sizes = {
+  xs: iconOnly
+    ? 'p-1.5 rounded-[10px] min-h-11 min-w-11 lg:min-h-0 lg:min-w-0'
+    : 'px-2.5 py-1.5 rounded-[10px] min-h-11 lg:min-h-0',
+  md: 'px-3.5 py-2.5 rounded-xl min-h-11 lg:min-h-0',
+};
+
+const variants = {
+  'primary-fancy':
+    'bg-primary-dark text-static-white shadow-button-primary hover:bg-primary-darker',
+  /**
+   * Figma draws only the light state, where maroon on near-white is fine. On the
+   * dark page the same maroon on `#1E1C1E` measures about 1.6:1 and is close to
+   * invisible, so dark steps up the ramp to `maroon-300`. This is our decision,
+   * not Figma's — it has no dark variant for this button.
+   */
+  'primary-stroke':
+    'bg-bg-white-0 text-primary-dark ring-1 ring-primary-dark hover:bg-maroon-50 dark:text-maroon-300 dark:ring-maroon-400 dark:hover:bg-bg-weak-50',
+  'neutral-lighter': 'bg-bg-weak-50 text-text-sub-600 hover:bg-bg-soft-200',
+  /**
+   * One step stronger than `neutral-lighter`. The nav sits directly on
+   * `bg-white-0`, where `bg-weak-50` is a single step away and reads as no
+   * background at all; these need to be visible pills.
+   */
+  'neutral-soft':
+    'bg-bg-soft-200 text-text-sub-600 hover:bg-bg-sub-300 dark:bg-bg-weak-50 dark:hover:bg-bg-soft-200',
+  'neutral-ghost': 'text-icon-sub-600 hover:bg-bg-weak-50',
+  peach: 'bg-accent-peach-800 text-accent-peach-100 hover:opacity-90',
+};
+
+// The CTA-band button uses asymmetric padding so the icon chip sits flush.
+// Its 40px chip already carries it past the tap-target minimum.
+const shape = variant === 'peach' ? 'pl-6 pr-2 py-2 rounded-[96px] gap-4' : sizes[size];
+const Tag = href ? 'a' : 'button';
+const text = size === 'xs' ? 't-label-sm' : variant === 'peach' ? 't-h6' : 't-label-sm';
+---
+
+<Tag
+  href={href}
+  class:list={[
+    'inline-flex items-center justify-center transition-colors',
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-base',
+    shape,
+    variants[variant],
+    text,
+    className,
+  ]}
+  aria-label={iconOnly ? label : undefined}
+>
+  {leftIcon && <i class={`${leftIcon} shrink-0 text-[20px]`} aria-hidden="true"></i>}
+  {!iconOnly && label && <span class="px-1">{label}</span>}
+  {
+    rightIcon && !chipIcon && (
+      <i class={`${rightIcon} shrink-0 text-[20px] opacity-64`} aria-hidden="true" />
+    )
+  }
+  {
+    rightIcon && chipIcon && (
+      <span class="bg-accent-peach-100 text-accent-peach-800 flex items-center rounded-[96px] p-2">
+        <i class={`${rightIcon} text-[24px]`} aria-hidden="true" />
+      </span>
+    )
+  }
+</Tag>

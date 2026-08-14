@@ -1,0 +1,53 @@
+---
+/**
+ * Section 3 — the three numbers. Figma `147:2754` (FRAME "Hero", third of three
+ * siblings): row `147:2901`, gap 36, three fill-width cards.
+ *
+ * Structural note (spec gap 29): cards 1 and 2 each sit inside an extra
+ * `space-between` row wrapper (147:2755 / 147:2902) and card 3 (147:2897) is a
+ * direct child. All three are fill-width, so the wrappers change nothing and
+ * are flattened here into one equal-column grid.
+ *
+ * Card template EL-3476bcea: padding 40, gap 20, radius 28, on `bg-card-surface`
+ * so it follows the theme. Number = Landing H2 LEFT (48/56); caption = H6 at
+ * `text-text-soft-400`. That is the same card the home page's `Proof.astro`
+ * uses, so the two pages share one stat treatment.
+ *
+ * `needsVerify` marks a figure the content pack tags `[VERIFY]`, `[BENCHMARK]`
+ * or `[TO COLLECT]`. Both the number and its caption render inside
+ * `.copy-needed`, because a benchmark's claim usually lives in the caption.
+ */
+
+interface Stat {
+  value: string;
+  label: string;
+  needsVerify?: boolean;
+}
+
+interface Props {
+  stats: Stat[];
+}
+
+const { stats } = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 py-14">
+    <ul class="grid gap-6 sm:grid-cols-3 lg:gap-9">
+      {
+        stats.map((stat) => (
+          <li class="bg-card-surface flex flex-col gap-5 rounded-[28px] p-6 sm:p-8 lg:p-10">
+            {/* Landing Title/H2, LEFT variant — a real `.t-landing-h2` in
+                global.css rather than an inline size pair here. */}
+            <p class="t-landing-h2 text-text-strong-950">
+              {stat.needsVerify ? <span class="copy-needed">{stat.value}</span> : stat.value}
+            </p>
+            <p class="t-h6 text-text-soft-400 text-pretty">
+              {stat.needsVerify ? <span class="copy-needed">{stat.label}</span> : stat.label}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

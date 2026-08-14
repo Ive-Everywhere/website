@@ -1,0 +1,83 @@
+---
+import SocBadge from '../badges/SocBadge.astro';
+import IsoBadge from '../badges/IsoBadge.astro';
+import GdprBadge from '../badges/GdprBadge.astro';
+
+/**
+ * Security and compliance — Figma `178:2988`.
+ *
+ * Section: column, padding 96/188, gap 48, fill `#F8F8F3` -> `bg-white-0`.
+ * A split heading row, then three badge cards (padding 40, gap 36, radius 28).
+ *
+ * The badges are recoloured onto tokens and inlined — see `components/badges/`.
+ * They use the `--badge-*` palette, which deliberately does NOT invert: a
+ * medallion is dark ink on a light disc in both themes.
+ *
+ * `comingSoon` marks a certification not yet held: SOC 2 and ISO 27001, per
+ * Krishna's Figma. GDPR is held. This is a claim about the company rather than
+ * a design decision, so it is stated once here and nowhere else.
+ */
+const cards = [
+  {
+    node: '178:2993',
+    Badge: SocBadge,
+    ratio: 'aspect-[141.24/128]',
+    title: 'SOC 2',
+    label: 'Built for trusted data handling',
+    comingSoon: true,
+  },
+  {
+    node: '178:2997',
+    Badge: IsoBadge,
+    ratio: 'aspect-[112.76/128]',
+    title: 'ISO 27001',
+    // Figma keeps a trailing space and no period — transcribed, then trimmed.
+    label: 'Global security standard',
+    comingSoon: true,
+  },
+  {
+    node: '178:3001',
+    Badge: GdprBadge,
+    ratio: 'aspect-[156.44/128]',
+    title: 'GDPR',
+    label: 'Enterprise ready privacy',
+    comingSoon: false,
+  },
+];
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col gap-8 py-14 lg:gap-12">
+    {/* 181:2840 — row, space-between. Stacks below `lg`. */}
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
+      <h2 class="t-landing-h3 text-text-strong-950">Security and Compliance</h2>
+      {/* 181:2838 — fixed 391px, right-aligned. The sentence is unfinished in
+          Figma ("...and is constantly "), so it is marked rather than completed. */}
+      <p class="t-label-md text-text-sub-600 max-w-[391px] lg:text-right">
+        <span class="copy-needed">
+          Eluu is built with the highest security and privacy needs in mind and is constantly
+        </span>
+      </p>
+    </div>
+
+    {/* 178:2992 — row, gap 36, stretch. */}
+    <div class="grid gap-6 sm:grid-cols-3 lg:gap-9">
+      {
+        cards.map(({ Badge, ratio, title, label, comingSoon }) => (
+          <div class="bg-card-surface relative flex flex-col items-center justify-between gap-6 rounded-[28px] p-6 text-center lg:gap-9 lg:p-10">
+            {comingSoon && (
+              <span class="bg-bg-sub-300 text-text-sub-600 t-subheading-sm absolute top-5 right-5 rounded-full px-3 py-1">
+                Coming soon
+              </span>
+            )}
+            <Badge class={`h-24 w-auto lg:h-32 ${ratio}`} />
+            <div class="flex flex-col items-center gap-3">
+              <p class="t-h4 text-text-strong-950">{title}</p>
+              <p class="t-h6 text-text-soft-400 text-balance">{label}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
