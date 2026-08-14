@@ -1,63 +1,36 @@
 ---
 /**
- * Testimonial + outcome stats — Figma `178:2964`.
- *
- * Section: column, padding 96/188, gap 48, fill `#F8F8F3` -> `bg-white-0`.
- * A full-width quote card, then three equal stat cards.
- *
- * Every number here is a `[verify]` claim: none is sourced anywhere in the
- * file, and the attribution is a role, not a named customer. Both render inside
- * `copy-needed` so they cannot ship unverified.
+ * Testimonial + outcome stats. A heading (separates it from the teams section),
+ * a full-width quote card (max two short sentences), then three stat cards.
+ * Quote/numbers are the approved CRO story (2026-08-14), role-attributed.
  */
 const stats = [
-  {
-    node: '178:2969',
-    icon: 'ri-plug-fill',
-    value: '5x',
-    label: 'Agents moved off laptops',
-  },
-  {
-    node: '178:2973',
-    icon: 'ri-robot-2-line',
-    value: '80%',
-    label: 'Manual tasks migrated to Eluu',
-  },
-  {
-    node: '178:2977',
-    icon: 'ri-plug-fill',
-    value: '50+',
-    label: 'Agents running per team',
-  },
+  { icon: 'ri-robot-2-line', value: '95%', label: 'Manual work reduced' },
+  { icon: 'ri-rocket-line', value: '5x', label: 'Team productivity' },
+  { icon: 'ri-flashlight-line', value: '1 day', label: 'To agent readiness' },
 ];
 ---
 
 <section class="bg-bg-white-0">
   <div class="page-shell gutter-188 flex flex-col gap-8 py-14 lg:gap-12">
-    {/* 178:2965 — padding 60/40, gap 40, radius 28. */}
+    <h2 class="t-landing-h3 text-text-strong-950 text-balance">Teams already running on Eluu.</h2>
+
     <figure
-      class="bg-card-surface flex flex-col items-center justify-center gap-6 rounded-[28px] px-6 py-10 text-center lg:gap-10 lg:px-10 lg:py-[60px]"
+      class="bg-card-surface flex flex-col items-center justify-center gap-6 rounded-[28px] px-6 py-10 text-center lg:gap-8 lg:px-10 lg:py-[60px]"
     >
-      <figcaption class="t-label-md text-text-sub-600">
-        {/* 178:2966 — a role, not a named customer. */}
-        <span class="copy-needed">CRO at a leading SaaS</span>
-      </figcaption>
-      {/* 178:2967 — fixed 1042px in Figma. */}
-      <blockquote class="t-h4 text-text-strong-950 max-w-[1042px] text-balance">
-        My team has tens of agents constantly running. We are able to move at 5x the normal
-        execution speed without compromising quality
+      <blockquote class="t-h4 text-text-strong-950 max-w-[900px] text-balance">
+        Six months ago we had zero agents. Today my team runs 30-plus, and the cross-tool
+        work that ate my reps’ weeks now takes minutes.
       </blockquote>
+      <figcaption class="t-label-md text-text-sub-600">CRO at a leading SaaS</figcaption>
     </figure>
 
-    {/* 178:2968 — row, gap 36, stretch. */}
     <div class="grid gap-6 sm:grid-cols-3 lg:gap-9">
       {
         stats.map((stat) => (
           <div class="bg-card-surface flex flex-col gap-5 rounded-[28px] p-6 lg:p-10">
             <i class={`${stat.icon} text-icon-strong-950 text-[28px]`} aria-hidden="true" />
-            {/* Unsourced — see the file header. */}
-            <p class="t-h4 text-text-strong-950">
-              <span class="copy-needed">{stat.value}</span>
-            </p>
+            <p class="t-h4 text-text-strong-950">{stat.value}</p>
             <p class="t-h6 text-text-soft-400">{stat.label}</p>
           </div>
         ))

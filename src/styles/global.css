@@ -168,7 +168,7 @@
   .t-landing-h2,
   .t-landing-h3,
   .t-landing-h4 {
-    font-weight: 550;
+    font-weight: 400;
     font-feature-settings: normal;
   }
   /* 56/64 at 1600 → 36px at 390. */
@@ -203,7 +203,7 @@
   .t-h4,
   .t-h5,
   .t-h6 {
-    font-weight: 500;
+    font-weight: 450;
     font-variation-settings: var(--opsz-display);
   }
   /* 32/40 at 1600 → 24px at 390. */

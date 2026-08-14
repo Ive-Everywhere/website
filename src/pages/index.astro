@@ -1,39 +1,22 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/home/Hero.astro';
-import FeatureQuadrants from '../components/home/FeatureQuadrants.astro';
-import FeatureCards from '../components/home/FeatureCards.astro';
-import Recipes from '../components/home/Recipes.astro';
+import Pillars from '../components/home/Pillars.astro';
+import CapabilityTabs from '../components/home/CapabilityTabs.tsx';
+import SolutionsCarousel from '../components/home/SolutionsCarousel.tsx';
 import Proof from '../components/home/Proof.astro';
+import Recipes from '../components/home/Recipes.astro';
 import Security from '../components/home/Security.astro';
-import PrivateCloud from '../components/home/PrivateCloud.astro';
-import Decal from '../components/site/Decal.astro';
-
-/**
- * Home — Figma frame `147:3069` ("Home", 1600px).
- * Sections 5 (CTA band) and 6 (footer) are component instances and live in
- * `Base.astro`, so only the four page-specific sections are composed here.
- *
- * The decal straddles the quadrants/cards boundary, as measured off Krishna's
- * export. It is out of flow, so it changes no spacing.
- *
- * `PrivateCloud` sits directly above `Proof`, the testimonial — Krishna's call
- * (2026-08-05). It reads better than my first guess of "before Security": the
- * filled band now breaks the light run EARLIER, and the page argues capability
- * (cards) → control (own cloud) → proof (quote, stats) rather than deferring the
- * only dark section to the end.
- */
 ---
 
 <Base
-  title="Eluu — Specialist agents to run your business"
-  description="Deploy a team of AI specialists that work across your whole tool stack. In the cloud, in your Slack, on your schedule."
+  title="Eluu — The agentic team for your human team"
+  description="AI teams that run end-to-end work across your tools. Available 24x7 via web, Slack, or phone."
 >
   <Hero />
-  <FeatureQuadrants />
-  <Decal />
-  <FeatureCards />
-  <PrivateCloud />
+  <Pillars />
+  <CapabilityTabs client:visible />
+  <SolutionsCarousel client:visible />
   <Proof />
   <Recipes />
   <Security />
