@@ -3,24 +3,19 @@
     radial-gradient(85% 70% at 20% 10%, #eaf4ec 0%, rgba(234,244,236,0) 60%),
     radial-gradient(90% 80% at 90% 90%, #f2ece9 0%, rgba(242,236,233,0) 60%),
     linear-gradient(165deg,#f0f5f0 0%,#f4f1ee 100%);}
-  .ghost{position:absolute;left:190px;top:150px;width:760px;padding:20px 26px;opacity:.5;filter:blur(1px)}
-  .ghost .t{font-size:17px;color:#8b8791}
-  .main{position:absolute;left:120px;top:226px;width:880px}
-  .row{display:flex;align-items:center;gap:16px;padding:17px 26px;border-bottom:1px solid #f3f1f5}
+  .main{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:980px}
+  .row{display:flex;align-items:center;gap:24px;padding:26px 36px;border-bottom:1px solid #f3f1f5}
   .row:last-child{border-bottom:0}
-  .row__l{font-size:18px;flex:1}
+  .row__l{font-size:29px;flex:1;letter-spacing:.002em}
   .row__l em{font-style:normal;font-weight:480}
-  .row__t{font-size:15px;color:#9a95a0;flex:none;font-variant-numeric:tabular-nums}
 </style></head><body><div class="stage">
-  <div class="card ghost"><div class="t mono">reports/june-reconciliation.md · closed in 1m 40s</div></div>
   <div class="card main">
-    <div class="hd"><span class="hd__t">Month-end close</span><span class="tag tag--ok" style="margin-left:auto"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg>Done in 1m 12s</span></div>
+    <div class="hd"><span class="hd__t">Month-end close</span><span class="tag tag--ok" style="margin-left:auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg>Done in 1m 12s</span></div>
     <div>
-      <div class="row"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span><span class="row__l">Pulled <em>142 payouts</em> from Stripe</span><span class="row__t">7:01 AM</span></div>
-      <div class="row"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span><span class="row__l">Matched <em>3,208 ledger rows</em> in Sheets</span><span class="row__t">7:01 AM</span></div>
-      <div class="row"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span><span class="row__l">Posted <em>139 entries</em> to QuickBooks</span><span class="row__t">7:02 AM</span></div>
-      <div class="row"><span class="warn">!</span><span class="row__l"><em>3 exceptions</em> emailed for your sign-off</span><span class="row__t">7:02 AM</span></div>
-      <div class="row"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span><span class="row__l">Board pack refreshed · <span class="mono" style="font-size:16px">reports/july.md</span></span><span class="row__t">7:02 AM</span></div>
+      <div class="row"><span class="ic"><img src="live/assets/stripe.svg"></span><span class="row__l">Pulled <em>142 payouts</em> from Stripe</span><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
+      <div class="row"><span class="ic"><img src="live/assets/googlesheets.svg"></span><span class="row__l">Matched <em>3,208 ledger rows</em></span><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
+      <div class="row"><span class="ic"><img src="live/assets/gmail.svg"></span><span class="row__l"><em>3 exceptions</em> emailed for sign-off</span><span class="warn">!</span></div>
+      <div class="row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#755a68" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="row__l">Board pack refreshed</span><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
     </div>
   </div>
 </div></body></html>
