@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pillar · Context — every system feeds the same colleague</title>
+<link href="tokens.css" rel="stylesheet">
+<link href="live-shim.css" rel="stylesheet">
+<link href="art.css" rel="stylesheet">
+<link href="live.css" rel="stylesheet">
+<link href="fonts/remixicon.css" rel="stylesheet">
+<link href="embed.css" rel="stylesheet">
+<style>
+  html,body { margin:0; height:100%; background:var(--bg-soft-200); }
+  .a-frame { position:absolute; inset:0; }
+
+  /* ── P3 · CONTEXT ────────────────────────────────────────────────────────
+     Six real integrations, three per side, wired into one colleague. Pulses
+     travel the wires INTO the center one at a time — context flowing in —
+     and the payoff is a single grounded answer chip beneath the node.
+     Real logos, not counters: the logos are the proof of reach.            */
+  .a-stage { display:grid; place-items:center; }
+  .wrap { position:relative; width:520px; height:320px; }
+  .wires { position:absolute; inset:0; }
+  .wires path { fill:none; stroke:var(--stroke-soft-200); stroke-width:1.5; }
+  .wires path.is-lit { stroke:var(--primary-base); stroke-opacity:.45; transition:stroke .3s; }
+  .node { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+          width:64px; height:64px; border-radius:18px; display:grid; place-items:center;
+          background:var(--primary-base); color:#fff; box-shadow:var(--shadow-regular-lg);
+          transition:transform .25s var(--ease-out-app); }
+  .node svg { width:26px; height:26px; }
+  .node.is-hit { transform:translate(-50%,-50%) scale(1.07); }
+  .src { position:absolute; width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
+         background:var(--bg-white-0); border:1px solid var(--stroke-soft-200);
+         box-shadow:var(--shadow-regular-sm); transition:box-shadow .3s, border-color .3s; }
+  .src img { width:20px; height:20px; }
+  .src.is-hit { border-color:var(--primary-base); box-shadow:0 0 0 3px color-mix(in srgb, var(--primary-base) 14%, transparent); }
+  /* the traveling pulse — one dot per wire, animated along its offset-path */
+  .dot { position:absolute; left:0; top:0; width:7px; height:7px; border-radius:50%;
+         background:var(--primary-base); opacity:0; }
+  .dot.is-go { animation:p3travel 1s var(--ease-out-app) forwards; }
+  @keyframes p3travel { 0% { opacity:0; offset-distance:0% } 12% { opacity:1 }
+                        88% { opacity:1 } 100% { opacity:0; offset-distance:100% } }
+  .answer { position:absolute; left:50%; bottom:6px; transform:translate(-50%,8px);
+            display:flex; align-items:center; gap:7px; padding:8px 13px; border-radius:999px;
+            background:var(--bg-white-0); border:1px solid var(--stroke-soft-200);
+            box-shadow:var(--shadow-regular-lg); font-size:11.5px; letter-spacing:-.008em;
+            white-space:nowrap; opacity:0;
+            transition:opacity .45s var(--ease-out-app), transform .45s var(--ease-out-app); }
+  .answer.is-on { opacity:1; transform:translate(-50%,0); }
+  .answer i { color:var(--success-base); font-size:13px; }
+  .answer b { font-weight:600; }
+</style>
+</head>
+<body>
+<div class="a-frame"><div class="a-field"><div class="a-stage" data-w="600" data-h="400">
+
+  <div class="wrap">
+    <svg class="wires" viewBox="0 0 520 320">
+      <path id="w1" d="M66,68  C176,68  198,146 234,154"/>
+      <path id="w2" d="M66,160 C150,160 180,160 228,160"/>
+      <path id="w3" d="M66,252 C176,252 198,174 234,166"/>
+      <path id="w4" d="M454,68  C344,68  322,146 286,154"/>
+      <path id="w5" d="M454,160 C370,160 340,160 292,160"/>
+      <path id="w6" d="M454,252 C344,252 322,174 286,166"/>
+    </svg>
+
+    <!-- one traveling dot per wire; offset-path mirrors the svg path -->
+    <span class="dot" id="d1" style="offset-path:path('M66,68  C176,68  198,146 234,154')"></span>
+    <span class="dot" id="d2" style="offset-path:path('M66,160 C150,160 180,160 228,160')"></span>
+    <span class="dot" id="d3" style="offset-path:path('M66,252 C176,252 198,174 234,166')"></span>
+    <span class="dot" id="d4" style="offset-path:path('M454,68  C344,68  322,146 286,154')"></span>
+    <span class="dot" id="d5" style="offset-path:path('M454,160 C370,160 340,160 292,160')"></span>
+    <span class="dot" id="d6" style="offset-path:path('M454,252 C344,252 322,174 286,166')"></span>
+
+    <div class="src" id="l1" style="left:44px; top:46px"><img src="assets/hubspot.svg" alt="HubSpot"></div>
+    <div class="src" id="l2" style="left:44px; top:138px"><img src="assets/gmail.svg" alt="Gmail"></div>
+    <div class="src" id="l3" style="left:44px; top:230px"><img src="assets/googlesheets.svg" alt="Google Sheets"></div>
+    <div class="src" id="l4" style="right:44px; top:46px"><img src="assets/slack.svg" alt="Slack"></div>
+    <div class="src" id="l5" style="right:44px; top:138px"><img src="assets/stripe.svg" alt="Stripe"></div>
+    <div class="src" id="l6" style="right:44px; top:230px"><img src="assets/linear.svg" alt="Linear"></div>
+
+    <div class="node" id="node"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="5" height="16" rx="2.2" fill="currentColor"/><rect x="14" y="4" width="5" height="16" rx="2.2" fill="currentColor"/></svg></div>
+
+    <div class="answer" id="answer"><i class="ri-check-line"></i><span><b>$486.2K</b> reconciled — sourced from 6 systems</span></div>
+  </div>
+
+</div></div></div>
+<script src="live.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var N = 6;
+
+  function reset() {
+    for (var i = 1; i <= N; i++) {
+      $('d' + i).classList.remove('is-go');
+      $('l' + i).classList.remove('is-hit');
+      $('w' + i).classList.remove('is-lit');
+    }
+    $('node').classList.remove('is-hit');
+    $('answer').classList.remove('is-on');
+  }
+
+  function fire(i) {
+    return function () {
+      $('l' + i).classList.add('is-hit');
+      $('w' + i).classList.add('is-lit');
+      // restart the dot's animation cleanly
+      var d = $('d' + i); d.classList.remove('is-go'); void d.offsetWidth; d.classList.add('is-go');
+      Live.soon(function () {
+        $('node').classList.add('is-hit');
+        Live.soon(function () { $('node').classList.remove('is-hit'); }, 180);
+      }, 950);
+    };
+  }
+
+  // unequal spacing so it reads as systems answering, not a metronome
+  var seq = Live.Seq([
+    [500, fire(1)], [420, fire(4)], [360, fire(2)],
+    [300, fire(5)], [340, fire(3)], [300, fire(6)],
+    [1250, function () { $('answer').classList.add('is-on'); }]
+  ], { reset: reset, hold: 3200 });
+
+  reset();
+  Live.autoplay(seq);
+})();
+</script>
+</body>
+</html>

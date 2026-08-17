@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pillar · Security — scoped, gated, and logged</title>
+<link href="tokens.css" rel="stylesheet">
+<link href="live-shim.css" rel="stylesheet">
+<link href="art.css" rel="stylesheet">
+<link href="live.css" rel="stylesheet">
+<link href="fonts/remixicon.css" rel="stylesheet">
+<link href="embed.css" rel="stylesheet">
+<style>
+  html,body { margin:0; height:100%; background:var(--bg-soft-200); }
+  .a-frame { position:absolute; inset:0; }
+
+  /* ── P4 · SECURITY ───────────────────────────────────────────────────────
+     A destructive action hits the approval gate: the real app's card, with
+     the reason spelled out. A human approves, and the audit trail writes
+     itself line by line underneath. The mono log lines ARE the message —
+     every action scoped, logged, auditable.                                */
+  .a-stage { display:grid; place-items:center; }
+  .sec { position:relative; width:432px; }
+  .gate { background:var(--bg-white-0); border:1px solid var(--stroke-soft-200);
+          border-radius:14px; box-shadow:var(--shadow-regular-lg); padding:13px 15px; }
+  .gate-head { display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; letter-spacing:-.01em; }
+  .gate-head i { color:var(--warning-base); font-size:15px; }
+  .gate-head .a-chip { margin-left:auto; }
+  .gate-cmd { display:flex; align-items:center; gap:7px; margin-top:10px; padding:8px 11px;
+              border-radius:9px; background:var(--bg-weak-50);
+              font-family:var(--font-mono); font-size:11px; color:var(--text-sub-600); }
+  .gate-cmd img { width:14px; height:14px; }
+  .gate-why { font-size:10.5px; color:var(--text-soft-400); margin-top:7px; line-height:1.45; }
+  .gate-actions { display:flex; gap:8px; margin-top:11px; }
+  .gbtn { flex:1; height:30px; border-radius:9px; display:grid; place-items:center;
+          font-size:12px; font-weight:500; transition:filter .15s, opacity .3s; }
+  .gbtn--p { background:var(--primary-base); color:#fff; }
+  .gbtn--g { background:var(--bg-weak-50); color:var(--text-sub-600); }
+  .gbtn.is-hit { filter:brightness(.82); }
+  .sec.is-approved .gate-actions { opacity:.35; }
+  .audit { margin-top:10px; background:var(--bg-white-0); border:1px solid var(--stroke-soft-200);
+           border-radius:12px; padding:10px 13px; }
+  .audit-l { font-size:9.5px; color:var(--text-soft-400); text-transform:uppercase;
+             letter-spacing:.06em; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+  .audit-l i { font-size:11px; color:var(--primary-base); }
+  .log { display:flex; align-items:baseline; gap:9px; font-family:var(--font-mono); font-size:10px;
+         line-height:1.5; padding:2.5px 0; color:var(--text-sub-600);
+         opacity:0; transform:translateY(4px);
+         transition:opacity .35s var(--ease-out-app), transform .35s var(--ease-out-app); }
+  .log.is-on { opacity:1; transform:none; }
+  .log-t { color:var(--text-soft-400); flex:none; }
+  .log b { color:var(--text-strong-950); font-weight:500; }
+  .log .ok { color:var(--success-base); }
+</style>
+</head>
+<body>
+<div class="a-frame"><div class="a-field"><div class="a-stage" data-w="600" data-h="400">
+
+  <div class="sec" id="sec">
+    <div class="gate">
+      <div class="gate-head"><i class="ri-shield-keyhole-line"></i>Approval required
+        <span class="a-chip" id="status">Waiting for you</span></div>
+      <div class="gate-cmd"><img src="assets/hubspot.svg" alt=""><span>archive 30 stale deals · $214K total</span></div>
+      <div class="gate-why">Destructive: archives CRM records. Scoped to deals with no activity for 6+ months.</div>
+      <div class="gate-actions">
+        <span class="gbtn gbtn--p" id="approve">Approve</span>
+        <span class="gbtn gbtn--g">Deny</span>
+      </div>
+    </div>
+
+    <div class="audit">
+      <div class="audit-l"><i class="ri-lock-2-line"></i>Audit trail · your environment</div>
+      <div class="log" id="g1"><span class="log-t">14:02:11</span><span><b>scope</b> checked — crm.deals:write only</span></div>
+      <div class="log" id="g2"><span class="log-t">14:02:36</span><span><b>approved</b> by David · recorded</span></div>
+      <div class="log" id="g3"><span class="log-t">14:02:38</span><span><b>30 deals</b> archived · <span class="ok">✓ logged</span></span></div>
+    </div>
+  </div>
+
+</div></div></div>
+<script src="live.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  function reset() {
+    $('sec').classList.remove('is-approved');
+    $('approve').classList.remove('is-hit');
+    ['g1','g2','g3'].forEach(function (id) { $(id).classList.remove('is-on'); });
+    $('status').className = 'a-chip';
+    $('status').textContent = 'Waiting for you';
+  }
+
+  var seq = Live.Seq([
+    [700,  function () { $('g1').classList.add('is-on'); }],       // scope check lands first
+    [1300, function () { $('approve').classList.add('is-hit'); }], // the human decides
+    [250,  function () {
+      $('sec').classList.add('is-approved');
+      $('status').className = 'a-chip a-chip--ok';
+      $('status').innerHTML = '<i class="ri-check-line" style="font-size:11px"></i>Approved';
+    }],
+    [500,  function () { $('g2').classList.add('is-on'); }],
+    [700,  function () { $('g3').classList.add('is-on'); }]
+  ], { reset: reset, hold: 3400 });
+
+  reset();
+  Live.autoplay(seq);
+})();
+</script>
+</body>
+</html>

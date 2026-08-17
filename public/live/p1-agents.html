@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pillar · Agents — a run works through real systems and delivers</title>
+<link href="tokens.css" rel="stylesheet">
+<link href="live-shim.css" rel="stylesheet">
+<link href="art.css" rel="stylesheet">
+<link href="live.css" rel="stylesheet">
+<link href="fonts/remixicon.css" rel="stylesheet">
+<link href="embed.css" rel="stylesheet">
+<style>
+  html,body { margin:0; height:100%; background:var(--bg-soft-200); }
+  .a-frame { position:absolute; inset:0; }
+
+  /* ── P1 · AGENTS ─────────────────────────────────────────────────────────
+     One run panel. The task sits as the title (the request is carried once),
+     three integration steps check off with staggered, unequal durations, the
+     header chip flips to Done, and the delivered file appears. No composer,
+     no scrolling, fixed height — rows reveal by opacity only.              */
+  .a-stage { display:grid; place-items:center; }
+  .run { position:relative; width:432px; background:var(--bg-white-0);
+         border:1px solid var(--stroke-soft-200); border-radius:14px;
+         box-shadow:var(--shadow-regular-lg); overflow:hidden; }
+  .run-head { display:flex; align-items:center; gap:9px; padding:12px 15px;
+              border-bottom:1px solid var(--stroke-soft-200); }
+  .run-mark { width:22px; height:22px; border-radius:6px; display:grid; place-items:center;
+              background:var(--primary-base); color:#fff; }
+  .run-mark svg { width:11px; height:11px; }
+  .run-who { font-size:12px; font-weight:600; letter-spacing:-.01em; }
+  .run-who span { color:var(--text-soft-400); font-weight:400; }
+  .run-head .a-chip { margin-left:auto; }
+  .task { padding:14px 16px 3px; font-size:13.5px; font-weight:500; letter-spacing:-.012em; }
+  .steps { padding:11px 16px 15px; display:flex; flex-direction:column; gap:7px; }
+  .st { display:flex; align-items:center; gap:9px; padding:9px 11px; border-radius:10px;
+        background:var(--bg-weak-50); opacity:0; transform:translateY(5px);
+        transition:opacity .35s var(--ease-out-app), transform .35s var(--ease-out-app); }
+  .st.is-on { opacity:1; transform:none; }
+  .st img { width:16px; height:16px; flex:none; }
+  .st-t { font-size:12px; color:var(--text-sub-600); letter-spacing:-.008em; flex:1;
+          white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .st-ms { font-family:var(--font-mono); font-size:10px; color:var(--text-soft-400); flex:none;
+           opacity:0; transition:opacity .3s; }
+  .st-ok { color:var(--success-base); font-size:13px; flex:none; opacity:0; transition:opacity .3s; }
+  .st.is-done .st-ok, .st.is-done .st-ms { opacity:1; }
+  .st-spin { width:12px; height:12px; border-radius:50%; flex:none; display:none;
+             border:1.6px solid var(--stroke-soft-200); border-top-color:var(--primary-base);
+             animation:p1spin .7s linear infinite; }
+  .st.is-run .st-spin { display:block; } .st.is-done .st-spin { display:none; }
+  @keyframes p1spin { to { transform:rotate(360deg) } }
+  .deliver { display:flex; align-items:center; gap:8px; margin:0 16px 15px; padding:10px 12px;
+             border:1px solid var(--stroke-soft-200); border-radius:10px;
+             opacity:0; transform:translateY(5px);
+             transition:opacity .4s var(--ease-out-app), transform .4s var(--ease-out-app); }
+  .deliver.is-on { opacity:1; transform:none; }
+  .deliver i { color:var(--primary-base); font-size:15px; }
+  .deliver-f { font-family:var(--font-mono); font-size:11px; letter-spacing:-.01em; }
+  .deliver-m { font-size:10.5px; color:var(--text-soft-400); margin-left:auto; }
+</style>
+</head>
+<body>
+<div class="a-frame"><div class="a-field"><div class="a-stage" data-w="600" data-h="400">
+
+  <div class="run">
+    <div class="run-head">
+      <span class="run-mark"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="5" height="16" rx="2.2" fill="currentColor"/><rect x="14" y="4" width="5" height="16" rx="2.2" fill="currentColor"/></svg></span>
+      <span class="run-who">Ledger <span>· Finance Ops</span></span>
+      <span class="a-chip" id="status"><span class="l-caret" style="height:9px"></span>Running</span>
+    </div>
+    <div class="task">Close the July books</div>
+    <div class="steps">
+      <div class="st" id="s1"><img src="assets/stripe.svg" alt=""><span class="st-t">List July payouts · 142 found</span><span class="st-ms" >3.8s</span><span class="st-spin"></span><i class="st-ok ri-check-line"></i></div>
+      <div class="st" id="s2"><img src="assets/googlesheets.svg" alt=""><span class="st-t">Match against the master ledger</span><span class="st-ms">5.2s</span><span class="st-spin"></span><i class="st-ok ri-check-line"></i></div>
+      <div class="st" id="s3"><img src="assets/gmail.svg" alt=""><span class="st-t">Email 3 exceptions for sign-off</span><span class="st-ms">2.6s</span><span class="st-spin"></span><i class="st-ok ri-check-line"></i></div>
+    </div>
+    <div class="deliver" id="deliver">
+      <i class="ri-file-text-line"></i>
+      <span class="deliver-f">reports/july-reconciliation.md</span>
+      <span class="deliver-m">delivered</span>
+    </div>
+  </div>
+
+</div></div></div>
+<script src="live.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  function reset() {
+    ['s1','s2','s3'].forEach(function (id) { $(id).className = 'st'; });
+    $('deliver').classList.remove('is-on');
+    $('status').className = 'a-chip';
+    $('status').innerHTML = '<span class="l-caret" style="height:9px"></span>Running';
+  }
+
+  function step(id, runMs) {
+    return function () {
+      $(id).classList.add('is-on','is-run');
+      Live.soon(function () { $(id).classList.remove('is-run'); $(id).classList.add('is-done'); }, runMs);
+    };
+  }
+
+  var seq = Live.Seq([
+    [500,  step('s1', 700)],
+    [950,  step('s2', 950)],   // staggered, unequal — reads as real work
+    [1150, step('s3', 620)],
+    [1000, function () {
+      $('status').className = 'a-chip a-chip--ok';
+      $('status').innerHTML = '<i class="ri-check-line" style="font-size:11px"></i>Done in 1m 12s';
+    }],
+    [500,  function () { $('deliver').classList.add('is-on'); }]
+  ], { reset: reset, hold: 3400 });
+
+  reset();
+  Live.autoplay(seq);
+})();
+</script>
+</body>
+</html>

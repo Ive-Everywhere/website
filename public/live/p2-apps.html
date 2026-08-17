@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pillar · Apps — an internal app assembles and goes live</title>
+<link href="tokens.css" rel="stylesheet">
+<link href="live-shim.css" rel="stylesheet">
+<link href="art.css" rel="stylesheet">
+<link href="live.css" rel="stylesheet">
+<link href="fonts/remixicon.css" rel="stylesheet">
+<link href="embed.css" rel="stylesheet">
+<style>
+  html,body { margin:0; height:100%; background:var(--bg-soft-200); }
+  .a-frame { position:absolute; inset:0; }
+
+  /* ── P2 · APPS ───────────────────────────────────────────────────────────
+     A mini browser window at <team>.eluu.site. The app assembles in front of
+     you — tiles pop in, the chart draws itself — and the header chip flips
+     from Building to Live. The URL pill is the claim: this is hosted
+     software, not a screenshot.                                            */
+  .a-stage { display:grid; place-items:center; }
+  .app { position:relative; width:432px; background:var(--bg-white-0);
+         border:1px solid var(--stroke-soft-200); border-radius:14px;
+         box-shadow:var(--shadow-regular-lg); overflow:hidden; }
+  .app-head { display:flex; align-items:center; gap:9px; padding:10px 13px;
+              border-bottom:1px solid var(--stroke-soft-200); }
+  .dots { display:flex; gap:5px; } .dots i { width:8px; height:8px; border-radius:50%; background:var(--bg-soft-200); }
+  .urlpill { flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+             height:24px; border-radius:8px; background:var(--bg-weak-50);
+             font-family:var(--font-mono); font-size:10.5px; color:var(--text-sub-600); }
+  .urlpill i { font-size:10px; color:var(--text-soft-400); }
+  .urlpill b { color:var(--primary-base); font-weight:500; }
+  .app-body { padding:14px 15px 13px; }
+  .kgrid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .kpi { border:1px solid var(--stroke-soft-200); border-radius:10px; padding:9px 11px;
+         opacity:0; transform:scale(.94); transform-origin:center;
+         transition:opacity .4s var(--ease-out-app), transform .4s var(--ease-out-app); }
+  .kpi.is-on { opacity:1; transform:none; }
+  .kpi-l { font-size:9.5px; color:var(--text-soft-400); text-transform:uppercase; letter-spacing:.05em; }
+  .kpi-v { font-size:16px; font-weight:600; letter-spacing:-.02em; margin-top:1px;
+           font-variant-numeric:tabular-nums; }
+  .chartbox { margin-top:8px; border:1px solid var(--stroke-soft-200); border-radius:10px;
+              padding:9px 11px 5px; opacity:0; transition:opacity .4s var(--ease-out-app); }
+  .chartbox.is-on { opacity:1; }
+  .chart-l { font-size:9.5px; color:var(--text-soft-400); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+  .chartbox svg { display:block; width:100%; height:58px; }
+  .chart-line { stroke-dasharray:420; stroke-dashoffset:420; }
+  .chart-fill { opacity:0; transition:opacity .5s ease .4s; }
+  .chartbox.is-drawn .chart-line { transition:stroke-dashoffset 1.1s var(--ease-out-app); stroke-dashoffset:0; }
+  .chartbox.is-drawn .chart-fill { opacity:1; }
+  .app-foot { display:flex; align-items:center; gap:6px; padding:0 15px 12px;
+              font-size:10.5px; color:var(--text-soft-400);
+              opacity:0; transition:opacity .4s var(--ease-out-app); }
+  .app-foot.is-on { opacity:1; }
+  .app-foot b { color:var(--text-sub-600); font-weight:500; }
+  .app-foot svg { width:9px; height:9px; color:var(--primary-base); flex:none; }
+</style>
+</head>
+<body>
+<div class="a-frame"><div class="a-field"><div class="a-stage" data-w="600" data-h="400">
+
+  <div class="app">
+    <div class="app-head">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="urlpill"><i class="ri-lock-line"></i><span><b>acme-finance</b>.eluu.site</span></span>
+      <span class="a-chip" id="status">Building…</span>
+    </div>
+    <div class="app-body">
+      <div class="kgrid">
+        <div class="kpi" id="k1"><div class="kpi-l">Cash</div><div class="kpi-v">$2.1M</div></div>
+        <div class="kpi" id="k2"><div class="kpi-l">Runway</div><div class="kpi-v">18 mo</div></div>
+      </div>
+      <div class="chartbox" id="chart">
+        <div class="chart-l">Net revenue · FY26</div>
+        <svg viewBox="0 0 400 64" preserveAspectRatio="none">
+          <path class="chart-fill" d="M0,54 L57,49 L114,44 L171,35 L228,31 L285,22 L342,15 L400,7 L400,64 L0,64 Z" fill="var(--primary-base)" fill-opacity=".1"/>
+          <path class="chart-line" d="M0,54 L57,49 L114,44 L171,35 L228,31 L285,22 L342,15 L400,7" fill="none" stroke="var(--primary-base)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+    <div class="app-foot" id="foot">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="5" height="16" rx="2.2" fill="currentColor"/><rect x="14" y="4" width="5" height="16" rx="2.2" fill="currentColor"/></svg>
+      <span>Built by <b>Ledger</b> · refreshed daily at 7:02 AM</span>
+    </div>
+  </div>
+
+</div></div></div>
+<script src="live.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  function reset() {
+    ['k1','k2'].forEach(function (id) { $(id).classList.remove('is-on'); });
+    $('chart').className = 'chartbox';
+    $('foot').classList.remove('is-on');
+    $('status').className = 'a-chip';
+    $('status').textContent = 'Building…';
+  }
+
+  var seq = Live.Seq([
+    [600,  function () { $('k1').classList.add('is-on'); }],
+    [280,  function () { $('k2').classList.add('is-on'); }],
+    [420,  function () { $('chart').classList.add('is-on'); Live.soon(function () { $('chart').classList.add('is-drawn'); }, 120); }],
+    [1500, function () {
+      $('status').className = 'a-chip a-chip--live';
+      $('status').innerHTML = '<span class="pulse" style="width:5px;height:5px;border-radius:50%;background:var(--information-base);display:inline-block"></span>Live';
+    }],
+    [450,  function () { $('foot').classList.add('is-on'); }]
+  ], { reset: reset, hold: 3400 });
+
+  reset();
+  Live.autoplay(seq);
+})();
+</script>
+</body>
+</html>
