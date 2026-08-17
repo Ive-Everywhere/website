@@ -106,7 +106,7 @@ const { features, heading, headingNeedsCopy = false, id = 'features' } = Astro.p
                 class={`${feature.icon ?? 'ri-checkbox-circle-line'} size-7 shrink-0 text-[28px] leading-none opacity-0 transition-opacity duration-200 group-aria-[current=true]:opacity-100`}
                 aria-hidden="true"
               />
-              <span class="t-label-lg">{feature.headline}</span>
+              <span class="t-label-lg">{feature.navLabel ?? feature.headline}</span>
             </button>
           ))
         }
@@ -131,7 +131,6 @@ const { features, heading, headingNeedsCopy = false, id = 'features' } = Astro.p
                   aria-hidden="true"
                 />
                 <h3 class="t-h4 text-text-strong-950 text-balance">{feature.headline}</h3>
-                <p class="t-h6 text-text-soft-400 text-pretty">{feature.eyebrow}</p>
                 <p class="t-label-md text-text-sub-600 text-pretty">{feature.body}</p>
                 {feature.linkHref && (
                   <a

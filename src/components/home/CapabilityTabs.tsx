@@ -19,13 +19,13 @@ interface Tab {
 
 const TABS: Tab[] = [
   {
-    tab: 'Run',
+    tab: 'Agents',
     tabSub: 'Connect your tools and hand off the work.',
     headline: 'Put agents to work across your tools.',
     intro:
       'Connect your systems and hand the work to agents that run it end to end, wherever your team works.',
-    ctaLabel: 'Explore the platform',
-    ctaHref: '/connections',
+    ctaLabel: 'Explore Agents',
+    ctaHref: '/agents',
     items: [
       { icon: 'ri-plug-line', title: 'Connect any tool', body: 'Native connections to Slack, Salesforce, Stripe, Sheets, and 100+ more. Agents read and act, no glue code.' },
       { icon: 'ri-terminal-box-line', title: 'Bring your harness', body: 'Run Claude Code, Codex, or any open harness on the subscription you already pay for.' },
@@ -34,12 +34,12 @@ const TABS: Tab[] = [
     ],
   },
   {
-    tab: 'Scale',
-    tabSub: 'One workspace, as many agents as the work needs.',
-    headline: 'Scale to a whole team of agents.',
+    tab: 'Workforce',
+    tabSub: 'Scale the work, not the headcount.',
+    headline: "Move a team's worth of work with agents.",
     intro: 'Run a whole team at once, in one workspace, where what one agent learns the rest can use.',
-    ctaLabel: 'See the workspace',
-    ctaHref: '/workspace',
+    ctaLabel: 'Explore Workforce',
+    ctaHref: '/workforce',
     items: [
       { icon: 'ri-stack-line', title: 'Run in parallel', body: 'Hundreds of sessions at once, not one task waiting in a queue behind another.' },
       { icon: 'ri-dashboard-line', title: 'Build live apps', body: 'Dashboards, trackers, and internal tools your agents build, connect to your data, and keep current.' },
@@ -48,11 +48,11 @@ const TABS: Tab[] = [
     ],
   },
   {
-    tab: 'Secure',
+    tab: 'Security',
     tabSub: 'Governed and auditable, in your environment.',
     headline: 'Every agent under your control.',
     intro: 'Decide what each agent can reach, keep your data in your environment, and record everything it does.',
-    ctaLabel: 'Learn about security',
+    ctaLabel: 'Explore Security',
     ctaHref: '/security',
     items: [
       { icon: 'ri-lock-2-line', title: 'Granular access control', body: 'Set the exact tools and actions each agent can use, per agent and per tool.' },

@@ -70,7 +70,9 @@ export const stat = z.object({
  */
 export const featureCard = z.object({
   headline: z.string(),
-  eyebrow: z.string(),
+  /** Short label for the left rail; the card heading uses `headline`. */
+  navLabel: z.string().optional(),
+  eyebrow: z.string().optional(),
   body: z.string(),
   icon: z.string().default('ri-checkbox-circle-line'),
   linkHref: z.string().optional(),
