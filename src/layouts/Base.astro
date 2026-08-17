@@ -9,8 +9,10 @@ interface Props {
   title: string;
   description: string;
   /**
-   * Forces a theme and disables the switch. Only the `/dark` review route uses
-   * it — normally the theme follows the OS or the visitor's stored choice.
+   * Forces a theme and disables the switch. The site is hard-set to light for
+   * now (default below), so the OS-follow + stored-choice path (theme=null) is
+   * dormant — pass it explicitly to re-enable the switch on a page. The `/dark`
+   * review route passes `theme='dark'`.
    */
   theme?: 'light' | 'dark' | null;
   ogImage?: string;
@@ -21,7 +23,7 @@ interface Props {
 const {
   title,
   description,
-  theme = null,
+  theme = 'light',
   ogImage = '/brand/logotext-256-light.png',
   cta = true,
 } = Astro.props;
