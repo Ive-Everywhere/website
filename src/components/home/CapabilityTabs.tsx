@@ -9,8 +9,8 @@ interface Item {
 }
 interface Tab {
   tab: string;
-  art: string;
-  artAlt: string;
+  bigIcon: string;
+  glow: string;
   tabSub: string;
   headline: string;
   intro: string;
@@ -22,8 +22,8 @@ interface Tab {
 const TABS: Tab[] = [
   {
     tab: 'Agents',
-    art: '/brand/iso/agents.svg',
-    artAlt: 'The Eluu mark as two solid isometric pillars on warm paper.',
+    bigIcon: 'ri-robot-3-line',
+    glow: '#f3e4ec',
     tabSub: 'Connect your tools and hand off the work.',
     headline: 'Put agents to work across your tools.',
     intro:
@@ -39,8 +39,8 @@ const TABS: Tab[] = [
   },
   {
     tab: 'Workforce',
-    art: '/brand/iso/workforce.svg',
-    artAlt: 'Three isometric pillars rising in file — the team scales.',
+    bigIcon: 'ri-stack-line',
+    glow: '#ece7f3',
     tabSub: 'Scale the work, not the headcount.',
     headline: "Move a team's worth of work with agents.",
     intro: 'Run a whole team at once, in one workspace, where what one agent learns the rest can use.',
@@ -55,8 +55,8 @@ const TABS: Tab[] = [
   },
   {
     tab: 'Security',
-    art: '/brand/iso/security.svg',
-    artAlt: 'The Eluu mark held inside an isometric wireframe cage.',
+    bigIcon: 'ri-lock-2-line',
+    glow: '#f0e6e2',
     tabSub: 'Governed and auditable, in your environment.',
     headline: 'Every agent under your control.',
     intro: 'Decide what each agent can reach, keep your data in your environment, and record everything it does.',
@@ -132,8 +132,27 @@ export default function CapabilityTabs() {
                 i === active ? 'opacity-100' : 'opacity-40 hover:opacity-70'
               }`}
             >
-              <div className="aspect-[16/10] w-full overflow-hidden rounded-[12px]">
-                <img src={t.art} alt={t.artAlt} className="size-full object-cover" loading="lazy" />
+              {/* The nav's own product icon, writ large: gradient-clipped glyph on the
+                  warm paper tile (light on the maroon band, per Krishna). */}
+              <div
+                className="flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-[12px]"
+                style={{
+                  background: `radial-gradient(85% 95% at 50% 18%, ${t.glow}, rgba(255,255,255,0) 64%), radial-gradient(62% 46% at 50% 98%, rgba(93,55,75,.13), rgba(93,55,75,0) 72%), #f5f2ee`,
+                }}
+              >
+                <i
+                  className={t.bigIcon}
+                  aria-hidden="true"
+                  style={{
+                    fontSize: '118px',
+                    lineHeight: 1,
+                    background: 'linear-gradient(155deg, #a98f9c 6%, #755a68 46%, #4a2c3c 94%)',
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    color: 'transparent',
+                    filter: 'drop-shadow(0 12px 20px rgba(93,55,75,.28))',
+                  }}
+                />
               </div>
               <div className="flex flex-col gap-1 px-2 pb-1">
                 <span className="t-h6 text-band-ink">{t.tab}</span>

@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000">
-<defs>
-  <radialGradient id="glow" cx="50%" cy="26%" r="80%"><stop offset="0%" stop-color="#f3e4ec"/><stop offset="62%" stop-color="#f3e4ec" stop-opacity="0"/></radialGradient>
-  <radialGradient id="floor" cx="50%" cy="94%" r="60%"><stop offset="0%" stop-color="#5d374b" stop-opacity="0.12"/><stop offset="100%" stop-color="#5d374b" stop-opacity="0"/></radialGradient>
-</defs>
-<rect width="1600" height="1000" fill="#f5f2ee"/><rect width="1600" height="1000" fill="url(#glow)"/><rect width="1600" height="1000" fill="url(#floor)"/>
-<ellipse cx="800" cy="728" rx="290" ry="62" fill="#5d374b" fill-opacity="0.13"/><path d="M559.2,570.0 L670.1,634.0 L670.1,284.0 L559.2,220.0 Z" fill="#816273" stroke="#816273" stroke-width="9" stroke-linejoin="round"/><path d="M780.9,570.0 L670.1,634.0 L670.1,284.0 L780.9,220.0 Z" fill="#553040" stroke="#553040" stroke-width="9" stroke-linejoin="round"/><path d="M670.1,156.0 L780.9,220.0 L670.1,284.0 L559.2,220.0 Z" fill="#a98f9c" stroke="#a98f9c" stroke-width="9" stroke-linejoin="round"/><path d="M819.1,720.0 L929.9,784.0 L929.9,434.0 L819.1,370.0 Z" fill="#816273" stroke="#816273" stroke-width="9" stroke-linejoin="round"/><path d="M1040.8,720.0 L929.9,784.0 L929.9,434.0 L1040.8,370.0 Z" fill="#553040" stroke="#553040" stroke-width="9" stroke-linejoin="round"/><path d="M929.9,306.0 L1040.8,370.0 L929.9,434.0 L819.1,370.0 Z" fill="#a98f9c" stroke="#a98f9c" stroke-width="9" stroke-linejoin="round"/>
-</svg>
