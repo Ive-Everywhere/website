@@ -2,98 +2,69 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Pillar · Agents — one team line, a reel of specialists</title>
+<title>Pillar · Agents — the colleague profile card, four specialists</title>
 <link href="tokens.css" rel="stylesheet">
 <link href="live-shim.css" rel="stylesheet">
-<link href="art.css" rel="stylesheet">
-<link href="live.css" rel="stylesheet">
-<link href="fonts/remixicon.css" rel="stylesheet">
 <link href="embed.css" rel="stylesheet">
+<link href="mv.css" rel="stylesheet">
 <style>
-  html,body { margin:0; height:100%; background:var(--bg-soft-200); }
+  html,body { margin:0; height:100%; background:#ddd; }
   .a-frame { position:absolute; inset:0; }
+  .a-field { position:absolute; inset:0; }
+  /* live.js contain-scales the fixed stage; 3:2 matches the slot so the paper fills it */
+  .a-stage { position:absolute; left:50%; top:50%; width:1600px; height:1067px;
+             transform:translate(-50%,-50%) scale(var(--s,1));
+             font-family:var(--font); color:var(--ink-strong); font-weight:400;
+             letter-spacing:.005em; -webkit-font-smoothing:antialiased; }
 
-  /* ── P1 · AGENTS — Modal's variant-reel, ours: the agent is the variant ──
-     One mono line: team.add( <agent> ). The agent card is a vertical reel —
-     prev and next ghosted above and below, the active one bright — rolling
-     through the four specialists, each with its own integrations. Below the
-     divider, "Available in" chips cycle Slack → Chat → API → Phone.        */
-  .a-stage { display:grid; place-items:center; }
-  .panel { width:480px; background:var(--bg-white-0); border:1px solid var(--stroke-soft-200);
-           border-radius:16px; box-shadow:var(--shadow-regular-lg); padding:20px 24px 18px; }
-  .p-dots { display:flex; gap:5px; margin-bottom:16px; }
-  .p-dots i { width:9px; height:9px; border-radius:50%; background:var(--bg-soft-200); }
-  .p-dots i:first-child { background:var(--primary-base); opacity:.55; }
-
-  .line { display:flex; align-items:center; gap:14px; }
-  .ln { font-family:var(--font-mono); font-size:13px; color:var(--text-soft-400); flex:none; }
-  .code { font-family:var(--font-mono); font-size:15px; color:var(--text-strong-950); flex:none; letter-spacing:-.01em; }
-  .code i { font-style:normal; color:var(--text-soft-400); }
-
-  /* the reel — three rows visible, active centered, edges masked */
-  .reelbox { position:relative; height:156px; flex:1; overflow:hidden;
-             -webkit-mask:linear-gradient(180deg,transparent 0,#000 26%,#000 74%,transparent 100%);
-             mask:linear-gradient(180deg,transparent 0,#000 26%,#000 74%,transparent 100%); }
-  .reel { position:absolute; left:0; right:0; top:50%;
-          transition:transform .55s var(--ease-out-app); }
-  .reel.l-noanim { transition:none; }
-  .acard { height:52px; display:flex; align-items:center; gap:10px; padding:0 12px;
-           border-radius:12px; border:1px solid transparent; opacity:.32; transform:scale(.94);
-           transition:opacity .45s, transform .45s var(--ease-out-app), border-color .45s, background .45s;
-           background:transparent; }
-  .acard.is-active { opacity:1; transform:none; background:var(--bg-weak-50);
-                     border-color:var(--stroke-soft-200); }
-  .acard + .acard { margin-top:8px; }
-  .acard img.av { width:28px; height:28px; border-radius:50%; flex:none; }
-  .a-nm { font-size:13px; font-weight:600; letter-spacing:-.01em; white-space:nowrap; }
-  .a-tm { font-size:11px; color:var(--text-soft-400); white-space:nowrap; }
-  .a-ints { margin-left:auto; display:flex; gap:5px; }
-  .a-ints img { width:15px; height:15px; }
-
-  .rule { border-top:1px solid var(--stroke-soft-200); margin:16px 0 13px; }
-  .foot { display:flex; align-items:flex-start; gap:34px; }
-  .f-l { font-family:var(--font-mono); font-size:11px; color:var(--text-sub-600); margin-bottom:7px; }
-  .chips { display:flex; gap:6px; }
-  .chip { display:inline-flex; align-items:center; gap:5px; height:24px; padding:0 9px;
-          border-radius:7px; background:var(--bg-weak-50); border:1px solid transparent;
-          font-family:var(--font-mono); font-size:11px; color:var(--text-soft-400);
-          transition:color .3s, background .3s, border-color .3s; }
-  .chip i { font-size:12px; }
-  .chip.on { color:var(--primary-base); background:color-mix(in srgb, var(--primary-base) 8%, transparent);
-             border-color:color-mix(in srgb, var(--primary-base) 25%, transparent); }
-  .always { display:inline-flex; align-items:center; gap:6px; height:24px; padding:0 9px;
-            border-radius:7px; background:var(--success-lighter); color:var(--success-dark);
-            font-family:var(--font-mono); font-size:11px; }
-  .always i { width:5px; height:5px; border-radius:50%; background:var(--success-base); }
+  /* ── P1 · AGENTS — the T7 colleague profile card IS the picture ──────────
+     Mercury's recurring brand object, ours: a colleague is a profile. One
+     hero card commanding the frame on cream paper; its identity crossfades
+     through the four specialists. Channel chips cycle quietly below the
+     integrations row. Weight ceiling 480 — never bold, never thin.         */
+  .hero { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2; }
+  .mv-colleague-card { width:600px; }
+  .mv-cc__avatar { background:#fff; padding:0; overflow:hidden; }
+  .mv-cc__avatar img { width:100%; height:100%; display:block; }
+  .id { transition:opacity .5s ease; }
+  .id.is-out { opacity:0; }
+  .mv-cc__conns img.intg { width:20px; height:20px; }
+  .mv-cc__av { background:#fff; border-color:var(--hair); }
+  /* channel row — quiet, one lit at a time */
+  .chans { display:flex; align-items:center; gap:10px; margin-top:20px; padding-top:18px;
+           border-top:1px solid var(--hair); }
+  .chans__l { font-size:16px; color:var(--ink-soft); margin-right:4px; }
+  .chan { display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:var(--r-pill);
+          font-size:16px; font-weight:480; color:var(--ink-soft); background:#f6f4f6;
+          transition:background .5s, color .5s; }
+  .chan.on { background:var(--accent-tint); color:var(--accent); }
 </style>
 </head>
 <body>
-<div class="a-frame"><div class="a-field"><div class="a-stage" data-w="600" data-h="400">
+<div class="a-frame"><div class="a-field"><div class="a-stage" data-w="1600" data-h="1067">
+  <div class="mv-canvas mv-canvas--cream"></div>
 
-  <div class="panel">
-    <div class="p-dots"><i></i><i></i><i></i></div>
-
-    <div class="line">
-      <span class="ln">01</span>
-      <span class="code">team.add(</span>
-      <div class="reelbox"><div class="reel" id="reel"></div></div>
-      <span class="code">)</span>
-    </div>
-
-    <div class="rule"></div>
-    <div class="foot">
-      <div>
-        <div class="f-l">Available in</div>
-        <div class="chips" id="chans">
-          <span class="chip on"><i class="ri-slack-line"></i>Slack</span>
-          <span class="chip"><i class="ri-chat-1-line"></i>Chat</span>
-          <span class="chip"><i class="ri-braces-line"></i>API</span>
-          <span class="chip"><i class="ri-smartphone-line"></i>Phone</span>
-        </div>
+  <div class="hero">
+    <div class="mv-colleague-card">
+      <div class="mv-cc__cover"><div class="mv-cc__cover-topo"></div>
+        <div class="mv-cc__status"><span class="mv-cc__dot"></span><span>Working</span></div>
       </div>
-      <div>
-        <div class="f-l">Uptime</div>
-        <span class="always"><i></i>24/7</span>
+      <div class="mv-cc__avatar"><img id="avatar" src="" alt=""></div>
+      <div class="mv-cc__body">
+        <div class="id" id="identity">
+          <div class="mv-cc__name" id="nm"></div>
+          <div class="mv-cc__role" id="rl"></div>
+          <div class="mv-cc__bio" id="bio"></div>
+          <div class="mv-cc__skills" id="skills"></div>
+          <div class="mv-cc__conns">
+            <div class="mv-cc__avatars" id="ints"></div>
+            <span class="mv-cc__conns-label" id="intlabel"></span>
+          </div>
+        </div>
+        <div class="chans">
+          <span class="chans__l">Available in</span>
+          <span class="chan on">Slack</span><span class="chan">Chat</span><span class="chan">API</span><span class="chan">Phone</span>
+        </div>
       </div>
     </div>
   </div>
@@ -102,44 +73,54 @@
 <script src="live.js"></script>
 <script>
 (function () {
+  var $ = function (id) { return document.getElementById(id); };
   var AV = function (seed, bg) { return 'https://api.dicebear.com/9.x/adventurer/svg?seed=' + seed + '&backgroundColor=' + bg; };
-  var AGENTS = [
-    { n:'Ledger', t:'Finance Ops',    seed:'Ledger', bg:'c5f2e0', ints:['stripe','googlesheets','gmail'] },
-    { n:'Sana',   t:'Sales',          seed:'Sana',   bg:'b6e3f4', ints:['hubspot','gmail','slack'] },
-    { n:'Cass',   t:'Engineering',    seed:'Cass',   bg:'ffd5dc', ints:['github','linear','zendesk'] },
-    { n:'Hana',   t:'People Ops',     seed:'Hana',   bg:'ffdfbf', ints:['notion','gmail','linear'] },
+  var A = [
+    { n:'Ledger', r:'Finance Ops', seed:'Ledger', bg:'c5f2e0', total:6,
+      bio:'Reconciles the books, chases the exceptions, and has the close ready before you sit down.',
+      sk:['Month-end close','Payouts','Reporting'], ints:['stripe','googlesheets','gmail'] },
+    { n:'Sana', r:'Sales Lead', seed:'Sana', bg:'b6e3f4', total:5,
+      bio:'Scores the pipeline nightly and drafts a follow-up for every deal that has gone quiet.',
+      sk:['Pipeline','Follow-ups','Forecast'], ints:['hubspot','gmail','slack'] },
+    { n:'Cass', r:'Customer Engineer', seed:'Cass', bg:'ffd5dc', total:7,
+      bio:'Triages the page, finds the root cause, and ships the fix with a test — before standup.',
+      sk:['Incidents','Root cause','Post-mortems'], ints:['github','linear','zendesk'] },
+    { n:'Hana', r:'People Ops', seed:'Hana', bg:'ffdfbf', total:4,
+      bio:'Screens every applicant against the scorecard overnight and books the interviews.',
+      sk:['Screening','Scheduling','Onboarding'], ints:['notion','gmail','linear'] },
   ];
-  var CARD = 60; // card height + gap
-  var reel = document.getElementById('reel');
-  var chips = document.querySelectorAll('#chans .chip');
+  var chans = document.querySelectorAll('.chan');
 
-  // the reel is the agent list twice, so the wrap-around never shows a gap
-  var doubled = AGENTS.concat(AGENTS);
-  reel.innerHTML = doubled.map(function (a) {
-    return '<div class="acard"><img class="av" src="' + AV(a.seed, a.bg) + '" alt="">' +
-      '<span><span class="a-nm">' + a.n + '</span> <span class="a-tm">· ' + a.t + '</span></span>' +
-      '<span class="a-ints">' + a.ints.map(function (i) { return '<img src="assets/' + i + '.svg" alt="' + i + '">'; }).join('') + '</span></div>';
-  }).join('');
-  var cards = reel.children;
-
-  var pos = 0;
-  function paint(instant) {
-    if (instant) reel.classList.add('l-noanim');
-    reel.style.transform = 'translateY(' + (-(pos * CARD) - CARD / 2) + 'px)';
-    for (var i = 0; i < cards.length; i++) cards[i].classList.toggle('is-active', i === pos);
-    for (var c = 0; c < chips.length; c++) chips[c].classList.toggle('on', c === pos % chips.length);
-    if (instant) { void reel.offsetWidth; reel.classList.remove('l-noanim'); }
+  function fill(a) {
+    $('avatar').src = AV(a.seed, a.bg);
+    $('nm').textContent = a.n; $('rl').textContent = a.r; $('bio').textContent = a.bio;
+    $('skills').innerHTML = a.sk.map(function (s) { return '<span class="mv-chip">' + s + '</span>'; }).join('');
+    $('ints').innerHTML = a.ints.map(function (i) { return '<span class="mv-cc__av"><img class="intg" src="assets/' + i + '.svg" alt="' + i + '"></span>'; }).join('') +
+      '<span class="mv-cc__av" style="background:#eee7ec;color:#755a68;font-size:13px;font-weight:480;">+' + (a.total - a.ints.length) + '</span>';
+    $('intlabel').textContent = a.total + ' integrations connected';
   }
 
-  function reset() { pos = 0; paint(true); }
+  function swapTo(i) {
+    return function () {
+      $('identity').classList.add('is-out');
+      Live.soon(function () {
+        fill(A[i]);
+        $('identity').classList.remove('is-out');
+        for (var c = 0; c < chans.length; c++) chans[c].classList.toggle('on', c === i % chans.length);
+      }, 500);
+    };
+  }
+
+  function reset() {
+    fill(A[0]); $('identity').classList.remove('is-out');
+    for (var c = 0; c < chans.length; c++) chans[c].classList.toggle('on', c === 0);
+  }
 
   var seq = Live.Seq([
-    [1600, function () { pos = 1; paint(); }],
-    [1600, function () { pos = 2; paint(); }],
-    [1600, function () { pos = 3; paint(); }],
-    // one more beat onto the doubled copy, then the reset jump is invisible
-    [1600, function () { pos = 4; paint(); }]
-  ], { reset: reset, hold: 10 });
+    [3400, swapTo(1)],
+    [3400, swapTo(2)],
+    [3400, swapTo(3)]
+  ], { reset: reset, hold: 3400 });
 
   reset();
   Live.autoplay(seq);

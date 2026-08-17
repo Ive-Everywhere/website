@@ -2,122 +2,101 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Pillar · Context — systems in, a learning out, stashed to memory</title>
+<title>Pillar · Context — systems in, one learning out (F02 aggregation)</title>
 <link href="tokens.css" rel="stylesheet">
 <link href="live-shim.css" rel="stylesheet">
-<link href="art.css" rel="stylesheet">
-<link href="live.css" rel="stylesheet">
-<link href="fonts/remixicon.css" rel="stylesheet">
 <link href="embed.css" rel="stylesheet">
+<link href="mv.css" rel="stylesheet">
 <style>
-  html,body { margin:0; height:100%; background:var(--bg-soft-200); }
+  html,body { margin:0; height:100%; background:#ddd; }
   .a-frame { position:absolute; inset:0; }
+  .a-field { position:absolute; inset:0; }
+  .a-stage { position:absolute; left:50%; top:50%; width:1600px; height:1067px;
+             transform:translate(-50%,-50%) scale(var(--s,1));
+             font-family:var(--font); color:var(--ink-strong); font-weight:400;
+             letter-spacing:.005em; -webkit-font-smoothing:antialiased; }
 
-  /* ── P3 · CONTEXT — in, process, out ─────────────────────────────────────
-     Systems pulse context into the colleague (the real app avatar). She
-     processes — a ring sweeps around her — and writes a learning: a file
-     chip pops out and stashes itself onto the memory pile, which grows.
-     Each loop stashes a different file. Information in, knowledge kept.    */
-  .a-stage { display:grid; place-items:center; }
-  .wrap { position:relative; width:540px; height:340px; }
-  .wires { position:absolute; inset:0; }
-  .wires path { fill:none; stroke:var(--stroke-soft-200); stroke-width:1.5; }
-  .wires path.is-lit { stroke:color-mix(in srgb, var(--primary-base) 45%, transparent); }
-  .src { position:absolute; width:42px; height:42px; border-radius:12px; display:grid; place-items:center;
-         background:var(--bg-white-0); border:1px solid var(--stroke-soft-200);
-         box-shadow:var(--shadow-regular-sm); transition:box-shadow .3s, border-color .3s; }
-  .src img { width:19px; height:19px; }
-  .src.is-hit { border-color:var(--primary-base);
-                box-shadow:0 0 0 3px color-mix(in srgb, var(--primary-base) 14%, transparent); }
-  .dot { position:absolute; left:0; top:0; width:6px; height:6px; border-radius:50%;
-         background:var(--primary-base); opacity:0; }
-  .dot.is-go { animation:p3travel .9s var(--ease-out-app) forwards; }
-  @keyframes p3travel { 0% { opacity:0; offset-distance:0% } 14% { opacity:1 }
-                        86% { opacity:1 } 100% { opacity:0; offset-distance:100% } }
+  /* ── P3 · CONTEXT — F02, aggregation variant ─────────────────────────────
+     Many inputs → the colleague → ONE output. The bright coherent line runs
+     Sheets → Ledger → the learning she wrote; the other systems are faded
+     breadth. The output is the proof beat: a named file, saved to memory. */
+  .in  { position:absolute; left:110px; z-index:2; }
+  .in--a { top:311px; } .in--b { top:493px; } .in--c { top:675px; }
+  .in .mv-node { width:270px; }
+  .in--a, .in--c { opacity:.42; filter:saturate(.92); }
+  .in .mv-node__ic { background:#fff; box-shadow:0 1px 2px rgba(28,27,31,.06); }
+  .in .mv-node__ic img { width:26px; height:26px; }
 
-  /* the colleague — real app avatar with a processing ring */
-  .agent { position:absolute; left:50%; top:118px; transform:translate(-50%,-50%); width:66px; height:66px; }
-  .agent img { width:100%; height:100%; border-radius:50%; border:2px solid var(--bg-white-0);
-               box-shadow:var(--shadow-regular-lg); display:block; }
-  .ring { position:absolute; inset:-6px; border-radius:50%; opacity:0; transition:opacity .25s; }
-  .ring svg { width:100%; height:100%; transform:rotate(-90deg); }
-  .ring circle { fill:none; stroke:var(--primary-base); stroke-width:2.5; stroke-linecap:round;
-                 stroke-dasharray:245; stroke-dashoffset:245; }
-  .agent.is-busy .ring { opacity:1; }
-  .agent.is-busy .ring circle { transition:stroke-dashoffset 1.1s var(--ease-out-app); stroke-dashoffset:0; }
-  .a-name { position:absolute; left:50%; top:162px; transform:translateX(-50%);
-            font-size:11px; color:var(--text-soft-400); white-space:nowrap; }
-  .a-name b { color:var(--text-sub-600); font-weight:600; }
+  .hero { position:absolute; left:585px; top:399px; z-index:2; }
+  .mini { width:430px; background:#fff; border-radius:var(--r-lg); overflow:hidden;
+          box-shadow:0 34px 64px -22px rgba(28,27,31,.24), 0 10px 24px -10px rgba(28,27,31,.12); }
+  .mini__cover { height:64px; position:relative;
+    background:radial-gradient(150% 170% at 82% -25%, #3a2f42 0%, transparent 55%),
+               linear-gradient(155deg,#2a2130 0%,#191320 100%); }
+  .mini__status { position:absolute; left:20px; top:22px; display:inline-flex; align-items:center; gap:8px;
+                  color:#efeaf0; font-size:16px; opacity:.92; }
+  .mini__body { display:flex; align-items:center; gap:18px; padding:20px 24px 22px; }
+  .mini__avatar { width:76px; height:76px; border-radius:20px; border:4px solid #fff; overflow:hidden;
+                  margin-top:-46px; position:relative; z-index:2; background:#fff; flex:none; }
+  .mini__avatar img { width:100%; height:100%; display:block; }
+  .mini__name { font-size:27px; font-weight:480; color:var(--ink-strong); }
+  .mini__role { font-size:18px; color:var(--ink-sub); margin-top:2px; }
 
-  /* the learning — pops under the avatar, then stashes onto the pile */
-  .file { position:absolute; left:50%; top:196px; transform:translate(-50%,6px) scale(.9);
-          display:flex; align-items:center; gap:7px; padding:7px 12px; border-radius:9px;
-          background:var(--bg-white-0); border:1px solid var(--stroke-soft-200);
-          box-shadow:var(--shadow-regular-lg); white-space:nowrap; opacity:0; z-index:3;
-          font-family:var(--font-mono); font-size:11px; letter-spacing:-.01em;
-          transition:opacity .4s var(--ease-out-app), transform .55s var(--ease-out-app); }
-  .file i { color:var(--primary-base); font-size:13px; }
-  .file.is-out { opacity:1; transform:translate(-50%,0) scale(1); }
-  .file.is-stash { opacity:0; transform:translate(56px,74px) scale(.55); transition-duration:.5s,.5s; }
+  .out { position:absolute; left:1150px; top:493px; z-index:2;
+         opacity:0; transform:translateY(10px);
+         transition:opacity .55s ease, transform .55s ease; }
+  .out.is-on { opacity:1; transform:none; }
+  .out .mv-node { width:340px; }
+  .out .mv-node__label { font-size:20px; white-space:nowrap; }
 
-  /* the memory pile */
-  .pile { position:absolute; left:50%; transform:translateX(-50%); bottom:0; width:238px; }
-  .pile-l { display:flex; align-items:center; gap:6px; font-size:10px; color:var(--text-soft-400);
-            text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
-  .pile-l i { color:var(--primary-base); font-size:12px; }
-  .stack { position:relative; height:44px; }
-  .st { position:absolute; left:0; right:0; display:flex; align-items:center; gap:7px;
-        padding:6px 11px; border-radius:8px; background:var(--bg-white-0);
-        border:1px solid var(--stroke-soft-200); font-family:var(--font-mono); font-size:10.5px;
-        color:var(--text-sub-600); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-        transition:transform .45s var(--ease-out-app), opacity .45s; }
-  .st i { color:var(--primary-base); font-size:12px; flex:none; }
-  .st[data-d="0"] { transform:translateY(12px); z-index:3; }
-  .st[data-d="1"] { transform:translateY(5px) scale(.965); opacity:.6; z-index:2; }
-  .st[data-d="2"] { transform:translateY(-2px) scale(.93); opacity:.3; z-index:1; }
-  .st[data-d="3"] { transform:translateY(-8px) scale(.9); opacity:0; z-index:0; }
-  .l-noanim .st, .l-noanim .file { transition:none !important; }
+  .mv-connectors path.bright { stroke:var(--accent); stroke-opacity:.4; }
+  .pulse-dot { position:absolute; left:0; top:0; width:9px; height:9px; border-radius:50%;
+               background:var(--accent); opacity:0; z-index:3; }
+  .pulse-dot.is-go { animation:p3go .9s ease forwards; }
+  @keyframes p3go { 0% { opacity:0; offset-distance:0% } 15% { opacity:1 }
+                    85% { opacity:1 } 100% { opacity:0; offset-distance:100% } }
 </style>
 </head>
 <body>
-<div class="a-frame"><div class="a-field"><div class="a-stage" data-w="600" data-h="400">
+<div class="a-frame"><div class="a-field"><div class="a-stage" data-w="1600" data-h="1067">
+  <div class="mv-canvas mv-canvas--cream"></div>
 
-  <div class="wrap" id="wrap">
-    <svg class="wires" viewBox="0 0 540 340">
-      <path id="w1" d="M62,46  C180,46  212,96 244,108"/>
-      <path id="w2" d="M62,118 C160,118 200,118 238,118"/>
-      <path id="w3" d="M62,190 C180,190 212,140 244,128"/>
-      <path id="w4" d="M478,46  C360,46  328,96 296,108"/>
-      <path id="w5" d="M478,118 C380,118 340,118 302,118"/>
-      <path id="w6" d="M478,190 C360,190 328,140 296,128"/>
-    </svg>
-    <span class="dot" id="d1" style="offset-path:path('M62,46  C180,46  212,96 244,108')"></span>
-    <span class="dot" id="d2" style="offset-path:path('M62,118 C160,118 200,118 238,118')"></span>
-    <span class="dot" id="d3" style="offset-path:path('M62,190 C180,190 212,140 244,128')"></span>
-    <span class="dot" id="d4" style="offset-path:path('M478,46  C360,46  328,96 296,108')"></span>
-    <span class="dot" id="d5" style="offset-path:path('M478,118 C380,118 340,118 302,118')"></span>
-    <span class="dot" id="d6" style="offset-path:path('M478,190 C360,190 328,140 296,128')"></span>
+  <svg class="mv-connectors" viewBox="0 0 1600 1067" preserveAspectRatio="none">
+    <path class="faint" d="M380,352 C470,352 495,522 585,532"/>
+    <path class="faint" d="M380,716 C470,716 495,546 585,536"/>
+    <path class="bright" id="pin" d="M380,534 L585,534"/>
+    <path class="bright" id="pout" d="M1015,534 L1150,534"/>
+    <circle class="mv-node-dot" cx="585" cy="534" r="5"/>
+    <circle class="mv-node-dot" cx="1015" cy="534" r="5"/>
+  </svg>
+  <span class="pulse-dot" id="din"  style="offset-path:path('M380,534 L585,534')"></span>
+  <span class="pulse-dot" id="dout" style="offset-path:path('M1015,534 L1150,534')"></span>
 
-    <div class="src" id="l1" style="left:41px;  top:25px"><img src="assets/hubspot.svg" alt="HubSpot"></div>
-    <div class="src" id="l2" style="left:41px;  top:97px"><img src="assets/gmail.svg" alt="Gmail"></div>
-    <div class="src" id="l3" style="left:41px;  top:169px"><img src="assets/googlesheets.svg" alt="Google Sheets"></div>
-    <div class="src" id="l4" style="right:41px; top:25px"><img src="assets/slack.svg" alt="Slack"></div>
-    <div class="src" id="l5" style="right:41px; top:97px"><img src="assets/stripe.svg" alt="Stripe"></div>
-    <div class="src" id="l6" style="right:41px; top:169px"><img src="assets/linear.svg" alt="Linear"></div>
+  <div class="in in--a"><div class="mv-node mv-rest">
+    <div class="mv-node__ic"><img src="assets/hubspot.svg" alt="HubSpot"></div>
+    <div><div class="mv-node__label">HubSpot</div><div class="mv-node__meta">214 deals</div></div>
+  </div></div>
+  <div class="in in--b"><div class="mv-node mv-raised">
+    <div class="mv-node__ic"><img src="assets/googlesheets.svg" alt="Google Sheets"></div>
+    <div><div class="mv-node__label">Google Sheets</div><div class="mv-node__meta">3,208 ledger rows</div></div>
+  </div></div>
+  <div class="in in--c"><div class="mv-node mv-rest">
+    <div class="mv-node__ic"><img src="assets/stripe.svg" alt="Stripe"></div>
+    <div><div class="mv-node__label">Stripe</div><div class="mv-node__meta">142 payouts</div></div>
+  </div></div>
 
-    <div class="agent" id="agent">
-      <div class="ring"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="39"/></svg></div>
-      <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ledger&backgroundColor=c5f2e0" alt="Ledger">
+  <div class="hero"><div class="mini">
+    <div class="mini__cover"><div class="mini__status"><span class="mv-cc__dot"></span>Learning</div></div>
+    <div class="mini__body">
+      <div class="mini__avatar"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ledger&backgroundColor=c5f2e0" alt="Ledger"></div>
+      <div><div class="mini__name">Ledger</div><div class="mini__role">Finance Ops</div></div>
     </div>
-    <div class="a-name"><b>Ledger</b> · learning</div>
+  </div></div>
 
-    <div class="file" id="file"><i class="ri-file-text-line"></i><span id="filename">Stripe payout tables.md</span></div>
-
-    <div class="pile">
-      <div class="pile-l"><i class="ri-hard-drive-2-line"></i>Memory · <span id="count">128</span> notes</div>
-      <div class="stack" id="stack"></div>
-    </div>
-  </div>
+  <div class="out" id="out"><div class="mv-node mv-raised">
+    <div class="mv-node__ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
+    <div><div class="mv-node__label" id="fname">Stripe payout tables.md</div><div class="mv-node__meta">Saved to memory</div></div>
+  </div></div>
 
 </div></div></div>
 <script src="live.js"></script>
@@ -125,55 +104,18 @@
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var FILES = ['Stripe payout tables.md', 'AE team roster.txt', 'Refund policy notes.md'];
-  var SEED  = ['Vendor tax IDs.md', 'Close checklist.md'];   // pile starts non-empty
-  var wrap = $('wrap'), stack = $('stack'), file = $('file');
-  var round = 0, baseCount = 128;
+  var round = 0;
 
-  function renderStack(names) {
-    stack.innerHTML = names.slice(-4).map(function (n, i, arr) {
-      var depth = arr.length - 1 - i; // 0 = newest, on top
-      return '<div class="st" data-d="' + depth + '"><i class="ri-file-text-line"></i>' + n + '</div>';
-    }).join('');
-  }
+  function go(id) { var d = $(id); d.classList.remove('is-go'); void d.offsetWidth; d.classList.add('is-go'); }
 
-  var pileNames;
-  function reset() {
-    wrap.classList.add('l-noanim');
-    round = 0;
-    pileNames = SEED.slice();
-    renderStack(pileNames);
-    $('count').textContent = baseCount;
-    file.className = 'file';
-    for (var i = 1; i <= 6; i++) { $('d'+i).classList.remove('is-go'); $('l'+i).classList.remove('is-hit'); $('w'+i).classList.remove('is-lit'); }
-    $('agent').classList.remove('is-busy');
-    void wrap.offsetWidth; wrap.classList.remove('l-noanim');
-  }
-
-  function fire(i) {
-    return function () {
-      $('l'+i).classList.add('is-hit'); $('w'+i).classList.add('is-lit');
-      var d = $('d'+i); d.classList.remove('is-go'); void d.offsetWidth; d.classList.add('is-go');
-    };
-  }
+  function reset() { round = 0; $('out').classList.remove('is-on'); $('fname').textContent = FILES[0]; }
 
   var seq = Live.Seq([
-    [450, fire(1)], [260, fire(4)], [220, fire(2)], [200, fire(5)], [220, fire(3)], [200, fire(6)],
-    [700, function () { $('agent').classList.add('is-busy'); }],
-    [1250, function () {
-      $('filename').textContent = FILES[round % FILES.length];
-      file.classList.add('is-out');
-    }],
-    [1400, function () { file.classList.add('is-stash'); }],
-    [520, function () {
-      pileNames.push(FILES[round % FILES.length]);
-      renderStack(pileNames);
-      $('count').textContent = baseCount + round + 1;
-      file.className = 'file';
-      $('agent').classList.remove('is-busy');
-      round++;
-      for (var i = 1; i <= 6; i++) { $('l'+i).classList.remove('is-hit'); $('w'+i).classList.remove('is-lit'); }
-    }]
-  ], { reset: reset, hold: 1300 });
+    [700,  function () { go('din'); }],
+    [1200, function () { go('dout'); }],
+    [750,  function () { $('fname').textContent = FILES[round % FILES.length]; $('out').classList.add('is-on'); }],
+    [3200, function () { $('out').classList.remove('is-on'); round++; }]
+  ], { reset: reset, hold: 500 });
 
   reset();
   Live.autoplay(seq);
