@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Pillar · Agents — a run works through real systems and delivers</title>
+<title>Pillar · Agents — one team line, a reel of specialists</title>
 <link href="tokens.css" rel="stylesheet">
 <link href="live-shim.css" rel="stylesheet">
 <link href="art.css" rel="stylesheet">
@@ -13,70 +13,88 @@
   html,body { margin:0; height:100%; background:var(--bg-soft-200); }
   .a-frame { position:absolute; inset:0; }
 
-  /* ── P1 · AGENTS ─────────────────────────────────────────────────────────
-     One run panel. The task sits as the title (the request is carried once),
-     three integration steps check off with staggered, unequal durations, the
-     header chip flips to Done, and the delivered file appears. No composer,
-     no scrolling, fixed height — rows reveal by opacity only.              */
+  /* ── P1 · AGENTS — Modal's variant-reel, ours: the agent is the variant ──
+     One mono line: team.add( <agent> ). The agent card is a vertical reel —
+     prev and next ghosted above and below, the active one bright — rolling
+     through the four specialists, each with its own integrations. Below the
+     divider, "Available in" chips cycle Slack → Chat → API → Phone.        */
   .a-stage { display:grid; place-items:center; }
-  .run { position:relative; width:432px; background:var(--bg-white-0);
-         border:1px solid var(--stroke-soft-200); border-radius:14px;
-         box-shadow:var(--shadow-regular-lg); overflow:hidden; }
-  .run-head { display:flex; align-items:center; gap:9px; padding:12px 15px;
-              border-bottom:1px solid var(--stroke-soft-200); }
-  .run-mark { width:22px; height:22px; border-radius:6px; display:grid; place-items:center;
-              background:var(--primary-base); color:#fff; }
-  .run-mark svg { width:11px; height:11px; }
-  .run-who { font-size:12px; font-weight:600; letter-spacing:-.01em; }
-  .run-who span { color:var(--text-soft-400); font-weight:400; }
-  .run-head .a-chip { margin-left:auto; }
-  .task { padding:14px 16px 3px; font-size:13.5px; font-weight:500; letter-spacing:-.012em; }
-  .steps { padding:11px 16px 15px; display:flex; flex-direction:column; gap:7px; }
-  .st { display:flex; align-items:center; gap:9px; padding:9px 11px; border-radius:10px;
-        background:var(--bg-weak-50); opacity:0; transform:translateY(5px);
-        transition:opacity .35s var(--ease-out-app), transform .35s var(--ease-out-app); }
-  .st.is-on { opacity:1; transform:none; }
-  .st img { width:16px; height:16px; flex:none; }
-  .st-t { font-size:12px; color:var(--text-sub-600); letter-spacing:-.008em; flex:1;
-          white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .st-ms { font-family:var(--font-mono); font-size:10px; color:var(--text-soft-400); flex:none;
-           opacity:0; transition:opacity .3s; }
-  .st-ok { color:var(--success-base); font-size:13px; flex:none; opacity:0; transition:opacity .3s; }
-  .st.is-done .st-ok, .st.is-done .st-ms { opacity:1; }
-  .st-spin { width:12px; height:12px; border-radius:50%; flex:none; display:none;
-             border:1.6px solid var(--stroke-soft-200); border-top-color:var(--primary-base);
-             animation:p1spin .7s linear infinite; }
-  .st.is-run .st-spin { display:block; } .st.is-done .st-spin { display:none; }
-  @keyframes p1spin { to { transform:rotate(360deg) } }
-  .deliver { display:flex; align-items:center; gap:8px; margin:0 16px 15px; padding:10px 12px;
-             border:1px solid var(--stroke-soft-200); border-radius:10px;
-             opacity:0; transform:translateY(5px);
-             transition:opacity .4s var(--ease-out-app), transform .4s var(--ease-out-app); }
-  .deliver.is-on { opacity:1; transform:none; }
-  .deliver i { color:var(--primary-base); font-size:15px; }
-  .deliver-f { font-family:var(--font-mono); font-size:11px; letter-spacing:-.01em; }
-  .deliver-m { font-size:10.5px; color:var(--text-soft-400); margin-left:auto; }
+  .panel { width:480px; background:var(--bg-white-0); border:1px solid var(--stroke-soft-200);
+           border-radius:16px; box-shadow:var(--shadow-regular-lg); padding:20px 24px 18px; }
+  .p-dots { display:flex; gap:5px; margin-bottom:16px; }
+  .p-dots i { width:9px; height:9px; border-radius:50%; background:var(--bg-soft-200); }
+  .p-dots i:first-child { background:var(--primary-base); opacity:.55; }
+
+  .line { display:flex; align-items:center; gap:14px; }
+  .ln { font-family:var(--font-mono); font-size:13px; color:var(--text-soft-400); flex:none; }
+  .code { font-family:var(--font-mono); font-size:15px; color:var(--text-strong-950); flex:none; letter-spacing:-.01em; }
+  .code i { font-style:normal; color:var(--text-soft-400); }
+
+  /* the reel — three rows visible, active centered, edges masked */
+  .reelbox { position:relative; height:156px; flex:1; overflow:hidden;
+             -webkit-mask:linear-gradient(180deg,transparent 0,#000 26%,#000 74%,transparent 100%);
+             mask:linear-gradient(180deg,transparent 0,#000 26%,#000 74%,transparent 100%); }
+  .reel { position:absolute; left:0; right:0; top:50%;
+          transition:transform .55s var(--ease-out-app); }
+  .reel.l-noanim { transition:none; }
+  .acard { height:52px; display:flex; align-items:center; gap:10px; padding:0 12px;
+           border-radius:12px; border:1px solid transparent; opacity:.32; transform:scale(.94);
+           transition:opacity .45s, transform .45s var(--ease-out-app), border-color .45s, background .45s;
+           background:transparent; }
+  .acard.is-active { opacity:1; transform:none; background:var(--bg-weak-50);
+                     border-color:var(--stroke-soft-200); }
+  .acard + .acard { margin-top:8px; }
+  .acard img.av { width:28px; height:28px; border-radius:50%; flex:none; }
+  .a-nm { font-size:13px; font-weight:600; letter-spacing:-.01em; white-space:nowrap; }
+  .a-tm { font-size:11px; color:var(--text-soft-400); white-space:nowrap; }
+  .a-ints { margin-left:auto; display:flex; gap:5px; }
+  .a-ints img { width:15px; height:15px; }
+
+  .rule { border-top:1px solid var(--stroke-soft-200); margin:16px 0 13px; }
+  .foot { display:flex; align-items:flex-start; gap:34px; }
+  .f-l { font-family:var(--font-mono); font-size:11px; color:var(--text-sub-600); margin-bottom:7px; }
+  .chips { display:flex; gap:6px; }
+  .chip { display:inline-flex; align-items:center; gap:5px; height:24px; padding:0 9px;
+          border-radius:7px; background:var(--bg-weak-50); border:1px solid transparent;
+          font-family:var(--font-mono); font-size:11px; color:var(--text-soft-400);
+          transition:color .3s, background .3s, border-color .3s; }
+  .chip i { font-size:12px; }
+  .chip.on { color:var(--primary-base); background:color-mix(in srgb, var(--primary-base) 8%, transparent);
+             border-color:color-mix(in srgb, var(--primary-base) 25%, transparent); }
+  .always { display:inline-flex; align-items:center; gap:6px; height:24px; padding:0 9px;
+            border-radius:7px; background:var(--success-lighter); color:var(--success-dark);
+            font-family:var(--font-mono); font-size:11px; }
+  .always i { width:5px; height:5px; border-radius:50%; background:var(--success-base); }
 </style>
 </head>
 <body>
 <div class="a-frame"><div class="a-field"><div class="a-stage" data-w="600" data-h="400">
 
-  <div class="run">
-    <div class="run-head">
-      <span class="run-mark"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="5" height="16" rx="2.2" fill="currentColor"/><rect x="14" y="4" width="5" height="16" rx="2.2" fill="currentColor"/></svg></span>
-      <span class="run-who">Ledger <span>· Finance Ops</span></span>
-      <span class="a-chip" id="status"><span class="l-caret" style="height:9px"></span>Running</span>
+  <div class="panel">
+    <div class="p-dots"><i></i><i></i><i></i></div>
+
+    <div class="line">
+      <span class="ln">01</span>
+      <span class="code">team.add(</span>
+      <div class="reelbox"><div class="reel" id="reel"></div></div>
+      <span class="code">)</span>
     </div>
-    <div class="task">Close the July books</div>
-    <div class="steps">
-      <div class="st" id="s1"><img src="assets/stripe.svg" alt=""><span class="st-t">List July payouts · 142 found</span><span class="st-ms" >3.8s</span><span class="st-spin"></span><i class="st-ok ri-check-line"></i></div>
-      <div class="st" id="s2"><img src="assets/googlesheets.svg" alt=""><span class="st-t">Match against the master ledger</span><span class="st-ms">5.2s</span><span class="st-spin"></span><i class="st-ok ri-check-line"></i></div>
-      <div class="st" id="s3"><img src="assets/gmail.svg" alt=""><span class="st-t">Email 3 exceptions for sign-off</span><span class="st-ms">2.6s</span><span class="st-spin"></span><i class="st-ok ri-check-line"></i></div>
-    </div>
-    <div class="deliver" id="deliver">
-      <i class="ri-file-text-line"></i>
-      <span class="deliver-f">reports/july-reconciliation.md</span>
-      <span class="deliver-m">delivered</span>
+
+    <div class="rule"></div>
+    <div class="foot">
+      <div>
+        <div class="f-l">Available in</div>
+        <div class="chips" id="chans">
+          <span class="chip on"><i class="ri-slack-line"></i>Slack</span>
+          <span class="chip"><i class="ri-chat-1-line"></i>Chat</span>
+          <span class="chip"><i class="ri-braces-line"></i>API</span>
+          <span class="chip"><i class="ri-smartphone-line"></i>Phone</span>
+        </div>
+      </div>
+      <div>
+        <div class="f-l">Uptime</div>
+        <span class="always"><i></i>24/7</span>
+      </div>
     </div>
   </div>
 
@@ -84,32 +102,44 @@
 <script src="live.js"></script>
 <script>
 (function () {
-  var $ = function (id) { return document.getElementById(id); };
+  var AV = function (seed, bg) { return 'https://api.dicebear.com/9.x/adventurer/svg?seed=' + seed + '&backgroundColor=' + bg; };
+  var AGENTS = [
+    { n:'Ledger', t:'Finance Ops',    seed:'Ledger', bg:'c5f2e0', ints:['stripe','googlesheets','gmail'] },
+    { n:'Sana',   t:'Sales',          seed:'Sana',   bg:'b6e3f4', ints:['hubspot','gmail','slack'] },
+    { n:'Cass',   t:'Engineering',    seed:'Cass',   bg:'ffd5dc', ints:['github','linear','zendesk'] },
+    { n:'Hana',   t:'People Ops',     seed:'Hana',   bg:'ffdfbf', ints:['notion','gmail','linear'] },
+  ];
+  var CARD = 60; // card height + gap
+  var reel = document.getElementById('reel');
+  var chips = document.querySelectorAll('#chans .chip');
 
-  function reset() {
-    ['s1','s2','s3'].forEach(function (id) { $(id).className = 'st'; });
-    $('deliver').classList.remove('is-on');
-    $('status').className = 'a-chip';
-    $('status').innerHTML = '<span class="l-caret" style="height:9px"></span>Running';
+  // the reel is the agent list twice, so the wrap-around never shows a gap
+  var doubled = AGENTS.concat(AGENTS);
+  reel.innerHTML = doubled.map(function (a) {
+    return '<div class="acard"><img class="av" src="' + AV(a.seed, a.bg) + '" alt="">' +
+      '<span><span class="a-nm">' + a.n + '</span> <span class="a-tm">· ' + a.t + '</span></span>' +
+      '<span class="a-ints">' + a.ints.map(function (i) { return '<img src="assets/' + i + '.svg" alt="' + i + '">'; }).join('') + '</span></div>';
+  }).join('');
+  var cards = reel.children;
+
+  var pos = 0;
+  function paint(instant) {
+    if (instant) reel.classList.add('l-noanim');
+    reel.style.transform = 'translateY(' + (-(pos * CARD) - CARD / 2) + 'px)';
+    for (var i = 0; i < cards.length; i++) cards[i].classList.toggle('is-active', i === pos);
+    for (var c = 0; c < chips.length; c++) chips[c].classList.toggle('on', c === pos % chips.length);
+    if (instant) { void reel.offsetWidth; reel.classList.remove('l-noanim'); }
   }
 
-  function step(id, runMs) {
-    return function () {
-      $(id).classList.add('is-on','is-run');
-      Live.soon(function () { $(id).classList.remove('is-run'); $(id).classList.add('is-done'); }, runMs);
-    };
-  }
+  function reset() { pos = 0; paint(true); }
 
   var seq = Live.Seq([
-    [500,  step('s1', 700)],
-    [950,  step('s2', 950)],   // staggered, unequal — reads as real work
-    [1150, step('s3', 620)],
-    [1000, function () {
-      $('status').className = 'a-chip a-chip--ok';
-      $('status').innerHTML = '<i class="ri-check-line" style="font-size:11px"></i>Done in 1m 12s';
-    }],
-    [500,  function () { $('deliver').classList.add('is-on'); }]
-  ], { reset: reset, hold: 3400 });
+    [1600, function () { pos = 1; paint(); }],
+    [1600, function () { pos = 2; paint(); }],
+    [1600, function () { pos = 3; paint(); }],
+    // one more beat onto the doubled copy, then the reset jump is invisible
+    [1600, function () { pos = 4; paint(); }]
+  ], { reset: reset, hold: 10 });
 
   reset();
   Live.autoplay(seq);
