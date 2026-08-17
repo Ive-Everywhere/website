@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Pillar · Context — systems in, one learning out (F02 aggregation)</title>
+<title>Pillar · Context — a reel of systems in, a stack of learnings out</title>
 <link href="tokens.css" rel="stylesheet">
 <link href="live-shim.css" rel="stylesheet">
 <link href="embed.css" rel="stylesheet">
@@ -16,49 +16,73 @@
              font-family:var(--font); color:var(--ink-strong); font-weight:400;
              letter-spacing:.005em; -webkit-font-smoothing:antialiased; }
 
-  /* ── P3 · CONTEXT — F02, aggregation variant ─────────────────────────────
-     Many inputs → the colleague → ONE output. The bright coherent line runs
-     Sheets → Ledger → the learning she wrote; the other systems are faded
-     breadth. The output is the proof beat: a named file, saved to memory. */
-  .in  { position:absolute; left:150px; z-index:2; }
-  .in--a { top:311px; } .in--b { top:493px; } .in--c { top:675px; }
-  .in .mv-node { width:270px; }
-  .in--a, .in--c { opacity:.42; filter:saturate(.92); }
-  .in .mv-node__ic { background:#fff; box-shadow:0 1px 2px rgba(28,27,31,.06); }
-  .in .mv-node__ic img { width:26px; height:26px; }
+  /* ── P3 · CONTEXT — reel in, colleague, stack out ────────────────────────
+     Left: the systems SCROLL — a masked reel of integrations stepping past,
+     the centered one bright and feeding the wire. Center: the colleague;
+     ports sit exactly at the mid-point of each card edge. Right: the memory
+     stack — every cycle lands a new learning on top and the count ticks up.
+     Context flows through; knowledge accumulates.                          */
 
-  .hero { position:absolute; left:585px; top:399px; z-index:2; }
-  .mini { width:430px; background:#fff; border-radius:var(--r-lg); overflow:hidden;
+  /* left reel — three slots visible, middle active */
+  .reelbox { position:absolute; left:100px; top:234px; width:370px; height:600px; z-index:2;
+             overflow:hidden;
+             -webkit-mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%);
+             mask:linear-gradient(180deg,transparent 0,#000 22%,#000 78%,transparent 100%); }
+  .reel { position:absolute; left:4px; right:4px; top:12px; transition:transform .6s ease; }
+  .reel.l-noanim { transition:none; }
+  .rnode { height:96px; margin-bottom:24px; display:flex; align-items:center; gap:18px;
+           background:#fff; border-radius:var(--r-md); padding:0 22px;
+           opacity:.38; filter:saturate(.9); transform:scale(.96);
+           transition:opacity .5s, transform .5s, box-shadow .5s;
+           box-shadow:0 1px 2px rgba(28,27,31,.05); }
+  .rnode.is-active { opacity:1; filter:none; transform:none;
+                     box-shadow:0 8px 24px -8px rgba(28,27,31,.14), 0 2px 6px rgba(28,27,31,.06); }
+  .rnode__ic { width:54px; height:54px; border-radius:14px; background:#fff;
+               border:1px solid var(--hair); display:flex; align-items:center; justify-content:center; flex:none; }
+  .rnode__ic img { width:30px; height:30px; }
+  .rnode__l { font-size:24px; font-weight:480; color:var(--ink-strong); }
+  .rnode__m { font-size:19px; color:var(--ink-sub); margin-top:2px; }
+
+  /* center colleague — ports at exact edge midpoints */
+  .hero { position:absolute; left:610px; top:429px; z-index:2; }
+  .mini { width:500px; height:210px; background:#fff; border-radius:var(--r-lg); overflow:hidden;
           box-shadow:0 34px 64px -22px rgba(28,27,31,.24), 0 10px 24px -10px rgba(28,27,31,.12); }
-  .mini__cover { height:64px; position:relative;
+  .mini__cover { height:74px; position:relative;
     background:radial-gradient(150% 170% at 82% -25%, #3a2f42 0%, transparent 55%),
                linear-gradient(155deg,#2a2130 0%,#191320 100%); }
-  .mini__status { position:absolute; left:20px; top:22px; display:inline-flex; align-items:center; gap:8px;
-                  color:#efeaf0; font-size:16px; opacity:.92; }
-  .mini__body { display:flex; align-items:center; gap:18px; padding:20px 24px 22px; }
-  .mini__avatar { width:76px; height:76px; border-radius:20px; border:4px solid #fff; overflow:hidden;
-                  margin-top:-46px; position:relative; z-index:2; background:#fff; flex:none; }
+  .mini__status { position:absolute; left:24px; top:26px; display:inline-flex; align-items:center; gap:9px;
+                  color:#efeaf0; font-size:18px; opacity:.92; }
+  .mini__body { display:flex; align-items:center; gap:22px; padding:22px 28px; }
+  .mini__avatar { width:92px; height:92px; border-radius:24px; border:4px solid #fff; overflow:hidden;
+                  margin-top:-58px; position:relative; z-index:2; background:#fff; flex:none; }
   .mini__avatar img { width:100%; height:100%; display:block; }
-  .mini__name { font-size:27px; font-weight:480; color:var(--ink-strong); }
-  .mini__role { font-size:18px; color:var(--ink-sub); margin-top:2px; }
+  .mini__name { font-size:32px; font-weight:480; color:var(--ink-strong); }
+  .mini__role { font-size:21px; color:var(--ink-sub); margin-top:3px; }
 
-  .out { position:absolute; left:1160px; top:493px; z-index:2;
-         opacity:0; transform:translateY(10px);
-         transition:opacity .55s ease, transform .55s ease; }
-  .out.is-on { opacity:1; transform:none; }
-  .out .mv-node { width:340px; }
-  .out .mv-node__label { font-size:20px; white-space:nowrap; }
+  /* right — the memory stack */
+  .mem { position:absolute; left:1210px; top:388px; width:330px; z-index:2; }
+  .mem__l { display:flex; align-items:center; gap:9px; font-size:17px; color:var(--ink-soft);
+            text-transform:uppercase; letter-spacing:.06em; margin-bottom:14px; }
+  .mem__l svg { width:17px; height:17px; color:var(--accent); }
+  .stack { position:relative; height:230px; }
+  .fchip { position:absolute; left:0; right:0; display:flex; align-items:center; gap:12px;
+           background:#fff; border-radius:14px; padding:16px 18px;
+           font-size:19px; letter-spacing:.005em; color:var(--ink-strong); white-space:nowrap;
+           overflow:hidden; text-overflow:ellipsis;
+           box-shadow:0 8px 24px -8px rgba(28,27,31,.14), 0 2px 6px rgba(28,27,31,.06);
+           transition:transform .5s ease, opacity .5s ease; }
+  .fchip svg { width:19px; height:19px; color:var(--accent); flex:none; }
+  .fchip[data-d="0"] { transform:translateY(0); z-index:4; }
+  .fchip[data-d="1"] { transform:translateY(74px) scale(.96); opacity:.62; z-index:3; }
+  .fchip[data-d="2"] { transform:translateY(142px) scale(.92); opacity:.34; z-index:2; }
+  .fchip[data-d="3"] { transform:translateY(204px) scale(.88); opacity:0; z-index:1; }
+  .fchip.is-new { transform:translateX(-36px); opacity:0; }
+  .l-noanim .fchip { transition:none !important; }
 
   .mv-connectors path.bright { stroke:var(--accent); stroke-opacity:.4; }
-  #pout { stroke-opacity:0; transition:stroke-opacity .5s ease; }
-  #pout.on { stroke-opacity:.4; }
-  #portout { opacity:0; transition:opacity .5s ease; }
-  #portout.on { opacity:1; }
-  #fname { display:inline-block; transition:opacity .35s ease; }
-  #fname.swap { opacity:0; }
-  .pulse-dot { position:absolute; left:0; top:0; width:9px; height:9px; border-radius:50%;
+  .pulse-dot { position:absolute; left:0; top:0; width:10px; height:10px; border-radius:50%;
                background:var(--accent); opacity:0; z-index:3; }
-  .pulse-dot.is-go { animation:p3go .9s ease forwards; }
+  .pulse-dot.is-go { animation:p3go .8s ease forwards; }
   @keyframes p3go { 0% { opacity:0; offset-distance:0% } 15% { opacity:1 }
                     85% { opacity:1 } 100% { opacity:0; offset-distance:100% } }
 </style>
@@ -68,28 +92,15 @@
   <div class="mv-canvas mv-canvas--cream"></div>
 
   <svg class="mv-connectors" viewBox="0 0 1600 1067" preserveAspectRatio="none">
-    <path class="faint" d="M436,352 C510,352 520,520 585,531"/>
-    <path class="faint" d="M436,716 C510,716 520,548 585,537"/>
-    <path class="bright" id="pin" d="M436,534 L585,534"/>
-    <path class="bright" id="pout" d="M1015,534 L1160,534"/>
-    <circle class="mv-node-dot" cx="585" cy="534" r="5"/>
-    <circle class="mv-node-dot" id="portout" cx="1015" cy="534" r="5"/>
+    <path class="bright" d="M470,534 L610,534"/>
+    <path class="bright" d="M1110,534 L1210,534"/>
+    <circle class="mv-node-dot" cx="610"  cy="534" r="6"/>
+    <circle class="mv-node-dot" cx="1110" cy="534" r="6"/>
   </svg>
-  <span class="pulse-dot" id="din"  style="offset-path:path('M436,534 L585,534')"></span>
-  <span class="pulse-dot" id="dout" style="offset-path:path('M1015,534 L1160,534')"></span>
+  <span class="pulse-dot" id="din"  style="offset-path:path('M470,534 L610,534')"></span>
+  <span class="pulse-dot" id="dout" style="offset-path:path('M1110,534 L1210,534')"></span>
 
-  <div class="in in--a"><div class="mv-node mv-rest">
-    <div class="mv-node__ic"><img src="assets/hubspot.svg" alt="HubSpot"></div>
-    <div><div class="mv-node__label">HubSpot</div><div class="mv-node__meta">214 deals</div></div>
-  </div></div>
-  <div class="in in--b"><div class="mv-node mv-raised">
-    <div class="mv-node__ic"><img src="assets/googlesheets.svg" alt="Google Sheets"></div>
-    <div><div class="mv-node__label">Google Sheets</div><div class="mv-node__meta">3,208 ledger rows</div></div>
-  </div></div>
-  <div class="in in--c"><div class="mv-node mv-rest">
-    <div class="mv-node__ic"><img src="assets/stripe.svg" alt="Stripe"></div>
-    <div><div class="mv-node__label">Stripe</div><div class="mv-node__meta">142 payouts</div></div>
-  </div></div>
+  <div class="reelbox"><div class="reel" id="reel"></div></div>
 
   <div class="hero"><div class="mini">
     <div class="mini__cover"><div class="mini__status"><span class="mv-cc__dot"></span>Learning</div></div>
@@ -99,47 +110,79 @@
     </div>
   </div></div>
 
-  <div class="out" id="out"><div class="mv-node mv-raised">
-    <div class="mv-node__ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
-    <div><div class="mv-node__label" id="fname">Stripe payout tables.md</div><div class="mv-node__meta">Saved to memory</div></div>
-  </div></div>
+  <div class="mem">
+    <div class="mem__l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M7.5 14h4"/></svg>Memory · <span id="count">128</span> notes</div>
+    <div class="stack" id="stack"></div>
+  </div>
 
 </div></div></div>
 <script src="live.js"></script>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  var FILES = ['Stripe payout tables.md', 'AE team roster.txt', 'Refund policy notes.md'];
-  var round = 0;
+  var SYS = [
+    ['hubspot','HubSpot','214 deals'], ['googlesheets','Google Sheets','3,208 ledger rows'],
+    ['stripe','Stripe','142 payouts'], ['gmail','Gmail','36 threads read'],
+    ['slack','Slack','#month-end-close'], ['linear','Linear','FIN board'],
+  ];
+  var FILES = ['Vendor tax IDs.md', 'Close checklist.md', 'Stripe payout tables.md',
+               'AE team roster.txt', 'Refund policy notes.md', 'Deal stage playbook.md'];
+  var ROW = 120; // node 96 + gap 24
+  var reel = $('reel'), stack = $('stack'), stage = document.querySelector('.a-stage');
+  var pos = 0, files, baseCount = 128, added = 0;
+
+  var doubled = SYS.concat(SYS);
+  reel.innerHTML = doubled.map(function (s) {
+    return '<div class="rnode"><span class="rnode__ic"><img src="assets/' + s[0] + '.svg" alt="' + s[1] + '"></span>' +
+      '<span><span class="rnode__l">' + s[1] + '</span><div class="rnode__m">' + s[2] + '</div></span></div>';
+  }).join('');
+  var rnodes = reel.children;
+
+  function paintReel(instant) {
+    if (instant) reel.classList.add('l-noanim');
+    reel.style.transform = 'translateY(' + (-pos * ROW) + 'px)';
+    for (var i = 0; i < rnodes.length; i++) rnodes[i].classList.toggle('is-active', i === pos + 2);
+    if (instant) { void reel.offsetWidth; reel.classList.remove('l-noanim'); }
+  }
+
+  function renderStack() {
+    stack.innerHTML = files.slice(0, 4).map(function (n, d) {
+      return '<div class="fchip" data-d="' + d + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>' + n + '</div>';
+    }).join('');
+  }
+
+  function reset() {
+    stage.classList.add('l-noanim');
+    pos = 0; added = 0;
+    files = FILES.slice(0, 3);           // seeded — memory is never empty
+    renderStack();
+    $('count').textContent = baseCount;
+    paintReel(true);
+    void stage.offsetWidth; stage.classList.remove('l-noanim');
+  }
 
   function go(id) { var d = $(id); d.classList.remove('is-go'); void d.offsetWidth; d.classList.add('is-go'); }
 
-  function reset() {
-    round = 0;
-    $('out').classList.remove('is-on'); $('fname').classList.remove('swap');
-    $('pout').classList.remove('on'); $('portout').classList.remove('on');
-    $('fname').textContent = FILES[0];
+  function beat() {
+    return [
+      [1000, function () { pos = (pos + 1) % SYS.length; paintReel(pos === 0); if (pos === 0) { pos = 1; paintReel(); } }],
+      [650,  function () { go('din'); }],
+      [900,  function () { go('dout'); }],
+      [700,  function () {
+        added++;
+        files.unshift(FILES[(2 + added) % FILES.length]);
+        renderStack();
+        var top = stack.firstElementChild;
+        top.classList.add('is-new');
+        void top.offsetWidth; top.classList.remove('is-new');
+        $('count').textContent = baseCount + added;
+      }]
+    ];
   }
 
-  function swapFile() {
-    $('fname').classList.add('swap');
-    Live.soon(function () {
-      round++; $('fname').textContent = FILES[round % FILES.length];
-      $('fname').classList.remove('swap');
-    }, 350);
-  }
-
-  var seq = Live.Seq([
-    [700,  function () { go('din'); }],
-    [1100, function () { $('pout').classList.add('on'); $('portout').classList.add('on'); go('dout'); }],
-    [750,  function () { $('out').classList.add('is-on'); }],
-    [3300, function () { go('din'); }],
-    [1100, function () { go('dout'); }],
-    [750,  swapFile],
-    [3300, function () { go('din'); }],
-    [1100, function () { go('dout'); }],
-    [750,  swapFile]
-  ], { reset: reset, hold: 3300 });
+  var steps = [];
+  for (var b = 0; b < 3; b++) steps = steps.concat(beat());
+  var seq = Live.Seq(steps, { reset: reset, hold: 2600 });
 
   reset();
   Live.autoplay(seq);
