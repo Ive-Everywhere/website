@@ -25,3 +25,4 @@ pnpm-debug.log*
 
 # Cloudflare local state, written by any wrangler invocation.
 .wrangler/
+tmp/
