@@ -9,6 +9,8 @@ interface Item {
 }
 interface Tab {
   tab: string;
+  art: string;
+  artAlt: string;
   tabSub: string;
   headline: string;
   intro: string;
@@ -20,6 +22,8 @@ interface Tab {
 const TABS: Tab[] = [
   {
     tab: 'Agents',
+    art: '/brand/iso/agents.svg',
+    artAlt: 'The Eluu mark as two solid isometric pillars on warm paper.',
     tabSub: 'Connect your tools and hand off the work.',
     headline: 'Put agents to work across your tools.',
     intro:
@@ -35,6 +39,8 @@ const TABS: Tab[] = [
   },
   {
     tab: 'Workforce',
+    art: '/brand/iso/workforce.svg',
+    artAlt: 'Three isometric pillars rising in file — the team scales.',
     tabSub: 'Scale the work, not the headcount.',
     headline: "Move a team's worth of work with agents.",
     intro: 'Run a whole team at once, in one workspace, where what one agent learns the rest can use.',
@@ -49,6 +55,8 @@ const TABS: Tab[] = [
   },
   {
     tab: 'Security',
+    art: '/brand/iso/security.svg',
+    artAlt: 'The Eluu mark held inside an isometric wireframe cage.',
     tabSub: 'Governed and auditable, in your environment.',
     headline: 'Every agent under your control.',
     intro: 'Decide what each agent can reach, keep your data in your environment, and record everything it does.',
@@ -124,11 +132,8 @@ export default function CapabilityTabs() {
                 i === active ? 'opacity-100' : 'opacity-40 hover:opacity-70'
               }`}
             >
-              {/* Illustration placeholder — 480 × 300 (16:10). */}
-              <div className="border-band-muted flex aspect-[16/10] w-full items-center justify-center rounded-[12px] border border-dashed">
-                <span className="t-label-xs text-band-muted font-mono uppercase tracking-[0.08em]">
-                  Illustration · 480 × 300
-                </span>
+              <div className="aspect-[16/10] w-full overflow-hidden rounded-[12px]">
+                <img src={t.art} alt={t.artAlt} className="size-full object-cover" loading="lazy" />
               </div>
               <div className="flex flex-col gap-1 px-2 pb-1">
                 <span className="t-h6 text-band-ink">{t.tab}</span>

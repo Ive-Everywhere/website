@@ -6,6 +6,8 @@ interface Op {
   href: string;
 }
 interface Team {
+  art: string;
+  artAlt: string;
   icon: string;
   eyebrow: string;
   title: string;
@@ -15,6 +17,8 @@ interface Team {
 const TEAMS: Team[] = [
   {
     icon: 'ri-bank-line',
+    art: '/brand/solutions/finance.webp',
+    artAlt: 'A month-end close run: payouts pulled, ledger matched, entries posted, three exceptions emailed for sign-off — done in 1m 12s.',
     eyebrow: 'Finance',
     title: 'Close the month while you sleep.',
     ops: [
@@ -25,6 +29,8 @@ const TEAMS: Team[] = [
   },
   {
     icon: 'ri-line-chart-line',
+    art: '/brand/solutions/sales.webp',
+    artAlt: 'An automation cascade: daily trigger, score the pipeline, six follow-ups drafted, sent to #sales with owners cc-d.',
     eyebrow: 'Sales',
     title: 'Keep the pipeline clean and the forecast honest.',
     ops: [
@@ -35,6 +41,8 @@ const TEAMS: Team[] = [
   },
   {
     icon: 'ri-terminal-box-line',
+    art: '/brand/solutions/ce.webp',
+    artAlt: 'Incident logs: spike detected, root cause found by Cass, PR opened, rollback deployed and resolved, post-mortem drafted.',
     eyebrow: 'Customer Engineering',
     title: 'From incident to fix, without the scramble.',
     ops: [
@@ -45,6 +53,8 @@ const TEAMS: Team[] = [
   },
   {
     icon: 'ri-team-line',
+    art: '/brand/solutions/people.webp',
+    artAlt: 'Hiring pipeline: 62 resumes screened and graded overnight, interviews booking, a shortlist of five with scores.',
     eyebrow: 'People',
     title: 'Hire and onboard without the busywork.',
     ops: [
@@ -277,11 +287,12 @@ export default function SolutionsCarousel() {
                 </div>
 
                 <div className="flex w-full min-w-0 lg:flex-1">
-                  <div className="border-stroke-sub-300 bg-bg-white-0 flex min-h-[280px] w-full items-center justify-center rounded-[12px] border border-dashed">
-                    <span className="t-label-xs text-text-soft-400 font-mono uppercase tracking-[0.08em]">
-                      Illustration
-                    </span>
-                  </div>
+                  <img
+                    src={team.art}
+                    alt={team.artAlt}
+                    loading="lazy"
+                    className="w-full self-start rounded-[12px]"
+                  />
                 </div>
               </div>
             </article>
