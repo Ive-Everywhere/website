@@ -16,7 +16,7 @@ import Button from '../ui/Button.astro';
 <section class="bg-bg-white-0">
   {/* Figma's 32px top padding sits under a sticky header, so the H1 crowded the
       nav. Doubled to 64px. */}
-  <div class="page-shell gutter-187 flex flex-col items-center gap-10 pt-16 pb-16 lg:gap-14">
+  <div class="page-shell gutter-187 flex flex-col items-center gap-10 pt-16 lg:gap-14">
     {/* 147:3086 → 147:3087 → 147:3088 */}
     <div class="flex w-full flex-col items-center gap-7">
       {/* 147:3088 caps the whole block at 742px, which fitted Figma's shorter
@@ -74,32 +74,38 @@ import Button from '../ui/Button.astro';
         Below `lg` the live stage would scale past legibility (incident.io
         makes the same trade), so it is replaced by a static poster capture.
     */}
-    {/*
-        The stage breaks OUT of the shell (1600 cap + gutter-187) on lg+ —
-        incident.io's stage runs nearly full-viewport and ours read small
-        beside it. Centered breakout: pinned to the section's center, width
-        min(1720px, viewport − 80px). The stage document scales itself to
-        whatever width this box gives it.
-    */}
-    <div class="w-full lg:relative lg:left-1/2 lg:w-[min(1720px,100vw-80px)] lg:max-w-none lg:-translate-x-1/2">
-      {/* live stage — lg and up */}
-      <div class="relative hidden w-full lg:block" style="aspect-ratio:1500/904">
-        <iframe
-          src="/live/hero-windows.html"
-          title="The Eluu product across three live windows: the desktop workspace, a Slack thread, and a phone running an app an Eluu colleague built. A dock below switches the whole scene between Finance, Sales, Customer Engineering, and People teams."
-          loading="eager"
-          scrolling="no"
-          class="absolute inset-0 size-full border-0"
-        ></iframe>
-      </div>
-      {/* static poster — below lg */}
+  </div>
+
+  {/*
+      The stage lives OUTSIDE the padded shell — incident.io's stage runs
+      nearly full-viewport and inside `gutter-187` ours read small beside it.
+      A sibling wrapper with plain auto margins is the only centering
+      mechanism, so no parent width can skew it (a left-1/2/-translate
+      breakout inside the shell measured 107px off-viewport once the shell
+      grew to fit the child — never again). The stage document scales itself
+      to fill whatever width this box gives it, including past its 1500px
+      design size on wide screens.
+  */}
+  <div class="pt-10 pb-16 lg:pt-14">
+    {/* live stage — lg and up */}
+    <div class="relative mx-auto hidden w-[min(1720px,100vw-80px)] lg:block" style="aspect-ratio:1500/904">
+      <iframe
+        src="/live/hero-windows.html"
+        title="The Eluu product across three live windows: the desktop workspace, a Slack thread, and a phone running an app an Eluu colleague built. A dock below switches the whole scene between Finance, Sales, Customer Engineering, and People teams."
+        loading="eager"
+        scrolling="no"
+        class="absolute inset-0 size-full border-0"
+      ></iframe>
+    </div>
+    {/* static poster — below lg */}
+    <div class="px-6 sm:px-10 lg:hidden">
       <img
         src="/live/assets/hero-windows-poster.webp"
         alt="The Eluu product across three windows: the desktop workspace, a Slack thread where the Finance colleague reports the month-end close, and a phone running the Approvals app it built."
         width="1500"
         height="904"
         loading="eager"
-        class="block w-full rounded-2xl lg:hidden"
+        class="block w-full rounded-2xl"
       />
     </div>
   </div>
