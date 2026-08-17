@@ -1,0 +1,51 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"><style>
+  /* Feature 1 · "Agents that use the systems you do" — Connections panel:
+     Ona cloud-env chip list, real tool logos, scope line per row, one
+     green connected-count tag as the payoff. */
+  .win{width:640px}
+  .win__body{padding:6px 30px 30px}
+  .trow{display:flex;align-items:center;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+  .trow:last-of-type{border-bottom:0}
+  .trow .tile{width:56px;height:56px;border-radius:15px}
+  .trow .tile img{width:30px;height:30px}
+  .trow__t{font-size:22px;font-weight:480;letter-spacing:.002em}
+  .trow__s{font-size:17px;color:var(--soft);margin-top:3px;font-family:var(--mono)}
+  .trow .sp{margin-left:auto}
+  .more{padding:20px 0 4px;font-size:18px;color:var(--soft);text-align:center}
+</style></head><body><div class="stage cv-cream">
+  <div class="card win">
+    <div class="hd">
+      <span class="tile tile--maroon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><circle cx="12" cy="12" r="3"/></svg></span>
+      <div class="hd__t">Connections</div>
+      <span class="tag tag--ok sp"><span class="pip"></span>12 connected</span>
+    </div>
+    <div class="win__body">
+      <div class="trow">
+        <span class="tile"><img src="live/assets/slack.svg" alt=""></span>
+        <div><div class="trow__t">Slack</div><div class="trow__s">#ops · chat + act</div></div>
+        <span class="tag tag--ok sp">Connected</span>
+      </div>
+      <div class="trow">
+        <span class="tile"><img src="live/assets/salesforce.svg" alt=""></span>
+        <div><div class="trow__t">Salesforce</div><div class="trow__s">read + write</div></div>
+        <span class="tag tag--ok sp">Connected</span>
+      </div>
+      <div class="trow">
+        <span class="tile"><img src="live/assets/stripe.svg" alt=""></span>
+        <div><div class="trow__t">Stripe</div><div class="trow__s">142 payouts</div></div>
+        <span class="tag tag--ok sp">Connected</span>
+      </div>
+      <div class="trow">
+        <span class="tile"><img src="live/assets/googlesheets.svg" alt=""></span>
+        <div><div class="trow__t">Google Sheets</div><div class="trow__s">ledger</div></div>
+        <span class="tag tag--ok sp">Connected</span>
+      </div>
+      <div class="trow">
+        <span class="tile"><img src="live/assets/github.svg" alt=""></span>
+        <div><div class="trow__t">GitHub</div><div class="trow__s">acme/finance-ops</div></div>
+        <span class="tag tag--ok sp">Connected</span>
+      </div>
+      <div class="more">+ 100 more</div>
+    </div>
+  </div>
+</div></body></html>

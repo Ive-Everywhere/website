@@ -1,0 +1,58 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"><style>
+  /* Feature 2 · "Run tasks from your desk, Slack, or phone" — Ona trigger-cascade
+     panel: a vertical stack of source cards (Slack, web app, API) converging
+     into one distinct agent card. The convergence line is the payoff. */
+  .stack{display:flex;flex-direction:column;width:640px}
+  .trig{display:flex;align-items:center;gap:22px;padding:28px 32px}
+  .trig .sp{margin-left:auto}
+  .trig__l{font-size:23px;font-weight:400;letter-spacing:.002em}
+  .trig__s{font-size:17px;color:var(--soft);margin-top:5px}
+  .trig__s.mono{font-family:var(--mono);font-size:16px;color:var(--sub);letter-spacing:.01em}
+  .conn{width:2px;height:28px;background:var(--line);margin-left:60px}
+  .conn--last{background:var(--maroon)}
+  .agent{background:var(--maroon-tint);border:1px solid #e6d7de}
+  .agent .trig__l{color:var(--maroon-deep);font-weight:480}
+  .agent .trig__s{color:var(--maroon)}
+  .cap{margin-top:30px}
+</style></head><body><div class="stage cv-lav">
+  <div class="stack">
+
+    <div class="card card--soft trig">
+      <span class="tile"><img src="live/assets/slack.svg" alt="Slack"></span>
+      <div>
+        <div class="trig__l">Started from Slack</div>
+        <div class="trig__s">#ops channel · direct message</div>
+      </div>
+    </div>
+    <div class="conn"></div>
+
+    <div class="card card--soft trig">
+      <span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#755A68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></span>
+      <div>
+        <div class="trig__l">Started from the web app</div>
+        <div class="trig__s">app.eluu.com · new task</div>
+      </div>
+    </div>
+    <div class="conn"></div>
+
+    <div class="card card--soft trig">
+      <span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#755A68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12l6 6M16 6l6 6-6 6"/></svg></span>
+      <div>
+        <div class="trig__l">Started from the API</div>
+        <div class="trig__s mono">POST /v1/tasks</div>
+      </div>
+    </div>
+    <div class="conn conn--last"></div>
+
+    <div class="card trig agent">
+      <span class="av" style="width:64px;height:64px"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ledger&amp;backgroundColor=c5f2e0" alt="Ledger"></span>
+      <div>
+        <div class="trig__l">Ledger picked it up</div>
+        <div class="trig__s">Running in the cloud</div>
+      </div>
+      <span class="tag tag--run sp"><span class="pip" style="background:var(--maroon)"></span>Running</span>
+    </div>
+
+    <div class="built cap">Close your laptop — <b>it keeps running</b>.</div>
+  </div>
+</div></body></html>

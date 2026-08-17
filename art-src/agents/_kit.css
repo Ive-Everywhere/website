@@ -1,0 +1,75 @@
+/* ── Agents feature-well illustration kit ────────────────────────────────────
+   Ona-style stills for the RailFeatures wells (440×460 on the page → authored
+   at 2× = 880×920). Content IS the illustration: type runs BIG, one focal
+   card commands the frame, everything else recedes. Mercury weight discipline:
+   never above 530.  Tokens are the real site values.                          */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;480;530&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --ink:#1E1C1E; --sub:#58564D; --soft:#AAA89E; --line:#e7e4df; --paper:#fff;
+  --maroon:#755A68; --maroon-deep:#5D374B; --maroon-tint:#f4eef1;
+  --ok:#1f8a5b; --ok-bg:#e4f4ea; --warn:#b0712a; --warn-bg:#fbf0e2;
+  --font:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box} html,body{margin:0}
+.stage{position:relative;width:880px;height:920px;overflow:hidden;
+  font-family:var(--font);color:var(--ink);font-weight:400;letter-spacing:.004em;
+  -webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center}
+/* per-file canvas tint: set .stage background to one of these gradients */
+.cv-cream {background:radial-gradient(80% 65% at 22% 12%,#eef4ee 0%,rgba(238,244,238,0) 60%),radial-gradient(85% 75% at 88% 90%,#f2ece9 0%,rgba(242,236,233,0) 60%),linear-gradient(160deg,#f2f4f0 0%,#f4f1ee 100%)}
+.cv-lav   {background:radial-gradient(80% 65% at 18% 12%,#efeaf6 0%,rgba(239,234,246,0) 62%),radial-gradient(85% 75% at 90% 88%,#f5ecf1 0%,rgba(245,236,241,0) 60%),linear-gradient(160deg,#f2eff5 0%,#f4f1f2 100%)}
+.cv-blue  {background:radial-gradient(80% 65% at 20% 12%,#e9ecf8 0%,rgba(233,236,248,0) 62%),radial-gradient(85% 75% at 90% 90%,#f0ecf4 0%,rgba(240,236,244,0) 60%),linear-gradient(160deg,#eef0f7 0%,#f3f1f3 100%)}
+.cv-warm  {background:radial-gradient(80% 65% at 16% 12%,#f7eae8 0%,rgba(247,234,232,0) 62%),radial-gradient(85% 75% at 90% 90%,#f1ecf5 0%,rgba(241,236,245,0) 60%),linear-gradient(160deg,#f6efed 0%,#f4f1f3 100%)}
+.cv-sand  {background:radial-gradient(80% 65% at 22% 12%,#f3efe6 0%,rgba(243,239,230,0) 60%),radial-gradient(85% 75% at 88% 90%,#efe7e9 0%,rgba(239,231,233,0) 60%),linear-gradient(160deg,#f3f0ea 0%,#f4f1ef 100%)}
+
+/* card + panel */
+.card{background:var(--paper);border-radius:24px;
+  box-shadow:0 26px 60px -22px rgba(30,28,30,.24),0 6px 16px -6px rgba(30,28,30,.09)}
+.card--soft{box-shadow:0 14px 36px -16px rgba(30,28,30,.16),0 3px 10px -4px rgba(30,28,30,.07)}
+.hd{display:flex;align-items:center;gap:14px;padding:26px 30px;border-bottom:1px solid var(--line)}
+.hd__t{font-size:27px;font-weight:480;letter-spacing:.002em}
+.hd .sp{margin-left:auto}
+
+/* chips / tags / pills */
+.tag{display:inline-flex;align-items:center;gap:9px;padding:9px 17px;border-radius:12px;
+  font-size:19px;font-weight:480;letter-spacing:.008em}
+.tag--ok{background:var(--ok-bg);color:var(--ok)} .tag--run{background:var(--maroon-tint);color:var(--maroon)}
+.tag--warn{background:var(--warn-bg);color:var(--warn)}
+.pip{width:11px;height:11px;border-radius:50%;background:var(--ok);flex:none}
+.chip{display:inline-flex;align-items:center;gap:11px;padding:12px 18px;border-radius:14px;
+  background:#fff;border:1px solid var(--line);font-size:20px;font-weight:480}
+
+/* logo / icon tile */
+.tile{width:64px;height:64px;border-radius:17px;display:flex;align-items:center;justify-content:center;flex:none;
+  background:#fff;border:1px solid var(--line);box-shadow:0 2px 6px -2px rgba(30,28,30,.08)}
+.tile img{width:36px;height:36px} .tile svg{width:32px;height:32px}
+.tile--maroon{background:linear-gradient(150deg,#8d7581,var(--maroon-deep));border:0;color:#fff}
+.tile--maroon svg{color:#fff}
+
+/* status marks */
+.tick{width:38px;height:38px;border-radius:50%;background:var(--ok-bg);color:var(--ok);
+  display:flex;align-items:center;justify-content:center;flex:none}
+.tick svg{width:19px;height:19px}
+.dot-ring{width:26px;height:26px;border-radius:50%;border:3px solid #ded9dc;border-top-color:var(--maroon);flex:none;animation:none}
+
+/* list rows */
+.row{display:flex;align-items:center;gap:20px;padding:22px 30px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row__l{font-size:23px;flex:1;letter-spacing:.002em} .row__l em{font-style:normal;font-weight:480}
+.row__s{font-size:17px;color:var(--soft);margin-top:3px}
+
+/* toggle (on) */
+.tog{width:60px;height:34px;border-radius:999px;background:var(--ok);position:relative;flex:none}
+.tog::after{content:"";position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;background:#fff}
+
+/* mono log line */
+.log{display:flex;align-items:center;gap:18px;padding:16px 30px;font-family:var(--mono);font-size:20px}
+.log .ts{color:var(--soft);flex:none;width:78px;font-size:18px}
+.log em{font-style:normal;font-weight:500;color:var(--ink)} .log .ok{color:var(--ok);font-weight:500}
+
+/* avatar */
+.av{border-radius:50%;overflow:hidden;flex:none;background:#eee}
+.av img{width:100%;height:100%;display:block}
+
+/* meta caption */
+.built{display:flex;align-items:center;justify-content:center;gap:9px;font-size:18px;color:var(--soft);white-space:nowrap}
+.built b{color:var(--sub);font-weight:480}

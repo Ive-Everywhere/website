@@ -1,0 +1,46 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"><style>
+  /* Feature 5 · "Run Claude, Codex, or any model you pay for" — Ona model
+     selector: a Mercury-clean config card, one row selected in maroon with
+     a tick. Bring-your-own-key row proves the "no lock-in" line. */
+  .win{width:640px}
+  .sub{font-size:19px;color:var(--sub);margin-top:4px}
+  .m-ic{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none;
+        background:#fbfaf8;border:1px solid var(--line);color:var(--maroon)}
+  .m-ic svg{width:23px;height:23px}
+  .m-ic--sel{background:linear-gradient(150deg,#8d7581,var(--maroon-deep));border:0;color:#fff}
+  .row__l em{font-size:23px}
+  .row--sel{background:linear-gradient(90deg,var(--maroon-tint) 0%,rgba(244,238,241,0) 72%);
+            border-left:4px solid var(--maroon-deep);padding-left:26px}
+  .row .sp{margin-left:auto}
+  .keyfield{font-family:var(--mono);font-size:18px;color:var(--sub);background:#fbfaf8;
+            border:1px solid var(--line);border-radius:10px;padding:9px 16px;letter-spacing:.03em}
+</style></head><body><div class="stage cv-blue">
+  <div class="card win">
+    <div class="hd">
+      <span class="tile tile--maroon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4z"/></svg></span>
+      <div><div class="hd__t">Model</div><div class="sub">No lock-in</div></div>
+    </div>
+
+    <div class="row row--sel">
+      <span class="m-ic m-ic--sel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4z"/></svg></span>
+      <div class="row__l" style="flex:1"><em>Claude Opus 4.5</em><div class="row__s">On your subscription · Anthropic</div></div>
+      <span class="tick sp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></span>
+    </div>
+
+    <div class="row">
+      <span class="m-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6L3 12l6 6M15 6l6 6-6 6"/></svg></span>
+      <div class="row__l" style="flex:1">Codex<div class="row__s">OpenAI · pay-per-token</div></div>
+    </div>
+
+    <div class="row">
+      <span class="m-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-11.9 7.8L4 21l1.7-5.1A8.5 8.5 0 1 1 21 11.5z"/></svg></span>
+      <div class="row__l" style="flex:1">GPT-4o<div class="row__s">OpenAI · pay-per-token</div></div>
+    </div>
+
+    <div class="row">
+      <span class="m-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 5l3 3M13 8l2.5 2.5"/></svg></span>
+      <div class="row__l" style="flex:1">Bring your own key<div class="row__s">Any provider · your API key</div></div>
+      <span class="sp keyfield">sk-••••</span>
+    </div>
+  </div>
+</div></body></html>

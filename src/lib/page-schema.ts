@@ -77,6 +77,8 @@ export const featureCard = z.object({
   icon: z.string().default('ri-checkbox-circle-line'),
   linkHref: z.string().optional(),
   linkLabel: z.string().optional(),
+  /** Feature-well illustration, relative to `public/` (e.g. brand/agents/feat1.webp). */
+  art: z.string().optional(),
 });
 
 /** Always a placeholder today — every testimonial line is unverified. */

@@ -29,6 +29,8 @@ interface FeatureCard {
   icon?: string;
   linkHref?: string;
   linkLabel?: string;
+  /** Feature-well illustration, relative to `public/`. Falls back to the placeholder. */
+  art?: string;
 }
 
 interface Props {
@@ -147,11 +149,23 @@ const { features, heading, headingNeedsCopy = false, id = 'features' } = Astro.p
                   is drawn and labelled rather than filled with stock art. It
                   bleeds to the card's bottom edge, as drawn. */}
               <div
-                class="bg-art-surface flex items-center justify-center self-end rounded-t-[10px] p-6 max-lg:mx-2.5 max-lg:aspect-[440/300] max-lg:w-[calc(100%-1.25rem)] lg:min-h-[460px] lg:w-[440px] lg:shrink-0"
+                class="bg-art-surface flex items-center justify-center self-end overflow-hidden rounded-t-[10px] max-lg:mx-2.5 max-lg:aspect-[440/300] max-lg:w-[calc(100%-1.25rem)] lg:min-h-[460px] lg:w-[440px] lg:shrink-0"
               >
-                <span class="t-paragraph-sm copy-needed text-center">
-                  Visual needed — {feature.headline}
-                </span>
+                {
+                  feature.art ? (
+                    <img
+                      src={feature.art}
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      class="size-full object-cover"
+                    />
+                  ) : (
+                    <span class="t-paragraph-sm copy-needed text-center">
+                      Visual needed — {feature.headline}
+                    </span>
+                  )
+                }
               </div>
             </article>
           ))
