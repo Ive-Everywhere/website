@@ -1,6 +1,5 @@
 ---
 import Button from '../ui/Button.astro';
-import LiveArt from '../site/LiveArt.astro';
 
 /**
  * Hero — Figma `147:3084` (§1b of home-spec.md).
@@ -61,38 +60,40 @@ import LiveArt from '../site/LiveArt.astro';
     </div>
 
     {/*
-        147:3094 "Hero Image" → 147:3095 "Content", 1224 × 591.
+        The live-windows stage (2026-08-17, replaces the hero-stack deck).
 
-        Figma draws this as three static stacked task cards. The real thing is
-        the `hero-stack` animation: the same deck, but the front card works
-        through its plan and then drops away as the next rises.
+        `/live/hero-windows.html` is a self-contained 1500×904 stage: the real
+        product across three surfaces — desktop workspace (real app export),
+        Slack thread (animated reveal), and a phone running an Eluu-built app
+        (lock screen → notification → approve → summary → dashboard loop) —
+        with a macOS-style team dock that swaps all three windows per team.
+        Windows are draggable by their chrome. The stage scales itself to its
+        frame width (ResizeObserver inside the document), so the aspect box
+        here is all the page needs to provide.
 
-        The well behind it is Figma 147:3096 "BG" — a linear fill whose top stop
-        is `bg/white-0`, i.e. the page background, so the well dissolves into
-        the page at the top and only the `bg/sub-300` foot is visible. Both
-        stops are tokens, so it inverts with the theme. Radius 0 0 40 40, and
-        the front card sits flush on that bottom edge.
+        Below `lg` the live stage would scale past legibility (incident.io
+        makes the same trade), so it is replaced by a static poster capture.
     */}
-    {/*
-        Below `lg` the well spans the full viewport instead of sitting inside
-        the 24px gutter. The stage is scaled to fit by WIDTH at phone size, so
-        the gutter was costing the art 12% of its size for no compositional
-        gain — the well is a full-bleed band in the drawing anyway. The
-        negative margins cancel the shell's own padding; `rounded-b` is dropped
-        with them, since a full-bleed band has no side edges to round.
-    */}
-    <div class="-mx-6 w-auto self-stretch sm:-mx-10 lg:mx-0 lg:w-full lg:max-w-[1224px]">
-      <div class="overflow-hidden lg:rounded-b-[40px]">
-        <LiveArt
-          src="hero-stack"
-          width={900}
-          height={440}
-          eager
-          speed={1.6}
-          surface="linear-gradient(to top, var(--bg-sub-300) 0%, var(--bg-white-0) 100%)"
-          title="A deck of agent task cards. The front card works through its checklist item by item, then drops away as the next card rises into its place."
-        />
+    <div class="w-full lg:max-w-[1360px]">
+      {/* live stage — lg and up */}
+      <div class="relative hidden w-full lg:block" style="aspect-ratio:1500/904">
+        <iframe
+          src="/live/hero-windows.html"
+          title="The Eluu product across three live windows: the desktop workspace, a Slack thread, and a phone running an app an Eluu colleague built. A dock below switches the whole scene between Finance, Sales, Customer Engineering, and People teams."
+          loading="eager"
+          scrolling="no"
+          class="absolute inset-0 size-full border-0"
+        ></iframe>
       </div>
+      {/* static poster — below lg */}
+      <img
+        src="/live/assets/hero-windows-poster.webp"
+        alt="The Eluu product across three windows: the desktop workspace, a Slack thread where the Finance colleague reports the month-end close, and a phone running the Approvals app it built."
+        width="1500"
+        height="904"
+        loading="eager"
+        class="block w-full rounded-2xl lg:hidden"
+      />
     </div>
   </div>
 </section>
