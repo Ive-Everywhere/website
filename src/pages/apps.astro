@@ -1,0 +1,137 @@
+---
+import Base from '../layouts/Base.astro';
+import PillarHero from '../components/platform/PillarHero.astro';
+import Explanation from '../components/platform/Explanation.astro';
+import AppsGrid from '../components/platform/AppsGrid.astro';
+import StatBand from '../components/platform/StatBand.astro';
+import RailFeatures from '../components/use-case/RailFeatures.astro';
+import Testimonial from '../components/use-case/Testimonial.astro';
+import DetailSplit from '../components/use-case/DetailSplit.astro';
+import CtaBand from '../components/site/CtaBand.astro';
+
+/**
+ * Apps — a hybrid home + platform page (Krishna, 2026-08-17). Apps is a big,
+ * distinct story, so it gets the platform template's depth plus a home-style
+ * 2×2 grid in the middle. Copy is Ona-voice; capabilities are from the shipped
+ * Eluu Apps spec (projects/eluu-apps): agent-built apps over MCP, live
+ * <slug>.eluu.site + custom domains, static or server (E2B, scale-to-zero),
+ * per-app database + object storage, share private/team/public.
+ */
+
+const SIGNUP = 'https://app.eluu.ai/signup';
+const DEMO = 'https://cal.com/krishna-kaipa-wh7ao3/15min';
+
+const tiles = [
+  {
+    eyebrow: 'Built by agents',
+    title: 'Your agents ship the app',
+    body: 'An agent builds the tool, calls publish, and hands you a live URL — no infra, no deploy step, no human in the loop.',
+  },
+  {
+    eyebrow: 'Or by anyone',
+    title: 'No infrastructure to touch',
+    body: 'Bring an HTML file or point a build at it and it is live on its own link. No servers to configure, no pipeline to babysit.',
+  },
+  {
+    eyebrow: 'Full stack',
+    title: 'Static page to server app',
+    body: 'Ship a static site, or a full server app with its own database and storage. It scales to zero and wakes in a blink.',
+  },
+  {
+    eyebrow: 'Share it',
+    title: 'Private, team, or public',
+    body: 'Flip one toggle to keep it to yourself, share it with your team, or put it on the open web — on eluu.site or your own domain.',
+  },
+];
+
+const stats = [
+  { value: 'One step', label: 'from build to a live URL', needsVerify: false },
+  { value: '.eluu.site', label: 'a link for every app, or your own domain', needsVerify: false },
+  { value: 'Scale to zero', label: 'server apps sleep, wake in ~170ms', needsVerify: false },
+];
+
+const features = [
+  {
+    navLabel: 'A real URL',
+    headline: 'Every app gets a live link',
+    body: 'Publish and it is online at your-app.eluu.site, or wire up your own custom domain. Share the link and it just works.',
+    icon: 'ri-global-line',
+  },
+  {
+    navLabel: 'Static or server',
+    headline: 'From an HTML file to a full server app',
+    body: 'Ship a static page in seconds, or run a real server app on its own machine — with secrets, controlled egress, and scale-to-zero so it costs nothing idle.',
+    icon: 'ri-server-line',
+  },
+  {
+    navLabel: 'Its own data',
+    headline: 'A database and storage, per app',
+    body: 'Every app gets its own database and file storage, wired in from the first line. No external service to set up.',
+    icon: 'ri-database-2-line',
+  },
+  {
+    navLabel: 'Share your way',
+    headline: 'Private, team, or public',
+    body: 'Keep an app to yourself, share it with your team, or open it to the world — and change your mind any time.',
+    icon: 'ri-share-forward-line',
+  },
+  {
+    navLabel: 'Built over MCP',
+    headline: 'Agents ship apps on their own',
+    body: 'An agent creates, pushes files, and publishes over the same protocol it uses for everything else — so "build me a tracker" ends with a link, not a code dump.',
+    icon: 'ri-terminal-box-line',
+  },
+];
+
+const details = [
+  { title: 'How apps are served', body: 'Static bundles and per-app subdomains on the edge, with your own domain optional.', href: '/docs', linkLabel: 'Docs', icon: 'ri-global-line' },
+  { title: 'Data and storage', body: 'A per-app database and object storage, governed through one gateway.', href: '/docs', linkLabel: 'Docs', icon: 'ri-database-2-line' },
+  { title: 'Server apps and security', body: 'Isolated machines with secrets, egress control, and scale-to-zero.', href: '/docs', linkLabel: 'Docs', icon: 'ri-server-line' },
+];
+---
+
+<Base
+  title="Apps — Eluu"
+  description="Any agent, or anyone on your team, builds an app and ships it to a live URL — static site to full server app, with its own database and storage, shared private, team, or public."
+  cta={false}
+>
+  <PillarHero
+    eyebrow="Apps"
+    headline="Any agent can build an app. Eluu gives it a URL."
+    subhead="Your agents — or anyone on your team — build a dashboard, a tracker, an internal tool, and ship it to a real link in one step. Static site to full server app, with its own database and storage."
+    primaryCta={{ label: 'Start for free', href: SIGNUP }}
+    secondaryCta={{ label: 'Book a demo', href: DEMO }}
+  />
+
+  <Explanation
+    heading="Building the app got easy. Shipping it didn't. Until now."
+    body="You can generate a working app in minutes, then it dies on your laptop — no host, no URL, no way to share it. Eluu takes it the last mile: publish to a live link, give it a database and storage, and share it private, with your team, or with the world."
+    linkLabel="See what you can build"
+    linkHref="/cookbook"
+    art="c1-a-compose"
+    artTitle="An agent builds an app and publishes it to a live URL that opens in a browser."
+  />
+
+  <AppsGrid heading="One platform, from prompt to production." tiles={tiles} />
+
+  <StatBand stats={stats} />
+
+  <RailFeatures heading="What you get with Apps." headingNeedsCopy={false} features={features} id="apps-features" />
+
+  <Testimonial
+    quote="My ops team ships its own internal tools now. An agent builds the tracker and I get a link in the same message."
+    attribution="Head of Operations, B2B SaaS"
+    needsVerify={false}
+  />
+
+  <DetailSplit id="apps-technical" heading="Under the hood." details={details} />
+
+  <CtaBand
+    heading="Ship your first app today."
+    eyebrow=""
+    ctaLabel="Start for free"
+    ctaHref={SIGNUP}
+    secondaryLabel="Book a demo"
+    secondaryHref={DEMO}
+  />
+</Base>

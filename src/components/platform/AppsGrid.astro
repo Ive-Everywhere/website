@@ -1,0 +1,44 @@
+---
+/**
+ * AppsGrid — a home-style 2×2 grid for the (hybrid) Apps page. Mirrors the home
+ * `Pillars` layout: an illustration placeholder on top, then eyebrow + headline
+ * + body below it, unenclosed. Content is passed in so the page owns the copy.
+ */
+interface Tile {
+  eyebrow: string;
+  title: string;
+  body: string;
+}
+interface Props {
+  heading: string;
+  tiles: Tile[];
+}
+const { heading, tiles } = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 flex flex-col gap-10 py-14">
+    <h2 class="t-landing-h3 text-text-strong-950 text-balance">{heading}</h2>
+
+    <div class="grid gap-x-6 gap-y-12 lg:grid-cols-2">
+      {
+        tiles.map((t) => (
+          <div class="flex flex-col gap-5">
+            <div class="border-stroke-sub-300 bg-bg-weak-50 flex aspect-[3/2] w-full items-center justify-center rounded-[16px] border border-dashed">
+              <span class="t-label-xs text-text-soft-400 font-mono uppercase tracking-[0.08em]">
+                Illustration · 600 × 400
+              </span>
+            </div>
+            <div class="flex flex-col gap-2">
+              <span class="t-label-xs text-text-soft-400 font-mono uppercase tracking-[0.08em]">
+                {t.eyebrow}
+              </span>
+              <h3 class="t-h6 text-text-strong-950">{t.title}</h3>
+              <p class="t-label-md text-text-sub-600 text-pretty max-w-[46ch]">{t.body}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
