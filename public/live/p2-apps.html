@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Pillar · Apps — a hosted app assembles and goes live (Mercury paper)</title>
+<title>Pillar · Apps — prompt to deployed, one card</title>
 <link href="tokens.css" rel="stylesheet">
 <link href="live-shim.css" rel="stylesheet">
 <link href="embed.css" rel="stylesheet">
@@ -16,99 +16,148 @@
              font-family:var(--font); color:var(--ink-strong); font-weight:400;
              letter-spacing:.005em; -webkit-font-smoothing:antialiased; }
 
-  /* ── P2 · APPS — one browser object on lavender paper ────────────────────
-     The mv-browser frame floats with the toolkit's shadow; the URL pill is
-     the claim (hosted software), the Live pill is the payoff. Tiles pop,
-     the chart draws itself. Weight ceiling 480, tabular figures.           */
+  /* ── P2 · APPS — prompt → deployed, the Modal-autoscale shape ────────────
+     The app itself never appears. One card: the prompt at the top, the
+     services that provision themselves in the middle (staggered, unequal),
+     and the payoff at the bottom — a live URL the whole team can open.    */
   .hero { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2; }
-  .mv-browser { width:860px; }
-  .mv-browser__bar { height:64px; padding:0 22px; gap:10px; }
-  .mv-browser__dot { width:13px; height:13px; }
-  .url { flex:1; display:flex; align-items:center; justify-content:center; gap:9px;
-         height:38px; margin:0 18px; border-radius:12px; background:#f3f1f4;
-         font-size:19px; color:var(--ink-sub); letter-spacing:.005em; }
-  .url svg { width:15px; height:15px; color:var(--ink-soft); }
-  .url em { font-style:normal; font-weight:480; color:var(--accent); }
-  .bar-pill { opacity:0; transition:opacity .5s ease; }
-  .bar-pill.is-on { opacity:1; }
-  .pip { width:9px; height:9px; border-radius:50%; background:#2eb67d; }
+  .card { width:640px; background:#fff; border-radius:var(--r-lg);
+          box-shadow:0 34px 64px -22px rgba(28,27,31,.24), 0 10px 24px -10px rgba(28,27,31,.12);
+          padding:26px 30px 24px; }
+  .cap { font-size:15px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.06em; }
+  .prompt { display:flex; gap:14px; margin-top:10px; }
+  .prompt__who { width:38px; height:38px; border-radius:50%; overflow:hidden; flex:none;
+                 border:1px solid var(--hair); }
+  .prompt__who img { width:100%; height:100%; display:block; }
+  .prompt__t { font-size:22px; line-height:1.4; color:var(--ink-strong); letter-spacing:.005em; }
 
-  .body { padding:26px 28px 24px; }
-  .kgrid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  .kpi { border:1px solid var(--hair); border-radius:var(--r-md); padding:18px 22px;
-         opacity:0; transform:scale(.95); transform-origin:center;
-         transition:opacity .5s ease, transform .5s ease; }
-  .kpi.is-on { opacity:1; transform:none; }
-  .kpi__l { font-size:16px; color:var(--ink-soft); letter-spacing:.01em; }
-  .kpi__v { font-size:37px; font-weight:480; color:var(--ink-strong); margin-top:4px;
-            font-variant-numeric:tabular-nums; letter-spacing:.005em; }
-  .chartbox { margin-top:16px; border:1px solid var(--hair); border-radius:var(--r-md);
-              padding:18px 22px 12px; opacity:0; transition:opacity .5s ease; }
-  .chartbox.is-on { opacity:1; }
-  .chartbox__l { font-size:16px; color:var(--ink-soft); letter-spacing:.01em; margin-bottom:10px; }
-  .chartbox svg { display:block; width:100%; height:150px; }
-  .cl { stroke-dasharray:860; stroke-dashoffset:860; }
-  .cf { opacity:0; transition:opacity .6s ease .45s; }
-  .chartbox.is-drawn .cl { transition:stroke-dashoffset 1.2s ease; stroke-dashoffset:0; }
-  .chartbox.is-drawn .cf { opacity:1; }
-  .foot { display:flex; align-items:center; gap:9px; padding:0 28px 22px;
-          font-size:17px; color:var(--ink-soft); opacity:0; transition:opacity .5s ease; }
-  .foot.is-on { opacity:1; }
-  .foot em { font-style:normal; font-weight:480; color:var(--ink-sub); }
+  .hr { height:1px; background:var(--hair); margin:22px 0 18px; }
+
+  .svc { display:flex; align-items:center; gap:16px; padding:11px 2px;
+         opacity:0; transform:translateY(6px);
+         transition:opacity .45s ease, transform .45s ease; }
+  .svc.is-on { opacity:1; transform:none; }
+  .svc__ic { width:42px; height:42px; border-radius:12px; background:var(--accent-tint);
+             color:var(--accent); display:flex; align-items:center; justify-content:center; flex:none; }
+  .svc__ic svg { width:20px; height:20px; }
+  .svc__n { font-size:20px; font-weight:480; color:var(--ink-strong); }
+  .svc__m { font-size:17px; color:var(--ink-sub); margin-top:1px; }
+  .svc__st { margin-left:auto; display:flex; align-items:center; }
+  .spin { width:16px; height:16px; border-radius:50%; border:2px solid var(--hair);
+          border-top-color:var(--accent); animation:p2spin .7s linear infinite; display:none; }
+  .svc.is-run .spin { display:block; }
+  @keyframes p2spin { to { transform:rotate(360deg) } }
+  .ck { width:22px; height:22px; border-radius:50%; background:#e4f6ee; color:#1f8a5b;
+        display:none; align-items:center; justify-content:center; }
+  .ck svg { width:11px; height:11px; }
+  .svc.is-done .ck { display:flex; }
+
+  .deploy { margin-top:6px; opacity:0; transform:translateY(6px);
+            transition:opacity .5s ease, transform .5s ease; }
+  .deploy.is-on { opacity:1; transform:none; }
+  .urlrow { display:flex; align-items:center; gap:12px; margin-top:10px; }
+  .urlchip { flex:1; display:flex; align-items:center; gap:10px; height:52px; padding:0 18px;
+             border-radius:14px; background:#f6f4f6; }
+  .urlchip svg.lk { width:16px; height:16px; color:var(--ink-soft); flex:none; }
+  .urlchip .u { font-size:21px; color:var(--ink-sub); letter-spacing:.005em; }
+  .urlchip .u em { font-style:normal; font-weight:480; color:var(--accent); }
+  .urlchip .mv-pill { margin-left:auto; }
+  .pip { width:9px; height:9px; border-radius:50%; background:#2eb67d; }
+  .team { display:flex; align-items:center; gap:11px; margin-top:14px;
+          opacity:0; transition:opacity .5s ease; }
+  .team.is-on { opacity:1; }
+  .team__avs { display:flex; }
+  .team__av { width:32px; height:32px; border-radius:50%; border:2px solid #fff; margin-left:-8px;
+              overflow:hidden; background:#eee7ec; }
+  .team__av:first-child { margin-left:0; }
+  .team__av img { width:100%; height:100%; display:block; }
+  .team__l { font-size:17px; color:var(--ink-soft); }
 </style>
 </head>
 <body>
 <div class="a-frame"><div class="a-field"><div class="a-stage" data-w="1600" data-h="1067">
   <div class="mv-canvas mv-canvas--lav"></div>
 
-  <div class="hero">
-    <div class="mv-browser mv-floating">
-      <div class="mv-browser__bar">
-        <span class="mv-browser__dot"></span><span class="mv-browser__dot"></span><span class="mv-browser__dot"></span>
-        <span class="url">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-          <span><em>acme-finance</em>.eluu.site</span>
+  <div class="hero"><div class="card">
+    <div class="cap">Prompt</div>
+    <div class="prompt">
+      <span class="prompt__who"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt=""></span>
+      <div class="prompt__t">“A dashboard for the July close — refreshed daily, for the whole team.”</div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="svc" id="s1">
+      <span class="svc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.66 3.58 3 8 3s8-1.34 8-3v-13"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg></span>
+      <div><div class="svc__n">Postgres database</div><div class="svc__m">Schemas created · seeded from Sheets</div></div>
+      <span class="svc__st"><span class="spin"></span><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></span>
+    </div>
+    <div class="svc" id="s2">
+      <span class="svc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="M8.2 7.4l7.6 3.4M8.4 6h7.2M8.2 16.6l7.6-3.4M6 8.4v7.2"/></svg></span>
+      <div><div class="svc__n">Vector store</div><div class="svc__m">1,204 documents indexed</div></div>
+      <span class="svc__st"><span class="spin"></span><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></span>
+    </div>
+    <div class="svc" id="s3">
+      <span class="svc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8H3l1.5-4.2A1.5 1.5 0 0 1 5.9 3h12.2a1.5 1.5 0 0 1 1.4.8L21 8z"/><rect x="3" y="8" width="18" height="13" rx="1.8"/><path d="M9 12h6"/></svg></span>
+      <div><div class="svc__n">Object storage</div><div class="svc__m">Exports bucket · reports and PDFs</div></div>
+      <span class="svc__st"><span class="spin"></span><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></span>
+    </div>
+    <div class="svc" id="s4">
+      <span class="svc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.4"/><path d="M12 7.5V12l3 2"/></svg></span>
+      <div><div class="svc__n">Scheduled refresh</div><div class="svc__m">Daily at 7:02 AM · by Ledger</div></div>
+      <span class="svc__st"><span class="spin"></span><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></span>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="deploy" id="deploy">
+      <div class="cap">Deployed</div>
+      <div class="urlrow">
+        <div class="urlchip">
+          <svg class="lk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          <span class="u"><em>acme-finance</em>.eluu.site</span>
+          <span class="mv-pill mv-pill--live"><span class="pip"></span>Live</span>
+        </div>
+      </div>
+      <div class="team" id="team">
+        <span class="team__avs">
+          <span class="team__av"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt=""></span>
+          <span class="team__av"><img src="https://randomuser.me/api/portraits/women/65.jpg" alt=""></span>
+          <span class="team__av"><img src="https://randomuser.me/api/portraits/men/71.jpg" alt=""></span>
         </span>
-        <span class="mv-pill mv-pill--live bar-pill" id="livepill"><span class="pip"></span>Live</span>
-      </div>
-      <div class="body">
-        <div class="kgrid">
-          <div class="kpi" id="k1"><div class="kpi__l">Cash</div><div class="kpi__v">$2.1M</div></div>
-          <div class="kpi" id="k2"><div class="kpi__l">Runway</div><div class="kpi__v">18 mo</div></div>
-        </div>
-        <div class="chartbox" id="chart">
-          <div class="chartbox__l">Net revenue · FY26</div>
-          <svg viewBox="0 0 800 160" preserveAspectRatio="none">
-            <path class="cf" d="M0,132 L114,120 L228,108 L342,86 L456,76 L570,54 L684,36 L800,18 L800,160 L0,160 Z" fill="#755a68" fill-opacity=".09"/>
-            <path class="cl" d="M0,132 L114,120 L228,108 L342,86 L456,76 L570,54 L684,36 L800,18" fill="none" stroke="#755a68" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-      <div class="foot" id="foot">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="5" height="16" rx="2.2" fill="#755a68"/><rect x="14" y="4" width="5" height="16" rx="2.2" fill="#755a68"/></svg>
-        <span>Built by <em>Ledger</em> · refreshed daily at 7:02 AM</span>
+        <span class="team__l">Shared with your team · anyone can open it</span>
       </div>
     </div>
-  </div>
+  </div></div>
 
 </div></div></div>
 <script src="live.js"></script>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
+
   function reset() {
-    ['k1','k2'].forEach(function (id) { $(id).classList.remove('is-on'); });
-    $('chart').className = 'chartbox';
-    $('foot').classList.remove('is-on');
-    $('livepill').classList.remove('is-on');
+    ['s1','s2','s3','s4'].forEach(function (id) { $(id).className = 'svc'; });
+    $('deploy').classList.remove('is-on');
+    $('team').classList.remove('is-on');
   }
+
+  function svc(id, ms) {
+    return function () {
+      $(id).classList.add('is-on','is-run');
+      Live.soon(function () { $(id).classList.remove('is-run'); $(id).classList.add('is-done'); }, ms);
+    };
+  }
+
   var seq = Live.Seq([
-    [700,  function () { $('k1').classList.add('is-on'); }],
-    [320,  function () { $('k2').classList.add('is-on'); }],
-    [480,  function () { $('chart').classList.add('is-on'); Live.soon(function () { $('chart').classList.add('is-drawn'); }, 120); }],
-    [1600, function () { $('livepill').classList.add('is-on'); }],
-    [500,  function () { $('foot').classList.add('is-on'); }]
-  ], { reset: reset, hold: 3800 });
+    [700,  svc('s1', 900)],
+    [500,  svc('s2', 1250)],   // staggered, unequal — real provisioning
+    [450,  svc('s3', 700)],
+    [500,  svc('s4', 950)],
+    [1500, function () { $('deploy').classList.add('is-on'); }],
+    [700,  function () { $('team').classList.add('is-on'); }]
+  ], { reset: reset, hold: 4200 });
+
   reset();
   Live.autoplay(seq);
 })();

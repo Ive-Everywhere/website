@@ -20,7 +20,7 @@
      Many inputs → the colleague → ONE output. The bright coherent line runs
      Sheets → Ledger → the learning she wrote; the other systems are faded
      breadth. The output is the proof beat: a named file, saved to memory. */
-  .in  { position:absolute; left:110px; z-index:2; }
+  .in  { position:absolute; left:150px; z-index:2; }
   .in--a { top:311px; } .in--b { top:493px; } .in--c { top:675px; }
   .in .mv-node { width:270px; }
   .in--a, .in--c { opacity:.42; filter:saturate(.92); }
@@ -42,7 +42,7 @@
   .mini__name { font-size:27px; font-weight:480; color:var(--ink-strong); }
   .mini__role { font-size:18px; color:var(--ink-sub); margin-top:2px; }
 
-  .out { position:absolute; left:1150px; top:493px; z-index:2;
+  .out { position:absolute; left:1160px; top:493px; z-index:2;
          opacity:0; transform:translateY(10px);
          transition:opacity .55s ease, transform .55s ease; }
   .out.is-on { opacity:1; transform:none; }
@@ -50,6 +50,12 @@
   .out .mv-node__label { font-size:20px; white-space:nowrap; }
 
   .mv-connectors path.bright { stroke:var(--accent); stroke-opacity:.4; }
+  #pout { stroke-opacity:0; transition:stroke-opacity .5s ease; }
+  #pout.on { stroke-opacity:.4; }
+  #portout { opacity:0; transition:opacity .5s ease; }
+  #portout.on { opacity:1; }
+  #fname { display:inline-block; transition:opacity .35s ease; }
+  #fname.swap { opacity:0; }
   .pulse-dot { position:absolute; left:0; top:0; width:9px; height:9px; border-radius:50%;
                background:var(--accent); opacity:0; z-index:3; }
   .pulse-dot.is-go { animation:p3go .9s ease forwards; }
@@ -62,15 +68,15 @@
   <div class="mv-canvas mv-canvas--cream"></div>
 
   <svg class="mv-connectors" viewBox="0 0 1600 1067" preserveAspectRatio="none">
-    <path class="faint" d="M380,352 C470,352 495,522 585,532"/>
-    <path class="faint" d="M380,716 C470,716 495,546 585,536"/>
-    <path class="bright" id="pin" d="M380,534 L585,534"/>
-    <path class="bright" id="pout" d="M1015,534 L1150,534"/>
+    <path class="faint" d="M436,352 C510,352 520,520 585,531"/>
+    <path class="faint" d="M436,716 C510,716 520,548 585,537"/>
+    <path class="bright" id="pin" d="M436,534 L585,534"/>
+    <path class="bright" id="pout" d="M1015,534 L1160,534"/>
     <circle class="mv-node-dot" cx="585" cy="534" r="5"/>
-    <circle class="mv-node-dot" cx="1015" cy="534" r="5"/>
+    <circle class="mv-node-dot" id="portout" cx="1015" cy="534" r="5"/>
   </svg>
-  <span class="pulse-dot" id="din"  style="offset-path:path('M380,534 L585,534')"></span>
-  <span class="pulse-dot" id="dout" style="offset-path:path('M1015,534 L1150,534')"></span>
+  <span class="pulse-dot" id="din"  style="offset-path:path('M436,534 L585,534')"></span>
+  <span class="pulse-dot" id="dout" style="offset-path:path('M1015,534 L1160,534')"></span>
 
   <div class="in in--a"><div class="mv-node mv-rest">
     <div class="mv-node__ic"><img src="assets/hubspot.svg" alt="HubSpot"></div>
@@ -108,14 +114,32 @@
 
   function go(id) { var d = $(id); d.classList.remove('is-go'); void d.offsetWidth; d.classList.add('is-go'); }
 
-  function reset() { round = 0; $('out').classList.remove('is-on'); $('fname').textContent = FILES[0]; }
+  function reset() {
+    round = 0;
+    $('out').classList.remove('is-on'); $('fname').classList.remove('swap');
+    $('pout').classList.remove('on'); $('portout').classList.remove('on');
+    $('fname').textContent = FILES[0];
+  }
+
+  function swapFile() {
+    $('fname').classList.add('swap');
+    Live.soon(function () {
+      round++; $('fname').textContent = FILES[round % FILES.length];
+      $('fname').classList.remove('swap');
+    }, 350);
+  }
 
   var seq = Live.Seq([
     [700,  function () { go('din'); }],
-    [1200, function () { go('dout'); }],
-    [750,  function () { $('fname').textContent = FILES[round % FILES.length]; $('out').classList.add('is-on'); }],
-    [3200, function () { $('out').classList.remove('is-on'); round++; }]
-  ], { reset: reset, hold: 500 });
+    [1100, function () { $('pout').classList.add('on'); $('portout').classList.add('on'); go('dout'); }],
+    [750,  function () { $('out').classList.add('is-on'); }],
+    [3300, function () { go('din'); }],
+    [1100, function () { go('dout'); }],
+    [750,  swapFile],
+    [3300, function () { go('din'); }],
+    [1100, function () { go('dout'); }],
+    [750,  swapFile]
+  ], { reset: reset, hold: 3300 });
 
   reset();
   Live.autoplay(seq);
