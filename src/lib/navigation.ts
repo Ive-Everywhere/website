@@ -19,7 +19,8 @@ export const primaryNav: NavItem[] = [
       { label: 'Security', href: '/security', description: 'Access, limits, and audit.', icon: 'ri-lock-2-line' },
     ],
   },
-  { label: 'Apps', href: '/apps' },
+  // { label: 'Apps', href: '/apps' },            // hidden pre-prod (Krishna)
+  /* Solutions dropdown hidden pre-prod (Krishna):
   {
     label: 'Solutions',
     children: [
@@ -29,6 +30,7 @@ export const primaryNav: NavItem[] = [
       { label: 'People', href: '/solutions/people', description: 'Hire without the busywork.', icon: 'ri-team-line' },
     ],
   },
+  */
   {
     label: 'Resources',
     children: [
@@ -48,10 +50,11 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
       { label: 'Agents', href: '/agents' },
       { label: 'Workforce', href: '/workforce' },
       { label: 'Security', href: '/security' },
-      { label: 'Apps', href: '/apps' },
+      // { label: 'Apps', href: '/apps' },            // hidden pre-prod (Krishna)
       { label: 'Pricing', href: '/pricing' },
     ],
   },
+  /* Solutions footer column hidden pre-prod (Krishna):
   {
     heading: 'Solutions',
     links: [
@@ -61,6 +64,7 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
       { label: 'People', href: '/solutions/people' },
     ],
   },
+  */
   {
     heading: 'Compare',
     links: [
