@@ -58,14 +58,9 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
     ],
   },
   */
-  {
-    heading: 'Company',
-    links: [
-      { label: 'About', href: '/about' },
-      { label: 'Careers', href: '/careers' },
-      { label: 'Contact', href: '/contact' },
-    ],
-  },
+  /* Company column (About / Careers / Contact) removed pre-prod (Krishna,
+   * 2026-08-18): the pages do not exist yet. Restore when the Modal-style
+   * company page ships (about + careers + contact with #-anchors). */
   {
     heading: 'Legal',
     links: [

@@ -23,7 +23,7 @@ import { z } from 'astro:content';
  */
 
 /** Both CTAs are fixed site-wide, so pages only override them if they differ. */
-export const SIGNUP_HREF = 'https://app.eluu.ai/signup';
+export const SIGNUP_HREF = 'https://app.eluu.ai';
 export const DEMO_HREF = '/demo';
 
 export const cta = z.object({
