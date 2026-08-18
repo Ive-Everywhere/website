@@ -1,157 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;450;480&family=JetBrains+Mono:wght@400;450&display=swap');
-
-:root{
-  --ink:#1e1c1e;
-  --sub:#55525b;
-  --soft:#a09da6;
-  --hairline:#ecebee;
-  --accent:#755a68;
-  --accent-deep:#5d374b;
-  --chrome:#f4f3f6;
-  --green:#17a34a;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{background:transparent;}
-body{font-family:'Inter',sans-serif;}
-
-.stage{
-  position:relative;
-  width:1224px;height:1224px;
-  overflow:hidden;
-  background:
-    radial-gradient(85% 70% at 22% 12%, #f4f0e4, transparent 62%),
-    linear-gradient(160deg,#f5f2ea,#f4f2ef);
-}
-.shadow{box-shadow:0 30px 70px -30px rgba(30,28,30,.22), 0 8px 22px -10px rgba(30,28,30,.08);}
-
-/* ---------- main card ---------- */
-.main{
-  position:absolute; left:96px; top:120px; width:824px; height:624px;
-  background:var(--chrome); border-radius:28px;
-}
-.main__hd{
-  position:absolute; left:96px; top:120px; width:824px; height:112px;
-  display:flex; align-items:center; gap:16px; padding:0 40px;
-}
-.g{color:var(--ink); flex-shrink:0;}
-.main__hd .t{font-weight:480; font-size:40px; color:var(--ink);}
-
-.sheet{
-  position:absolute; left:108px; top:244px; width:800px; height:488px;
-  background:#ffffff; border-radius:20px;
-}
-
-.tog-row{
-  position:absolute; left:144px; top:280px; width:728px; height:92px;
-  display:flex; align-items:center; gap:20px;
-}
-.tog{width:92px; height:52px; border-radius:26px; background:var(--green); position:relative; flex-shrink:0;}
-.tog__k{position:absolute; top:4px; right:4px; width:44px; height:44px; border-radius:50%; background:#fff;}
-.tog-row .txt{display:flex; flex-direction:column;}
-.tog-row .txt__t{font-weight:480; font-size:40px; color:var(--ink);}
-.tog-row .txt__s{margin-top:4px; font-weight:400; font-size:28px; color:var(--sub);}
-
-.chips{
-  position:absolute; left:144px; top:404px; width:728px; height:160px;
-  display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
-}
-.chip{
-  height:72px; border-radius:14px; border:1px solid var(--hairline); background:#fff;
-  display:flex; align-items:center; gap:12px; padding-left:18px;
-  font-weight:400; font-size:30px; color:var(--ink);
-}
-.chip.off{color:var(--soft);}
-.ck{width:26px; height:26px; flex-shrink:0;}
-
-.scopes-lbl{
-  position:absolute; left:144px; top:596px; width:728px; height:24px;
-  font-weight:400; font-size:24px; color:var(--soft);
-  text-transform:uppercase; letter-spacing:.06em;
-}
-.scopes{
-  position:absolute; left:144px; top:632px; width:728px; height:64px;
-  display:flex; align-items:center; gap:12px;
-}
-.scope-chip{
-  height:64px; border-radius:999px; border:1px solid var(--hairline);
-  display:flex; align-items:center; padding:0 26px;
-  font-family:'JetBrains Mono', monospace; font-weight:400; font-size:27px; color:var(--ink);
-}
-
-/* ---------- neighbour right, cropped by the frame's right edge ---------- */
-.nbr{
-  position:absolute; left:952px; top:120px; width:420px; height:320px;
-  background:var(--chrome); border-radius:28px;
-}
-.nbr__hd{
-  position:absolute; left:952px; top:120px; width:420px; height:112px;
-  display:flex; align-items:center; gap:16px; padding:0 40px;
-  white-space:nowrap;
-}
-.nbr__hd .t{font-weight:480; font-size:40px; color:var(--ink);}
-.nbr__sheet{
-  position:absolute; left:964px; top:244px; width:396px; height:160px;
-  background:#ffffff; border-radius:20px;
-}
-
-/* ---------- neighbour bottom, cropped by the frame's bottom edge ---------- */
-.nbb{
-  position:absolute; left:96px; top:1120px; width:824px; height:200px;
-  background:var(--chrome); border-radius:28px;
-}
-.nbb__g{
-  position:absolute; left:136px; top:1160px; width:34px; height:34px; color:var(--ink);
-}
-</style>
-</head>
-<body>
-<div class="stage">
-
-  <!-- neighbour bottom, drawn first so the main card overlaps its top edge -->
-  <div class="nbb shadow"></div>
-  <svg class="nbb__g" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
-
-  <!-- neighbour right, cropped by the stage's right edge -->
-  <div class="nbr shadow"></div>
-  <div class="nbr__hd">
-    <svg class="g" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-    <span class="t">Identity</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"></head><body>
+<!-- RULE 2: every row carries a BARE brand logo. No tiles anywhere.
+     RULE 6: the list dissolves instead of printing "+100 more". -->
+<div class="stage cv-cream">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6M15 2v6M6 8h12v3a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8zM12 17v5"/></svg></span>
+      <span class="hd__t">Connections</span>
+      <span class="hd__r"><span class="pill"><span class="pill__dot"></span>12 connected</span></span>
+    </div>
+    <div class="list list--fade">
+      <div class="row"><span class="mk"><img src="live/assets/slack.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Slack</div><div class="row__s row__s--mono">#ops · read + post</div></span>
+        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
+      <div class="row"><span class="mk"><img src="live/assets/salesforce.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Salesforce</div><div class="row__s row__s--mono">opportunities · read + write</div></span>
+        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
+      <div class="row"><span class="mk"><img src="live/assets/stripe.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Stripe</div><div class="row__s row__s--mono">payouts · read</div></span>
+        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
+      <div class="row"><span class="mk"><img src="live/assets/googlesheets.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Google Sheets</div><div class="row__s row__s--mono">master ledger</div></span>
+        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
+      <div class="row row--g1"><span class="mk"><img src="live/assets/github.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">GitHub</div><div class="row__s row__s--mono">acme/finance-ops</div></span>
+        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
+      <div class="row row--g2"><span class="mk"><img src="live/assets/linear.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Linear</div><div class="row__s row__s--mono">FIN board</div></span>
+        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
+    </div>
   </div>
-  <div class="nbr__sheet"></div>
-
-  <!-- main card -->
-  <div class="main shadow"></div>
-  <div class="main__hd">
-    <svg class="g" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8z"/><path d="M12 18v4"/></svg>
-    <span class="t">Connections</span>
-  </div>
-  <div class="sheet"></div>
-
-  <div class="tog-row">
-    <div class="tog"><div class="tog__k"></div></div>
-    <div class="txt"><div class="txt__t">12 active</div><div class="txt__s">3 pending invites</div></div>
-  </div>
-
-  <div class="chips">
-    <div class="chip"><svg class="ck" viewBox="0 0 26 26"><circle cx="13" cy="13" r="13" fill="#17a34a"/><path d="M8 13.3l3.4 3.4L18.5 9.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Slack</div>
-    <div class="chip"><svg class="ck" viewBox="0 0 26 26"><circle cx="13" cy="13" r="13" fill="#17a34a"/><path d="M8 13.3l3.4 3.4L18.5 9.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Stripe</div>
-    <div class="chip"><svg class="ck" viewBox="0 0 26 26"><circle cx="13" cy="13" r="13" fill="#17a34a"/><path d="M8 13.3l3.4 3.4L18.5 9.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Sheets</div>
-    <div class="chip"><svg class="ck" viewBox="0 0 26 26"><circle cx="13" cy="13" r="13" fill="#17a34a"/><path d="M8 13.3l3.4 3.4L18.5 9.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>QuickBooks</div>
-    <div class="chip"><svg class="ck" viewBox="0 0 26 26"><circle cx="13" cy="13" r="13" fill="#17a34a"/><path d="M8 13.3l3.4 3.4L18.5 9.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Gmail</div>
-    <div class="chip off"><svg class="ck" viewBox="0 0 26 26"><circle cx="13" cy="13" r="11" fill="none" stroke="#a09da6" stroke-width="2" stroke-dasharray="2 4"/></svg>HubSpot</div>
-  </div>
-
-  <div class="scopes-lbl">SCOPES</div>
-  <div class="scopes">
-    <div class="scope-chip">payouts &middot; read</div>
-    <div class="scope-chip">ledger &middot; read + write</div>
-  </div>
-
-</div>
-</body>
-</html>
+</div></body></html>
