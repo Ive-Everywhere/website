@@ -1,0 +1,232 @@
+---
+/**
+ * A single recipe, `/cookbook/<slug>`.
+ *
+ * The copy-prompt is SHORT and points the agent at `/cookbook/<slug>.md`, which
+ * resolves to the full workflow/skills/prompts. So the RIGHT column is the
+ * machine artifact — a file tree plus that short fetch-prompt with a Copy
+ * button — and the LEFT column is a human-readable render of the same content
+ * (what it does, the workflow, recommended skills, how to use).
+ */
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const entries = await getCollection('cookbook', ({ data }) => !data.draft);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+};
+
+const { entry } = Astro.props;
+const d = entry.data;
+const slug = entry.id;
+
+const kindMeta: Record<string, { label: string; icon: string; cls: string }> = {
+  trigger: { label: 'Trigger', icon: 'ri-play-circle-line', cls: 'bg-[#e6f2ea] text-[#2f7d54]' },
+  prompt: { label: 'Prompt', icon: 'ri-chat-1-line', cls: 'bg-[#f4eff2] text-[#755a68]' },
+  shell: { label: 'Shell', icon: 'ri-terminal-box-line', cls: 'bg-bg-soft-200 text-text-sub-600' },
+  result: { label: 'Result', icon: 'ri-check-line', cls: 'bg-[#e7eef8] text-[#3f5a86]' },
+};
+
+const kebab = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+const promptSteps = d.workflow.filter((s: any) => s.kind === 'prompt' || s.kind === 'shell');
+
+// The short, copyable fetch-prompt. Points at the .md so the agent pulls the rest.
+const shortPrompt =
+  `You're running the "${d.title}" recipe from the Eluu cookbook.\n` +
+  `Fetch https://eluu.ai/cookbook/${slug}.md for the workflow, skills, and prompts, ` +
+  `then ${d.goal || 'run it end to end'} against my connected tools.`;
+
+// The file tree shown on the right — derived from the recipe.
+type Node = { name: string; kind: 'dir' | 'file'; depth: number };
+const tree: Node[] = [{ name: `${slug}/`, kind: 'dir', depth: 0 }];
+tree.push({ name: 'recipe.md', kind: 'file', depth: 1 });
+tree.push({ name: 'workflow.json', kind: 'file', depth: 1 });
+if (d.skills.length) {
+  tree.push({ name: 'skills/', kind: 'dir', depth: 1 });
+  d.skills.forEach((s: any) => tree.push({ name: `${kebab(s.name)}.md`, kind: 'file', depth: 2 }));
+}
+if (promptSteps.length) {
+  tree.push({ name: 'prompts/', kind: 'dir', depth: 1 });
+  promptSteps.forEach((s: any) => tree.push({ name: `${kebab(s.title)}.md`, kind: 'file', depth: 2 }));
+}
+---
+
+<Base title={`${d.title} — Cookbook — Eluu`} description={d.description}>
+  {/* hero band */}
+  <section class="bg-card-surface">
+    <div class="page-shell gutter-188 flex flex-col gap-7 pt-12 pb-12 lg:pt-16">
+      <a href="/cookbook" class="t-label-md text-text-sub-600 hover:text-text-strong-950 inline-flex w-fit items-center gap-1.5 transition-colors">
+        <i class="ri-arrow-left-line" aria-hidden="true"></i> Cookbook
+      </a>
+      <div class="flex flex-col gap-4 lg:max-w-[720px]">
+        <span class="bg-bg-white-0 text-icon-strong-950 flex size-12 items-center justify-center rounded-[13px]">
+          <i class={`${d.icon} text-[24px]`} aria-hidden="true"></i>
+        </span>
+        <h1 class="t-landing-h2 text-text-strong-950 text-balance">{d.title}</h1>
+        <p class="t-paragraph-md text-text-sub-600 text-pretty">{d.description}</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="https://app.eluu.ai/signup" class="t-label-md bg-text-strong-950 text-bg-white-0 hover:opacity-90 inline-flex min-h-11 items-center gap-2 rounded-full px-5 transition-opacity">
+          Use this recipe <i class="ri-arrow-right-up-long-line" aria-hidden="true"></i>
+        </a>
+        <span class="t-label-xs text-text-soft-400 bg-bg-white-0 rounded-full px-3 py-1.5 font-mono uppercase tracking-[0.06em]">{d.category}</span>
+        <span class="t-label-xs text-text-soft-400 bg-bg-white-0 rounded-full px-3 py-1.5 font-mono capitalize">{d.difficulty}</span>
+      </div>
+    </div>
+  </section>
+
+  {/* body */}
+  <section class="bg-bg-white-0">
+    <div class="page-shell gutter-188 grid gap-12 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)] lg:gap-16">
+      {/* LEFT — rendered recipe */}
+      <div class="flex flex-col gap-12">
+        {
+          d.whatItDoes.length > 0 && (
+            <div class="flex flex-col gap-4">
+              <h2 class="t-h5 text-text-strong-950">What this does</h2>
+              <ul class="flex flex-col gap-3">
+                {d.whatItDoes.map((li: string) => (
+                  <li class="flex items-start gap-3">
+                    <i class="ri-check-line text-[#2f7d54] mt-0.5 shrink-0 text-[20px]" aria-hidden="true" />
+                    <span class="t-label-md text-text-sub-600">{li}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+
+        {
+          d.workflow.length > 0 && (
+            <div class="flex flex-col gap-4">
+              <h2 class="t-h5 text-text-strong-950">Workflow</h2>
+              <ol class="relative flex flex-col gap-3 before:absolute before:left-[15px] before:top-4 before:bottom-4 before:w-px before:bg-stroke-soft-200">
+                {d.workflow.map((step: any) => {
+                  const m = kindMeta[step.kind] ?? kindMeta.prompt;
+                  return (
+                    <li class="relative flex gap-4">
+                      <span class="bg-bg-white-0 border-stroke-soft-200 relative z-10 mt-4 flex size-8 shrink-0 items-center justify-center rounded-full border">
+                        <i class={`${m.icon} text-text-sub-600 text-[16px]`} aria-hidden="true" />
+                      </span>
+                      <div class="border-stroke-soft-200 flex flex-1 flex-col gap-1.5 rounded-[14px] border p-4">
+                        <span class={`${m.cls} t-label-xs w-fit rounded-md px-2 py-0.5 font-medium`}>{m.label}</span>
+                        <h3 class="t-label-lg text-text-strong-950">{step.title}</h3>
+                        {step.body && <p class="t-label-md text-text-sub-600">{step.body}</p>}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
+          )
+        }
+
+        {
+          d.skills.length > 0 && (
+            <div class="flex flex-col gap-4">
+              <h2 class="t-h5 text-text-strong-950">Recommended skills</h2>
+              <p class="t-label-md text-text-soft-400 -mt-1">
+                Reusable skills the recipe pulls in — add them once, every agent can use them.
+              </p>
+              <div class="grid gap-3 sm:grid-cols-2">
+                {d.skills.map((s: any) => (
+                  <div class="border-stroke-soft-200 flex items-start gap-3 rounded-[14px] border p-4">
+                    <span class="bg-[#f4eff2] text-[#755a68] mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-[9px]">
+                      <i class="ri-sparkling-2-line text-[16px]" aria-hidden="true" />
+                    </span>
+                    <div class="flex flex-col gap-0.5">
+                      <span class="t-label-lg text-text-strong-950">{s.name}</span>
+                      {s.description && <span class="t-label-md text-text-sub-600">{s.description}</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        }
+
+        {
+          d.howToUse.length > 0 && (
+            <div class="flex flex-col gap-4">
+              <h2 class="t-h5 text-text-strong-950">How to use this recipe</h2>
+              <ol class="flex flex-col gap-3">
+                {d.howToUse.map((li: string, i: number) => (
+                  <li class="flex items-start gap-3.5">
+                    <span class="t-label-xs text-text-sub-600 bg-bg-soft-200 mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full font-mono">
+                      {i + 1}
+                    </span>
+                    <span class="t-label-md text-text-sub-600">{li}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )
+        }
+      </div>
+
+      {/* RIGHT — the artifact: file tree + short fetch-prompt */}
+      <div class="lg:sticky lg:top-24 lg:self-start flex flex-col gap-6">
+        {/* file tree */}
+        <div class="border-stroke-soft-200 overflow-hidden rounded-[18px] border">
+          <div class="border-stroke-soft-200 bg-bg-weak-50 flex items-center gap-2 border-b px-5 py-3.5">
+            <i class="ri-hard-drive-2-line text-text-sub-600" aria-hidden="true"></i>
+            <span class="t-label-md text-text-strong-950 font-medium">Recipe files</span>
+          </div>
+          <div class="flex flex-col px-3 py-3 font-mono text-[13.5px]">
+            {
+              tree.map((n) => (
+                <div class="flex items-center gap-2.5 rounded-md px-2 py-1.5" style={`padding-left:${n.depth * 22 + 8}px`}>
+                  <i
+                    class={`${n.kind === 'dir' ? 'ri-folder-3-line text-text-soft-400' : 'ri-file-text-line text-[#755a68]'} text-[16px]`}
+                    aria-hidden="true"
+                  />
+                  <span class={n.kind === 'dir' ? 'text-text-strong-950' : 'text-text-sub-600'}>{n.name}</span>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        {/* short fetch-prompt */}
+        <div class="border-stroke-soft-200 overflow-hidden rounded-[18px] border">
+          <div class="border-stroke-soft-200 bg-bg-weak-50 flex items-center justify-between border-b px-5 py-3.5">
+            <span class="t-label-md text-text-strong-950 font-medium">Copy the prompt</span>
+            <button
+              type="button"
+              data-copy
+              class="t-label-sm text-bg-white-0 bg-text-strong-950 hover:opacity-90 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 transition-opacity"
+            >
+              <i class="ri-file-copy-line" aria-hidden="true"></i><span data-copy-label>Copy</span>
+            </button>
+          </div>
+          <pre data-prompt class="text-text-sub-600 whitespace-pre-wrap px-5 py-4 font-mono text-[13.5px] leading-[1.7]">{shortPrompt}</pre>
+          <div class="border-stroke-soft-200 flex items-center gap-2 border-t px-5 py-3">
+            <i class="ri-links-line text-text-soft-400 text-[15px]" aria-hidden="true"></i>
+            <span class="t-label-sm text-text-soft-400 font-mono truncate">eluu.ai/cookbook/{slug}.md</span>
+          </div>
+        </div>
+        <p class="t-label-sm text-text-soft-400 px-1 -mt-1">
+          Paste it into any agent. It fetches the recipe file and pulls in the skills and
+          prompts on its own — the prompt stays short, the detail lives at the URL.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-copy]');
+  const pre = document.querySelector<HTMLElement>('[data-prompt]');
+  const label = document.querySelector<HTMLElement>('[data-copy-label]');
+  btn?.addEventListener('click', async () => {
+    if (!pre) return;
+    try {
+      await navigator.clipboard.writeText(pre.innerText);
+      if (label) label.textContent = 'Copied';
+      setTimeout(() => label && (label.textContent = 'Copy'), 1600);
+    } catch {
+      /* clipboard blocked */
+    }
+  });
+</script>

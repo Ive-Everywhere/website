@@ -1,0 +1,55 @@
+---
+title: Draft the board and investor pack
+description: Gather the month's numbers from every source and write the board deck on a schedule.
+publishedAt: 2026-08-18
+icon: ri-file-chart-line
+category: Finance
+collection: Month-end pack
+featured: true
+order: 2
+difficulty: intermediate
+skills:
+  - name: KPI narrative
+    description: Write the context around each number
+  - name: Deck assembly
+    description: Build the pack in your format
+  - name: Variance flags
+    description: Catch what moved vs last month
+goal: draft this month's board pack from the live numbers
+integrations: [googlesheets, stripe, hubspot]
+whatItDoes:
+  - Pulls the KPIs — revenue, burn, runway, pipeline — from each system
+  - Writes the narrative around each number, not just the number
+  - Assembles the deck and a one-page TL;DR for the board
+  - Refreshes on the cadence you set, before the meeting
+howToUse:
+  - Connect your metrics sources and the doc destination
+  - Point the agent at last month's pack as the format to match
+  - Set it to run a day before the board meeting
+  - Skim the draft, adjust the commentary, send
+workflow:
+  - kind: trigger
+    title: Before the meeting
+    body: A day before the board meeting, monthly.
+  - kind: prompt
+    title: Gather the numbers
+    body: Pull revenue, burn, runway, and pipeline from each source.
+  - kind: prompt
+    title: Write the narrative
+    body: One paragraph of context per KPI, in last month's format.
+  - kind: result
+    title: Deck + TL;DR
+    body: Assemble the pack and a one-page summary up top.
+prompt: |
+  Draft this month's board pack.
+
+  1. Pull the headline metrics — net revenue, burn, runway, open pipeline,
+     win rate — from Sheets, Stripe, and HubSpot.
+  2. For each metric, write one short paragraph of context: what moved, why,
+     and what it means for next month.
+  3. Match the structure of last month's pack (attached), including the
+     one-page TL;DR at the top.
+  4. Flag anything that looks off against last month before you finalize.
+
+  Output a shareable doc and save it to reports/board/{{month}}.md.
+---

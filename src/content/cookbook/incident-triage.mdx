@@ -1,0 +1,54 @@
+---
+title: From incident to fix, without the scramble
+description: Triage the page, find the root cause, open the remedial PR, and write the post-mortem.
+publishedAt: 2026-08-18
+icon: ri-git-pull-request-line
+category: Engineering
+collection: Incident response
+featured: true
+order: 4
+difficulty: advanced
+skills:
+  - name: Root-cause tracing
+    description: Correlate errors with deploys
+  - name: PR + test authoring
+    description: Guard the path, add a test
+  - name: Post-mortem writing
+    description: Draft the RCA once it ships
+goal: triage the incident, open the fix, and write the post-mortem
+integrations: [github, linear, zendesk]
+whatItDoes:
+  - Reads the alerts and error signatures the moment a service degrades
+  - Correlates with recent deploys to find the regression
+  - Opens a PR with the fix and a test, and files the bug
+  - Drafts the customer status note and the post-mortem
+howToUse:
+  - Connect your logs, repo, and issue tracker
+  - Fire it from the incident channel or an alert webhook
+  - Approve the rollback or the PR from your phone
+  - Ship, then let it write the post-mortem
+workflow:
+  - kind: trigger
+    title: On the page
+    body: From an alert webhook or the incident channel.
+  - kind: prompt
+    title: Find the cause
+    body: Correlate error signatures with recent deploys.
+  - kind: shell
+    title: Open the fix
+    body: PR with the guard and a regression test.
+  - kind: result
+    title: Notify + post-mortem
+    body: Customer status note and the RCA, drafted.
+prompt: |
+  A service is returning elevated errors. Investigate and fix.
+
+  1. Read the last hour of error logs and identify the failing endpoint and
+     the error signature.
+  2. Correlate with the last few deploys to find the regression and the commit.
+  3. Open a PR that guards the failure path and adds a regression test.
+  4. File a P1 bug with the trace, draft a status note for the affected
+     customers, and write a post-mortem once the fix ships.
+
+  Ask for approval before merging or rolling anything back.
+---
