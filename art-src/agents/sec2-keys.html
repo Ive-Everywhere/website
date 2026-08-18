@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* A plain card (per spec's second option), stacked label/value fields —
+     Ona's env-guardrails identity-panel pattern: small soft label over a
+     bolder value, one hairline between each pair. RULE 7: the one maroon
+     accent is the masked API key value, nothing else. */
+  .fields { padding: 6px 30px 30px; }
+  .field__l { font-size: 20px; color: var(--soft); }
+  .field__v { font-size: 26px; font-weight: 450; margin-top: 5px; letter-spacing: -.008em; }
+  .field__v--mono { font-family: var(--mono); font-weight: 450; font-size: 24px; }
+  .field__v--maroon { color: var(--maroon-deep); }
+</style>
+</head><body>
+<div class="stage cv-blue">
+  <div class="card">
+    <div class="hd hd--rule">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M14 9l2 2"/></svg></span>
+      <span class="hd__t">Keys &amp; environment</span>
+      <span class="hd__r"><span class="pill">in your VPC</span></span>
+    </div>
+    <div class="fields">
+      <div class="field"><div class="field__l">Model provider</div><div class="field__v">Anthropic · your key</div></div>
+      <div class="sep"></div>
+      <div class="field"><div class="field__l">API key</div><div class="field__v field__v--mono field__v--maroon">sk-••••••••4c1a</div></div>
+      <div class="sep"></div>
+      <div class="field"><div class="field__l">Inference</div><div class="field__v">your VPC · us-east-1</div></div>
+      <div class="sep"></div>
+      <div class="field"><div class="field__l">Data egress</div><div class="field__v">none — stays in account</div></div>
+    </div>
+  </div>
+</div></body></html>
