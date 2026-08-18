@@ -1,11 +1,19 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_ona.css"></head><body>
-<div class="stage cv-lav"><div class="card">
-<div class="hd"><span class="hd__chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span><span class="hd__dot"></span><span class="hd__t">Follow-ups in progress...</span><span class="hd__n">3/6</span></div>
-<div class="rows">
-<div class="r"><span class="r__n">1.</span><span class="r__b"><div class="r__t">Meridian Health<span class="arr">→</span><span class="to">follow-up sent</span></div><div class="r__m">Pricing recap + SOC 2 · <b>1 min. ago</b></div></span><span class="st st--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
-<div class="r"><span class="r__n">2.</span><span class="r__b"><div class="r__t">Brightline<span class="arr">→</span><span class="to">follow-up sent</span></div><div class="r__m">Pricing nudge · <b>30 sec. ago</b></div></span><span class="st st--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
-<div class="r"><span class="r__n">3.</span><span class="r__b"><div class="r__t">Coastal Freight<span class="arr">→</span><span class="to">drafting...</span></div><div class="r__m">from the call notes · started 10 seconds ago</div></span><span class="st st--run"></span></div>
-<div class="r r--b1"><span class="r__n">4.</span><span class="r__b"><div class="r__t">Northwind<span class="arr">→</span><span class="to">queued</span></div><div class="r__m">stalled 21 days · next up</div></span><span class="st st--q"></span></div>
-<div class="r r--b2"><span class="r__n">5.</span><span class="r__b"><div class="r__t">Vertex<span class="arr">→</span><span class="to">queued</span></div><div class="r__m">stalled 24 days</div></span><span class="st st--q"></span></div>
-<div class="r r--b3"><span class="r__n">6.</span><span class="r__b"><div class="r__t">Atlas Freight<span class="arr">→</span><span class="to">queued</span></div><div class="r__m">stalled 30 days</div></span><span class="st st--q"></span></div>
-</div></div></div></body></html>
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css"><style>
+  .stage{background:
+    radial-gradient(85% 70% at 15% 12%, #efeaf6 0%, rgba(239,234,246,0) 62%),
+    radial-gradient(90% 80% at 92% 88%, #f5ecf1 0%, rgba(245,236,241,0) 60%),
+    linear-gradient(165deg,#f2eff5 0%,#f4f1f2 100%);}
+  .stk{position:absolute;left:50%;transform:translateX(-50%);width:880px;display:flex;align-items:center;gap:26px;padding:28px 34px}
+  .t{font-size:29px;font-weight:480}
+  .s{font-size:22px;color:#8b8791;margin-top:4px}
+  .tm{margin-left:auto;font-size:21px;color:#9a95a0;font-variant-numeric:tabular-nums;flex:none}
+  .c1{top:64px;opacity:.42;filter:blur(1px)}
+  .c2{top:258px;opacity:.72}
+  .c3{top:452px}
+  .c4{top:646px}
+</style></head><body><div class="stage">
+  <div class="card stk c1"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#755a68" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span><span><div class="t">Call with Meridian ends</div></span><span class="tm">11:32 AM</span></div>
+  <div class="card stk c2"><span class="ic"><img src="live/assets/hubspot.svg"></span><span><div class="t">Notes logged, deal stage updated</div><div class="s">No CRM homework tonight</div></span></div>
+  <div class="card stk c3"><span class="ic"><img src="live/assets/gmail.svg"></span><span><div class="t">Follow-up drafted from the call</div><div class="s">Pricing recap + the SOC 2 they asked for</div></span></div>
+  <div class="card stk c4"><span class="tick" style="width:66px;height:66px;border-radius:17px"><svg style="width:30px;height:30px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span><span><div class="t">Sent · next meeting booked</div><div class="s">Thursday 2:00 PM, brief ready before it</div></span></div>
+</div></body></html>
