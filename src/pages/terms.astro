@@ -1,6 +1,94 @@
 ---
-// Footer/legal page — served from the canonical eluu.ai page for now so the
-// content stays authoritative (important for legal). Replace with a native v3
-// page when one is built. 302 = temporary, so it flips cleanly when v3 owns it.
-return Astro.redirect('https://eluu.ai/terms', 302);
+import LegalLayout from '../layouts/LegalLayout.astro';
 ---
+
+<LegalLayout title="Terms and Conditions" pageTitle="Terms and Conditions" path="/terms" description="Terms and conditions governing your use of the Eluu AI platform and website.">
+
+<p>Welcome to Eluu AI. The following terms and conditions (these "Terms of Use") govern your access to and use of the Eluu AI website, including any content, functionality, and services offered on or through https://www.eluu.ai (the "Website"), whether as a guest or a registered user.</p>
+
+<p>Please read the Terms of Use carefully before you start to use the Website. By using the Website or by clicking to accept or agree to the Terms of Use when this option is made available to you, you accept and agree to be bound and abide by these Terms of Use and our Privacy Policy, incorporated herein by reference. If you do not want to agree to these Terms of Use or the Privacy Policy, you must not access or use the Website.</p>
+
+<h2>1. User Representation</h2>
+<p>By using the Website, you represent and warrant that: (a) all registration information you submit will be true, accurate, current, and complete; (b) you will maintain the accuracy of such information and promptly update such registration information as necessary; (c) you have the legal capacity and you agree to comply with these Terms of Use; (d) you are not under the age of 13; (e) you will not access the Website through automated or non-human means, whether through a bot, script, or otherwise, except as expressly permitted through the Eluu AI platform's intended functionality; (f) you will not use the Website for any illegal or unauthorized purpose; and (g) your use of the Website will not violate any applicable law or regulation.</p>
+
+<h2>2. User Account</h2>
+<p>You may be required to register with the Website to access some services or areas of the Website. If you register, you will provide truthful information as requested in the registration form. You also will choose a password and a user name. You are responsible for maintaining the confidentiality of your password and account, and are fully responsible for all activities that occur using your password or account. Please notify us immediately of any unauthorized use of your password or account or any other breach of security.</p>
+
+<h2>3. Intellectual Property Rights</h2>
+<p>The Website and its original content, features, and functionality are and will remain the exclusive property of Eluu AI and its licensors. The Website is protected by copyright, trade secrets, and other laws of both Australia and foreign countries. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Eluu AI.</p>
+
+<h2>4. User Contributions</h2>
+<p>The Website may contain message boards, chat rooms, personal web pages or profiles, forums, bulletin boards, and other interactive features (collectively, "Interactive Services") that allow users to post, submit, publish, display, or transmit to other users or other persons (hereinafter, "post") content or materials (collectively, "User Contributions") on or through the Website.</p>
+<p>All User Contributions must comply with the Content Standards set out in these Terms of Use. Any User Contribution you post to the site will be considered non-confidential and non-proprietary. By providing any User Contribution on the Website, you grant us and our affiliates and service providers, and each of their and our respective licensees, successors, and assigns the right to use, reproduce, modify, perform, display, distribute, and otherwise disclose to third parties any such material for any purpose.</p>
+
+<h2>5. Orders and Payment Processing</h2>
+<p>When you purchase a subscription or service through the Website, your payment is processed by our designated third-party payment processor. By completing a purchase, you agree to the payment processor's terms of service and privacy policy in addition to these Terms.</p>
+
+<h3>Subscriptions and Auto-Renewal</h3>
+<p>Some of our Services are available on a subscription basis. When you subscribe to a plan, your subscription will automatically renew at the end of each billing period (monthly or annually, depending on your selected plan) unless you cancel before the renewal date. You will be charged the applicable subscription fee at the beginning of each renewal period. You may cancel your subscription at any time through your account settings or by contacting us at <a href="mailto:hello@eluu.ai">hello@eluu.ai</a>, and cancellation will take effect at the end of the current billing period.</p>
+
+<h3>Pricing</h3>
+<p>All prices are displayed on the Website and are subject to change. All applicable taxes, including GST, VAT, and sales tax, will be handled as required by law in your jurisdiction. The final price including any applicable taxes will be displayed before you confirm your purchase.</p>
+
+<h2>6. Refund Policy</h2>
+<p>Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns.</p>
+<p>You may request a refund within 14 days of your original purchase date. For subscription services, refund requests must be made within 14 days of the date your subscription was last renewed. Refund requests should be submitted directly to Paddle at paddle.net.</p>
+<p>Payments for Eluu AI products and services are processed by Paddle.com Market Ltd. By purchasing through our website, you also agree to Paddle's Buyer Terms available at paddle.com/legal/checkout-buyer-terms.</p>
+
+<h2>7. Prohibited Activities</h2>
+<p>You may not access or use the Website for any purpose other than that for which we make the Website available. The Website may not be used in connection with any commercial endeavors except those that are specifically endorsed or approved by us. As a user of the Website, you agree not to:</p>
+<ul>
+  <li>Systematically retrieve data or other content from the Website to create or compile, directly or indirectly, a collection, compilation, database, or directory without written permission from us.</li>
+  <li>Make any unauthorized use of the Website, including collecting usernames and/or email addresses of users by electronic or other means for the purpose of sending unsolicited email, or creating user accounts by automated means or under false pretenses.</li>
+  <li>Use the Website to advertise or offer to sell goods and services.</li>
+  <li>Circumvent, disable, or otherwise interfere with security-related features of the Website, including features that prevent or restrict the use or copying of any Content or enforce limitations on the use of the Website and/or the Content contained therein.</li>
+  <li>Engage in unauthorized framing of or linking to the Website.</li>
+  <li>Trick, defraud, or mislead us and other users, especially in any attempt to learn sensitive account information such as user passwords.</li>
+  <li>Make improper use of our support services or submit false reports of abuse or misconduct.</li>
+  <li>Engage in any automated use of the system, such as using scripts to send comments or messages, or using any data mining, robots, or similar data gathering and extraction tools, except as expressly permitted through the Eluu AI platform's intended functionality.</li>
+  <li>Interfere with, disrupt, or create an undue burden on the Website or the networks or services connected to the Website.</li>
+  <li>Attempt to impersonate another user or person or use the username of another user.</li>
+  <li>Sell or otherwise transfer your profile.</li>
+  <li>Use any information obtained from the Website in order to harass, abuse, or harm another person.</li>
+  <li>Use the Website as part of any effort to compete with us or otherwise use the Website and/or the Content for any revenue-generating endeavor or commercial enterprise.</li>
+</ul>
+
+<h2>8. Modification and Interruption</h2>
+<p>We reserve the right to change, modify, or remove the contents of the Website at any time or for any reason at our sole discretion without notice. We also reserve the right to modify or discontinue all or part of the Services without notice at any time. We will not be liable to you or any third party for any modification, price change, suspension, or discontinuance of the Website.</p>
+<p>We cannot guarantee the Website will be available at all times. We may experience hardware, software, or other problems or need to perform maintenance related to the Website, resulting in interruptions, delays, or errors. We reserve the right to change, revise, update, suspend, discontinue, or otherwise modify the Website at any time or for any reason without notice to you. You agree that we have no liability whatsoever for any loss, damage, or inconvenience caused by your inability to access or use the Website during any downtime or discontinuance of the Website. Nothing in these Terms of Use will be construed to obligate us to maintain and support the Website or to supply any corrections, updates, or releases in connection therewith.</p>
+
+<h2>9. Governing Law</h2>
+<p>These Terms shall be governed by and defined following the laws of Victoria, Australia. Eluu AI and yourself irrevocably consent that the courts of Victoria, Australia shall have exclusive jurisdiction to resolve any dispute which may arise in connection with these terms.</p>
+
+<h2>10. Corrections</h2>
+<p>There may be information on the Website that contains typographical errors, inaccuracies, or omissions, including descriptions, pricing, availability, and various other information. We reserve the right to correct any errors, inaccuracies, or omissions and to change or update the information on the Website at any time, without prior notice.</p>
+
+<h2>11. Disclaimer</h2>
+<p>The Website is provided on an as-is and as-available basis. You agree that your use of the Website and our services will be at your sole risk. To the fullest extent permitted by law, we disclaim all warranties, express or implied, in connection with the Website and your use thereof, including, without limitation, the implied warranties of merchantability, fitness for a particular purpose, and non-infringement. We make no warranties or representations about the accuracy or completeness of the Website's content or the content of any websites linked to the Website and we will assume no liability or responsibility for any (1) errors, mistakes, or inaccuracies of content and materials, (2) personal injury or property damage, of any nature whatsoever, resulting from your access to and use of the Website, (3) any unauthorized access to or use of our secure servers and/or any and all personal information and/or financial information stored therein, (4) any interruption or cessation of transmission to or from the Website, (5) any bugs, viruses, trojan horses, or the like which may be transmitted to or through the Website by any third party, and/or (6) any errors or omissions in any content and materials or for any loss or damage of any kind incurred as a result of the use of any content posted, transmitted, or otherwise made available via the Website. We do not warrant, endorse, guarantee, or assume responsibility for any product or service advertised or offered by a third party through the Website, any hyperlinked website, or any website or mobile application featured in any banner or other advertising, and we will not be a party to or in any way be responsible for monitoring any transaction between you and any third-party providers of products or services. As with the purchase of a product or service through any medium or in any environment, you should use your best judgment and exercise caution where appropriate.</p>
+
+<h2>12. Limitations of Liability</h2>
+<p>In no event will we or our directors, employees, or agents be liable to you or any third party for any direct, indirect, consequential, exemplary, incidental, special, or punitive damages, including lost profit, lost revenue, loss of data, or other damages arising from your use of the Website, even if we have been advised of the possibility of such damages.</p>
+
+<h2>13. Indemnification</h2>
+<p>You agree to defend, indemnify, and hold us harmless, including our subsidiaries, affiliates, and all of our respective officers, agents, partners, and employees, from and against any loss, damage, liability, claim, or demand, including reasonable attorneys' fees and expenses, made by any third party due to or arising out of: (1) use of the Website; (2) breach of these Terms of Use; (3) any breach of your representations and warranties set forth in these Terms of Use; (4) your violation of the rights of a third party, including but not limited to intellectual property rights; or (5) any overt harmful act toward any other user of the Website with whom you connected via the Website. Notwithstanding the foregoing, we reserve the right, at your expense, to assume the exclusive defense and control of any matter for which you are required to indemnify us, and you agree to cooperate, at your expense, with our defense of such claims. We will use reasonable efforts to notify you of any such claim, action, or proceeding which is subject to this indemnification upon becoming aware of it.</p>
+
+<h2>14. User Data</h2>
+<p>We will maintain certain data that you transmit to the Website for the purpose of managing the performance of the Website, as well as data relating to your use of the Website. Although we perform regular routine backups of data, you are solely responsible for all data that you transmit or that relates to any activity you have undertaken using the Website. You agree that we shall have no liability to you for any loss or corruption of any such data, and you hereby waive any right of action against us arising from any such loss or corruption of such data.</p>
+
+<h2>15. Electronic Communications, Transactions, and Signatures</h2>
+<p>Visiting the Website, sending us emails, and completing online forms constitute electronic communications. You consent to receive electronic communications, and you agree that all agreements, notices, disclosures, and other communications we provide to you electronically, via email and on the Website, satisfy any legal requirement that such communication be in writing. YOU HEREBY AGREE TO THE USE OF ELECTRONIC SIGNATURES, CONTRACTS, ORDERS, AND OTHER RECORDS, AND TO ELECTRONIC DELIVERY OF NOTICES, POLICIES, AND RECORDS OF TRANSACTIONS INITIATED OR COMPLETED BY US OR VIA THE WEBSITE. You hereby waive any rights or requirements under any statutes, regulations, rules, ordinances, or other laws in any jurisdiction which require an original signature or delivery or retention of non-electronic records, or to payments or the granting of credits by any means other than electronic means.</p>
+
+<h2>16. Complaint Handling</h2>
+<p>If you have a complaint about our Services, please contact us at <a href="mailto:hello@eluu.ai">hello@eluu.ai</a>. We aim to acknowledge all complaints within 2 business days and provide a resolution within 10 business days. If we require additional time to investigate, we will notify you of the expected timeframe. If you are not satisfied with our response, you may escalate the matter to the Australian Competition and Consumer Commission (ACCC) at <a href="https://www.accc.gov.au/">https://www.accc.gov.au/</a> or to your local consumer protection authority.</p>
+
+<h2>17. Miscellaneous</h2>
+<p>These Terms of Use and any policies or operating rules posted by us on the Website or in respect to the Service constitute the entire agreement and understanding between you and us. Our failure to exercise or enforce any right or provision of these Terms of Use shall not operate as a waiver of such right or provision. These Terms of Use operate to the fullest extent permissible by law. We may assign any or all of our rights and obligations to others at any time. We shall not be responsible or liable for any loss, damage, delay, or failure to act caused by any cause beyond our reasonable control. If any provision or part of a provision of these Terms of Use is determined to be unlawful, void, or unenforceable, that provision or part of the provision is deemed severable from these Terms of Use and does not affect the validity and enforceability of any remaining provisions. There is no joint venture, partnership, employment or agency relationship created between you and us as a result of these Terms of Use or use of the Website. You agree that these Terms of Use will not be construed against us by virtue of having drafted them. You hereby waive any and all defenses you may have based on the electronic form of these Terms of Use and the lack of signing by the parties hereto to execute these Terms of Use.</p>
+
+<h2>18. Paddle Notice</h2>
+<p>Payments for Eluu AI products and services are processed by Paddle.com Market Ltd. Paddle.com is the Merchant of Record for all transactions. By purchasing through our website, you also agree to Paddle's Buyer Terms available at paddle.com/legal/checkout-buyer-terms.</p>
+
+<h2>19. Contact Us</h2>
+<p>In order to resolve a complaint regarding the Website or to receive further information regarding use of the Website, please contact us at: <a href="mailto:hello@eluu.ai">hello@eluu.ai</a></p>
+<p>Eluu AI is a trading name of Kamal Kumar Khatri (ABN 72 492 653 758), operating as an Individual/Sole Trader under the laws of Victoria, Australia.</p>
+
+</LegalLayout>
