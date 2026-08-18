@@ -14,9 +14,9 @@ export const primaryNav: NavItem[] = [
   {
     label: 'Product',
     children: [
-      { label: 'Agents', href: '/agents', description: 'A specialist for every role.', icon: 'ri-robot-3-line' },
-      { label: 'Workforce', href: '/workforce', description: 'Scale the work, not the headcount.', icon: 'ri-stack-line' },
-      { label: 'Security', href: '/security', description: 'Access, limits, and audit.', icon: 'ri-lock-2-line' },
+      { label: 'Agents', href: '/platform/agents', description: 'A specialist for every role.', icon: 'ri-robot-3-line' },
+      { label: 'Workforce', href: '/platform/workforce', description: 'Scale the work, not the headcount.', icon: 'ri-stack-line' },
+      { label: 'Security', href: '/platform/security', description: 'Access, limits, and audit.', icon: 'ri-lock-2-line' },
     ],
   },
   // { label: 'Apps', href: '/apps' },            // hidden pre-prod (Krishna)
@@ -40,9 +40,9 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
   {
     heading: 'Product',
     links: [
-      { label: 'Agents', href: '/agents' },
-      { label: 'Workforce', href: '/workforce' },
-      { label: 'Security', href: '/security' },
+      { label: 'Agents', href: '/platform/agents' },
+      { label: 'Workforce', href: '/platform/workforce' },
+      { label: 'Security', href: '/platform/security' },
       // { label: 'Apps', href: '/apps' },            // hidden pre-prod (Krishna)
       { label: 'Pricing', href: '/pricing' },
     ],
@@ -61,7 +61,6 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
   {
     heading: 'Company',
     links: [
-      { label: 'Blog', href: '/blog' },
       { label: 'About', href: '/about' },
       { label: 'Careers', href: '/careers' },
       { label: 'Contact', href: '/contact' },
@@ -72,6 +71,7 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
     links: [
       { label: 'Terms', href: '/terms' },
       { label: 'Privacy', href: '/privacy' },
+      { label: 'Security Statement', href: '/security-statement' },
     ],
   },
 ];

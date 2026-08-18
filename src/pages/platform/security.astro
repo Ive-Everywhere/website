@@ -1,0 +1,11 @@
+---
+// Product pillar, /platform/security. Thin glue over the shared PillarPage template
+// so the pillars cannot drift apart. Content lives in src/content/platform/security.mdx.
+import { getEntry } from 'astro:content';
+import PillarPage from '../../components/platform/PillarPage.astro';
+
+const entry = await getEntry('platform', 'security');
+if (!entry) throw new Error('Missing content entry: src/content/platform/security.mdx');
+---
+
+<PillarPage entry={entry} />
