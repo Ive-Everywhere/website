@@ -72,13 +72,20 @@ const featured = recipes.filter((r) => r.data.featured);
                 const meta = collectionMeta[name] ?? { blurb: '', tint: 'bg-bg-soft-200' };
                 const count = recipes.filter((r) => r.data.collection === name).length;
                 return (
-                  <div class={`${meta.tint} flex flex-col gap-2 rounded-[20px] p-7`}>
+                  <button
+                    type="button"
+                    data-collection={name}
+                    class={`${meta.tint} border border-black/[0.06] flex flex-col gap-2 rounded-[20px] p-7 text-left transition-transform hover:-translate-y-0.5`}
+                  >
                     <p class="t-label-xs text-text-soft-400 font-mono uppercase tracking-[0.08em]">
                       Collection · {count} {count === 1 ? 'recipe' : 'recipes'}
                     </p>
                     <h3 class="t-h6 text-text-strong-950">{name}</h3>
                     <p class="t-label-md text-text-sub-600">{meta.blurb}</p>
-                  </div>
+                    <span class="t-label-sm text-text-strong-950 mt-2 inline-flex items-center gap-1">
+                      Browse collection <span aria-hidden="true">→</span>
+                    </span>
+                  </button>
                 );
               })}
             </div>
@@ -95,7 +102,7 @@ const featured = recipes.filter((r) => r.data.featured);
               {featured.map((r) => (
                 <a
                   href={`/cookbook/${r.id}`}
-                  class={`${catColor(r.data.category).surface} flex flex-col gap-4 rounded-[18px] p-5 transition-transform hover:-translate-y-0.5`}
+                  class={`${catColor(r.data.category).surface} border border-black/[0.06] flex flex-col gap-4 rounded-[18px] p-5 transition-transform hover:-translate-y-0.5`}
                 >
                   <span class={`${catColor(r.data.category).tile} ${catColor(r.data.category).ink} flex size-11 items-center justify-center rounded-[12px]`}>
                     <i class={`${r.data.icon} text-[22px]`} aria-hidden="true" />
@@ -124,7 +131,8 @@ const featured = recipes.filter((r) => r.data.featured);
                 href={`/cookbook/${r.id}`}
                 data-card
                 data-card-cat={r.data.category}
-                class={`${catColor(r.data.category).surface} flex flex-col gap-4 rounded-[18px] p-6 transition-transform hover:-translate-y-0.5`}
+                data-card-collection={r.data.collection ?? ''}
+                class={`${catColor(r.data.category).surface} border border-black/[0.06] flex flex-col gap-4 rounded-[18px] p-6 transition-transform hover:-translate-y-0.5`}
               >
                 <span class={`${catColor(r.data.category).tile} ${catColor(r.data.category).ink} flex size-12 items-center justify-center rounded-[13px]`}>
                   <i class={`${r.data.icon} text-[24px]`} aria-hidden="true" />
@@ -154,16 +162,29 @@ const featured = recipes.filter((r) => r.data.featured);
   // Category filter, no framework needed.
   const bar = document.querySelector<HTMLElement>('[data-cat-bar]');
   const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-card]'));
+  const grid = document.querySelector<HTMLElement>('[data-grid]');
+  const setCat = (btn: HTMLButtonElement | null) => {
+    bar?.querySelectorAll<HTMLButtonElement>('[data-cat]').forEach((b) =>
+      b.setAttribute('aria-pressed', String(b === btn)),
+    );
+  };
+  const filterBy = (test: (c: HTMLElement) => boolean) => {
+    for (const card of cards) card.style.display = test(card) ? '' : 'none';
+  };
   bar?.addEventListener('click', (e) => {
     const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-cat]');
     if (!btn) return;
     const cat = btn.dataset.cat;
-    bar.querySelectorAll<HTMLButtonElement>('[data-cat]').forEach((b) =>
-      b.setAttribute('aria-pressed', String(b === btn)),
-    );
-    for (const card of cards) {
-      const show = cat === 'all' || card.dataset.cardCat === cat;
-      card.style.display = show ? '' : 'none';
-    }
+    setCat(btn);
+    filterBy((c) => cat === 'all' || c.dataset.cardCat === cat);
+  });
+  // Collection cards filter the grid to that collection and scroll to it.
+  document.querySelectorAll<HTMLButtonElement>('[data-collection]').forEach((cb) => {
+    cb.addEventListener('click', () => {
+      const name = cb.dataset.collection;
+      setCat(bar?.querySelector<HTMLButtonElement>('[data-cat="all"]') ?? null);
+      filterBy((c) => c.dataset.cardCollection === name);
+      grid?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   });
 </script>

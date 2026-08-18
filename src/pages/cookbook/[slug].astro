@@ -39,18 +39,23 @@ const shortPrompt =
   `Fetch https://eluu.ai/cookbook/${slug}.md for the workflow, skills, and prompts, ` +
   `then ${d.goal || 'run it end to end'} against my connected tools.`;
 
-// The file tree shown on the right, derived from the recipe.
-type Node = { name: string; kind: 'dir' | 'file'; depth: number };
+// The file tree shown on the right, derived from the recipe. Every FILE row is
+// a real, fetchable URL — the same ones the recipe.md links to.
+type Node = { name: string; kind: 'dir' | 'file'; depth: number; href?: string };
 const tree: Node[] = [{ name: `${slug}/`, kind: 'dir', depth: 0 }];
-tree.push({ name: 'recipe.md', kind: 'file', depth: 1 });
-tree.push({ name: 'workflow.json', kind: 'file', depth: 1 });
+tree.push({ name: 'recipe.md', kind: 'file', depth: 1, href: `/cookbook/${slug}.md` });
+tree.push({ name: 'workflow.json', kind: 'file', depth: 1, href: `/cookbook/${slug}/workflow.json` });
 if (d.skills.length) {
   tree.push({ name: 'skills/', kind: 'dir', depth: 1 });
-  d.skills.forEach((s: any) => tree.push({ name: `${kebab(s.name)}.md`, kind: 'file', depth: 2 }));
+  d.skills.forEach((s: any) =>
+    tree.push({ name: `${kebab(s.name)}.md`, kind: 'file', depth: 2, href: `/cookbook/${slug}/skills/${kebab(s.name)}.md` }),
+  );
 }
 if (promptSteps.length) {
   tree.push({ name: 'prompts/', kind: 'dir', depth: 1 });
-  promptSteps.forEach((s: any) => tree.push({ name: `${kebab(s.title)}.md`, kind: 'file', depth: 2 }));
+  promptSteps.forEach((s: any) =>
+    tree.push({ name: `${kebab(s.title)}.md`, kind: 'file', depth: 2, href: `/cookbook/${slug}/prompts/${kebab(s.title)}.md` }),
+  );
 }
 ---
 
@@ -111,7 +116,7 @@ if (promptSteps.length) {
                       <span class="bg-bg-white-0 border-stroke-soft-200 relative z-10 mt-4 flex size-8 shrink-0 items-center justify-center rounded-full border">
                         <i class={`${m.icon} text-text-sub-600 text-[16px]`} aria-hidden="true" />
                       </span>
-                      <div class="border-stroke-soft-200 bg-bg-weak-50/60 flex flex-1 flex-col gap-1.5 rounded-[14px] border p-4">
+                      <div class="border-stroke-soft-200 bg-white flex flex-1 flex-col gap-1.5 rounded-[14px] border p-4">
                         <span class={`${m.cls} t-label-xs w-fit rounded-md px-2 py-0.5 font-medium`}>{m.label}</span>
                         <h3 class="t-label-lg text-text-strong-950">{step.title}</h3>
                         {step.body && <p class="t-label-md text-text-sub-600">{step.body}</p>}
@@ -170,28 +175,36 @@ if (promptSteps.length) {
       {/* RIGHT, the artifact: file tree + short fetch-prompt */}
       <div class="lg:sticky lg:top-24 lg:self-start flex flex-col gap-6">
         {/* file tree */}
-        <div class="border-stroke-soft-200 overflow-hidden rounded-[18px] border">
+        <div class="border-stroke-soft-200 bg-white overflow-hidden rounded-[18px] border">
           <div class="border-stroke-soft-200 bg-bg-weak-50 flex items-center gap-2 border-b px-5 py-3.5">
             <i class="ri-hard-drive-2-line text-text-sub-600" aria-hidden="true"></i>
             <span class="t-label-md text-text-strong-950 font-medium">Recipe files</span>
           </div>
           <div class="flex flex-col px-3 py-3 font-mono text-[13.5px]">
             {
-              tree.map((n) => (
-                <div class="flex items-center gap-2.5 rounded-md px-2 py-1.5" style={`padding-left:${n.depth * 22 + 8}px`}>
-                  <i
-                    class={`${n.kind === 'dir' ? 'ri-folder-3-line text-text-soft-400' : 'ri-file-text-line text-[#755a68]'} text-[16px]`}
-                    aria-hidden="true"
-                  />
-                  <span class={n.kind === 'dir' ? 'text-text-strong-950' : 'text-text-sub-600'}>{n.name}</span>
-                </div>
-              ))
+              tree.map((n) =>
+                n.kind === 'file' ? (
+                  <a
+                    href={n.href}
+                    class="hover:bg-bg-weak-50 flex items-center gap-2.5 rounded-md px-2 py-1.5 transition-colors"
+                    style={`padding-left:${n.depth * 22 + 8}px`}
+                  >
+                    <i class="ri-file-text-line text-[#755a68] text-[16px]" aria-hidden="true" />
+                    <span class="text-text-sub-600 hover:text-text-strong-950">{n.name}</span>
+                  </a>
+                ) : (
+                  <div class="flex items-center gap-2.5 rounded-md px-2 py-1.5" style={`padding-left:${n.depth * 22 + 8}px`}>
+                    <i class="ri-folder-3-line text-text-soft-400 text-[16px]" aria-hidden="true" />
+                    <span class="text-text-strong-950">{n.name}</span>
+                  </div>
+                ),
+              )
             }
           </div>
         </div>
 
         {/* short fetch-prompt */}
-        <div class="border-stroke-soft-200 overflow-hidden rounded-[18px] border">
+        <div class="border-stroke-soft-200 bg-white overflow-hidden rounded-[18px] border">
           <div class="border-stroke-soft-200 bg-bg-weak-50 flex items-center justify-between border-b px-5 py-3.5">
             <span class="t-label-md text-text-strong-950 font-medium">Copy the prompt</span>
             <button
@@ -202,7 +215,7 @@ if (promptSteps.length) {
               <i class="ri-file-copy-line" aria-hidden="true"></i><span data-copy-label>Copy</span>
             </button>
           </div>
-          <pre data-prompt class="text-text-sub-600 bg-bg-weak-50/50 whitespace-pre-wrap px-5 py-4 font-mono text-[13.5px] leading-[1.7]">{shortPrompt}</pre>
+          <pre data-prompt class="text-text-sub-600 whitespace-pre-wrap px-5 py-4 font-mono text-[13.5px] leading-[1.7]">{shortPrompt}</pre>
           <div class="border-stroke-soft-200 flex items-center gap-2 border-t px-5 py-3">
             <i class="ri-links-line text-text-soft-400 text-[15px]" aria-hidden="true"></i>
             <span class="t-label-sm text-text-soft-400 font-mono truncate">eluu.ai/cookbook/{slug}.md</span>
