@@ -1,16 +1,16 @@
 ---
 /**
- * The bar decal — Figma `214:2941`, supplied as two SVGs (one per theme).
+ * The bar decal, Figma `214:2941`, supplied as two SVGs (one per theme).
  *
  * Purely decorative. Krishna's brief: "a bit of detail that cuts the whitespace
  * to give the website a rich feeling". So it must FILL the gap between two
- * sections, never widen it — which is the whole reason for the zero-height
+ * sections, never widen it, which is the whole reason for the zero-height
  * wrapper below.
  *
  * MEASURED off the 1600px Figma export rather than eyeballed. In design pixels:
  *   bar         18 wide, 42 tall, radius 3, 30px pitch, 66px row pitch
  *   artboard    259 x 174, nine columns x three rows
- *   right edge  x = 1600.0 — flush with the PAGE edge, not the 188px content
+ *   right edge  x = 1600.0, flush with the PAGE edge, not the 188px content
  *               gutter, so it deliberately overhangs the content column by 188px
  *   vertical    y 839 -> 1012, and the section boundary above it is at y 867.4,
  *               so 28px sits above the boundary and 145px hangs below it
@@ -18,7 +18,7 @@
  * Two files, not one recoloured file: the teal and the grey both change with the
  * theme (#22D3BB -> #1DAF9C, #AAA89E -> #7C7A71) while the lilac and the sand do
  * not. That is authored intent in the asset, so the asset is swapped whole.
- * `<img>` rather than inline SVG for the same reason — the file is the source of
+ * `<img>` rather than inline SVG for the same reason, the file is the source of
  * truth and stays byte-identical to what Krishna exported.
  */
 interface Props {
@@ -43,7 +43,7 @@ const HEIGHT = 174;
   whitespace and starts adding to it.
 
   Hidden below `lg`. On a phone the right gutter is 24px, so a 259px decal would
-  either cover the copy or be cropped to two bars — decoration is not worth
+  either cover the copy or be cropped to two bars, decoration is not worth
   either. `aria-hidden` and `pointer-events-none` because it carries no meaning
   and must never intercept a click meant for the section beneath it.
 */}
@@ -52,13 +52,13 @@ const HEIGHT = 174;
   aria-hidden="true"
 >
   {/*
-    Flush to the VIEWPORT right edge at every width — `right-0`, with no page-width
+    Flush to the VIEWPORT right edge at every width, `right-0`, with no page-width
     cap and no `page-shell` gutter.
 
     It was capped at the 1600px page container first, on the theory that the decal
     should stay with the composition on a wide display. That was wrong, and visibly
     so above 1600px: the cap parks the decal at the container's edge, which is an
-    arbitrary point in open space — Krishna's word was "awkwardly in between".
+    arbitrary point in open space, Krishna's word was "awkwardly in between".
     A decal is furniture for the page EDGE, not part of the content column, so it
     tracks the edge and the overhang past the content simply grows. Right-edge
     alignment now holds at any width.

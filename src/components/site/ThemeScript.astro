@@ -4,7 +4,7 @@
  * the wrong theme.
  *
  * Storage choice: `localStorage`. It survives browser restarts, and it is wiped
- * when the visitor clears site data — which is exactly the behaviour asked for.
+ * when the visitor clears site data, which is exactly the behaviour asked for.
  * A cookie would be sent on every request for no reason; `sessionStorage` would
  * not survive a restart.
  *
@@ -55,7 +55,7 @@
         try {
           localStorage.setItem(KEY, theme);
         } catch (e) {
-          /* storage unavailable — the choice simply will not persist */
+          /* storage unavailable, the choice simply will not persist */
         }
         apply(theme);
         document.querySelectorAll('iframe[data-live-art]').forEach(function (frame) {

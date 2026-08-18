@@ -2,7 +2,7 @@
 import LiveArt from '../site/LiveArt.astro';
 
 /**
- * Section 2 — the value prop. Figma `147:2592` (FRAME "Hero", second of three
+ * Section 2, the value prop. Figma `147:2592` (FRAME "Hero", second of three
  * siblings): a row with a copy column on the left and a product visual on the
  * right, no gap declared.
  *
@@ -32,7 +32,7 @@ const { heading, body, linkLabel, linkHref, art, visualNote } = Astro.props;
 <section class="bg-bg-white-0">
   <div class="page-shell gutter-188 flex flex-col gap-10 py-14">
     <div class="bg-card-surface rounded-[16px] p-2.5">
-      {/* Copy and visual sit side by side at `lg` and stack below it — the same
+      {/* Copy and visual sit side by side at `lg` and stack below it, the same
           breakpoint the home page's feature cards use, for the same reason: the
           copy column and the animation crush each other under about 1100px. */}
       <div
@@ -78,7 +78,7 @@ const { heading, body, linkLabel, linkHref, art, visualNote } = Astro.props;
               <div class="bg-bg-sub-300 relative aspect-[700/438] w-full overflow-hidden rounded-[12px]">
                 <div class="t-paragraph-sm text-text-sub-600 absolute inset-0 flex items-center justify-center p-4 text-center">
                   <span class="copy-needed">
-                    Illustration needed — {visualNote ?? 'product visual'}
+                    Illustration needed, {visualNote ?? 'product visual'}
                   </span>
                 </div>
               </div>

@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"></head><body>
+<!-- feat2 — 4 DISTINCT trigger cards (Ona automations-cascade pattern), not thin rows.
+     Each card = its own badge chip [icon+word] + a big title + a grey mono sub.
+     One consistent chip style (tint bg + hairline); ONE maroon accent (the Slack
+     chip's tint, per spec's "e.g. the chip icon tint"). No status lane anywhere. -->
+<style>
+.tstack{ display:flex; flex-direction:column; align-items:center; gap:26px; width:620px; transform: translateY(46px); }
+/* everything centered (Krishna) */
+.tcard{ width:620px; background:var(--panel); border-radius:20px; padding:26px 28px; text-align:center;
+  box-shadow: 0 22px 48px -22px rgba(30,28,30,.18), 0 5px 14px -6px rgba(30,28,30,.06); }
+.tcard__chip{ display:inline-flex; align-items:center; gap:10px; height:40px; padding:0 15px;
+  border-radius:12px; margin:0 auto 16px; }
+.tcard__chipicon{ width:22px; height:22px; flex:none; display:block; }
+.tcard__chipicon--glyph svg{ width:100%; height:100%; display:block; }
+.tcard__chiplabel{ font-size:19px; font-weight:480; }
+.tcard__title{ font-size:26px; font-weight:480; letter-spacing:-.008em; line-height:1.25; color:var(--ink); }
+.tcard__sub{ font-family:var(--mono); font-size:20px; color:var(--soft); margin-top:6px; }
+/* distinct soft pill colors per source (Krishna) — muted, on-brand-adjacent */
+.chip-slack{ background:#f0e7f2; } .chip-slack .tcard__chiplabel,.chip-slack .tcard__chipicon--glyph{ color:#6b4a63; }
+.chip-chat{ background:#e7eef8; } .chip-chat .tcard__chiplabel,.chip-chat .tcard__chipicon--glyph{ color:#3f5a86; }
+.chip-schedule{ background:#e5f1ea; } .chip-schedule .tcard__chiplabel,.chip-schedule .tcard__chipicon--glyph{ color:#2f7d54; }
+.chip-api{ background:#f4ebdd; } .chip-api .tcard__chiplabel,.chip-api .tcard__chipicon--glyph{ color:#8a6a3e; }
+</style>
+<div class="stage cv-lav">
+  <div class="tstack">
+
+    <div class="tcard">
+      <span class="tcard__chip chip-slack">
+        <img class="tcard__chipicon" src="live/assets/slack.svg" alt="">
+        <span class="tcard__chiplabel">Slack</span>
+      </span>
+      <div class="tcard__title">A teammate asks in Slack</div>
+      <div class="tcard__sub">#ops · @Ledger close the books</div>
+    </div>
+
+    <div class="tcard">
+      <span class="tcard__chip chip-chat">
+        <span class="tcard__chipicon tcard__chipicon--glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+        <span class="tcard__chiplabel">Chat</span>
+      </span>
+      <div class="tcard__title">You ask in the app</div>
+      <div class="tcard__sub">app.eluu.ai</div>
+    </div>
+
+    <div class="tcard">
+      <span class="tcard__chip chip-schedule">
+        <span class="tcard__chipicon tcard__chipicon--glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+        <span class="tcard__chiplabel">Schedule</span>
+      </span>
+      <div class="tcard__title">On a schedule, unattended</div>
+      <div class="tcard__sub">Every weekday · 8:00 AM</div>
+    </div>
+
+    <div class="tcard">
+      <span class="tcard__chip chip-api">
+        <span class="tcard__chipicon tcard__chipicon--glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13 5l-2 14"/></svg></span>
+        <span class="tcard__chiplabel">API</span>
+      </span>
+      <div class="tcard__title">Fired from your code</div>
+      <div class="tcard__sub">POST /v1/tasks</div>
+    </div>
+
+  </div>
+</div>
+</body></html>

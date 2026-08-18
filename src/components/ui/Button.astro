@@ -5,7 +5,7 @@
  *   `Fancy Buttons [1.1]`  (104:732)
  *
  * Only the `State=Default` variants exist in the marketing frames. Hover and
- * focus are defined here, not in Figma — see specs gap list.
+ * focus are defined here, not in Figma, see specs gap list.
  */
 interface Props {
   variant?:
@@ -58,7 +58,7 @@ const variants = {
    * Figma draws only the light state, where maroon on near-white is fine. On the
    * dark page the same maroon on `#1E1C1E` measures about 1.6:1 and is close to
    * invisible, so dark steps up the ramp to `maroon-300`. This is our decision,
-   * not Figma's — it has no dark variant for this button.
+   * not Figma's, it has no dark variant for this button.
    */
   'primary-stroke':
     'bg-bg-white-0 text-primary-dark ring-1 ring-primary-dark hover:bg-maroon-50 dark:text-maroon-300 dark:ring-maroon-400 dark:hover:bg-bg-weak-50',

@@ -1,0 +1,55 @@
+---
+title: Reconcile the month-end close
+description: Pull payouts, match them against the ledger line by line, and surface only the exceptions.
+publishedAt: 2026-08-18
+icon: ri-arrow-left-right-line
+category: Finance
+collection: Month-end pack
+featured: true
+order: 1
+difficulty: starter
+skills:
+  - name: Ledger matching
+    description: Match payouts to the ledger line by line
+  - name: Exception policy
+    description: Apply your approval thresholds
+  - name: Close checklist
+    description: Run the steps in order, every time
+goal: reconcile the month-end close and surface only the exceptions
+integrations: [stripe, googlesheets, gmail]
+whatItDoes:
+  - Pulls every payout and charge for the period from your billing systems
+  - Matches each one against the master ledger, line by line
+  - Flags only what doesn't tie out, over-threshold, missing invoice, duplicate
+  - Emails the exceptions for sign-off and writes the reconciliation report
+howToUse:
+  - Connect Stripe, your ledger sheet, and Gmail to the agent
+  - Set a trigger, a schedule, or fire it from Slack on demand
+  - Paste the prompt into the agent and adjust the thresholds for your policy
+  - Review the exceptions it emails you; the rest posts on its own
+workflow:
+  - kind: trigger
+    title: Runs on a schedule
+    body: The 1st at 7:00 AM, or on demand from Slack.
+  - kind: prompt
+    title: Pull and match
+    body: List the period's payouts, then match each against the ledger.
+  - kind: prompt
+    title: Isolate exceptions
+    body: Flag anything over the policy threshold or missing an invoice.
+  - kind: result
+    title: Report + sign-off
+    body: Email the exceptions and save the reconciliation to reports/.
+prompt: |
+  Reconcile the month-end close for {{period}}.
+
+  1. List every payout from Stripe for the period.
+  2. Match each payout against the master ledger in Google Sheets, line by line.
+  3. Flag any that are over the $1,000 approval threshold, missing an invoice,
+     or appear to be duplicates.
+  4. Email me the exceptions with a one-line reason each, and post the matched
+     entries to the ledger.
+  5. Save a reconciliation report to reports/{{period}}-close.md.
+
+  Do not post anything that failed a check, surface it for my sign-off instead.
+---

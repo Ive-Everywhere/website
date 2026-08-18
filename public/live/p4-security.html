@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pillar · Security — the audit trail, flowing (Mercury paper)</title>
+<link href="tokens.css" rel="stylesheet">
+<link href="live-shim.css" rel="stylesheet">
+<link href="embed.css" rel="stylesheet">
+<link href="mv.css" rel="stylesheet">
+<style>
+  html,body { margin:0; height:100%; background:#ddd; }
+  .a-frame { position:absolute; inset:0; }
+  .a-field { position:absolute; inset:0; }
+  .a-stage { position:absolute; left:50%; top:50%; width:1600px; height:1067px;
+             transform:translate(-50%,-50%) scale(var(--s,1));
+             font-family:var(--font); color:var(--ink-strong); font-weight:400;
+             letter-spacing:.005em; -webkit-font-smoothing:antialiased; }
+
+  /* ── P4 · SECURITY — the audit trail IS the picture ──────────────────────
+     One card on grey paper, one endless upward flow of timestamped lines.
+     Doubled content, 50% keyframe, masked edges. Weight ceiling 480;
+     tabular figures; the only colour is a scoped green/amber status word. */
+  .panel { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+           width:1000px; height:780px; z-index:2; background:#fff; border-radius:var(--r-lg);
+           box-shadow:0 34px 64px -22px rgba(28,27,31,.22), 0 10px 24px -10px rgba(28,27,31,.12);
+           display:flex; flex-direction:column; overflow:hidden; }
+  .head { display:flex; align-items:center; gap:14px; padding:26px 32px;
+          border-bottom:1px solid var(--hair); flex:none; }
+  .head__ic { width:44px; height:44px; border-radius:12px; background:var(--accent-tint);
+              color:var(--accent); display:flex; align-items:center; justify-content:center; }
+  .head__t { font-size:24px; font-weight:480; color:var(--ink-strong); }
+  .head__s { font-size:18px; color:var(--ink-soft); margin-top:2px; }
+  .head .mv-pill--live { margin-left:auto; }
+  .pip { width:9px; height:9px; border-radius:50%; background:#2eb67d; animation:p4pip 1.4s infinite; }
+  @keyframes p4pip { 50% { opacity:.35 } }
+
+  .flowbox { flex:1; position:relative; overflow:hidden;
+             -webkit-mask:linear-gradient(180deg,transparent 0,#000 10%,#000 88%,transparent 100%);
+             mask:linear-gradient(180deg,transparent 0,#000 10%,#000 88%,transparent 100%); }
+  .flow { position:absolute; left:0; right:0; top:0; padding:14px 32px;
+          animation:p4flow 30s linear infinite; }
+  @media (prefers-reduced-motion: reduce) { .flow { animation:none; transform:translateY(-25%); } }
+  @keyframes p4flow { to { transform:translateY(-50%); } }
+  .log { display:flex; align-items:center; gap:16px; padding:12px 0;
+         font-size:19px; line-height:1.4; color:var(--ink-sub); white-space:nowrap;
+         border-bottom:1px solid #f4f2f0; }
+  .log .t { font-size:17px; color:var(--ink-soft); flex:none; width:96px;
+            font-variant-numeric:tabular-nums; letter-spacing:.01em; }
+  .log img { width:22px; height:22px; flex:none; }
+  .log em { font-style:normal; font-weight:480; color:var(--ink-strong); }
+  .log .ok { color:#1f8a5b; font-weight:480; }
+  .log .warn { color:#a96a1f; font-weight:480; }
+</style>
+</head>
+<body>
+<div class="a-frame"><div class="a-field"><div class="a-stage" data-w="1600" data-h="1067">
+  <div class="mv-canvas mv-canvas--grey"></div>
+
+  <div class="panel">
+    <div class="head">
+      <div class="head__ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+      <div><div class="head__t">Audit trail</div><div class="head__s">Your environment · every action logged</div></div>
+      <span class="mv-pill mv-pill--live"><span class="pip"></span>Live</span>
+    </div>
+    <div class="flowbox"><div class="flow" id="flow"></div></div>
+  </div>
+
+</div></div></div>
+<script src="live.js"></script>
+<script>
+(function () {
+  var L = [
+    ['09:41:02','stripe',       '<em>scope</em> checked — payouts, read only'],
+    ['09:41:04','stripe',       'read <em>142 payouts</em> · July'],
+    ['09:41:09','googlesheets', 'matched <em>139 rows</em> against the ledger'],
+    ['09:41:12',null,           '<em>memory</em> updated · july-close.md'],
+    ['09:41:30','gmail',        'sent <em>3 exceptions</em> for sign-off · <span class="ok">logged</span>'],
+    ['09:52:18','hubspot',      '<span class="warn">approval requested</span> — archive 30 deals'],
+    ['09:53:41',null,           '<em>approved</em> by David · recorded'],
+    ['09:53:42','hubspot',      '<em>30 deals</em> archived · <span class="ok">logged</span>'],
+    ['10:04:07','linear',       'created <em>FIN-208</em> · missing invoice'],
+    ['10:04:11',null,           '<em>session</em> ended · tokens metered'],
+    ['10:15:55','slack',        'posted the summary to <em>#month-end-close</em>'],
+    ['10:16:02',null,           '<em>scope</em> denied — contacts, write · <span class="warn">not granted</span>'],
+    ['10:16:03','zendesk',      'read <em>8 tickets</em> · Vertex escalation'],
+    ['10:16:20',null,           '<em>audit</em> snapshot exported · SOC 2'],
+  ];
+  var row = function (l) {
+    return '<div class="log"><span class="t">' + l[0] + '</span>' +
+      (l[1] ? '<img src="assets/' + l[1] + '.svg" alt="">' : '') +
+      '<span>' + l[2] + '</span></div>';
+  };
+  document.getElementById('flow').innerHTML = L.map(row).join('') + L.map(row).join('');
+})();
+</script>
+</body>
+</html>

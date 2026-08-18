@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eluu — live windows</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;480;500;530;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+<style>
+  :root{ --page:#f4f2ec; --ink:#1e1c1e; --sub:#58564d; --soft:#8f8b83; --maroon:#755a68; --line:#e3e0d8; --paper:#fff;
+    --font:'Inter',-apple-system,system-ui,sans-serif; --mono:'JetBrains Mono',monospace; }
+  *{box-sizing:border-box} html,body{margin:0}
+  body{background:transparent; font-family:var(--font); color:var(--ink);}
+  .hero{position:relative; overflow:hidden; padding:0;}
+  .hero__inner{margin:0;}
+  .hero__copy{max-width:760px; margin:0 auto 4px; text-align:center;}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--soft); margin:0 0 16px;}
+  .h1{font-size:clamp(34px,4.6vw,56px); line-height:1.03; letter-spacing:-.03em; font-weight:500; margin:0 0 16px;}
+  .sub{font-size:19px; line-height:1.45; letter-spacing:-.01em; color:var(--sub); margin:0 auto; max-width:46ch;}
+
+  /* responsive: .stagebox is fluid with the stage's aspect; .stage renders at its
+     1500×904 design size and is transform-scaled to fit the box width */
+  .stagebox{position:relative; width:100%; aspect-ratio:1500/904; margin:0 auto;}
+  .stage{position:absolute; top:0; left:0; transform-origin:top left; width:1500px; height:904px; border-radius:24px; overflow:hidden;
+    background:
+      radial-gradient(130% 96% at 50% 122%, color-mix(in srgb,var(--maroon) 58%,transparent) 0%, color-mix(in srgb,var(--maroon) 22%,transparent) 46%, transparent 72%),
+      linear-gradient(178deg, #f8f6f1 0%, #f2ece9 52%, #ece0e4 100%);
+    box-shadow:0 30px 80px -30px rgba(28,24,26,.28), inset 0 0 0 1px rgba(28,24,26,.05);}
+  .dots{position:absolute; inset:0; z-index:0; opacity:.4; pointer-events:none;
+    background-image:radial-gradient(color-mix(in srgb,var(--maroon) 38%,transparent) 1px, transparent 1px);
+    background-size:30px 30px; -webkit-mask:radial-gradient(72% 60% at 50% 54%, #000 8%, transparent 72%); mask:radial-gradient(72% 60% at 50% 54%, #000 8%, transparent 72%);}
+
+  .win{position:absolute; overflow:hidden; background:var(--paper); transition:opacity .3s ease, transform .3s ease;
+    box-shadow:0 44px 90px -26px rgba(28,24,26,.34), 0 18px 38px -18px rgba(28,24,26,.18), 0 0 0 1px rgba(28,24,26,.05);}
+  .win iframe{border:0; display:block; transform-origin:top left; background:var(--paper);}
+
+  .desktop{left:300px; top:96px; width:900px; height:600px; border-radius:18px; z-index:2;
+    box-shadow:0 40px 80px -30px rgba(28,24,26,.24), 0 0 0 1px rgba(28,24,26,.05);}
+  .desktop::after{content:""; position:absolute; inset:0; z-index:3; pointer-events:none; background:rgba(246,242,238,.18);}
+  .macbar{height:34px; display:flex; align-items:center; gap:8px; padding:0 15px; background:#faf9f7; border-bottom:1px solid var(--line);}
+  .tl{width:11px;height:11px;border-radius:50%} .tl--r{background:#FF5F57}.tl--y{background:#FEBC2E}.tl--g{background:#28C840}
+  .macbar__t{margin-left:8px; font-size:13px; color:var(--soft); font-weight:500;}
+  .desktop iframe{width:1200px; height:755px; transform:scale(.75);}
+  .phone{left:62px; top:235px; width:312px; height:601px; background:transparent; box-shadow:none; z-index:5; filter:drop-shadow(0 44px 56px rgba(28,24,26,.34)); overflow:visible;}
+  .phone iframe{width:480px; height:924px; transform:scale(.65); background:transparent;}
+  /* drag handles — grab chrome regions, not content */
+  .draghandle{position:absolute; top:0; left:0; right:0; z-index:8; cursor:grab;}
+  .slack .draghandle{height:38px;}
+  .phone .draghandle{height:96px;}
+  .macbar{cursor:grab;}
+  .win.dragging{transition:none !important;}
+  .slack{left:925px; top:393px; width:460px; height:430px; border-radius:20px; z-index:6;}
+  /* mac menu bar — incident.io treatment: 13px neutral label left, wifi + date right */
+  .menubar{position:absolute; top:0; left:0; right:0; z-index:15; height:42px; display:flex; align-items:center; gap:7px; padding:0 22px; font-size:13px; font-weight:500; color:rgba(28,24,26,.55); letter-spacing:-.005em;}
+  .menubar svg{width:14px; height:14px; flex-shrink:0;}
+  .menubar .mb__r{margin-left:auto; display:flex; align-items:center; gap:9px; color:rgba(28,24,26,.55);}
+  .menubar .mb__r svg{width:15px; height:15px; opacity:.85;}
+  .slack iframe{width:640px; height:598px; transform:scale(.71875);}
+
+  /* macOS-style dock — glass container, squircle tiles, active maroon */
+  .dock{position:absolute; left:50%; bottom:22px; transform:translateX(-50%); z-index:40; display:flex; align-items:flex-end; gap:13px;
+    padding:12px 15px; border-radius:26px;
+    background:linear-gradient(180deg, rgba(255,255,255,.34), rgba(255,255,255,.14));
+    backdrop-filter:blur(18px) saturate(1.2); -webkit-backdrop-filter:blur(18px) saturate(1.2);
+    box-shadow:0 24px 50px -16px rgba(78,54,64,.4), inset 0 1px 0 rgba(255,255,255,.6), inset 0 0 0 1px rgba(255,255,255,.25);}
+  .di{position:relative; width:58px; height:58px; border-radius:17px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:transform .18s cubic-bezier(.2,0,0,1);
+    background:linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,255,255,.22));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.7), inset 0 0 0 1px rgba(255,255,255,.3), 0 4px 10px -3px rgba(78,54,64,.3);}
+  .di i{font-size:28px; color:#5d374b; opacity:.72; line-height:1; text-shadow:0 1px 0 rgba(255,255,255,.5);}
+  .di.on i{color:#fff; filter:drop-shadow(0 1px 2px rgba(60,40,50,.4)); text-shadow:none;}
+  .di:hover{transform:scale(1.06);}
+  .di.on{background:linear-gradient(160deg, #8d7581, #5d374b);
+    box-shadow:0 10px 22px -4px rgba(93,55,75,.6), inset 0 1px 0 rgba(255,255,255,.4), inset 0 0 0 1px rgba(255,255,255,.2);}
+  .di.on i{opacity:1;}
+  .di__lbl{position:absolute; top:-38px; left:50%; transform:translateX(-50%); background:rgba(20,16,18,.9); color:#fff;
+    font:600 12px var(--font); padding:5px 11px; border-radius:8px; white-space:nowrap; opacity:0; transition:opacity .15s; pointer-events:none;}
+  .di:hover .di__lbl{opacity:1;}
+</style>
+</head>
+<body>
+<section class="hero">
+  <div class="hero__inner">
+    <div class="stagebox">
+    <div class="stage">
+      <div class="dots"></div>
+      <div class="menubar">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px;margin-top:-2px"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.702"/></svg><span id="mbteam">Eluu AI · Finance Team</span>
+        <span class="mb__r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M2.6 9.4a14.2 14.2 0 0118.8 0M5.7 12.8a9.6 9.6 0 0112.6 0M8.9 16.1a4.9 4.9 0 016.2 0"/><circle cx="12" cy="19" r="1.35" fill="currentColor" stroke="none"/></svg><span id="mbdate">Mon Aug 17</span><span id="mbtime">9:41 AM</span></span>
+      </div>
+
+      <div class="win desktop">
+        <div class="macbar"><span class="tl tl--r"></span><span class="tl tl--y"></span><span class="tl tl--g"></span><span class="macbar__t">Eluu · Workspace</span></div>
+        <iframe id="deskframe" src="hero/desktop-finance.html" scrolling="no" title="Eluu workspace"></iframe>
+      </div>
+      <div class="win phone"><div class="draghandle"></div><iframe id="phoneframe" src="hero/phone-app.html?t=finance" scrolling="no" title="Eluu app on mobile"></iframe></div>
+      <div class="win slack"><div class="draghandle"></div><iframe id="slackframe" src="hero/slack-window.html?t=finance" scrolling="no" title="Eluu in Slack"></iframe></div>
+
+      <!-- team dock -->
+      <div class="dock" id="dock">
+        <div class="di on" data-team="finance"><span class="di__lbl">Finance</span><i class="ri-bank-line"></i></div>
+        <div class="di" data-team="sales"><span class="di__lbl">Sales</span><i class="ri-line-chart-line"></i></div>
+        <div class="di" data-team="ce"><span class="di__lbl">Customer Engineering</span><i class="ri-terminal-box-line"></i></div>
+        <div class="di" data-team="hr"><span class="di__lbl">People</span><i class="ri-team-line"></i></div>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+<script>
+  const deskFrame=document.getElementById('deskframe'), slackFrame=document.getElementById('slackframe'), phoneFrame=document.getElementById('phoneframe');
+  const wins=[document.querySelector('.desktop'),document.querySelector('.phone'),document.querySelector('.slack')];
+  const tiles=[...document.querySelectorAll('.di')];
+  let active='finance', timer;
+  const NAME={finance:'Finance', sales:'Sales', ce:'Customer Engineering', hr:'People'};
+  const mbteam=document.getElementById('mbteam');
+
+  // live menu-bar clock, like a real desktop
+  function tick(){ const d=new Date();
+    document.getElementById('mbdate').textContent=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}).replace(',','');
+    document.getElementById('mbtime').textContent=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  } tick(); setInterval(tick,30000);
+
+  function setTeam(t){
+    if(t===active) return;
+    active=t;
+    tiles.forEach(d=>d.classList.toggle('on', d.dataset.team===t));
+    mbteam.textContent='Eluu AI · '+NAME[t]+' Team';
+    wins.forEach(w=>{ w.style.opacity='0'; w.style.transform='translateY(16px)'; });
+    setTimeout(()=>{
+      deskFrame.src='hero/desktop-'+t+'.html';
+      slackFrame.src='hero/slack-window.html?t='+t;   // query change forces reload
+      phoneFrame.src='hero/phone-app.html?t='+t;
+      setTimeout(()=>wins.forEach(w=>{ w.style.opacity='1'; w.style.transform='none'; }),160);
+    },300);
+  }
+  tiles.forEach(d=>d.addEventListener('click',()=>{ setTeam(d.dataset.team); restart(); }));
+
+  // gentle auto-advance through teams (macOS-dock feel), pause on hover
+  const order=['finance','sales','ce','hr'];
+  function next(){ setTeam(order[(order.indexOf(active)+1)%order.length]); }
+  function restart(){ clearInterval(timer); timer=setInterval(next,15000); }
+  const stage=document.querySelector('.stage');
+  stage.addEventListener('mouseenter',()=>clearInterval(timer));
+  stage.addEventListener('mouseleave',restart);
+  restart();
+
+  // responsive: scale the fixed 1500×904 stage to the fluid box width
+  const stagebox=document.querySelector('.stagebox');
+  let scale=1;
+  function fit(){ scale=stagebox.clientWidth/1500; stage.style.transform=`scale(${scale})`; }
+  new ResizeObserver(fit).observe(stagebox); fit();
+
+  // windows are movable — grab the chrome (mac bar / top bar / phone bezel) and play
+  let ztop=20;
+  function draggable(win, handle){
+    handle.addEventListener('pointerdown', e=>{
+      e.preventDefault();
+      const sr=stage.getBoundingClientRect(), r=win.getBoundingClientRect();
+      const ox=e.clientX-r.left, oy=e.clientY-r.top;
+      win.classList.add('dragging'); win.style.zIndex=++ztop; handle.style.cursor='grabbing';
+      document.querySelectorAll('.win iframe').forEach(f=>f.style.pointerEvents='none');
+      handle.setPointerCapture(e.pointerId);
+      const move=ev=>{ win.style.left=((ev.clientX-sr.left-ox)/scale)+'px'; win.style.top=((ev.clientY-sr.top-oy)/scale)+'px'; };
+      const up=()=>{ handle.removeEventListener('pointermove',move); handle.removeEventListener('pointerup',up);
+        win.classList.remove('dragging'); handle.style.cursor='grab';
+        document.querySelectorAll('.win iframe').forEach(f=>f.style.pointerEvents=''); };
+      handle.addEventListener('pointermove',move); handle.addEventListener('pointerup',up);
+    });
+  }
+  draggable(document.querySelector('.desktop'), document.querySelector('.macbar'));
+  draggable(document.querySelector('.phone'),   document.querySelector('.phone .draghandle'));
+  draggable(document.querySelector('.slack'),   document.querySelector('.slack .draghandle'));
+</script>
+</body>
+</html>

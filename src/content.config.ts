@@ -4,7 +4,7 @@ import { sharedSections, linkCard } from './lib/page-schema';
 
 /**
  * Shared front-matter every content type carries.
- * Keep this list short — anything optional belongs on the specific collection.
+ * Keep this list short, anything optional belongs on the specific collection.
  */
 const base = {
   title: z.string(),
@@ -43,6 +43,33 @@ const cookbook = defineCollection({
     colleague: z.string().optional(),
     integrations: z.array(z.string()).default([]),
     difficulty: z.enum(['starter', 'intermediate', 'advanced']).default('starter'),
+    /** Gallery: icon, one primary category, an optional collection, featured flag. */
+    icon: z.string().default('ri-book-2-line'),
+    category: z.string().default('Automation'),
+    collection: z.string().optional(),
+    featured: z.boolean().default(false),
+    order: z.number().default(0),
+    /** Detail page, the two bullet lists. */
+    whatItDoes: z.array(z.string()).default([]),
+    howToUse: z.array(z.string()).default([]),
+    /** The workflow timeline; each step is a card in the left column. */
+    workflow: z
+      .array(
+        z.object({
+          kind: z.enum(['trigger', 'prompt', 'shell', 'result']).default('prompt'),
+          title: z.string(),
+          body: z.string().optional(),
+        }),
+      )
+      .default([]),
+    /** Recommended skills the recipe leans on (shown as cards). */
+    skills: z
+      .array(z.object({ name: z.string(), description: z.string().optional() }))
+      .default([]),
+    /** One-line goal woven into the short fetch-prompt. */
+    goal: z.string().default(''),
+    /** The full copyable prompt shown on the right, with a Copy button. */
+    prompt: z.string().default(''),
   }),
 });
 

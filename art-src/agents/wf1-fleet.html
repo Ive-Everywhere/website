@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* wf1 — fleet roster. RULE 1: header carries a bare 2x2 grid glyph, never
+     reused as a row mark. RULE 2: every cell's one mark is a real avatar image
+     (no tiles) — the grid's only mark treatment. RULE 3: every cell is a fixed
+     104px, 2-column, card sizes to content. RULE 5: green is the per-agent
+     "running" dot-label only; the header pill stays neutral text, no dot.
+     RULE 6: depth = the last row (cells 7-8) faded via the kit's row--g1,
+     Ona's "and more" device, reused here on a grid instead of a list. */
+  .fleet { display:grid; grid-template-columns:1fr 1fr; }
+  .fc { display:flex; align-items:center; gap:14px; height:104px; padding:0 26px; }
+  .fc:nth-child(odd) { border-right:1px solid var(--hair); }
+  .fc:not(:nth-last-child(-n+2)) { border-bottom:1px solid var(--hair); }
+  .fc__av { width:34px; height:34px; border-radius:50%; flex:none; overflow:hidden; }
+  .fc__av img { width:100%; height:100%; display:block; }
+  .fc__b { min-width:0; flex:1; }
+  .fc__name { font-size:21px; font-weight:480; letter-spacing:-.006em; color:var(--ink); line-height:1.2; }
+  .fc__meta { display:flex; align-items:center; gap:8px; margin-top:4px; }
+  .fc__role { font-size:17px; color:var(--soft); }
+  .fc__run { display:inline-flex; align-items:center; gap:5px; font-size:14px; font-weight:450; color:var(--ok); }
+  .fc__run i { width:6px; height:6px; border-radius:50%; background:var(--ok); flex:none; display:block; }
+  .fc--more { justify-content:center; }
+  .fc__more { font-family:var(--mono); font-size:22px; color:var(--soft); }
+</style>
+</head><body>
+<div class="stage cv-blue">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+      <span class="hd__t">Workforce</span>
+      <span class="hd__r"><span class="pill">24 running · in parallel</span></span>
+    </div>
+    <div class="fleet">
+      <div class="fc">
+        <span class="fc__av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ledger&backgroundColor=c5f2e0" alt=""></span>
+        <span class="fc__b"><div class="fc__name">Ledger</div><div class="fc__meta"><span class="fc__role">Finance</span><span class="fc__run"><i></i>running</span></div></span>
+      </div>
+      <div class="fc">
+        <span class="fc__av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Sana&backgroundColor=b6e3f4" alt=""></span>
+        <span class="fc__b"><div class="fc__name">Sana</div><div class="fc__meta"><span class="fc__role">Sales</span><span class="fc__run"><i></i>running</span></div></span>
+      </div>
+      <div class="fc">
+        <span class="fc__av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Cass&backgroundColor=ffd5dc" alt=""></span>
+        <span class="fc__b"><div class="fc__name">Cass</div><div class="fc__meta"><span class="fc__role">Support</span><span class="fc__run"><i></i>running</span></div></span>
+      </div>
+      <div class="fc">
+        <span class="fc__av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Hana&backgroundColor=ffdfbf" alt=""></span>
+        <span class="fc__b"><div class="fc__name">Hana</div><div class="fc__meta"><span class="fc__role">People</span><span class="fc__run"><i></i>running</span></div></span>
+      </div>
+      <div class="fc">
+        <span class="fc__av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Sol&backgroundColor=d1e8d4" alt=""></span>
+        <span class="fc__b"><div class="fc__name">Sol</div><div class="fc__meta"><span class="fc__role">Ops</span><span class="fc__run"><i></i>running</span></div></span>
+      </div>
+      <div class="fc">
+        <span class="fc__av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ivy&backgroundColor=e5d4f0" alt=""></span>
+        <span class="fc__b"><div class="fc__name">Ivy</div><div class="fc__meta"><span class="fc__role">Data</span><span class="fc__run"><i></i>running</span></div></span>
+      </div>
+      <div class="fc row--g1">
+        <span class="fc__av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Rhea&backgroundColor=ffe0c7" alt=""></span>
+        <span class="fc__b"><div class="fc__name">Rhea</div><div class="fc__meta"><span class="fc__role">Legal</span><span class="fc__run"><i></i>running</span></div></span>
+      </div>
+      <div class="fc fc--more row--g1">
+        <span class="fc__more">+18</span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

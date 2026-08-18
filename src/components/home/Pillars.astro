@@ -1,16 +1,22 @@
 ---
 /**
- * Pillars — Modal "production cloud" 2×2 grid.
+ * Pillars, Modal "production cloud" 2×2 grid.
  * Only the ILLUSTRATION is enclosed (fixed-dimension placeholder, 600×400).
  * Eyebrow + headline + sub sit below it, unenclosed, like Modal.
  * Copy = the approved Ona-voice pillar bodies (headline = first fragment,
  * sub = second fragment).
  */
 
+import LiveArt from '../site/LiveArt.astro';
+
 interface Pillar {
   eyebrow: string;
   title: string;
   body: string;
+  art: 'p1-agents' | 'p2-apps' | 'p3-context' | 'p4-security';
+  surface: string;
+  zoom: number;
+  artTitle: string;
 }
 
 const pillars: Pillar[] = [
@@ -18,21 +24,41 @@ const pillars: Pillar[] = [
     eyebrow: 'Agents',
     title: 'Hand off the work that eats your hours.',
     body: "Agents run it end to end, while you're at your desk or on the couch.",
+    art: 'p1-agents',
+    surface: '#f2efec',
+    zoom: 1.45,
+    artTitle:
+      'One line of intent, team.add(), with a rolling reel of specialist agents: Ledger, Sana, Cass, Hana, each carrying its own integrations, while availability chips cycle Slack, Chat, API, Phone.',
   },
   {
     eyebrow: 'Apps',
     title: 'Software your whole team actually uses.',
     body: 'Agents build the dashboards, trackers, and internal tools, and keep them live.',
+    art: 'p2-apps',
+    surface: '#eceaf6',
+    zoom: 1.35,
+    artTitle:
+      'A prompt becomes a deployed app: a Postgres database, vector store, object storage and a scheduled refresh provision themselves, ending in a live URL shared with the whole team.',
   },
   {
     eyebrow: 'Context',
     title: 'Wired into every system you run.',
     body: 'Agents pull from all of them to deliver the result you asked for.',
+    art: 'p3-context',
+    surface: '#f2efec',
+    zoom: 1.0,
+    artTitle:
+      'Six connected systems pulse context into Ledger, who processes it and stashes a learning, Stripe payout tables.md, onto a growing memory pile.',
   },
   {
     eyebrow: 'Security',
     title: 'Under your lock and key.',
     body: 'Runs in your environment, every action scoped, logged, and auditable.',
+    art: 'p4-security',
+    surface: '#f3f3f6',
+    zoom: 1.25,
+    artTitle:
+      'A live audit trail flows past: scope checks, reads, an approval recorded by name, every action timestamped and logged in your environment.',
   },
 ];
 ---
@@ -50,10 +76,8 @@ const pillars: Pillar[] = [
       {
         pillars.map((p) => (
           <div class="flex flex-col gap-5">
-            <div class="border-stroke-sub-300 bg-bg-weak-50 flex aspect-[3/2] w-full items-center justify-center rounded-[16px] border border-dashed">
-              <span class="t-label-xs text-text-soft-400 font-mono uppercase tracking-[0.08em]">
-                Illustration · 600 × 400
-              </span>
+            <div class="border-stroke-soft-200 overflow-hidden rounded-[16px] border">
+              <LiveArt src={p.art} title={p.artTitle} width={600} height={400} surface={p.surface} zoom={p.zoom} speed={1.3} />
             </div>
             <div class="flex flex-col gap-2">
               <span class="t-label-xs text-text-soft-400 font-mono uppercase tracking-[0.08em]">

@@ -1,0 +1,52 @@
+---
+title: Replace a SaaS tool with an app the agent builds
+description: Describe the internal tool you keep paying for, and get a live app wired to your data.
+publishedAt: 2026-08-18
+icon: ri-hand-coin-line
+category: Apps
+featured: false
+order: 6
+difficulty: intermediate
+skills:
+  - name: App scaffolding
+    description: Provision database, storage, UI
+  - name: Data wiring
+    description: Seed it from your systems
+  - name: Deploy + share
+    description: TLS, domain, team access
+goal: build and deploy the internal app to replace the tool
+integrations: [googlesheets, stripe, slack]
+whatItDoes:
+  - Turns a plain-English description into a working internal app
+  - Provisions the database, storage, and a shareable URL
+  - Wires it to your real data and keeps it refreshed
+  - Shares it with the team, no per-seat licence
+howToUse:
+  - Describe the tool you want in one paragraph
+  - Point the agent at the data it should use
+  - Review the deployed app at your eluu.site URL
+  - Set the refresh cadence and share the link
+workflow:
+  - kind: trigger
+    title: A prompt
+    body: One paragraph describing the tool.
+  - kind: prompt
+    title: Build it
+    body: Provision the database, storage, and UI.
+  - kind: shell
+    title: Deploy
+    body: TLS, domain, team access.
+  - kind: result
+    title: Live URL
+    body: Shared with the team, refreshed on schedule.
+prompt: |
+  Build an internal app to replace {{tool}}.
+
+  1. Read the description and the data sources I've connected.
+  2. Provision what it needs, a database seeded from my data, object storage
+     for exports, and a scheduled refresh.
+  3. Build the UI: the views and controls the team actually uses.
+  4. Deploy it to a shareable {{name}}.eluu.site URL and share it with the team.
+
+  Keep it refreshed daily and tell me the URL when it's live.
+---

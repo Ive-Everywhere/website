@@ -3,7 +3,7 @@ import SectionHeading from './SectionHeading.astro';
 import Copy from './Copy.astro';
 
 /**
- * Section 3 — the feature comparison table. Figma `151:5309` (named "Hero").
+ * Section 3, the feature comparison table. Figma `151:5309` (named "Hero").
  * This is the core of the page.
  *
  * Row template: a fixed 272px label column, then the "us" card
@@ -24,7 +24,7 @@ import Copy from './Copy.astro';
  * Each card therefore carries a "Eluu:" / "<competitor>:" label plus a
  * "Supported" / "Not supported" text equivalent for the icon.
  *
- * MOBILE (spec gap G.40 — Figma has no mobile strategy at all): below `lg`
+ * MOBILE (spec gap G.40, Figma has no mobile strategy at all): below `lg`
  * each row stacks into its label as a heading and two full-width cards, and
  * the side labels that are visually hidden on desktop become visible.
  */
@@ -55,7 +55,7 @@ const { table, competitor, rows } = Astro.props;
   <div class="page-shell gutter-187 flex flex-col items-center gap-10 pt-8 pb-16 lg:gap-14">
     <SectionHeading heading={table.heading} />
 
-    <!-- Row stack `151:5435` — column, gap 24. -->
+    <!-- Row stack `151:5435`, column, gap 24. -->
     <ul class="flex w-full list-none flex-col gap-8 p-0 lg:gap-6">
       {
         rows.map((row, i) => {
@@ -67,8 +67,7 @@ const { table, competitor, rows } = Astro.props;
             >
               {/*
                 Label column `151:5409`. Its inner frame is named "Active" and
-                carries radius 8 and padding 12 but no fill (spec gap D.22) —
-                an apparent selected state with the fill missing. The padding
+                carries radius 8 and padding 12 but no fill (spec gap D.22),                 an apparent selected state with the fill missing. The padding
                 and radius are kept; no fill is invented.
 
                 Stacked, this is the row's heading above its two cards, so the

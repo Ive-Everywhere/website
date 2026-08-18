@@ -2,10 +2,10 @@
 import Button from '../ui/Button.astro';
 
 /**
- * CTA band — Figma component `Custom CTA Sections [Landing]` (131:36,
+ * CTA band, Figma component `Custom CTA Sections [Landing]` (131:36,
  * variant `Type=03, Mobile=Off`). Byte-identical on the light Home, dark Home,
  * use-case and compare pages, including on the dark page where the band stays
- * peach. That is transcribed as drawn — flagged for confirmation.
+ * peach. That is transcribed as drawn, flagged for confirmation.
  */
 interface Props {
   heading?: string;
@@ -47,7 +47,18 @@ const {
     />
 
     <div class="flex flex-1 flex-col gap-3">
-      <p class="t-h4 text-accent-peach-800">{heading}</p>
+      {/* Break the headline onto its own line at each comma (Krishna). */}
+      <p class="t-h4 text-accent-peach-800">
+        {
+          heading.split(/,\s+/).map((part, i, all) => (
+            <>
+              {part}
+              {i < all.length - 1 ? ',' : ''}
+              {i < all.length - 1 && <br />}
+            </>
+          ))
+        }
+      </p>
       {/* Pass `eyebrow=""` on a page whose copy has no second line, so nothing
           is invented to fill the slot. */}
       {eyebrow && <p class="t-h6 text-accent-peach-800 opacity-64">{eyebrow}</p>}

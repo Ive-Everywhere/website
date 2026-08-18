@@ -1,12 +1,12 @@
 ---
 /**
- * Feature quadrants — Figma `147:3163` (§2 of home-spec.md).
+ * Feature quadrants, Figma `147:3163` (§2 of home-spec.md).
  * Section: column, gap 48, padding 96/188, fill #F8F8F3 → `bg-bg-white-0`.
  *
  * The four panels are 280px tall, `#EDEDE9` (`bg-bg-soft-200`), and each
  * carries a 1px stroke in the *page background* colour plus one rounded outer
  * corner, so together they read as a single rounded 2×2 block with hairline
- * gutters. The stroke sides differ per panel (spec table) — reproduced with a
+ * gutters. The stroke sides differ per panel (spec table), reproduced with a
  * 1px gap grid whose background is the page colour, which is the same result
  * and survives the dark-mode token flip.
  */
@@ -78,14 +78,14 @@ const quadrants: Quadrant[] = [
       <h2 class="t-landing-h3 text-text-strong-950 text-balance">
         Everything you need for an AI workforce.
       </h2>
-      {/* 147:3167. Figma reads "Allocate agent." (singular) — spec gap #14
+      {/* 147:3167. Figma reads "Allocate agent." (singular), spec gap #14
           flags it as a probable typo, so it is wrapped, not corrected. */}
       <p class="t-landing-h3 text-text-soft-400 text-balance">
         <span class="copy-needed">Allocate agent.</span> Connect to systems. Get work done.
       </p>
     </div>
 
-    {/* 147:3168 — one rounded 2×2 block, hairline gutters in the page colour.
+    {/* 147:3168, one rounded 2×2 block, hairline gutters in the page colour.
         A single column below `lg`; the outer radius is applied to the block at
         every width so the corners are never square. */}
     <div class="bg-bg-white-0 grid gap-px overflow-hidden rounded-[16px] lg:grid-cols-2">
@@ -94,7 +94,7 @@ const quadrants: Quadrant[] = [
           <div
             class={`bg-card-surface flex flex-col items-start justify-between gap-6 p-6 sm:flex-row sm:items-center sm:gap-8 sm:p-8 lg:h-[280px] lg:px-9 ${quadrant.radius}`}
           >
-            {/* Text column — fixed 360px in Figma, fluid below `lg`. `max-w`
+            {/* Text column, fixed 360px in Figma, fluid below `lg`. `max-w`
                 rather than `w` + `shrink-0`: at 1024 the panel is only ~470px
                 wide, so a rigid 360px column plus the icon cluster pushed the
                 icons past the panel edge. It reaches 360px once there is room. */}
@@ -104,7 +104,7 @@ const quadrants: Quadrant[] = [
                 <p class="t-label-md text-text-sub-600 text-pretty">{quadrant.body}</p>
               </div>
 
-              {/* Plain text link in Figma — no button frame, no fill, no radius.
+              {/* Plain text link in Figma, no button frame, no fill, no radius.
                   The `→` is part of the string (U+2192). */}
               <a
                 href={quadrant.href}
@@ -114,7 +114,7 @@ const quadrants: Quadrant[] = [
               </a>
             </div>
 
-            {/* Icon cluster — 2x2 as drawn. On a phone the panel is narrow and
+            {/* Icon cluster, 2x2 as drawn. On a phone the panel is narrow and
                 tall, so the cluster becomes a single row: four glyphs read as a
                 caption under the copy, whereas a 2x2 block eats vertical space
                 and reads as a second column that is not there. */}

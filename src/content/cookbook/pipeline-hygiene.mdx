@@ -1,0 +1,51 @@
+---
+title: Keep the pipeline clean and the forecast honest
+description: Score the pipeline nightly, update the CRM after every call, and chase the deals going quiet.
+publishedAt: 2026-08-18
+icon: ri-line-chart-line
+category: Sales
+collection: Revenue ops
+featured: true
+order: 3
+difficulty: starter
+skills:
+  - name: Deal scoring
+    description: Rank by value and slip-risk
+  - name: Follow-up drafting
+    description: Personalize from the thread
+  - name: Forecast diff
+    description: Compare against last week
+goal: score the pipeline and draft the stalled-deal follow-ups
+integrations: [hubspot, gmail, slack]
+whatItDoes:
+  - Refreshes the forecast against last week and flags what slipped
+  - Finds every deal with no activity for 21+ days
+  - Drafts a tailored follow-up for each owner from the deal history
+  - Posts a summary to the sales channel each morning
+howToUse:
+  - Connect your CRM, email, and Slack
+  - Set it to run before the daily standup
+  - Review the drafts and one-tap send, or let it send with owners cc'd
+  - Skim the morning summary for what needs a human
+workflow:
+  - kind: trigger
+    title: Every weekday
+    body: 8:00 AM, before standup.
+  - kind: prompt
+    title: Score the pipeline
+    body: Diff against last week; isolate stalled deals.
+  - kind: prompt
+    title: Draft follow-ups
+    body: One per owner, personalized from the thread.
+  - kind: result
+    title: Post the summary
+    body: To #sales, with each draft ready to send.
+prompt: |
+  Run the daily pipeline review.
+
+  1. Pull all open deals from HubSpot and diff against last week's snapshot.
+  2. Flag every deal with no activity for 21+ days and rank by value at risk.
+  3. For each stalled deal, draft a follow-up email to the owner, personalized
+     from the last thread and the deal stage.
+  4. Post a summary to #sales, pipeline total, what slipped, top 3 to chase,      with each draft attached and ready to send.
+---

@@ -1,0 +1,139 @@
+---
+import Base from '../layouts/Base.astro';
+import PillarHero from '../components/platform/PillarHero.astro';
+import Explanation from '../components/platform/Explanation.astro';
+import AppsGrid from '../components/platform/AppsGrid.astro';
+import StatBand from '../components/platform/StatBand.astro';
+import RailFeatures from '../components/use-case/RailFeatures.astro';
+import Testimonial from '../components/use-case/Testimonial.astro';
+import DetailSplit from '../components/use-case/DetailSplit.astro';
+import CtaBand from '../components/site/CtaBand.astro';
+
+/**
+ * Apps, a hybrid home + platform page (Krishna, 2026-08-17). Apps is a big,
+ * distinct story, so it gets the platform template's depth plus a home-style
+ * 2×2 grid in the middle. Copy is Ona-voice; capabilities are from the shipped
+ * Eluu Apps spec (projects/eluu-apps): agent-built apps published to a live
+ * <slug>.eluu.site or custom domain, static or server (E2B, scale-to-zero),
+ * per-app database + object storage, shared private/team/public. The MCP point
+ * appears ONLY as "equip the coding agent you already use (Claude Code, Codex)
+ * to publish to a URL", Krishna, 2026-08-17: protocol availability on its own
+ * is moot; the value is giving an external agent a place to ship what it builds.
+ */
+
+const SIGNUP = 'https://app.eluu.ai/signup';
+const DEMO = 'https://cal.com/krishna-kaipa-wh7ao3/30min';
+
+const tiles = [
+  {
+    eyebrow: 'Built by agents',
+    title: 'Your agent ships it, not just builds it',
+    body: 'Tell an agent to build the tool. It writes the app, publishes it, and hands back a live link, no deploy step, no human in the loop.',
+  },
+  {
+    eyebrow: 'Any coding agent',
+    title: 'Ship from the agent you already use',
+    body: 'Point Claude Code or Codex at Eluu and it publishes straight to a URL. The agent on your desk finally has somewhere to put what it builds.',
+  },
+  {
+    eyebrow: 'Static to server',
+    title: 'A page today, a full app tomorrow',
+    body: 'Start with an HTML file on a link. Grow into a server app with its own database and storage, same platform, nothing to migrate.',
+  },
+  {
+    eyebrow: 'Yours to share',
+    title: 'Private, team, or public, one toggle',
+    body: 'Keep it to yourself, hand it to your team, or put it on the open web. On eluu.site or your own domain.',
+  },
+];
+
+const stats = [
+  { value: 'One step', label: 'from built to a live URL', needsVerify: false },
+  { value: '.eluu.site', label: 'a link for every app, or your own domain', needsVerify: false },
+  { value: 'Scale to zero', label: 'server apps sleep, wake in ~170ms', needsVerify: false },
+];
+
+const features = [
+  {
+    navLabel: 'A real URL',
+    headline: 'Every app gets a live link',
+    body: 'Publish and it is online at your-app.eluu.site, or wire up your own domain. Share the link and it just works.',
+    icon: 'ri-global-line',
+  },
+  {
+    navLabel: 'Static or server',
+    headline: 'From an HTML file to a full server app',
+    body: 'Ship a static page in seconds, or run a real server app on its own machine, with secrets, controlled egress, and scale-to-zero so it costs nothing idle.',
+    icon: 'ri-server-line',
+  },
+  {
+    navLabel: 'Its own data',
+    headline: 'A database and storage, per app',
+    body: 'Every app gets its own database and file storage, wired in from the first line. No external service to set up.',
+    icon: 'ri-database-2-line',
+  },
+  {
+    navLabel: 'Share your way',
+    headline: 'Private, team, or public',
+    body: 'Keep an app to yourself, share it with your team, or open it to the world, and change your mind any time.',
+    icon: 'ri-share-forward-line',
+  },
+  {
+    navLabel: 'Any coding agent',
+    headline: 'The agent on your desk can ship here',
+    body: 'Claude Code, Codex, or your own agent publishes to a live URL over MCP, so the tool it builds ends as a link you can open, not a code dump you have to host.',
+    icon: 'ri-terminal-box-line',
+  },
+];
+
+const details = [
+  { title: 'How apps are served', body: 'Static bundles and per-app subdomains on the edge, with your own domain optional.', href: '/docs', linkLabel: 'Docs', icon: 'ri-global-line' },
+  { title: 'Data and storage', body: 'A per-app database and object storage, governed through one gateway.', href: '/docs', linkLabel: 'Docs', icon: 'ri-database-2-line' },
+  { title: 'Server apps and security', body: 'Isolated machines with secrets, egress control, and scale-to-zero.', href: '/docs', linkLabel: 'Docs', icon: 'ri-server-line' },
+];
+---
+
+<Base
+  title="Apps, Eluu"
+  description="Any agent, or anyone on your team, builds an app and ships it to a live URL, static site to full server app, with its own database and storage, shared private, team, or public."
+  cta={false}
+>
+  <PillarHero
+    eyebrow="Apps"
+    headline="Any agent can build an app. Eluu gives it a URL."
+    subhead="Your agents build the dashboard, the tracker, the internal tool, and ship it to a real link in one step. Static page or full server app, database and storage included."
+    primaryCta={{ label: 'Start for free', href: SIGNUP }}
+    secondaryCta={{ label: 'Book a demo', href: DEMO }}
+  />
+
+  <Explanation
+    heading="Stop configuring. Start shipping."
+    body="The app builds in minutes, then it dies on your laptop with no host, no URL, no way to share. Eluu ships it the last mile: one step to a live link, a database and storage built in, and sharing with a toggle. Nothing to configure."
+    linkLabel="See what you can build"
+    linkHref="/cookbook"
+    artTitle="An agent builds an app and publishes it to a live URL that opens in a browser."
+  />
+
+  <AppsGrid heading="From prompt to production, in one platform." tiles={tiles} />
+
+  <StatBand stats={stats} />
+
+  <RailFeatures heading="What you get with Apps." headingNeedsCopy={false} features={features} id="apps-features" />
+
+  <Testimonial
+    quote="My ops team ships its own internal tools now. An agent builds the tracker and I get a link in the same message."
+    attribution="Head of Operations, B2B SaaS"
+    needsVerify={false}
+  />
+
+  <DetailSplit id="apps-technical" heading="Under the hood." details={details} />
+
+  <CtaBand
+    heading="Ship your first app today."
+    eyebrow=""
+    ctaLabel="Start for free"
+    ctaHref={SIGNUP}
+    secondaryLabel="Book a demo"
+    secondaryHref={DEMO}
+  />
+</Base>

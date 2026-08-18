@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eluu — Slack window</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{ --slk-ink:#1d1c1d; --slk-sub:#616061; --slk-code:#e01e5a; --slk-link:#1264a3;
+    --slk-mention-bg:#e8f5fa; --slk-frame:#f1ebe2; --slk-border:rgba(0,0,0,.06); --mono:'JetBrains Mono',ui-monospace,monospace; }
+  *{box-sizing:border-box} html,body{margin:0;background:#e8e2d6; height:100%;}
+  body{font-family:'Lato',-apple-system,Helvetica,Arial,sans-serif; display:flex; justify-content:center; padding:0;}
+  .win{width:100%; max-width:1000px; height:100%; border-radius:20px; background:var(--slk-frame); padding:4px; box-shadow:0 10px 10px -5px rgba(22,22,24,.04),0 16px 25px -5px rgba(22,22,24,.06),0 0 0 .5px rgba(0,0,0,.08); display:flex; flex-direction:column;}
+  .win__bar{display:flex; align-items:center; gap:7px; padding:11px 14px 10px;}
+  .tl{width:11px;height:11px;border-radius:50%} .tl--r{background:#FF5F57}.tl--y{background:#FEBC2E}.tl--g{background:#28C840}
+  .win__panel{background:#fff; border-radius:16px; overflow:hidden; display:flex; flex-direction:column; flex:1; min-height:0;}
+  .ch{border-bottom:1px solid var(--slk-border); padding:12px 22px; flex-shrink:0;}
+  .ch__name{font-weight:900; font-size:16px; color:var(--slk-ink); letter-spacing:-.01em;}
+  .feed{padding:6px 22px 20px; display:flex; flex-direction:column; flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; scroll-behavior:smooth; -webkit-overflow-scrolling:touch;}
+  .feed::-webkit-scrollbar{display:none;}
+  .msg{display:flex; gap:10px; padding-top:16px;}
+  .msg--cont{padding-top:5px;}
+  .av{width:36px;height:36px;border-radius:8px;object-fit:cover;flex-shrink:0;background:#eee;}
+  .bd{min-width:0;flex:1;}
+  .hd{display:flex;align-items:center;gap:7px;margin-bottom:2px;}
+  .nm{font-weight:900;font-size:15px;color:var(--slk-ink);line-height:1.1;}
+  .badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--slk-sub);background:rgba(0,0,0,.08);border-radius:3px;padding:2px 5px;line-height:1;}
+  .ts{font-size:12px;color:var(--slk-sub);}
+  .tx{font-size:15px;line-height:1.46;color:var(--slk-ink);}
+  .tx p{margin:0 0 2px;} .tx strong{font-weight:900;}
+  .sec{font-weight:900;margin-top:12px;}
+  code{font-family:var(--mono);font-size:12.5px;color:var(--slk-code);background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.13);border-radius:4px;padding:1px 5px;}
+  .mention{color:var(--slk-link);background:var(--slk-mention-bg);border-radius:3px;padding:0 3px;font-weight:700;}
+  ul.list{margin:6px 0 2px;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px;}
+  ul.list li{display:flex;gap:9px;} ul.list li::before{content:"•";color:var(--slk-ink);transform:translateY(1px);}
+  .chart{margin-top:12px;width:100%;max-width:430px;border:1px solid rgba(0,0,0,.08);border-radius:10px;background:#fcfbf9;padding:14px 14px 8px;}
+  .chart__t{font-size:11px;color:var(--slk-sub);line-height:1.35;margin-bottom:6px;}
+  .chart svg{display:block;width:100%;height:auto;}
+  .chart__link{margin-top:8px;font-size:14px;color:var(--slk-link);}
+  .shim{display:flex;align-items:center;gap:9px;font-size:13px;}
+  .shim img{width:18px;height:18px;border-radius:4px;}
+  .shim span{background:linear-gradient(90deg,#616061 0%,#616061 40%,#c9c8c6 50%,#616061 60%,#616061 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shim 1.6s linear infinite;}
+  @keyframes shim{to{background-position:-200% 0}}
+  /* Hidden messages must take NO layout space — otherwise the feed overflows from t=0
+     and the first scroll overshoots into blank space. Reveal = display + enter animation. */
+  .feed .msg{display:none;}
+  .feed .msg.in{display:flex; animation:msgin .5s cubic-bezier(.2,0,0,1);}
+  @keyframes msgin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  #shim{display:none;}
+  .reacts{display:flex;gap:5px;margin-top:7px;opacity:0;transform:scale(.9);transform-origin:left center;transition:opacity .35s ease,transform .35s cubic-bezier(.34,1.56,.64,1);}
+  .reacts.in{opacity:1;transform:none;}
+  .rx{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;line-height:1;padding:4px 8px;border-radius:12px;background:#fff;border:1px solid rgba(0,0,0,.13);color:var(--slk-sub);font-weight:700;}
+  .rx--me{background:var(--slk-mention-bg);border-color:#1d9bd1;color:var(--slk-link);}
+  .rx em{font-style:normal;font-size:13px;}
+  /* app-style action row under a message (Scribe-like: "took notes | Join | Notes") */
+  .acts{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13.5px;color:var(--slk-sub);}
+  .acts img{width:18px;height:18px;border-radius:4px;}
+  .acts a{color:var(--slk-link);text-decoration:none;}
+  .acts i{font-style:normal;color:#c6c5c4;margin:0 2px;}
+  .hl{font-weight:900;}
+</style>
+</head>
+<body>
+<div class="win">
+  <div class="win__bar"><span class="tl tl--r"></span><span class="tl tl--y"></span><span class="tl tl--g"></span></div>
+  <div class="win__panel">
+    <div class="ch"><span class="ch__name" id="chname">#month-end-close</span></div>
+    <div class="feed" id="feed">
+      <div class="msg msg--cont" id="shim"><div style="width:36px;flex-shrink:0"></div><div class="bd"><div class="shim"><img id="shimav" src="" alt=""><span id="shimtext"></span></div></div></div>
+    </div>
+  </div>
+</div>
+<script>
+  const AV = (seed,bg)=>`https://api.dicebear.com/9.x/adventurer/svg?seed=${seed}&backgroundColor=${bg}`;
+  const HUMAN = { David:'https://randomuser.me/api/portraits/men/32.jpg', Mira:'https://randomuser.me/api/portraits/women/65.jpg' };
+  const frame = (label, inner, link) => `<div class="chart"><div class="chart__t">${label}</div>${inner}<div class="chart__link">${link}</div></div>`;
+  // finance — cumulative reconciliation area vs flat exceptions line
+  const chartArea = (label, link) => frame(label, `<svg viewBox="0 0 400 150" preserveAspectRatio="none"><g stroke="#eceae6" stroke-width="1"><line x1="0" y1="40" x2="400" y2="40"/><line x1="0" y1="85" x2="400" y2="85"/></g>
+    <path d="M0,120 L57,108 L114,96 L171,74 L228,64 L285,46 L342,34 L400,22 L400,150 L0,150 Z" fill="#755a68" fill-opacity=".10"/>
+    <path d="M0,120 L57,108 L114,96 L171,74 L228,64 L285,46 L342,34 L400,22" fill="none" stroke="#755a68" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M0,140 L100,138 L200,135 L300,133 L400,132" fill="none" stroke="#f6b51e" stroke-width="2" stroke-linecap="round"/></svg>`, link);
+  // sales — weekly pipeline bars, current week highlighted
+  const chartBars = (label, link) => { const v=[62,58,74,70,86,92,88,104]; const bars=v.map((h,i)=>{const x=8+i*49, bh=h, y=140-bh; const on=i===v.length-1;
+      return `<rect x="${x}" y="${y}" width="34" height="${bh}" rx="4" fill="#755a68" fill-opacity="${on?'1':'.28'}"/>`; }).join('');
+    return frame(label, `<svg viewBox="0 0 400 150" preserveAspectRatio="none"><g stroke="#eceae6" stroke-width="1"><line x1="0" y1="45" x2="400" y2="45"/><line x1="0" y1="95" x2="400" y2="95"/></g>${bars}</svg>`, link); };
+  // ce — error-rate spike that drops to zero after the fix
+  const chartSpike = (label, link) => frame(label, `<svg viewBox="0 0 400 150" preserveAspectRatio="none"><g stroke="#eceae6" stroke-width="1"><line x1="0" y1="40" x2="400" y2="40"/><line x1="0" y1="85" x2="400" y2="85"/></g>
+    <path d="M0,132 L60,128 L100,122 L130,52 L165,24 L200,38 L235,30 L268,96 L300,128 L340,133 L400,134 L400,150 L0,150 Z" fill="#d9544f" fill-opacity=".09"/>
+    <path d="M0,132 L60,128 L100,122 L130,52 L165,24 L200,38 L235,30 L268,96 L300,128 L340,133 L400,134" fill="none" stroke="#d9544f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="268" y1="12" x2="268" y2="140" stroke="#755a68" stroke-width="1.5" stroke-dasharray="4 4"/><text x="276" y="22" font-size="11" fill="#616061" font-family="Lato,sans-serif">fix deployed</text></svg>`, link);
+  // hr — screening funnel, horizontal bars
+  const chartFunnel = (label, link) => { const rows=[['Applied',62],['Screened',38],['Graded',12],['Shortlist',5]]; const max=62;
+    const bars=rows.map((r,i)=>{const y=14+i*34, w=Math.max(18, r[1]/max*290);
+      return `<text x="0" y="${y+12}" font-size="11.5" fill="#616061" font-family="Lato,sans-serif">${r[0]}</text><rect x="72" y="${y}" width="${w}" height="17" rx="4" fill="#755a68" fill-opacity="${(1-i*.2).toFixed(2)}"/><text x="${78+w}" y="${y+13}" font-size="11.5" font-weight="bold" fill="#1d1c1d" font-family="Lato,sans-serif">${r[1]}</text>`; }).join('');
+    return frame(label, `<svg viewBox="0 0 400 150">${bars}</svg>`, link); };
+  const agent = (name,seed,bg,time,body)=>({who:'agent',name,av:AV(seed,bg),time,body});
+  const human = (name,time,body)=>({who:'human',name,av:HUMAN[name],time,body});
+  const acts = (seed,bg,label,links)=>`<div class="acts"><img src="${AV(seed,bg)}" alt=""><span>${label}</span><i>|</i>${links.map(l=>`<a href="#" onclick="return false">${l}</a>`).join('<i>|</i>')}</div>`;
+
+  const TEAMS = {
+    finance:{ channel:'#month-end-close', shim:{i:2,steps:['Scanning 142 Stripe payouts…','Matching 3,208 ledger rows in Sheets…','Isolating 3 exceptions…'],seed:'Ledger',bg:'c5f2e0'}, msgs:[
+      agent('Ledger','Ledger','c5f2e0','9:24 AM',`<p>July close is ready. I reconciled <strong>139 of 142</strong> payouts (<code>$486,200</code> gross) and posted the matches to <code>QuickBooks</code> — 3 exceptions need your sign-off.</p>`),
+      human('David','9:25 AM',`<p><span class="mention">@Ledger</span> which exception is the biggest, and can we clear it today?</p>`),
+      agent('Ledger','Ledger','c5f2e0','9:25 AM',`<p>Pulled the three from <code>Stripe</code> and matched them in <code>Sheets</code>:</p><ul class="list"><li><span><code>Acme Corp</code> — <strong>$18,400</strong>, over threshold, awaiting sign-off</span></li><li><span><code>Vertex</code> — <strong>$2,110</strong>, already approved, ready to post</span></li><li><span><code>Northwind</code> — <strong>$960</strong>, blocked on invoice <code>INV-2231</code></span></li></ul>${chartArea('Payouts reconciled vs. exceptions — July 1–31','View reconciliation →')}`),
+      human('David','9:26 AM',`<p>Perfect. Can this run itself every month?</p>`),
+      agent('Ledger','Ledger','c5f2e0','9:26 AM',`<p class="hl">Month-end close scheduled</p><p>Runs the 1st at 7:00 AM — reconciles, posts here, and refreshes the Approvals app on your phone.</p>${acts('Ledger','c5f2e0','Ledger saved the report',['Open Approvals','View job','july-reconciliation.md'])}`),
+    ]},
+    sales:{ channel:'#pipeline', shim:{i:2,steps:['Scoring 214 open deals…','Reading 1,872 emails for last touch…','Drafting 6 follow-ups…'],seed:'Sana',bg:'b6e3f4'}, msgs:[
+      agent('Sana','Sana','b6e3f4','9:12 AM',`<p>Weekly pipeline is refreshed. Open is <strong>$3.4M</strong>, up <strong>9% WoW</strong>. 6 deals stalled 21+ days (<strong>$720K</strong> at risk) — I drafted a follow-up per owner.</p>`),
+      human('David','9:13 AM',`<p><span class="mention">@Sana</span> which stalled deal should I call first?</p>`),
+      agent('Sana','Sana','b6e3f4','9:13 AM',`<p>Ranked by value and slip-risk:</p><ul class="list"><li><span><code>Acme Corp</code> — <strong>$180K</strong>, Negotiation, no touch 24d</span></li><li><span><code>Vertex</code> — <strong>$96K</strong>, Proposal, 22d</span></li><li><span><code>Northwind</code> — <strong>$60K</strong>, follow-up already sent</span></li></ul>${chartBars('Open pipeline by week — current week highlighted','View pipeline →')}`),
+      human('David','9:14 AM',`<p>Queue them — owners approve from their phones.</p>`),
+      agent('Sana','Sana','b6e3f4','9:14 AM',`<p class="hl">6 drafts queued in Deal Room</p><p>Each owner gets a one-tap send. I nudge any deal still silent on Thursday.</p>${acts('Sana','b6e3f4','Sana updated the pipeline view',['Open Deal Room','View pipeline','pipeline-week.md'])}`),
+    ]},
+    ce:{ channel:'#inc-checkout-5xx', shim:{i:2,steps:['Scanning 4,120 log lines…','Diffing the last 3 deploys…','Writing the guard + test…'],seed:'Cass',bg:'ffd5dc'}, msgs:[
+      agent('Cass','Cass','ffd5dc','12:32 PM',`<p><code>checkout-service</code> is returning <strong>&gt;5% HTTP 500s</strong> on <code>POST /api/checkout</code>. Root cause: an unguarded divide in the promo logic at <code>main.go:236</code>.</p>`),
+      human('David','12:33 PM',`<p><span class="mention">@Cass</span> can we ship a fix today?</p>`),
+      agent('Cass','Cass','ffd5dc','12:33 PM',`<p>Traced it and opened a PR with the guard + a test:</p><ul class="list"><li><span><code>Sentry</code> — 142 events since 08:51</span></li><li><span><code>GitHub</code> — regressed in deploy <code>#482</code></span></li><li><span><code>Linear</code> — filed <code>ENG-1043</code> (P1)</span></li></ul>${chartSpike('checkout-service 500s per minute — today','View PR →')}`),
+      human('David','12:35 PM',`<p>Ship it. What do we tell Vertex?</p>`),
+      agent('Cass','Cass','ffd5dc','12:35 PM',`<p class="hl">Post-mortem drafted, status note sent</p><p>Revert ships in the 14:00 deploy — I confirm here once syncs run clean for 30 minutes.</p>${acts('Cass','ffd5dc','Cass saved the RCA',['RCA-ENG-1043.md','Watch deploy','On-call app'])}`),
+    ]},
+    hr:{ channel:'#hiring-ae', shim:{i:2,steps:['Scanning 234 résumés…','Checking LinkedIn for extra signal…','Finalising the top 5…'],seed:'Hana',bg:'ffdfbf'}, msgs:[
+      agent('Hana','Hana','ffdfbf','10:04 AM',`<p>The shortlist for the <strong>Account Executive</strong> role is ready — <strong>5 of 62</strong> applicants, screened and graded against the scorecard.</p>`),
+      human('Mira','10:05 AM',`<p><span class="mention">@Hana</span> who's the top pick, and are they available this week?</p>`),
+      agent('Hana','Hana','ffdfbf','10:05 AM',`<p>Top three by score:</p><ul class="list"><li><span><code>Priya S.</code> — <strong>92</strong>, 6y SaaS AE, free Thu</span></li><li><span><code>Marco L.</code> — <strong>88</strong>, strong outbound</span></li><li><span><code>Dana R.</code> — <strong>85</strong>, best culture fit</span></li></ul>${chartFunnel('Screening funnel — Account Executive','View shortlist →')}`),
+      human('Mira','10:06 AM',`<p>Book Priya first — this week if she can.</p>`),
+      agent('Hana','Hana','ffdfbf','10:06 AM',`<p class="hl">Interviews scheduled</p><p>Priya is booked Thu 2:00 PM; two more holds sent. Scorecards live in the Pipeline app.</p>${acts('Hana','ffdfbf','Hana updated the shortlist',['Open Pipeline','View calendar','AE-shortlist.md'])}`),
+    ]},
+  };
+
+  const team = new URLSearchParams(location.search).get('t') || location.hash.replace('#','') || 'finance';
+  const T = TEAMS[team] || TEAMS.finance;
+  const feed = document.getElementById('feed');
+  const shim = document.getElementById('shim');
+  document.getElementById('chname').textContent = T.channel;
+  document.getElementById('shimav').src = AV(T.shim.seed, T.shim.bg);
+  document.getElementById('shimtext').textContent = (T.shim.steps||[''])[0];
+
+  // build message nodes (before #shim)
+  const nodes = T.msgs.map(m => {
+    const el = document.createElement('div'); el.className = 'msg';
+    el.innerHTML = `<img class="av" src="${m.av}" alt="${m.name}"><div class="bd"><div class="hd"><span class="nm">${m.name}</span>${m.who==='agent'?'<span class="badge">Agent</span>':''}<span class="ts">${m.time}</span></div><div class="tx">${m.body}</div></div>`;
+    feed.insertBefore(el, shim); return el;
+  });
+
+  // reactions land on the final message as the finishing beat
+  const RX = {
+    finance:[['✅',2,1],['🙌',1,0]], sales:[['🔥',1,1],['👀',2,0]],
+    ce:[['🙏',2,1],['🚀',1,0]], hr:[['🎉',2,1],['👏',1,0]],
+  };
+  const rxWrap = document.createElement('div'); rxWrap.className='reacts';
+  rxWrap.innerHTML = (RX[team]||RX.finance).map(r=>`<span class="rx${r[2]?' rx--me':''}"><em>${r[0]}</em>${r[1]}</span>`).join('');
+  nodes[nodes.length-1].querySelector('.bd').appendChild(rxWrap);
+
+  // natural chat scroll: after each reveal, smooth-scroll to the newest content.
+  // Reveal ONCE and hold — the hero reloads this window on team switch, so it
+  // always plays from the start and always finishes. No mid-dwell restart.
+  const toBottom = ()=> feed.scrollTo({ top: feed.scrollHeight, behavior:'smooth' });
+  let i=0,timer;
+  const step=()=>{
+    if(i>=nodes.length){ timer=setTimeout(()=>{ rxWrap.classList.add('in'); setTimeout(toBottom,80); },700); return; }
+    const doReveal=()=>{ nodes[i].classList.add('in'); if(i>=2) requestAnimationFrame(()=>setTimeout(toBottom,60)); i++; timer=setTimeout(step,1300); };
+    if(i===T.shim.i){ feed.insertBefore(shim,nodes[i]); shim.style.display='flex'; if(i>=2) requestAnimationFrame(()=>setTimeout(toBottom,60));
+      const steps=T.shim.steps||[]; const stx=document.getElementById('shimtext'); let si=0; stx.textContent=steps[0]||'';
+      const cyc=setInterval(()=>{ si++; if(si<steps.length) stx.textContent=steps[si]; },1400);
+      timer=setTimeout(()=>{ clearInterval(cyc); shim.style.display='none'; doReveal(); },1400*Math.max(steps.length,1)+200); } else doReveal();
+  };
+  shim.style.display='none'; timer=setTimeout(step,500);
+</script>
+</body>
+</html>

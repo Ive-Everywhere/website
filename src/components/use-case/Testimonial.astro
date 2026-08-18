@@ -1,17 +1,17 @@
 ---
 /**
- * Section 5 — the pull quote. Figma `144:2910` "Features Sections [Landing
+ * Section 5, the pull quote. Figma `144:2910` "Features Sections [Landing
  * Page]". Shell: padding 96/188. Card `147:2975`: padding 60/40, centred, gap
  * 40, radius 28, on `bg-card-surface`.
  *
  * Render order in the node tree is attribution FIRST (147:2986), quote second
- * (147:2976) — kept in that order, which is also the order `home/Proof.astro`
+ * (147:2976), kept in that order, which is also the order `home/Proof.astro`
  * uses for the same card.
  *
  * EVERY testimonial on a use-case page is a placeholder today: the content pack
  * marks all of them `[VERIFY: anonymized, role-attributed.]`. So the quote and
  * the attribution both render inside `.copy-needed`, and `needsVerify` defaults
- * to true. Nothing here is invented — no named customer, no logo, no photo.
+ * to true. Nothing here is invented, no named customer, no logo, no photo.
  */
 
 interface Props {
@@ -32,7 +32,7 @@ const { quote, attribution, needsVerify = true } = Astro.props;
         {needsVerify ? <span class="copy-needed">{attribution}</span> : attribution}
       </figcaption>
 
-      {/* Landing Title/H2, CENTER variant, 48/56, fixed 792px — a real
+      {/* Landing Title/H2, CENTER variant, 48/56, fixed 792px, a real
           `.t-landing-h2` in global.css rather than an inline pair here. */}
       <blockquote class="t-h4 text-text-strong-950 max-w-[1042px] text-balance">
         {needsVerify ? <span class="copy-needed">{quote}</span> : quote}

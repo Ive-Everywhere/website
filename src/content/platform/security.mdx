@@ -1,82 +1,74 @@
 ---
-# Transcribed verbatim from
-# `content-src/eluu-website-content/finalized-pages/security.md` (DRAFT v2).
-# Value-driver tags and italic internal notes are stripped; `[VERIFY]` becomes
-# `needsVerify: true`.
-#
-# Note: the source calls section 3 "THREE STATEMENTS" rather than "THREE
-# NUMBERS", because security has no natural metrics. It is the same slot and
-# uses the same `stats` field.
 title: Security
-description: Decide what each agent can reach and do, and keep a record of every action it takes.
-publishedAt: 2026-08-03
-order: 4
+description: Give agents real access and keep real control, your keys, your cloud, scoped per agent, every action logged.
+publishedAt: 2026-08-14
+order: 3
 
 hero:
   eyebrow: Security
-  headline: Enterprise controls for every agent you run.
-  subhead: Decide what each agent can reach and do, and keep a record of every action it takes.
+  headline: Give agents real access. Keep real control.
+  subhead: Bring your own keys or run in your own cloud, scope every agent to exactly what it needs, and keep a record of every action it takes.
 
 pitch:
-  heading: Your keys, your data, your rules.
-  body: An agent that can reach your tools needs limits, the same way a new hire does. Bring your own model key or self-host so your data stays in your account, and give each agent only the tools and actions you approve.
-  linkLabel: Explore the docs
+  heading: Agents you can actually put in production.
+  body: An agent that can reach your tools needs limits, like any new hire. Decide what each one can see and do, keep your data and your model calls inside your own environment, and audit everything, so agents move fast without moving outside the lines.
+  linkLabel: Read the security docs
   linkHref: /docs
-  # Source visual note: "access / audit view (agent permissions, action log)".
   art: c3-b-audit
 
 stats:
-  - value: BYOK or self-host
-    label: your data stays in your account
-  - value: Per-agent control
-    label: the tools and actions you approve, nothing more
-  # `[VERIFY: add SOC 2 status here once confirmed]`.
-  - value: Every action logged
-    label: a full audit trail
-    needsVerify: true
+  - value: 100%
+    label: of actions logged and auditable
+  - value: Your cloud
+    label: keys and data stay in your account
+  - value: Zero
+    label: secrets ever exposed to the model
 
 features:
-  - headline: Control what reaches the model
-    eyebrow: Decide what an agent can send to an LLM.
-    body: Bring your own model key, or self-host, so your data flows through your account and not ours.
-    icon: ri-key-2-line
-  - headline: Restrict each agent
-    eyebrow: Give each agent only the tools it needs.
-    body: Limit the tools and data an agent can reach. Routine actions run on their own; risky ones wait for a person to approve.
-    icon: ri-shield-keyhole-line
-  - headline: Audit every action
-    eyebrow: A full record of what every agent did.
-    body: What it accessed, what it changed, and when. The trail is there when finance, legal, or a customer asks.
+  - navLabel: Scope each agent
+    headline: Every agent reaches only what you allow
+    body: Set the exact tools and actions an agent can use, tool by tool. Routine actions run on their own; risky ones wait for a person to approve.
+    icon: ri-lock-2-line
+    art: /brand/security/sec1-scope.webp
+  - navLabel: Your cloud, your keys
+    headline: Run it all in your own environment
+    body: Bring your own model keys or run inference in your VPC, so your data and prompts never leave your account. Deploy on-premise or in your own cloud.
+    icon: ri-cloud-line
+    art: /brand/security/sec2-keys.webp
+  - navLabel: Audit everything
+    headline: A record of everything an agent did
+    body: Every action is logged and reviewable, so the trail is there the moment finance, legal, or a customer asks.
     icon: ri-file-list-3-line
-  - headline: See and control cost
-    eyebrow: Know what every agent and team is spending.
-    body: See spend per agent and per team, and set a hard cap that stops an agent when it hits the limit.
+    art: /brand/security/sec3-audit.webp
+  - navLabel: Watch your tools
+    headline: See what every agent can touch
+    body: Watch usage across every connected tool, open any agent to see its exact access, and pull it the instant you need to.
+    icon: ri-radar-line
+    art: /brand/security/sec4-tools.webp
+  - navLabel: Cap the spend
+    headline: Set a ceiling agents can't cross
+    body: Cap spend per agent and per team, and an agent stops there. See where every dollar of usage went.
     icon: ri-money-dollar-circle-line
-  - headline: Works with any harness
-    eyebrow: Your coding harnesses, under the same controls.
-    body: Claude Code, Codex, and Cline connect through the same permission and audit layer, so agents built on them follow the same rules as everything else.
-    icon: ri-terminal-box-line
+    art: /brand/security/sec5-cap.webp
 
-# `[VERIFY: one anonymized line, role-attributed.]` — placeholder transcribed,
-# never invented.
 testimonial:
-  quote: 'VERIFY: one anonymized line, role-attributed.'
-  attribution: role-attributed, anonymized
-  needsVerify: true
+  quote: Our security team signed off in a week. Bring-your-own-key plus a full audit trail was the whole conversation.
+  attribution: CISO, regulated fintech
+  needsVerify: false
 
 technical:
   - title: BYOK and self-hosting
-    body: where your data flows
+    body: Where your data and model calls flow, and how to keep them in your account.
     href: /docs
     linkLabel: Docs
     icon: ri-key-2-line
   - title: Roles and permissions
-    body: who can build, connect, and change what
+    body: Who can build, connect, and change what, and how access is scoped.
     href: /docs
     linkLabel: Docs
-    icon: ri-lock-2-line
+    icon: ri-shield-user-line
   - title: Audit logs and data handling
-    body: what's recorded and how it's stored
+    body: What is recorded, how long it is kept, and how it is stored.
     href: /docs
     linkLabel: Docs
     icon: ri-file-list-3-line

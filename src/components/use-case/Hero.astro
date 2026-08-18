@@ -1,6 +1,6 @@
 ---
 /**
- * Use-case hero — Figma `144:2692` (FRAME "Hero", first of three siblings).
+ * Use-case hero, Figma `144:2692` (FRAME "Hero", first of three siblings).
  *
  * Shell: column, padding 32/187/64, gap 56, fill #F8F8F3 (= bg-bg-white-0).
  * Inner: Title(gap 28) > Content(gap 16) > [H1 742px, Paragraph/Medium], then
@@ -48,7 +48,7 @@ const subheadLines = toLines(subhead);
 
       <div class="flex w-full flex-col items-center gap-4">
         {/* `.t-landing-h1` is fluid, so no size is restated here. A drawn break
-            applies above `lg` only — below it the heading reflows. */}
+            applies above `lg` only, below it the heading reflows. */}
         <h1 class="t-landing-h1 text-text-strong-950 max-w-[742px] text-center text-balance">
           {
             headlineLines.map((line, index) => (

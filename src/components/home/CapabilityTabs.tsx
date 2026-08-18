@@ -9,6 +9,8 @@ interface Item {
 }
 interface Tab {
   tab: string;
+  bigIcon: string;
+  glow: string;
   tabSub: string;
   headline: string;
   intro: string;
@@ -19,27 +21,31 @@ interface Tab {
 
 const TABS: Tab[] = [
   {
-    tab: 'Run',
+    tab: 'Agents',
+    bigIcon: 'ri-robot-3-line',
+    glow: '#f3e4ec',
     tabSub: 'Connect your tools and hand off the work.',
     headline: 'Put agents to work across your tools.',
     intro:
       'Connect your systems and hand the work to agents that run it end to end, wherever your team works.',
-    ctaLabel: 'Explore the platform',
-    ctaHref: '/connections',
+    ctaLabel: 'Explore Agents',
+    ctaHref: '/agents',
     items: [
       { icon: 'ri-plug-line', title: 'Connect any tool', body: 'Native connections to Slack, Salesforce, Stripe, Sheets, and 100+ more. Agents read and act, no glue code.' },
       { icon: 'ri-terminal-box-line', title: 'Bring your harness', body: 'Run Claude Code, Codex, or any open harness on the subscription you already pay for.' },
-      { icon: 'ri-calendar-schedule-line', title: 'Schedule jobs', body: 'Run on a schedule, or fire from an inbound email or an API call — no one has to start it.' },
+      { icon: 'ri-calendar-schedule-line', title: 'Schedule jobs', body: 'Run on a schedule, or fire from an inbound email or an API call, no one has to start it.' },
       { icon: 'ri-slack-line', title: 'Talk on Slack', body: 'Assign work and get finished results in the channels your team already lives in.' },
     ],
   },
   {
-    tab: 'Scale',
-    tabSub: 'One workspace, as many agents as the work needs.',
-    headline: 'Scale to a whole team of agents.',
+    tab: 'Workforce',
+    bigIcon: 'ri-stack-line',
+    glow: '#ece7f3',
+    tabSub: 'Scale the work, not the headcount.',
+    headline: "Move a team's worth of work with agents.",
     intro: 'Run a whole team at once, in one workspace, where what one agent learns the rest can use.',
-    ctaLabel: 'See the workspace',
-    ctaHref: '/workspace',
+    ctaLabel: 'Explore Workforce',
+    ctaHref: '/workforce',
     items: [
       { icon: 'ri-stack-line', title: 'Run in parallel', body: 'Hundreds of sessions at once, not one task waiting in a queue behind another.' },
       { icon: 'ri-dashboard-line', title: 'Build live apps', body: 'Dashboards, trackers, and internal tools your agents build, connect to your data, and keep current.' },
@@ -48,11 +54,13 @@ const TABS: Tab[] = [
     ],
   },
   {
-    tab: 'Secure',
+    tab: 'Security',
+    bigIcon: 'ri-lock-2-line',
+    glow: '#f0e6e2',
     tabSub: 'Governed and auditable, in your environment.',
     headline: 'Every agent under your control.',
     intro: 'Decide what each agent can reach, keep your data in your environment, and record everything it does.',
-    ctaLabel: 'Learn about security',
+    ctaLabel: 'Explore Security',
     ctaHref: '/security',
     items: [
       { icon: 'ri-lock-2-line', title: 'Granular access control', body: 'Set the exact tools and actions each agent can use, per agent and per tool.' },
@@ -112,7 +120,7 @@ export default function CapabilityTabs() {
           </h2>
         </div>
 
-        {/* Selector tabs — dim the unselected, no solid highlight on the active */}
+        {/* Selector tabs, dim the unselected, no solid highlight on the active */}
         <div className="grid gap-6 lg:grid-cols-3">
           {TABS.map((t, i) => (
             <button
@@ -124,11 +132,27 @@ export default function CapabilityTabs() {
                 i === active ? 'opacity-100' : 'opacity-40 hover:opacity-70'
               }`}
             >
-              {/* Illustration placeholder — 480 × 300 (16:10). */}
-              <div className="border-band-muted flex aspect-[16/10] w-full items-center justify-center rounded-[12px] border border-dashed">
-                <span className="t-label-xs text-band-muted font-mono uppercase tracking-[0.08em]">
-                  Illustration · 480 × 300
-                </span>
+              {/* The nav's own product icon, writ large: gradient-clipped glyph on the
+                  warm paper tile (light on the maroon band, per Krishna). */}
+              <div
+                className="flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-[12px]"
+                style={{
+                  background: `radial-gradient(85% 95% at 50% 18%, ${t.glow}, rgba(255,255,255,0) 64%), radial-gradient(62% 46% at 50% 98%, rgba(93,55,75,.13), rgba(93,55,75,0) 72%), #f5f2ee`,
+                }}
+              >
+                <i
+                  className={t.bigIcon}
+                  aria-hidden="true"
+                  style={{
+                    fontSize: '118px',
+                    lineHeight: 1,
+                    background: 'linear-gradient(155deg, #a98f9c 6%, #755a68 46%, #4a2c3c 94%)',
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    color: 'transparent',
+                    filter: 'drop-shadow(0 12px 20px rgba(93,55,75,.28))',
+                  }}
+                />
               </div>
               <div className="flex flex-col gap-1 px-2 pb-1">
                 <span className="t-h6 text-band-ink">{t.tab}</span>
@@ -138,10 +162,10 @@ export default function CapabilityTabs() {
           ))}
         </div>
 
-        {/* Divider between the selectors and the detail — like Modal */}
+        {/* Divider between the selectors and the detail, like Modal */}
         <div className="border-band-muted border-t opacity-20" />
 
-        {/* Active content — no eyebrow above the heading */}
+        {/* Active content, no eyebrow above the heading */}
         <div className="grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] lg:gap-20">
           <div className="flex flex-col gap-6">
             <h3 className="t-landing-h3 text-band-ink text-balance">{a.headline}</h3>

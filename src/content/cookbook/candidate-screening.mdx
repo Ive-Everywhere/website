@@ -1,0 +1,53 @@
+---
+title: Screen candidates against the scorecard
+description: Read every application overnight, grade against the scorecard, and shortlist the top few.
+publishedAt: 2026-08-18
+icon: ri-user-search-line
+category: People
+featured: false
+order: 5
+difficulty: starter
+skills:
+  - name: Scorecard grading
+    description: Score with the evidence
+  - name: Shortlist ranking
+    description: Rank the top few with gaps
+  - name: Interview scheduling
+    description: Book the holds
+goal: screen the applicants against the scorecard and shortlist the top few
+integrations: [notion, gmail, linear]
+whatItDoes:
+  - Reads every résumé against the role's scorecard
+  - Grades on the criteria that matter, with the evidence for each
+  - Shortlists the top candidates and books the interviews
+  - Sends the weekly hiring digest to the panel
+howToUse:
+  - Drop the scorecard and the job spec onto the agent's drive
+  - Point it at the applicant inbox or ATS
+  - Let it run overnight; review the shortlist in the morning
+  - Advance or pass with one tap
+workflow:
+  - kind: trigger
+    title: Nightly
+    body: After the day's applications land.
+  - kind: prompt
+    title: Grade to the scorecard
+    body: Score each applicant with the evidence.
+  - kind: prompt
+    title: Shortlist
+    body: Rank the top few and note the gaps.
+  - kind: result
+    title: Book + digest
+    body: Send interview holds and the weekly digest.
+prompt: |
+  Screen this week's applicants for the {{role}} role.
+
+  1. Read every résumé and cover note in the applicant inbox.
+  2. Grade each against the scorecard on the agent's drive, with one line of
+     evidence per criterion.
+  3. Shortlist the top 5, ranked, with the gaps for each.
+  4. Send interview holds to the top 3 and post the weekly hiring digest to
+     the panel.
+
+  Never reject anyone automatically, surface the borderline cases for me.
+---

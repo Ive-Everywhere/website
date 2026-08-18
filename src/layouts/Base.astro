@@ -9,8 +9,10 @@ interface Props {
   title: string;
   description: string;
   /**
-   * Forces a theme and disables the switch. Only the `/dark` review route uses
-   * it — normally the theme follows the OS or the visitor's stored choice.
+   * Forces a theme and disables the switch. The site is hard-set to light for
+   * now (default below), so the OS-follow + stored-choice path (theme=null) is
+   * dormant, pass it explicitly to re-enable the switch on a page. The `/dark`
+   * review route passes `theme='dark'`.
    */
   theme?: 'light' | 'dark' | null;
   ogImage?: string;
@@ -21,7 +23,7 @@ interface Props {
 const {
   title,
   description,
-  theme = null,
+  theme = 'light',
   ogImage = '/brand/logotext-256-light.png',
   cta = true,
 } = Astro.props;
@@ -68,8 +70,8 @@ const robots = indexable
   </head>
 
   {/*
-    `overflow-x-clip` is a backstop, not the fix — every section is built to
-    fit — but a single mis-sized child should degrade to a clipped edge rather
+    `overflow-x-clip` is a backstop, not the fix, every section is built to
+    fit, but a single mis-sized child should degrade to a clipped edge rather
     than to a page the visitor can drag sideways. `clip` rather than `hidden`
     because `hidden` on the body makes `position: sticky` stop working.
   */}
@@ -84,7 +86,7 @@ const robots = indexable
     {/*
       Sticky lives here, not inside Navbar. A sticky element only travels
       within its own parent's box, and `<header>` is exactly as tall as the
-      nav — so a sticky child of it can never move and silently does nothing.
+      nav, so a sticky child of it can never move and silently does nothing.
     */}
     <header class="sticky top-0 z-40"><Navbar /></header>
     <main id="main"><slot /></main>

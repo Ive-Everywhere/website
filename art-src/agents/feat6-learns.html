@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"></head><body>
+<!-- Krishna correction: NO header — each memory rule is its own card, blur-stacked.
+     Fix (supervisor): the reveal step must exceed the title band so every card
+     shows its OWN rule (rev 1 stepped 50px under a 92px card, hiding all titles).
+     Now steps 82px: front card fully readable, each next reveals its title +
+     label, back two recede with blur. One maroon accent: the newest-card dot. -->
+<style>
+  .mem-stack { position: relative; width: 640px; height: 560px; }
+  .mem-card {
+    position: absolute; left: 50%; width: 620px;
+    background: var(--panel); border-radius: 18px; padding: 20px 26px;
+    transform-origin: top center;
+    box-shadow: 0 16px 34px -16px rgba(30, 28, 30, .17), 0 4px 11px -5px rgba(30, 28, 30, .06);
+  }
+  /* step 82px = title band (pad 20 + title 30 + label 22) fully clears the card above */
+  /* Krishna: more spacing between cards — each fully separated with a clear gap */
+  .mem-c1 { transform: translateX(-50%) translateY(0px)   scale(1);    z-index: 6; }
+  .mem-c2 { transform: translateX(-50%) translateY(120px) scale(.99);  z-index: 5; }
+  .mem-c3 { transform: translateX(-50%) translateY(240px) scale(.98);  z-index: 4; }
+  .mem-c4 { transform: translateX(-50%) translateY(356px) scale(.965); z-index: 3; opacity: .6;  filter: blur(.7px); }
+  .mem-c5 { transform: translateX(-50%) translateY(464px) scale(.95);  z-index: 2; opacity: .28; filter: blur(1.8px); }
+  .mem-t { font-size: 26px; font-weight: 450; letter-spacing: -.008em; line-height: 1.2; color: var(--ink); display: flex; align-items: center; gap: 11px; }
+  .mem-s { font-size: 19px; color: var(--soft); margin-top: 5px; line-height: 1.3; }
+  .mem-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--maroon); flex: none; }
+  .mem-more {
+    position: absolute; left: 50%; transform: translateX(-50%); bottom: 40px;
+    font-family: var(--mono); font-size: 16px; color: var(--soft);
+    background: var(--panel); border: 1px solid var(--hair); border-radius: 999px; padding: 8px 16px;
+    box-shadow: 0 4px 12px -5px rgba(30,28,30,.1); z-index: 7;
+  }
+</style>
+<div class="stage cv-warm">
+  <div class="mem-stack">
+    <div class="mem-card mem-c1">
+      <div class="mem-t"><span class="mem-dot"></span>Acme pays net-60, not net-30</div>
+      <div class="mem-s">learned from 3 invoices</div>
+    </div>
+    <div class="mem-card mem-c2">
+      <div class="mem-t">Anything over $10k needs Priya</div>
+      <div class="mem-s">approval policy</div>
+    </div>
+    <div class="mem-card mem-c3">
+      <div class="mem-t">Q3 close excludes intercompany</div>
+      <div class="mem-s">from the close playbook</div>
+    </div>
+    <div class="mem-card mem-c4">
+      <div class="mem-t">EU invoices need a VAT id</div>
+      <div class="mem-s">compliance rule</div>
+    </div>
+    <div class="mem-card mem-c5">
+      <div class="mem-t">Northwind bills quarterly</div>
+      <div class="mem-s">learned from 2 renewals</div>
+    </div>
+    <div class="mem-more">+ 123 more</div>
+  </div>
+</div></body></html>

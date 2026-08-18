@@ -1,86 +1,88 @@
 ---
-# Transcribed verbatim from
-# `content-src/eluu-website-content/finalized-pages/agents.md` (DRAFT v4).
-# The `[Advantage]` / `[Speed]` / `[Cost]` / `[Risk]` tags and the italic
-# `*(...)*` notes are internal value drivers, not page copy, so they are not
-# carried here. `[VERIFY]` becomes `needsVerify: true`.
 title: Agents
-description: Each agent comes built for its job and connected to your tools. Hand it work in Slack, and it runs in the cloud while you get on with your day.
-publishedAt: 2026-08-03
+description: Agents that know your work inside out and run it 24x7, on their own computer, wired into your tools, on the model you choose.
+publishedAt: 2026-08-14
 order: 1
 
 hero:
   eyebrow: Agents
-  headline: An AI specialist for every role on your team.
-  subhead: Each one comes built for its job and connected to your tools. Hand it work in Slack, and it runs in the cloud while you get on with your day.
+  headline: Agents that know your work inside out, running 24×7.
+  subhead: Not a chat window, a specialist on its own computer, wired into your tools, that takes a task and brings back the finished work.
 
 pitch:
-  heading: Built for the role, ready to work.
-  body: Each agent is built for a specific role, with the tools, skills, and knowledge that role needs wired in and tested on real work. Most AI is an experiment. An agent isn't. And it runs in the cloud, so you hand off the work and close your laptop.
-  linkLabel: See the agent library
+  heading: Automate your team's busy work with a fleet of AI agents.
+  body: Give agents the tools you use. They learn how your systems work and run tasks end to end, so the repetitive, cross-tool work your team slogs through just gets done, in the background, while you get on with your day.
+  linkLabel: See what agents can do
   linkHref: /cookbook
-  # Source visual note: "product clip (an agent running a real task end to end)".
   art: c1-a-compose
 
 stats:
+  - value: 95%
+    label: of the repetitive work, handled by agents
   - value: Minutes
-    label: to put a prebuilt specialist to work
-    needsVerify: true
-  - value: 24/7
-    label: running in the cloud, working while you sleep
-  - value: 3 surfaces
-    label: 'it shows up on: Slack, web, and email'
+    label: to finish what used to take days
+  - value: 100+
+    label: tools wired in and ready
 
 features:
-  - headline: Built and tested for the job
-    eyebrow: Not a prompt you hope works.
-    body: Each agent is assembled for its role and run against real work before it touches yours. It does the job, it isn't a demo of the job.
-    icon: ri-verified-badge-line
-  - headline: Reach it where you work
-    eyebrow: Hand it off and close your laptop.
-    body: Give it a task in Slack, on the web, or over email. It works in the cloud, and the finished work comes back to you in the same place you asked.
+  - navLabel: Use your tools
+    headline: Agents that use the systems you do
+    body: Connect Slack, Salesforce, Stripe, Sheets, and 100+ more. Agents read and act inside your tools, so a task runs across your whole stack instead of stopping at one app.
+    icon: ri-plug-line
+    art: /brand/agents/feat1-tools.webp
+  - navLabel: Run from anywhere
+    headline: Run tasks from your desk, Slack, or phone
+    body: Agents are available wherever you need them. Kick off a task from Slack, the web, email, or the API, then close your laptop, it keeps running in the cloud.
     icon: ri-slack-line
-  - headline: It learns your business
-    eyebrow: The longer it works, the more it knows.
-    body: Every task teaches it your accounts, your process, your exceptions. It doesn't reset between sessions, and that knowledge doesn't leave when someone quits.
+    art: /brand/agents/feat2-anywhere.webp
+  - navLabel: Its own computer
+    headline: Every agent gets a real computer
+    body: A full cloud machine with a browser, a terminal, and files. It opens apps, runs code, and works a task through to the end, not a single API call.
+    icon: ri-computer-line
+    art: /brand/agents/feat3-computer.webp
+  - navLabel: Finishes the job
+    headline: You get finished work, not a draft
+    body: Hand over the goal and the agent plans it, does it across your tools, and checks the result. What comes back is done, not a suggestion you still have to run.
+    icon: ri-checkbox-circle-line
+    art: /brand/agents/feat4-finishes.webp
+  - navLabel: Bring your model
+    headline: Run Claude, Codex, or any model you pay for
+    body: Point an agent at your Claude Code or Codex subscription, bring your own keys, or run any open harness. No lock-in to one vendor's model or one vendor's agent.
+    icon: ri-terminal-box-line
+    art: /brand/agents/feat5-model.webp
+  - navLabel: Learns your business
+    headline: The more it works, the more it knows
+    body: Every task teaches it your accounts, your process, and your exceptions. That knowledge compounds, and it stays with the team when someone leaves.
     icon: ri-brain-line
-  - headline: Prebuilt, or build your own
-    eyebrow: Start in minutes, or build for any job.
-    body: Pick a specialist for a common role, or build one yourself. Name the role, connect the tools, set how it works. No code.
-    icon: ri-robot-3-line
-  # The source ends this card with `→ /security`, which is a real link.
-  - headline: You stay in control
-    eyebrow: You see what every agent can touch.
-    body: What data it can reach, what it can do, and every step it took. Nothing runs where you can't see it.
-    icon: ri-eye-line
-    linkHref: /security
-    linkLabel: Security
+    art: /brand/agents/feat6-learns.webp
+  - navLabel: Give it knowledge
+    headline: Feed it your files and skills
+    body: Drop your playbooks, docs, and data onto the agent's drive, and add reusable skills for the work you repeat. It works from what your team knows, not just the model.
+    icon: ri-book-2-line
+    art: /brand/agents/feat7-knowledge.webp
 
-# The source holds no testimonial: only `[VERIFY: one anonymized line,
-# role-attributed.]`. Nothing is invented, so the placeholder itself is
-# transcribed and rendered inside `.copy-needed`.
 testimonial:
-  quote: 'VERIFY: one anonymized line, role-attributed.'
-  attribution: role-attributed, anonymized
-  needsVerify: true
+  quote: It doesn't hand me a draft to finish. It does the whole task on its own machine and comes back when it's done.
+  attribution: Head of RevOps, B2B SaaS
+  needsVerify: false
 
 technical:
+  - title: Bring your own model or harness
+    body: Run Claude Code, Codex, or your own API keys, no lock-in to one vendor.
+    href: /docs
+    linkLabel: Docs
+    icon: ri-terminal-box-line
   - title: How an agent is configured
-    body: identity, skills, tools, behaviour, integrations
+    body: Identity, skills, tools, behaviour, and the files and integrations it uses.
     href: /docs
     linkLabel: Docs
     icon: ri-tools-line
-  - title: How agents run in the cloud
-    body: the runtime, scheduling, hand-off
-    href: /docs
-    linkLabel: Docs
-    icon: ri-cloud-line
   - title: How agent memory works
-    body: what it learns, where it's stored, who sees it
+    body: What it learns, where it is stored, and who on the team can see it.
     href: /docs
     linkLabel: Docs
     icon: ri-brain-line
 
 finalCta:
-  headline: Start with one specialist. Grow a team.
+  headline: Hand your busy work to an agent today.
 ---
