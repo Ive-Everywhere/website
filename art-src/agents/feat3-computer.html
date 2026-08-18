@@ -1,39 +1,28 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"><style>
-  /* Feature 3 · "Every agent gets a real computer" — Ona Cloud Dev Environment
-     panel: a Running toggle + a real machine (browser, terminal, files, specs).
-     Portrait card commands the well; one green Running state is the payoff. */
-  .win{width:640px}
-  .win__body{padding:26px 30px 30px}
-  .spec{display:flex;align-items:center;gap:14px;margin-top:4px}
-  .spec__m{font-size:19px;color:var(--sub)} .spec__m b{font-weight:480;color:var(--ink)}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
-  .cell{display:flex;align-items:center;gap:15px;background:#fbfaf8;border:1px solid var(--line);
-        border-radius:16px;padding:16px 18px}
-  .cell__ic{width:46px;height:46px;border-radius:12px;background:var(--maroon-tint);color:var(--maroon);
-            display:flex;align-items:center;justify-content:center;flex:none}
-  .cell__ic svg{width:24px;height:24px}
-  .cell__t{font-size:20px;font-weight:480} .cell__s{font-size:16px;color:var(--soft);margin-top:2px}
-  .term{margin-top:16px;background:#221e23;border-radius:16px;padding:18px 20px;font-family:var(--mono);
-        font-size:18px;line-height:1.7;color:#d8d2d8;overflow:hidden}
-  .term .p{color:#c99db4} .term .g{color:#7ee0b8} .term .d{color:#8b8590}
-</style></head><body><div class="stage cv-blue">
-  <div class="card win">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"></head><body>
+<!-- Ona's env-guardrails pattern: outer chrome, inner white pane, label/value
+     pairs, a uniform chip grid, and one mono strip. -->
+<div class="stage cv-blue">
+  <div class="card card--chrome">
     <div class="hd">
-      <span class="tile tile--maroon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
-      <div><div class="hd__t">Agent computer</div><div class="spec__m" style="margin-top:2px"><b>8 vCPU</b> · 32 GB · ephemeral</div></div>
-      <span class="tag tag--ok sp"><span class="pip"></span>Running</span>
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+      <span><span class="hd__t">Agent computer</span></span>
+      <span class="hd__r"><span class="pill"><span class="pill__dot"></span>Running</span></span>
     </div>
-    <div class="win__body">
-      <div class="grid">
-        <div class="cell"><span class="cell__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></span><div><div class="cell__t">Browser</div><div class="cell__s">Signed in</div></div></div>
-        <div class="cell"><span class="cell__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM7 9l3 3-3 3M13 15h4"/></svg></span><div><div class="cell__t">Terminal</div><div class="cell__s">bash · zsh</div></div></div>
-        <div class="cell"><span class="cell__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4z"/></svg></span><div><div class="cell__t">Files</div><div class="cell__s">Drive mounted</div></div></div>
-        <div class="cell"><span class="cell__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><div><div class="cell__t">Test suite</div><div class="cell__s">Ready</div></div></div>
+    <div class="pane">
+      <div class="kv">
+        <div><div class="kv__l">Machine</div><div class="kv__v kv__v--mono">8 vCPU · 32 GB</div></div>
+        <div><div class="kv__l">Lifetime</div><div class="kv__v kv__v--mono">ephemeral</div></div>
       </div>
-      <div class="term">
-        <div><span class="p">agent</span> <span class="d">~/acme</span> $ npm run build</div>
-        <div><span class="g">✓</span> <span class="d">compiled · deployed to preview</span></div>
+      <div class="sep"></div>
+      <div class="chips">
+        <span class="chip"><span class="chip__ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>Browser</span>
+        <span class="chip"><span class="chip__ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>Terminal</span>
+        <span class="chip"><span class="chip__ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>Files</span>
+        <span class="chip"><span class="chip__ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>Test suite</span>
+        <span class="chip"><span class="chip__ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>Secrets</span>
       </div>
+      <div class="sep"></div>
+      <div class="strip"><span class="dim">agent ~/acme $</span> npm run build<br><span class="ok">✓</span> <span class="dim">compiled · deployed to preview</span></div>
     </div>
   </div>
 </div></body></html>

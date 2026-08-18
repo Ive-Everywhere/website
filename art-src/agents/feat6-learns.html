@@ -1,45 +1,20 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"><style>
-  /* Feature 6 · "The more it works, the more it knows" — Ona memory panel:
-     accumulated business rules the agent picked up on the job, capped with
-     who's behind them. Portrait card commands the well; the four learned
-     rules are the payoff — specific enough to be non-generic. */
-  .mem{width:640px}
-  .spec__m{font-size:19px;color:var(--sub)}
-  .mem .row{padding:26px 30px;gap:20px}
-  .ic{width:42px;height:42px;border-radius:12px;background:var(--maroon-tint);color:var(--maroon);
-      display:flex;align-items:center;justify-content:center;flex:none}
-  .ic svg{width:21px;height:21px}
-  .col{flex:1;min-width:0}
-  .foot{display:flex;align-items:center;gap:16px;padding:24px 30px;border-top:1px solid var(--line)}
-  .foot__t{font-size:18px;color:var(--sub)} .foot__t b{color:var(--ink);font-weight:480}
-</style></head><body><div class="stage cv-warm">
-  <div class="card mem">
-    <div class="hd">
-      <span class="tile tile--maroon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a3 3 0 0 0-3 3v1a3 3 0 0 0-2 5 3 3 0 0 0 2 5h1a3 3 0 0 0 3 3V4z"/><path d="M15 4a3 3 0 0 1 3 3v1a3 3 0 0 1 2 5 3 3 0 0 1-2 5h-1a3 3 0 0 1-3 3V4z"/></svg></span>
-      <div><div class="hd__t">Memory</div><div class="spec__m" style="margin-top:2px;color:var(--ok);font-weight:480">↑ +4 today</div></div>
-      <span class="tag tag--ok sp">128 notes</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"></head><body>
+<!-- RULE 2: NO row marks at all — the rules themselves are the content.
+     RULE 6: memory dissolves downward, implying far more than four. -->
+<div class="stage cv-warm">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a3.5 3.5 0 0 0-3.5 3.5v.1A3 3 0 0 0 6 10.5a3 3 0 0 0 .8 2A3 3 0 0 0 6 15a3 3 0 0 0 3 3h.2A3 3 0 0 0 12 20zM12 4a3.5 3.5 0 0 1 3.5 3.5v.1A3 3 0 0 1 18 10.5a3 3 0 0 1-.8 2A3 3 0 0 1 18 15a3 3 0 0 1-3 3h-.2A3 3 0 0 1 12 20z"/></svg></span>
+      <span class="hd__t">Memory</span>
+      <span class="hd__r"><span class="pill pill--mono">128 notes</span></span>
     </div>
-    <div class="rows">
-      <div class="row">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/></svg></span>
-        <div class="col"><div class="row__l">Acme pays net-60</div><div class="row__s">confirmed across 3 invoices</div></div>
-      </div>
-      <div class="row">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/></svg></span>
-        <div class="col"><div class="row__l">Q3 close excludes intercompany</div><div class="row__s">from the close playbook</div></div>
-      </div>
-      <div class="row">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/></svg></span>
-        <div class="col"><div class="row__l">&gt;$10k needs Priya</div><div class="row__s">approval policy, learned once</div></div>
-      </div>
-      <div class="row">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/></svg></span>
-        <div class="col"><div class="row__l">EU invoices need VAT id</div><div class="row__s">compliance rule</div></div>
-      </div>
+    <div class="list list--fade-soft">
+      <div class="row"><span class="row__b"><div class="row__t">Acme pays net-60, not net-30</div><div class="row__s">learned from 3 invoices</div></span></div>
+      <div class="row"><span class="row__b"><div class="row__t">Anything over $10k needs Priya</div><div class="row__s">approval policy</div></span></div>
+      <div class="row"><span class="row__b"><div class="row__t">Q3 close excludes intercompany</div><div class="row__s">from the close playbook</div></span></div>
+      <div class="row row--g1"><span class="row__b"><div class="row__t">EU invoices need a VAT id</div><div class="row__s">compliance rule</div></span></div>
+      <div class="row row--g2"><span class="row__b"><div class="row__t">Northwind bills quarterly</div><div class="row__s">learned from 2 renewals</div></span></div>
     </div>
-    <div class="foot">
-      <span class="av" style="width:40px;height:40px"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ledger&backgroundColor=c5f2e0" alt=""></span>
-      <div class="foot__t"><b>Ledger</b> learned this across 1,204 tasks</div>
-    </div>
+    <div class="foot"><span class="foot__av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ledger&backgroundColor=c5f2e0" alt=""></span><span><b>Ledger</b> learned this across 1,204 tasks</span></div>
   </div>
 </div></body></html>

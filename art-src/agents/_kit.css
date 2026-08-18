@@ -1,75 +1,189 @@
-/* ── Agents feature-well illustration kit ────────────────────────────────────
-   Ona-style stills for the RailFeatures wells (440×460 on the page → authored
-   at 2× = 880×920). Content IS the illustration: type runs BIG, one focal
-   card commands the frame, everything else recedes. Mercury weight discipline:
-   never above 530.  Tokens are the real site values.                          */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;480;530&family=JetBrains+Mono:wght@400;500&display=swap');
-:root{
-  --ink:#1E1C1E; --sub:#58564D; --soft:#AAA89E; --line:#e7e4df; --paper:#fff;
-  --maroon:#755A68; --maroon-deep:#5D374B; --maroon-tint:#f4eef1;
-  --ok:#1f8a5b; --ok-bg:#e4f4ea; --warn:#b0712a; --warn-bg:#fbf0e2;
-  --font:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+/* ═══════════════════════════════════════════════════════════════════════════
+   AGENTS FEATURE-WELL ILLUSTRATION KIT  ·  rev 2
+
+   Rebuilt against Ona's real cards (env-guardrails-info, ci-migration,
+   code-review-config). Rev 1 was rejected: it mixed three tile treatments in
+   one card, reused the header's filled tile as a row mark, let rows stretch to
+   unequal heights, and ran two competing green pills.
+
+   THE RULES — every card obeys all of them, no exceptions.
+
+   1  HEADER MARK ≠ ROW MARK. The header carries a BARE stroked line glyph at
+      ink colour. No tile, no fill, no border behind it. A filled maroon tile is
+      banned outright — it out-shouted everything and duplicated the row marks.
+   2  ONE ROW-MARK TREATMENT PER CARD. Either every row carries a bare brand
+      logo, or every row carries a bare stroked glyph, or no row carries a mark.
+      Never two kinds in one card.
+   3  UNIFORM ROW HEIGHT. Rows are a fixed height; the card sizes to its
+      content. Nothing flex-stretches to fill.
+   4  ONE STATUS LANE. The right edge holds one column of one glyph type at one
+      size: .st--done, .st--wait, .st--pick, or nothing.
+   5  ONE GREEN. Green means completed, and nothing else. A header pill is
+      neutral. Two green pills in one card is the bug rev 1 shipped.
+   6  DEPTH IS A TAIL FADE, not decoration. .list--fade blurs and fades the
+      last rows away — Ona's device for "and many more".
+   7  ONE MAROON ACCENT PER CARD, maximum, and never as an icon tile.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;450;480;530&family=JetBrains+Mono:wght@400;450&display=swap');
+
+:root {
+  /* surfaces */
+  --ink: #1e1c1e;
+  --sub: #58564d;
+  --soft: #aaa89e;
+  --hair: #efedea;
+  --panel: #ffffff;
+  --chrome: #f1f0ec; /* tinted band behind a header, one step off the panel */
+  --tint: #f8f7f4;   /* a distinguished row, one step off the panel */
+
+  /* the single accent */
+  --maroon: #755a68;
+  --maroon-deep: #5d374b;
+  --maroon-soft: #f4eff2;
+
+  /* completion only */
+  --ok: #1f8a5b;
+  --ok-bg: #e4f4ea;
+
+  --font: 'Inter', -apple-system, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
 }
-*{box-sizing:border-box} html,body{margin:0}
-.stage{position:relative;width:880px;height:920px;overflow:hidden;
-  font-family:var(--font);color:var(--ink);font-weight:400;letter-spacing:.004em;
-  -webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center}
-/* per-file canvas tint: set .stage background to one of these gradients */
-.cv-cream {background:radial-gradient(80% 65% at 22% 12%,#eef4ee 0%,rgba(238,244,238,0) 60%),radial-gradient(85% 75% at 88% 90%,#f2ece9 0%,rgba(242,236,233,0) 60%),linear-gradient(160deg,#f2f4f0 0%,#f4f1ee 100%)}
-.cv-lav   {background:radial-gradient(80% 65% at 18% 12%,#efeaf6 0%,rgba(239,234,246,0) 62%),radial-gradient(85% 75% at 90% 88%,#f5ecf1 0%,rgba(245,236,241,0) 60%),linear-gradient(160deg,#f2eff5 0%,#f4f1f2 100%)}
-.cv-blue  {background:radial-gradient(80% 65% at 20% 12%,#e9ecf8 0%,rgba(233,236,248,0) 62%),radial-gradient(85% 75% at 90% 90%,#f0ecf4 0%,rgba(240,236,244,0) 60%),linear-gradient(160deg,#eef0f7 0%,#f3f1f3 100%)}
-.cv-warm  {background:radial-gradient(80% 65% at 16% 12%,#f7eae8 0%,rgba(247,234,232,0) 62%),radial-gradient(85% 75% at 90% 90%,#f1ecf5 0%,rgba(241,236,245,0) 60%),linear-gradient(160deg,#f6efed 0%,#f4f1f3 100%)}
-.cv-sand  {background:radial-gradient(80% 65% at 22% 12%,#f3efe6 0%,rgba(243,239,230,0) 60%),radial-gradient(85% 75% at 88% 90%,#efe7e9 0%,rgba(239,231,233,0) 60%),linear-gradient(160deg,#f3f0ea 0%,#f4f1ef 100%)}
 
-/* card + panel */
-.card{background:var(--paper);border-radius:24px;
-  box-shadow:0 26px 60px -22px rgba(30,28,30,.24),0 6px 16px -6px rgba(30,28,30,.09)}
-.card--soft{box-shadow:0 14px 36px -16px rgba(30,28,30,.16),0 3px 10px -4px rgba(30,28,30,.07)}
-.hd{display:flex;align-items:center;gap:14px;padding:26px 30px;border-bottom:1px solid var(--line)}
-.hd__t{font-size:27px;font-weight:480;letter-spacing:.002em}
-.hd .sp{margin-left:auto}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
 
-/* chips / tags / pills */
-.tag{display:inline-flex;align-items:center;gap:9px;padding:9px 17px;border-radius:12px;
-  font-size:19px;font-weight:480;letter-spacing:.008em}
-.tag--ok{background:var(--ok-bg);color:var(--ok)} .tag--run{background:var(--maroon-tint);color:var(--maroon)}
-.tag--warn{background:var(--warn-bg);color:var(--warn)}
-.pip{width:11px;height:11px;border-radius:50%;background:var(--ok);flex:none}
-.chip{display:inline-flex;align-items:center;gap:11px;padding:12px 18px;border-radius:14px;
-  background:#fff;border:1px solid var(--line);font-size:20px;font-weight:480}
+/* ── stage ──────────────────────────────────────────────────────────────────
+   880 x 920 portrait. The rail well is 440 x 460, so this renders at exactly
+   50% — the type sizes below are chosen to land at Ona's on-screen scale. */
+.stage {
+  position: relative; width: 880px; height: 920px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font); color: var(--ink); font-weight: 400;
+  letter-spacing: .004em; -webkit-font-smoothing: antialiased;
+}
 
-/* logo / icon tile */
-.tile{width:64px;height:64px;border-radius:17px;display:flex;align-items:center;justify-content:center;flex:none;
-  background:#fff;border:1px solid var(--line);box-shadow:0 2px 6px -2px rgba(30,28,30,.08)}
-.tile img{width:36px;height:36px} .tile svg{width:32px;height:32px}
-.tile--maroon{background:linear-gradient(150deg,#8d7581,var(--maroon-deep));border:0;color:#fff}
-.tile--maroon svg{color:#fff}
+/* canvases — one soft tint per card, they rhyme but differ */
+.cv-cream { background: radial-gradient(80% 65% at 22% 12%, #eaf3ec 0%, rgba(234,243,236,0) 62%), linear-gradient(160deg, #f1f4f0 0%, #f5f2ef 100%); }
+.cv-lav   { background: radial-gradient(80% 65% at 18% 14%, #eeeaf6 0%, rgba(238,234,246,0) 62%), linear-gradient(160deg, #f1eff6 0%, #f5f1f3 100%); }
+.cv-blue  { background: radial-gradient(80% 65% at 20% 10%, #e9edf8 0%, rgba(233,237,248,0) 62%), linear-gradient(160deg, #eef0f7 0%, #f3f1f4 100%); }
+.cv-warm  { background: radial-gradient(80% 65% at 18% 14%, #f7ebe8 0%, rgba(247,235,232,0) 62%), linear-gradient(160deg, #f6f0ee 0%, #f4f1f3 100%); }
+.cv-sand  { background: radial-gradient(80% 65% at 22% 12%, #f4f0e4 0%, rgba(244,240,228,0) 62%), linear-gradient(160deg, #f5f2ea 0%, #f4f2ef 100%); }
 
-/* status marks */
-.tick{width:38px;height:38px;border-radius:50%;background:var(--ok-bg);color:var(--ok);
-  display:flex;align-items:center;justify-content:center;flex:none}
-.tick svg{width:19px;height:19px}
-.dot-ring{width:26px;height:26px;border-radius:50%;border:3px solid #ded9dc;border-top-color:var(--maroon);flex:none;animation:none}
+/* ── card ───────────────────────────────────────────────────────────────────
+   One card per illustration, 700 wide (80% of frame — the subject commands it).
+   Height is CONTENT-DRIVEN. Never set a height and let children stretch. */
+.card {
+  width: 700px; background: var(--panel); border-radius: 24px; overflow: hidden;
+  box-shadow: 0 26px 60px -24px rgba(30, 28, 30, .20), 0 6px 16px -6px rgba(30, 28, 30, .07);
+}
 
-/* list rows */
-.row{display:flex;align-items:center;gap:20px;padding:22px 30px;border-bottom:1px solid var(--line)}
-.row:last-child{border-bottom:0}
-.row__l{font-size:23px;flex:1;letter-spacing:.002em} .row__l em{font-style:normal;font-weight:480}
-.row__s{font-size:17px;color:var(--soft);margin-top:3px}
+/* ── header ─────────────────────────────────────────────────────────────────
+   RULE 1. A bare stroked glyph + title. `.hd--band` tints the strip, Ona's
+   ci-migration pattern; plain `.hd` sits on the panel with a hairline under. */
+.hd { display: flex; align-items: center; gap: 16px; padding: 26px 30px; }
+.hd--band { background: var(--chrome); }
+.hd--rule { border-bottom: 1px solid var(--hair); }
+.hd__g { width: 30px; height: 30px; flex: none; color: var(--ink); }
+.hd__g svg { width: 100%; height: 100%; display: block; }
+.hd__t { font-size: 32px; font-weight: 480; letter-spacing: -.012em; line-height: 1.1; }
+.hd__t--mono { font-family: var(--mono); font-weight: 450; font-size: 28px; letter-spacing: -.01em; }
+.hd__sub { font-size: 20px; color: var(--soft); margin-top: 3px; }
+.hd__r { margin-left: auto; flex: none; }
 
-/* toggle (on) */
-.tog{width:60px;height:34px;border-radius:999px;background:var(--ok);position:relative;flex:none}
-.tog::after{content:"";position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;background:#fff}
+/* header pill — NEUTRAL by rule 5. Green is reserved for completion glyphs. */
+.pill {
+  display: inline-flex; align-items: center; gap: 9px;
+  height: 40px; padding: 0 16px; border-radius: 12px;
+  background: var(--panel); border: 1px solid var(--hair);
+  font-size: 20px; color: var(--sub); white-space: nowrap;
+}
+.hd--rule .pill, .hd:not(.hd--band) .pill { background: var(--tint); }
+.pill__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); flex: none; }
+.pill--mono { font-family: var(--mono); font-size: 19px; }
 
-/* mono log line */
-.log{display:flex;align-items:center;gap:18px;padding:16px 30px;font-family:var(--mono);font-size:20px}
-.log .ts{color:var(--soft);flex:none;width:78px;font-size:18px}
-.log em{font-style:normal;font-weight:500;color:var(--ink)} .log .ok{color:var(--ok);font-weight:500}
+/* ── rows ───────────────────────────────────────────────────────────────────
+   RULE 3: fixed height, no stretch. RULE 2: one mark kind per card. */
+.list { display: flex; flex-direction: column; }
+.row {
+  display: flex; align-items: center; gap: 20px;
+  height: 96px; flex: none; padding: 0 30px;
+  border-bottom: 1px solid var(--hair);
+}
+.row:last-child { border-bottom: 0; }
+.row--tint { background: var(--tint); }
 
-/* avatar */
-.av{border-radius:50%;overflow:hidden;flex:none;background:#eee}
-.av img{width:100%;height:100%;display:block}
+/* the mark lane — pick ONE per card */
+.mk { width: 38px; height: 38px; flex: none; display: flex; align-items: center; justify-content: center; }
+.mk img { width: 100%; height: 100%; display: block; }         /* bare brand logo, no tile */
+.mk svg { width: 32px; height: 32px; color: var(--sub); }        /* bare stroked glyph */
+.mk--ord { font-family: var(--mono); font-size: 22px; color: var(--soft); }
 
-/* meta caption */
-.built{display:flex;align-items:center;justify-content:center;gap:9px;font-size:18px;color:var(--soft);white-space:nowrap}
-.built b{color:var(--sub);font-weight:480}
+.row__b { min-width: 0; flex: 1; }
+.row__t { font-size: 26px; font-weight: 450; letter-spacing: -.008em; line-height: 1.25; }
+.row__t--mono { font-family: var(--mono); font-weight: 450; font-size: 23px; }
+.row__s { font-size: 20px; color: var(--soft); margin-top: 3px; line-height: 1.3; }
+.row__s--mono { font-family: var(--mono); font-size: 19px; }
+.row__v { margin-left: auto; flex: none; font-family: var(--mono); font-size: 19px; color: var(--soft); }
+
+/* ── status lane ────────────────────────────────────────────────────────────
+   RULE 4. One glyph type, one size, right-aligned. */
+.st { width: 32px; height: 32px; flex: none; margin-left: auto; }
+.st--done { border-radius: 50%; background: var(--ok); display: flex; align-items: center; justify-content: center; }
+.st--done svg { width: 16px; height: 16px; color: #fff; }
+.st--wait { border-radius: 50%; border: 2.5px solid #dedbd6; }
+.st--pick { border-radius: 50%; border: 2.5px solid #dedbd6; }              /* radio, unselected */
+.st--pick.is-on { border-color: var(--maroon); background: var(--maroon); box-shadow: inset 0 0 0 5px #fff; }
+
+/* ── tail fade ──────────────────────────────────────────────────────────────
+   RULE 6. Ona's depth device: the list dissolves instead of ending. */
+.list--fade { -webkit-mask: linear-gradient(180deg, #000 62%, transparent 100%); mask: linear-gradient(180deg, #000 62%, transparent 100%); }
+/* when a footer band sits under the fade, the dissolve must finish sooner
+   or the last row collides with a solid edge */
+.list--fade-soft { -webkit-mask: linear-gradient(180deg, #000 74%, transparent 100%); mask: linear-gradient(180deg, #000 74%, transparent 100%); }
+.row--g1 { opacity: .55; filter: blur(.6px); }
+.row--g2 { opacity: .26; filter: blur(1.6px); }
+
+/* ── inner panel (env-guardrails pattern) ───────────────────────────────────
+   Outer chrome, inner white panel. Separation by value, no extra shadow. */
+.card--chrome { background: var(--chrome); }
+.pane { background: var(--panel); border-radius: 18px; margin: 0 14px 14px; padding: 26px 24px; }
+.kv { display: flex; gap: 56px; }
+.kv__l { font-size: 20px; color: var(--soft); }
+.kv__v { font-size: 26px; font-weight: 450; margin-top: 4px; letter-spacing: -.008em; }
+.kv__v--mono { font-family: var(--mono); font-weight: 450; font-size: 23px; }
+.sep { height: 1px; background: var(--hair); margin: 22px 0; }
+.lbl { font-size: 19px; color: var(--soft); letter-spacing: .04em; text-transform: uppercase; }
+
+/* chips — Ona's exact treatment: white, hairline border, uniform height */
+.chips { display: flex; flex-wrap: wrap; gap: 12px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 11px;
+  height: 56px; padding: 0 18px; border-radius: 14px;
+  background: var(--panel); border: 1px solid var(--hair);
+  font-size: 22px; color: var(--ink); white-space: nowrap;
+}
+.chip__ok { width: 22px; height: 22px; border-radius: 50%; background: var(--ok); flex: none; display: flex; align-items: center; justify-content: center; }
+.chip__ok svg { width: 12px; height: 12px; color: #fff; }
+.chip__g { width: 22px; height: 22px; flex: none; color: var(--sub); }
+.chip--mono { font-family: var(--mono); font-size: 20px; }
+
+/* toggle — the one maroon accent where a card needs a live control */
+.tog { width: 62px; height: 34px; border-radius: 999px; background: var(--maroon); position: relative; flex: none; }
+.tog::after { content: ""; position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border-radius: 50%; background: #fff; }
+
+/* mono strip — a terminal or a masked value */
+.strip {
+  background: #221e23; border-radius: 14px; padding: 18px 20px;
+  font-family: var(--mono); font-size: 20px; line-height: 1.6; color: #d9d4d9;
+}
+.strip .dim { color: #8f8794; }
+.strip .ok { color: #7fd6a6; }
+
+/* footer band — an attribution or a live state, distinct from a row */
+.foot { display: flex; align-items: center; gap: 14px; padding: 22px 30px; background: var(--tint); font-size: 21px; color: var(--soft); }
+.foot__av { width: 40px; height: 40px; border-radius: 50%; flex: none; overflow: hidden; }
+.foot__av img { width: 100%; height: 100%; display: block; }
+.foot b { font-weight: 480; color: var(--sub); }
+.foot__live { margin-left: auto; display: inline-flex; align-items: center; gap: 9px; font-size: 20px; color: var(--ok); }
+.foot__live i { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); display: block; }
