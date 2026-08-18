@@ -20,11 +20,11 @@ integrations: [stripe, googlesheets, gmail]
 whatItDoes:
   - Pulls every payout and charge for the period from your billing systems
   - Matches each one against the master ledger, line by line
-  - Flags only what doesn't tie out — over-threshold, missing invoice, duplicate
+  - Flags only what doesn't tie out, over-threshold, missing invoice, duplicate
   - Emails the exceptions for sign-off and writes the reconciliation report
 howToUse:
   - Connect Stripe, your ledger sheet, and Gmail to the agent
-  - Set a trigger — a schedule, or fire it from Slack on demand
+  - Set a trigger, a schedule, or fire it from Slack on demand
   - Paste the prompt into the agent and adjust the thresholds for your policy
   - Review the exceptions it emails you; the rest posts on its own
 workflow:
@@ -51,5 +51,5 @@ prompt: |
      entries to the ledger.
   5. Save a reconciliation report to reports/{{period}}-close.md.
 
-  Do not post anything that failed a check — surface it for my sign-off instead.
+  Do not post anything that failed a check, surface it for my sign-off instead.
 ---

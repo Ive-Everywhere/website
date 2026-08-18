@@ -1,12 +1,13 @@
 ---
 /**
- * The Cookbook, `/cookbook`. A browsable gallery of recipes — each a real
+ * The Cookbook, `/cookbook`. A browsable gallery of recipes, each a real
  * prompt + workflow you can run today. Layout is ours: hero, category filter,
  * collection cards, a featured strip, then the full grid. Cards link to the
  * recipe detail at `/cookbook/<slug>`.
  */
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { catColor } from '../../lib/cookbook';
 
 const recipes = (await getCollection('cookbook', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order,
@@ -26,8 +27,8 @@ const featured = recipes.filter((r) => r.data.featured);
 ---
 
 <Base
-  title="Cookbook — Eluu"
-  description="A gallery of agent recipes — real prompts and workflows you can run across your tools today."
+  title="Cookbook, Eluu"
+  description="A gallery of agent recipes, real prompts and workflows you can run across your tools today."
 >
   <section class="bg-bg-white-0">
     <div class="page-shell gutter-188 flex flex-col gap-12 pt-16 pb-14">
@@ -43,7 +44,7 @@ const featured = recipes.filter((r) => r.data.featured);
         </p>
       </div>
 
-      {/* category filter — static chips (progressive: a tiny script filters the grid) */}
+      {/* category filter, static chips (progressive: a tiny script filters the grid) */}
       <div class="flex flex-wrap items-center justify-center gap-2.5" data-cat-bar>
         <button
           type="button"
@@ -94,16 +95,16 @@ const featured = recipes.filter((r) => r.data.featured);
               {featured.map((r) => (
                 <a
                   href={`/cookbook/${r.id}`}
-                  class="border-stroke-soft-200 hover:border-stroke-sub-300 group flex flex-col gap-4 rounded-[16px] border p-5 transition-colors"
+                  class={`${catColor(r.data.category).surface} flex flex-col gap-4 rounded-[18px] p-5 transition-transform hover:-translate-y-0.5`}
                 >
-                  <span class="bg-bg-soft-200 text-icon-strong-950 flex size-11 items-center justify-center rounded-[11px]">
+                  <span class={`${catColor(r.data.category).tile} ${catColor(r.data.category).ink} flex size-11 items-center justify-center rounded-[12px]`}>
                     <i class={`${r.data.icon} text-[22px]`} aria-hidden="true" />
                   </span>
                   <div class="flex flex-1 flex-col gap-1.5">
                     <h3 class="t-label-lg text-text-strong-950">{r.data.title}</h3>
                     <p class="t-label-md text-text-sub-600 line-clamp-3">{r.data.description}</p>
                   </div>
-                  <span class="t-label-xs text-text-soft-400 font-mono uppercase tracking-[0.06em]">
+                  <span class={`${catColor(r.data.category).ink} t-label-xs font-mono uppercase tracking-[0.06em]`}>
                     {r.data.category}
                   </span>
                 </a>
@@ -123,17 +124,17 @@ const featured = recipes.filter((r) => r.data.featured);
                 href={`/cookbook/${r.id}`}
                 data-card
                 data-card-cat={r.data.category}
-                class="border-stroke-soft-200 hover:border-stroke-sub-300 flex flex-col gap-4 rounded-[16px] border p-6 transition-colors"
+                class={`${catColor(r.data.category).surface} flex flex-col gap-4 rounded-[18px] p-6 transition-transform hover:-translate-y-0.5`}
               >
-                <span class="bg-bg-soft-200 text-icon-strong-950 flex size-11 items-center justify-center rounded-[11px]">
-                  <i class={`${r.data.icon} text-[22px]`} aria-hidden="true" />
+                <span class={`${catColor(r.data.category).tile} ${catColor(r.data.category).ink} flex size-12 items-center justify-center rounded-[13px]`}>
+                  <i class={`${r.data.icon} text-[24px]`} aria-hidden="true" />
                 </span>
                 <div class="flex flex-1 flex-col gap-2">
                   <h3 class="t-h6 text-text-strong-950">{r.data.title}</h3>
                   <p class="t-label-md text-text-sub-600 text-pretty">{r.data.description}</p>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="t-label-xs text-text-soft-400 bg-bg-soft-200 rounded-full px-2.5 py-1 font-mono">
+                  <span class={`${catColor(r.data.category).ink} t-label-xs bg-bg-white-0/60 rounded-full px-2.5 py-1 font-mono`}>
                     {r.data.category}
                   </span>
                   <span class="t-label-xs text-text-soft-400 rounded-full px-1 py-1 font-mono capitalize">
@@ -150,7 +151,7 @@ const featured = recipes.filter((r) => r.data.featured);
 </Base>
 
 <script>
-  // Category filter — no framework needed.
+  // Category filter, no framework needed.
   const bar = document.querySelector<HTMLElement>('[data-cat-bar]');
   const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-card]'));
   bar?.addEventListener('click', (e) => {

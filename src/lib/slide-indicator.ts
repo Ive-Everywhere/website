@@ -11,7 +11,7 @@
  *
  * WHY THIS ANIMATES IN JS RATHER THAN WITH A CSS TRANSITION.
  * A CSS transition needs its destination up front. That is fine only when the
- * list is rigid. It is wrong the moment the selected row CHANGES SIZE — the
+ * list is rigid. It is wrong the moment the selected row CHANGES SIZE, the
  * private-cloud band reveals a body paragraph on the selected row, so the row
  * grows and every row under it moves WHILE the block is travelling. A CSS
  * transition aimed at the size measured on click would then arrive at a stale
@@ -24,8 +24,7 @@
  *
  * Contract for the caller:
  *   - the container must be the block's `offsetParent`, i.e. positioned. Use
- *     `relative`, or nothing at all when it is already `sticky`/`absolute` —
- *     adding `relative` next to `sticky` sets the same property twice and the
+ *     `relative`, or nothing at all when it is already `sticky`/`absolute`,  *     adding `relative` next to `sticky` sets the same property twice and the
  *     two fight;
  *   - the block must be `absolute` and carry `data-slide-indicator`;
  *   - the rows must sit above it (`relative z-10`), because a positioned
@@ -42,7 +41,7 @@ export interface SlideIndicator {
 const NOOP: SlideIndicator = { moveTo() {}, refresh() {} };
 
 /**
- * Fast out, long settle — the selection should leave at once and arrive gently.
+ * Fast out, long settle, the selection should leave at once and arrive gently.
  * A symmetric ease reads mechanical over this distance.
  *
  * Keep `DURATION` equal to any content transition on the rows themselves (the
@@ -117,7 +116,7 @@ export function mountSlideIndicator(container: HTMLElement, rows: HTMLElement[])
       run(painted);
     },
     refresh() {
-      // A reflow during a flight is expected — the rows are resizing under it,
+      // A reflow during a flight is expected, the rows are resizing under it,
       // and the loop already re-reads them. Snapping here would cancel that.
       if (frame) return;
       snap();

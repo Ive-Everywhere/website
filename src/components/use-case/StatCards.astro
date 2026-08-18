@@ -1,6 +1,6 @@
 ---
 /**
- * Section 3 — the three numbers. Figma `147:2754` (FRAME "Hero", third of three
+ * Section 3, the three numbers. Figma `147:2754` (FRAME "Hero", third of three
  * siblings): row `147:2901`, gap 36, three fill-width cards.
  *
  * Structural note (spec gap 29): cards 1 and 2 each sit inside an extra
@@ -37,7 +37,7 @@ const { stats } = Astro.props;
       {
         stats.map((stat) => (
           <li class="bg-card-surface flex flex-col gap-5 rounded-[28px] p-6 sm:p-8 lg:p-10">
-            {/* Landing Title/H2, LEFT variant — a real `.t-landing-h2` in
+            {/* Landing Title/H2, LEFT variant, a real `.t-landing-h2` in
                 global.css rather than an inline size pair here. */}
             <p class="t-landing-h2 text-text-strong-950">
               {stat.needsVerify ? <span class="copy-needed">{stat.value}</span> : stat.value}

@@ -350,10 +350,13 @@
  * never ship silently. Used wherever the Figma still holds placeholder text.
  */
 @layer components {
+  /* Pre-prod (Krishna): the pink placeholder highlight is switched off so no
+     marked text ships visibly. The class stays on the elements so unwritten
+     copy is still greppable; it just renders as normal text now. */
   .copy-needed {
-    background-color: var(--maroon-100);
-    color: var(--maroon-900);
-    border-bottom: 2px dotted var(--maroon-600);
-    padding-inline: 0.25em;
+    background-color: transparent;
+    color: inherit;
+    border-bottom: 0;
+    padding-inline: 0;
   }
 }

@@ -2,26 +2,26 @@
 import LiveArt from '../site/LiveArt.astro';
 
 /**
- * The split detail section — Figma `147:3006`.
+ * The split detail section, Figma `147:3006`.
  *
  * Used for the product pages' "technical details → docs" and the use-case
  * pages' "powered by" block. Both are three items, and both are drawn as this
- * one layout — NOT as a row of flat cards, which is what was here before.
+ * one layout, NOT as a row of flat cards, which is what was here before.
  *
  * Transcribed geometry:
- *   row     `147:3007` — gap 24
- *   left    `147:3049` — FIXED 520px, column, justify center, gap 36
- *     text  `147:3045` — column, gap 20:
+ *   row     `147:3007`, gap 24
+ *   left    `147:3049`, FIXED 520px, column, justify center, gap 36
+ *     text  `147:3045`, column, gap 20:
  *                        `Landing Title/H4` heading (#1E1C1E),
  *                        `Label/Medium` body (#58564D),
  *                        `Label/Medium` link (#755A68 = primary-base)
- *     list  `147:3008` — column, gap 12; each row padding 16, radius 8.
+ *     list  `147:3008`, column, gap 12; each row padding 16, radius 8.
  *                        The ACTIVE row is filled `#EDEDE9`; the others carry
- *                        no fill. Every row shows its title and its body — the
+ *                        no fill. Every row shows its title and its body, the
  *                        fill is the only difference, so this is a selector,
  *                        not a collapse.
- *   right   `147:3017` — column, justify center, gap 24
- *     well  `147:3050` — padding 24, gap 28, FIXED 600px tall, fill `#DDDBD1`
+ *   right   `147:3017`, column, justify center, gap 24
+ *     well  `147:3050`, padding 24, gap 28, FIXED 600px tall, fill `#DDDBD1`
  *
  * Selecting a row swaps the right-hand visual. Figma carries no prototype data,
  * so the interaction is ours; the fill on one row is what implies it.
@@ -61,12 +61,12 @@ const {
 
 <section class="bg-bg-white-0">
   <div class="page-shell gutter-188 py-14">
-    {/* 147:3007 — row, gap 24. Stacks below `lg`, where a 520px column beside
+    {/* 147:3007, row, gap 24. Stacks below `lg`, where a 520px column beside
         a 600px well does not fit. */}
     <div class="flex flex-col gap-8 lg:flex-row lg:items-stretch lg:gap-6" data-detail-root={id}>
-      {/* 147:3049 — fixed 520px, centred, gap 36. */}
+      {/* 147:3049, fixed 520px, centred, gap 36. */}
       <div class="flex flex-col justify-center gap-9 lg:w-[520px] lg:shrink-0">
-        {/* 147:3045 — gap 20. */}
+        {/* 147:3045, gap 20. */}
         <div class="flex flex-col gap-5">
           <h2 class="t-landing-h4 text-text-strong-950 text-balance">
             {headingNeedsCopy ? <span class="copy-needed">{heading}</span> : heading}
@@ -84,11 +84,11 @@ const {
           }
         </div>
 
-        {/* 147:3008 — gap 12. Choosing a row changes the visual beside it; the
+        {/* 147:3008, gap 12. Choosing a row changes the visual beside it; the
             row's own destination is a separate link inside it.
 
             `relative` because this element is the offsetParent the sliding fill
-            is measured against — see `lib/slide-indicator.ts`. */}
+            is measured against, see `lib/slide-indicator.ts`. */}
         <div class="relative flex flex-col gap-3" data-detail-list>
           {/* The drawn fill on the active row, as ONE element for the whole
               list, so the selection travels between rows rather than switching
@@ -133,7 +133,7 @@ const {
         </div>
       </div>
 
-      {/* 147:3017 → 147:3050 — 600px tall well, padding 24, fill #DDDBD1. */}
+      {/* 147:3017 → 147:3050, 600px tall well, padding 24, fill #DDDBD1. */}
       <div class="flex min-w-0 flex-1 flex-col justify-center gap-6">
         <div
           class="bg-art-surface flex items-center justify-center overflow-hidden rounded-[16px] p-6 max-lg:aspect-[957/599] lg:h-[600px]"
@@ -155,7 +155,7 @@ const {
                   class="t-paragraph-sm copy-needed text-center aria-[hidden=true]:hidden"
                   aria-hidden={index === 0 ? 'false' : 'true'}
                 >
-                  Visual needed — {detail.title}
+                  Visual needed, {detail.title}
                 </span>
               ))
             )

@@ -18,7 +18,7 @@ import { z } from 'astro:content';
  * PLACEHOLDER RULE: the content marks unverified facts with `[VERIFY]`,
  * `[BENCHMARK]` or `[TO COLLECT]`. Every such field carries a `needsVerify`
  * flag, and the templates render those inside `.copy-needed`. Nothing is
- * invented to fill a slot — INDEX.md says so explicitly and so does our
+ * invented to fill a slot, INDEX.md says so explicitly and so does our
  * grounding rule.
  */
 
@@ -64,7 +64,7 @@ export const stat = z.object({
 
 /**
  * A feature card. `eyebrow` is the quoted line in the source
- * (`**N. Headline** — "eyebrow"`), `body` the sentence under it.
+ * (`**N. Headline**, "eyebrow"`), `body` the sentence under it.
  * The `[Advantage/Speed/Cost/Risk]` tag is an internal value driver and is
  * deliberately NOT carried into the page.
  */
@@ -81,7 +81,7 @@ export const featureCard = z.object({
   art: z.string().optional(),
 });
 
-/** Always a placeholder today — every testimonial line is unverified. */
+/** Always a placeholder today, every testimonial line is unverified. */
 export const testimonial = z.object({
   quote: z.string(),
   attribution: z.string(),

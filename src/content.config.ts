@@ -4,7 +4,7 @@ import { sharedSections, linkCard } from './lib/page-schema';
 
 /**
  * Shared front-matter every content type carries.
- * Keep this list short — anything optional belongs on the specific collection.
+ * Keep this list short, anything optional belongs on the specific collection.
  */
 const base = {
   title: z.string(),
@@ -49,7 +49,7 @@ const cookbook = defineCollection({
     collection: z.string().optional(),
     featured: z.boolean().default(false),
     order: z.number().default(0),
-    /** Detail page — the two bullet lists. */
+    /** Detail page, the two bullet lists. */
     whatItDoes: z.array(z.string()).default([]),
     howToUse: z.array(z.string()).default([]),
     /** The workflow timeline; each step is a card in the left column. */

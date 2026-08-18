@@ -9,7 +9,7 @@ interface Props {
 const { artSurface = 'var(--art-surface)' } = Astro.props;
 
 /**
- * Wide feature cards — Figma `147:3227` (§3 of home-spec.md).
+ * Wide feature cards, Figma `147:3227` (§3 of home-spec.md).
  * Section: column, gap 48, padding 96/188, fill #F8F8F3 → `bg-bg-white-0`.
  *
  * Card shell (147:3232 / 147:3256 / 147:3279): fill #EDEDE9 → `bg-bg-soft-200`,
@@ -20,7 +20,7 @@ const { artSurface = 'var(--art-surface)' } = Astro.props;
 interface Bullet {
   icon: string;
   label: string;
-  /** Destination, per home.md §4 — nine unique links across product and use cases. */
+  /** Destination, per home.md §4, nine unique links across product and use cases. */
   href: string;
 }
 
@@ -72,7 +72,7 @@ const cards: Card[] = [
     ],
     art: 'c2-b-plan',
     artTitle:
-      'A carousel of triggers — a schedule, a Slack message, an email and an API call — each starting an agent run without a person present.',
+      'A carousel of triggers, a schedule, a Slack message, an email and an API call, each starting an agent run without a person present.',
     visualNode: '147:3278',
   },
   {
@@ -106,15 +106,14 @@ const cards: Card[] = [
       {
         cards.map((card) => (
           <div class="bg-card-surface rounded-[16px] p-2.5">
-            {/* Text and animation sit side by side at `lg` and stack below it —
-                the drawn row needs about 1100px before the 500px copy column
+            {/* Text and animation sit side by side at `lg` and stack below it,                 the drawn row needs about 1100px before the 500px copy column
                 and the animation stop crushing each other. Inner padding drops
                 from the drawn 30px to 20px on a phone, where 30px on top of the
                 card's own 10px leaves too little room for the copy. */}
             <div
               class="flex flex-col justify-between gap-8 p-5 lg:flex-row lg:items-center lg:gap-14 lg:p-[30px]"
             >
-              {/* Left column — 554 / 610 / fill in Figma; fluid here. */}
+              {/* Left column, 554 / 610 / fill in Figma; fluid here. */}
               <div class="flex flex-col justify-center gap-8 lg:max-w-[460px] lg:gap-10">
                 <div class="flex flex-col gap-2">
                   <h3 class="t-h6 text-text-strong-950">{card.title}</h3>
@@ -146,7 +145,7 @@ const cards: Card[] = [
                 </ul>
               </div>
 
-              {/* Right visual — 147:3254 / 147:3278 / 147:3301 "Form".
+              {/* Right visual, 147:3254 / 147:3278 / 147:3301 "Form".
                   It sits INSIDE the card's padding, so the space above, below
                   and to the right of it is the same 30px as everywhere else.
                   It previously bled past the padding on two sides, which both

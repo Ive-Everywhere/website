@@ -7,7 +7,7 @@
  *     on the page can be traced back to the drawing.
  *  2. Wrap unwritten copy in `.copy-needed`, so placeholder, duplicated and
  *     wrong-competitor strings stay visible in the render and can never ship
- *     silently. The string itself is always verbatim — never rewritten.
+ *     silently. The string itself is always verbatim, never rewritten.
  */
 interface Props {
   value: { text: string; node?: string; needed?: boolean };
@@ -23,9 +23,9 @@ const { value, as: Tag = 'p', note, class: className = '', id } = Astro.props;
 
 const comment = [value.node ? `Figma ${value.node}` : null, note]
   .filter(Boolean)
-  .join(' — ')
+  .join(', ')
   // An HTML comment cannot contain `--`, and cannot end with `-`.
-  .replace(/--+/g, '—');
+  .replace(/--+/g, ', ');
 ---
 
 <Tag class={className} id={id}>

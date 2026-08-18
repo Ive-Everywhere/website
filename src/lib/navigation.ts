@@ -31,14 +31,7 @@ export const primaryNav: NavItem[] = [
     ],
   },
   */
-  {
-    label: 'Resources',
-    children: [
-      { label: 'Blog', href: '/blog', icon: 'ri-article-line' },
-      { label: 'Research', href: '/research', icon: 'ri-flask-line' },
-      { label: 'Cookbook', href: '/cookbook', icon: 'ri-book-2-line' },
-    ],
-  },
+  { label: 'Cookbook', href: '/cookbook' },
   { label: 'Docs', href: '/docs' },
   { label: 'Pricing', href: '/pricing' },
 ];

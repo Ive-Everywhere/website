@@ -4,13 +4,14 @@
  *
  * The copy-prompt is SHORT and points the agent at `/cookbook/<slug>.md`, which
  * resolves to the full workflow/skills/prompts. So the RIGHT column is the
- * machine artifact — a file tree plus that short fetch-prompt with a Copy
- * button — and the LEFT column is a human-readable render of the same content
+ * machine artifact, a file tree plus that short fetch-prompt with a Copy
+ * button, and the LEFT column is a human-readable render of the same content
  * (what it does, the workflow, recommended skills, how to use).
  */
 import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { catColor } from '../../lib/cookbook';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const entries = await getCollection('cookbook', ({ data }) => !data.draft);
@@ -20,6 +21,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 const { entry } = Astro.props;
 const d = entry.data;
 const slug = entry.id;
+const cc = catColor(d.category);
 
 const kindMeta: Record<string, { label: string; icon: string; cls: string }> = {
   trigger: { label: 'Trigger', icon: 'ri-play-circle-line', cls: 'bg-[#e6f2ea] text-[#2f7d54]' },
@@ -37,7 +39,7 @@ const shortPrompt =
   `Fetch https://eluu.ai/cookbook/${slug}.md for the workflow, skills, and prompts, ` +
   `then ${d.goal || 'run it end to end'} against my connected tools.`;
 
-// The file tree shown on the right — derived from the recipe.
+// The file tree shown on the right, derived from the recipe.
 type Node = { name: string; kind: 'dir' | 'file'; depth: number };
 const tree: Node[] = [{ name: `${slug}/`, kind: 'dir', depth: 0 }];
 tree.push({ name: 'recipe.md', kind: 'file', depth: 1 });
@@ -52,7 +54,7 @@ if (promptSteps.length) {
 }
 ---
 
-<Base title={`${d.title} — Cookbook — Eluu`} description={d.description}>
+<Base title={`${d.title}, Cookbook, Eluu`} description={d.description}>
   {/* hero band */}
   <section class="bg-card-surface">
     <div class="page-shell gutter-188 flex flex-col gap-7 pt-12 pb-12 lg:pt-16">
@@ -60,8 +62,8 @@ if (promptSteps.length) {
         <i class="ri-arrow-left-line" aria-hidden="true"></i> Cookbook
       </a>
       <div class="flex flex-col gap-4 lg:max-w-[720px]">
-        <span class="bg-bg-white-0 text-icon-strong-950 flex size-12 items-center justify-center rounded-[13px]">
-          <i class={`${d.icon} text-[24px]`} aria-hidden="true"></i>
+        <span class={`${cc.tile} ${cc.ink} flex size-14 items-center justify-center rounded-[15px]`}>
+          <i class={`${d.icon} text-[26px]`} aria-hidden="true"></i>
         </span>
         <h1 class="t-landing-h2 text-text-strong-950 text-balance">{d.title}</h1>
         <p class="t-paragraph-md text-text-sub-600 text-pretty">{d.description}</p>
@@ -79,7 +81,7 @@ if (promptSteps.length) {
   {/* body */}
   <section class="bg-bg-white-0">
     <div class="page-shell gutter-188 grid gap-12 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)] lg:gap-16">
-      {/* LEFT — rendered recipe */}
+      {/* LEFT, rendered recipe */}
       <div class="flex flex-col gap-12">
         {
           d.whatItDoes.length > 0 && (
@@ -109,7 +111,7 @@ if (promptSteps.length) {
                       <span class="bg-bg-white-0 border-stroke-soft-200 relative z-10 mt-4 flex size-8 shrink-0 items-center justify-center rounded-full border">
                         <i class={`${m.icon} text-text-sub-600 text-[16px]`} aria-hidden="true" />
                       </span>
-                      <div class="border-stroke-soft-200 flex flex-1 flex-col gap-1.5 rounded-[14px] border p-4">
+                      <div class="border-stroke-soft-200 bg-bg-weak-50/60 flex flex-1 flex-col gap-1.5 rounded-[14px] border p-4">
                         <span class={`${m.cls} t-label-xs w-fit rounded-md px-2 py-0.5 font-medium`}>{m.label}</span>
                         <h3 class="t-label-lg text-text-strong-950">{step.title}</h3>
                         {step.body && <p class="t-label-md text-text-sub-600">{step.body}</p>}
@@ -127,12 +129,12 @@ if (promptSteps.length) {
             <div class="flex flex-col gap-4">
               <h2 class="t-h5 text-text-strong-950">Recommended skills</h2>
               <p class="t-label-md text-text-soft-400 -mt-1">
-                Reusable skills the recipe pulls in — add them once, every agent can use them.
+                Reusable skills the recipe pulls in, add them once, every agent can use them.
               </p>
               <div class="grid gap-3 sm:grid-cols-2">
                 {d.skills.map((s: any) => (
-                  <div class="border-stroke-soft-200 flex items-start gap-3 rounded-[14px] border p-4">
-                    <span class="bg-[#f4eff2] text-[#755a68] mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-[9px]">
+                  <div class={`${cc.surface} flex items-start gap-3 rounded-[14px] p-4`}>
+                    <span class={`${cc.tile} ${cc.ink} mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-[9px]`}>
                       <i class="ri-sparkling-2-line text-[16px]" aria-hidden="true" />
                     </span>
                     <div class="flex flex-col gap-0.5">
@@ -165,7 +167,7 @@ if (promptSteps.length) {
         }
       </div>
 
-      {/* RIGHT — the artifact: file tree + short fetch-prompt */}
+      {/* RIGHT, the artifact: file tree + short fetch-prompt */}
       <div class="lg:sticky lg:top-24 lg:self-start flex flex-col gap-6">
         {/* file tree */}
         <div class="border-stroke-soft-200 overflow-hidden rounded-[18px] border">
@@ -200,7 +202,7 @@ if (promptSteps.length) {
               <i class="ri-file-copy-line" aria-hidden="true"></i><span data-copy-label>Copy</span>
             </button>
           </div>
-          <pre data-prompt class="text-text-sub-600 whitespace-pre-wrap px-5 py-4 font-mono text-[13.5px] leading-[1.7]">{shortPrompt}</pre>
+          <pre data-prompt class="text-text-sub-600 bg-bg-weak-50/50 whitespace-pre-wrap px-5 py-4 font-mono text-[13.5px] leading-[1.7]">{shortPrompt}</pre>
           <div class="border-stroke-soft-200 flex items-center gap-2 border-t px-5 py-3">
             <i class="ri-links-line text-text-soft-400 text-[15px]" aria-hidden="true"></i>
             <span class="t-label-sm text-text-soft-400 font-mono truncate">eluu.ai/cookbook/{slug}.md</span>
@@ -208,7 +210,7 @@ if (promptSteps.length) {
         </div>
         <p class="t-label-sm text-text-soft-400 px-1 -mt-1">
           Paste it into any agent. It fetches the recipe file and pulls in the skills and
-          prompts on its own — the prompt stays short, the detail lives at the URL.
+          prompts on its own, the prompt stays short, the detail lives at the URL.
         </p>
       </div>
     </div>

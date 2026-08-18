@@ -39,7 +39,7 @@ const { Content } = await render(entry);
   {data.proof && <ProofGrid proof={data.proof} />}
   {data.closing && <ClosingBand closing={data.closing} />}
 
-  {/* The body is optional — Figma draws no prose block on this page. It is
+  {/* The body is optional, Figma draws no prose block on this page. It is
       rendered so a content file can add notes below the drawn sections. */}
   <div class="mx-auto max-w-[706px] px-6 pb-16 sm:px-10">
     <Content />

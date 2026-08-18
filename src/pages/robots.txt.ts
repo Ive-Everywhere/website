@@ -3,7 +3,7 @@ import type { APIRoute } from 'astro';
 /**
  * Generated rather than static, so it follows the same `PUBLIC_INDEXABLE`
  * switch as the per-page robots meta. Unset means staging, and staging is
- * disallowed wholesale — including the sitemap, which would otherwise hand a
+ * disallowed wholesale, including the sitemap, which would otherwise hand a
  * crawler the full URL list.
  */
 const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true';

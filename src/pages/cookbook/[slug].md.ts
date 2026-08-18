@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 
 /**
  * The machine-readable recipe. The short copy-prompt tells the agent to FETCH
- * this URL — so `/cookbook/<slug>.md` returns the full workflow, skills, and
+ * this URL, so `/cookbook/<slug>.md` returns the full workflow, skills, and
  * prompts as plain markdown for the agent to read and execute.
  */
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -24,13 +24,13 @@ export const GET: APIRoute = ({ props }) => {
   if (d.workflow.length) {
     L.push('## Workflow', '');
     d.workflow.forEach((s: any, i: number) =>
-      L.push(`${i + 1}. **[${s.kind}] ${s.title}**${s.body ? ` — ${s.body}` : ''}`),
+      L.push(`${i + 1}. **[${s.kind}] ${s.title}**${s.body ? `, ${s.body}` : ''}`),
     );
     L.push('');
   }
   if (d.skills.length) {
     L.push('## Recommended skills', '');
-    d.skills.forEach((s: any) => L.push(`- **${s.name}**${s.description ? ` — ${s.description}` : ''}`));
+    d.skills.forEach((s: any) => L.push(`- **${s.name}**${s.description ? `, ${s.description}` : ''}`));
     L.push('');
   }
   if (d.prompt) L.push('## Prompt', '', '```', d.prompt.trim(), '```', '');

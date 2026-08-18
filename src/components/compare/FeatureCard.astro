@@ -9,8 +9,8 @@ import Copy from './Copy.astro';
  * radius 28. Identical in `151:2780`, `151:5499`, `151:5620`.
  *
  * Two shapes:
- *  - stacked  — icon above the heading (section 2, the pillars)
- *  - inline   — icon beside the heading in an 8px row (sections 4 and 5)
+ *  - stacked, icon above the heading (section 2, the pillars)
+ *  - inline, icon beside the heading in an 8px row (sections 4 and 5)
  * `body2` adds the hairline divider and the second paragraph (section 4 only).
  */
 interface Props {
@@ -50,7 +50,7 @@ const { card, layout = 'inline', note } = Astro.props;
   {
     card.body2 && (
       <Fragment>
-        {/* Figma `151:5548` — LINE, height 1.7, stroke #DDDBD1 at 2px. */}
+        {/* Figma `151:5548`, LINE, height 1.7, stroke #DDDBD1 at 2px. */}
         <hr class="border-stroke-sub-300 border-t-2" />
         <Copy
           value={card.body2}

@@ -18,7 +18,7 @@ const TEAMS: Team[] = [
   {
     icon: 'ri-bank-line',
     art: '/brand/solutions/finance.webp',
-    artAlt: 'A month-end close run: payouts pulled, ledger matched, entries posted, three exceptions emailed for sign-off — done in 1m 12s.',
+    artAlt: 'A month-end close run: payouts pulled, ledger matched, entries posted, three exceptions emailed for sign-off, done in 1m 12s.',
     eyebrow: 'Finance',
     title: 'Close the month while you sleep.',
     ops: [
@@ -182,7 +182,7 @@ export default function SolutionsCarousel() {
             </h2>
           </div>
 
-          {/* Department icons (also the nav) — active carries the timer ring */}
+          {/* Department icons (also the nav), active carries the timer ring */}
           <div className="flex shrink-0 gap-3">
             {TEAMS.map((t, i) => (
               <button
@@ -239,7 +239,7 @@ export default function SolutionsCarousel() {
         </div>
       </div>
 
-      {/* Horizontal side-scroll — one FULL-WIDTH card per view, taller. */}
+      {/* Horizontal side-scroll, one FULL-WIDTH card per view, taller. */}
       <div className="page-shell gutter-188">
         <div
           ref={scroller}

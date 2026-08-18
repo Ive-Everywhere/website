@@ -33,7 +33,7 @@ const TABS: Tab[] = [
     items: [
       { icon: 'ri-plug-line', title: 'Connect any tool', body: 'Native connections to Slack, Salesforce, Stripe, Sheets, and 100+ more. Agents read and act, no glue code.' },
       { icon: 'ri-terminal-box-line', title: 'Bring your harness', body: 'Run Claude Code, Codex, or any open harness on the subscription you already pay for.' },
-      { icon: 'ri-calendar-schedule-line', title: 'Schedule jobs', body: 'Run on a schedule, or fire from an inbound email or an API call — no one has to start it.' },
+      { icon: 'ri-calendar-schedule-line', title: 'Schedule jobs', body: 'Run on a schedule, or fire from an inbound email or an API call, no one has to start it.' },
       { icon: 'ri-slack-line', title: 'Talk on Slack', body: 'Assign work and get finished results in the channels your team already lives in.' },
     ],
   },
@@ -120,7 +120,7 @@ export default function CapabilityTabs() {
           </h2>
         </div>
 
-        {/* Selector tabs — dim the unselected, no solid highlight on the active */}
+        {/* Selector tabs, dim the unselected, no solid highlight on the active */}
         <div className="grid gap-6 lg:grid-cols-3">
           {TABS.map((t, i) => (
             <button
@@ -162,10 +162,10 @@ export default function CapabilityTabs() {
           ))}
         </div>
 
-        {/* Divider between the selectors and the detail — like Modal */}
+        {/* Divider between the selectors and the detail, like Modal */}
         <div className="border-band-muted border-t opacity-20" />
 
-        {/* Active content — no eyebrow above the heading */}
+        {/* Active content, no eyebrow above the heading */}
         <div className="grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] lg:gap-20">
           <div className="flex flex-col gap-6">
             <h3 className="t-landing-h3 text-band-ink text-balance">{a.headline}</h3>

@@ -6,8 +6,8 @@
  * standalone stage with its own runtime, keyframes and generic class names
  * (`.tcard`, `.a-stage`). Inlining them into the page would leak that CSS into
  * the marketing components and couple two independent animation systems. The
- * iframe keeps them isolated and lets `live-shim.css` — the provisional
- * variables Figma does not define — stay quarantined.
+ * iframe keeps them isolated and lets `live-shim.css`, the provisional
+ * variables Figma does not define, stay quarantined.
  *
  * The runtime already handles `prefers-reduced-motion` by jumping to the final
  * frame, and pauses when scrolled out of view.
@@ -39,8 +39,8 @@ interface Props {
   speed?: number;
   /**
    * CSS the illustration paints behind itself, so it sits on the same surface
-   * as the section that contains it. Must be a token expression — never a
-   * literal colour — so it follows the theme.
+   * as the section that contains it. Must be a token expression, never a
+   * literal colour, so it follows the theme.
    */
   surface?: string;
   /**
@@ -67,7 +67,7 @@ const {
  * Built by hand rather than with `URLSearchParams`, which serialises a space as
  * `+`. The frame decodes with `decodeURIComponent`, which does NOT turn `+` back
  * into a space, so a value like `linear-gradient(to top, …)` arrived as
- * `linear-gradient(to+top,+…)` — invalid CSS, silently dropped, gradient gone.
+ * `linear-gradient(to+top,+…)`, invalid CSS, silently dropped, gradient gone.
  */
 const query = [`surface=${encodeURIComponent(surface)}`];
 if (speed !== 1) query.push(`speed=${speed}`);
@@ -80,7 +80,7 @@ const frameSrc = `/live/${src}.html?${query.join('&')}`;
  * That is deliberately NOT a taller box on narrow screens. The runtime scales
  * the stage by CONTAIN (`public/live/live.js`), i.e. `min(frameW/stageW,
  * frameH/stageH)`, so below `lg` the frame's WIDTH is always the binding term
- * — a 900×440 stage in a 390px-wide frame scales to 0.43 whatever its height
+ *, a 900×440 stage in a 390px-wide frame scales to 0.43 whatever its height
  * is. Making the box taller therefore cannot enlarge the art; it only pads
  * empty tint above and below it. Measured: a 4:3 box at 390px leaves a 102px
  * band and the art is exactly the same size as with the drawn aspect.
@@ -116,7 +116,7 @@ const aspect = width / height;
 
 <script>
   /**
-   * The initial theme cannot go in the `src` at build time — the page is static
+   * The initial theme cannot go in the `src` at build time, the page is static
    * and the visitor's theme is only known in the browser. So each frame is
    * pointed at its themed URL on mount, before it loads.
    */

@@ -3,7 +3,7 @@ import Copy from './Copy.astro';
 import Button from '../ui/Button.astro';
 
 /**
- * Section 1 — split hero + inline demo form. Figma `151:2692`.
+ * Section 1, split hero + inline demo form. Figma `151:2692`.
  *
  * Figma names five sibling frames "Hero". Only this one is a hero; the other
  * four are ordinary page sections (spec, Root frame).
@@ -46,7 +46,7 @@ const { form } = hero;
   <div
     class="page-shell gutter-187 flex flex-col gap-10 pt-8 pb-16 lg:flex-row lg:items-start lg:justify-between lg:gap-8"
   >
-    <!-- 1a. Left column `151:2693` — column, gap 56. -->
+    <!-- 1a. Left column `151:2693`, column, gap 56. -->
     <div class="flex min-w-0 flex-col gap-10 lg:max-w-[620px] lg:gap-14">
       <div class="flex flex-col gap-6">
         {/* Eyebrow `151:5124`. DM Mono/Medium with textCase UPPER, so the string
@@ -78,11 +78,11 @@ const { form } = hero;
           <Copy value={hero.sub} class="t-paragraph-md text-text-sub-600" />
         </div>
 
-        {/* Rule `151:5094` — LINE 620 × 2, stroke #AAA89E. */}
+        {/* Rule `151:5094`, LINE 620 × 2, stroke #AAA89E. */}
         <hr class="border-icon-soft-400 border-t-2" />
       </div>
 
-      {/* Stat row `151:5111` — three blocks, space-between. Two-up at 390px
+      {/* Stat row `151:5111`, three blocks, space-between. Two-up at 390px
           rather than one long column, then a single row from `sm`. */}
       <dl class="grid grid-cols-2 gap-6 sm:flex sm:flex-row sm:justify-between">
         {
@@ -100,7 +100,7 @@ const { form } = hero;
     </div>
 
     {/*
-      1b. Demo-form card `151:5039` — fixed 508px, fill #EDEDE9, radius 16.
+      1b. Demo-form card `151:5039`, fixed 508px, fill #EDEDE9, radius 16.
       Figma pins every input to `State=Placeholder` and sets `Hint Text: false`,
       so there is nowhere for a validation message to appear, and what happens
       after submit is undefined (spec gap D.21). The form posts nowhere here.
@@ -173,7 +173,7 @@ const { form } = hero;
 
         <Button variant="primary-fancy" label={form.submit} class="w-full" />
 
-        {/* Fine print `151:5049` — the same sentence as the card subheading
+        {/* Fine print `151:5049`, the same sentence as the card subheading
             `151:5044`, twice in one card (spec gap A.9). */}
         <Copy
           value={form.finePrint}

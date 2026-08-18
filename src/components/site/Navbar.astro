@@ -3,12 +3,12 @@ import { primaryNav } from '../../lib/navigation';
 import Button from '../ui/Button.astro';
 
 /**
- * Nav — Figma 147:3071 draws an 840px centred card holding everything.
+ * Nav, Figma 147:3071 draws an 840px centred card holding everything.
  *
  * DEPARTURE FROM THE DRAWING (Krishna, reference: ona.com): the bar spans the
  * page instead. The logo sits at the left gutter, the links sit in their own
  * tinted pill, and the actions sit at the right gutter. Only the link group
- * carries a background — a card around the whole header read as a floating
+ * carries a background, a card around the whole header read as a floating
  * widget rather than as site chrome.
  *
  * Figma defines no sticky behaviour, no dropdown contents and no mobile
@@ -23,7 +23,7 @@ import Button from '../ui/Button.astro';
  * The panel therefore does not reuse them: each section with children is a
  * real `<button aria-expanded>` disclosure that opens on tap.
  *
- * The panel is a modal surface while open — Escape closes it, a click outside
+ * The panel is a modal surface while open, Escape closes it, a click outside
  * closes it, focus is trapped inside it, and the page behind it cannot scroll.
  */
 const menuId = 'site-nav-panel';
@@ -31,12 +31,12 @@ const menuId = 'site-nav-panel';
 
 {/*
   Opaque, or the page scrolls through the sticky header. Stickiness itself is
-  applied by the `<header>` in Base.astro — see the note there.
+  applied by the `<header>` in Base.astro, see the note there.
 */}
 <div class="nav-shell bg-bg-white-0">
   {/*
     Scrim. While a dropdown is open the rest of the page dims, which is what
-    separates the panel from the page — the panel and the page share the same
+    separates the panel from the page, the panel and the page share the same
     surface token, so a shadow alone was not enough to tell them apart. It sits
     under the header and over everything else, and never takes a click.
   */}
@@ -139,13 +139,6 @@ const menuId = 'site-nav-panel';
 
       <div class="ml-auto flex items-center gap-2">
         <div class="hidden items-center gap-2 lg:flex">
-          <Button
-            variant="neutral-ghost"
-            size="xs"
-            iconOnly
-            leftIcon="ri-search-line"
-            label="Search"
-          />
           <Button
             variant="neutral-soft"
             size="xs"
@@ -260,12 +253,6 @@ const menuId = 'site-nav-panel';
             drawn button padding gives 40px, under the 44px tap-target floor. */}
         <div class="flex flex-col gap-2 px-1 pt-3 pb-1">
           <Button
-            variant="neutral-lighter"
-            leftIcon="ri-search-line"
-            label="Search"
-            class="min-h-11 w-full justify-start"
-          />
-          <Button
             variant="primary-stroke"
             label="Request a demo"
             href="/demo"
@@ -293,7 +280,7 @@ const menuId = 'site-nav-panel';
     const FOCUSABLE =
       'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
-    /** Only the items actually on screen — a collapsed section is `hidden`. */
+    /** Only the items actually on screen, a collapsed section is `hidden`. */
     const focusable = (): HTMLElement[] =>
       Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
         (el) => el.offsetParent !== null || el === document.activeElement,
@@ -382,7 +369,7 @@ const menuId = 'site-nav-panel';
   /**
    * While a dropdown is open the page behind dims and the header stays bright.
    * Without this the panel and the page share a surface token and the panel has
-   * no edge to read against — a shadow alone was not enough.
+   * no edge to read against, a shadow alone was not enough.
    *
    * `:has()` keeps the whole thing in CSS, so it works before any JS runs.
    */

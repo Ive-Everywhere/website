@@ -41,7 +41,7 @@ const artTitles: Record<string, string> = {
   'c1-a-compose':
     'An agent composer: a request is typed, the agent runs across connected tools, and a finished result appears.',
   'c2-b-plan':
-    'A carousel of triggers — a schedule, a Slack message, an email and an API call — each starting an agent run without a person present.',
+    'A carousel of triggers, a schedule, a Slack message, an email and an API call, each starting an agent run without a person present.',
   'c3-b-audit':
     'A live security stream showing each agent action as it is checked against permissions and written to an audit trail.',
 };
@@ -52,7 +52,7 @@ const artTitle = data.pitch.art
 ---
 
 <Base
-  title={`${data.title} — Eluu`}
+  title={`${data.title}, Eluu`}
   description={data.description}
   ogImage={data.ogImage}
   cta={false}
@@ -76,7 +76,7 @@ const artTitle = data.pitch.art
     artTitle={artTitle}
   />
 
-  {/* 3. THREE NUMBERS. Security calls this slot "three statements" — same
+  {/* 3. THREE NUMBERS. Security calls this slot "three statements", same
        section, word values instead of figures. */}
   {data.stats.length > 0 && <StatBand stats={data.stats} />}
 
@@ -92,7 +92,7 @@ const artTitle = data.pitch.art
     )
   }
 
-  {/* 5. TESTIMONIAL — `use-case/Testimonial.astro`, reused as-is. Every pillar
+  {/* 5. TESTIMONIAL, `use-case/Testimonial.astro`, reused as-is. Every pillar
        page's quote is still `[VERIFY]`, so both slots render marked. */}
   {
     data.testimonial && (
@@ -104,7 +104,7 @@ const artTitle = data.pitch.art
     )
   }
 
-  {/* 6. TECHNICAL DETAILS → "Under the hood." — HIDDEN for now (Krishna,
+  {/* 6. TECHNICAL DETAILS → "Under the hood.", HIDDEN for now (Krishna,
        2026-08-18): commented out across all pillar pages until we fill it with
        real content. Uncomment to restore; the `technical` data still lives in
        each content entry. */}
@@ -126,7 +126,7 @@ const artTitle = data.pitch.art
     <Content />
   </div>
 
-  {/* 7. FINAL CTA — the site-wide band, carrying this page's headline and both
+  {/* 7. FINAL CTA, the site-wide band, carrying this page's headline and both
        of its CTAs. The source gives the band no second line, so the eyebrow is
        cleared rather than filled with an invented one. */}
   <CtaBand
