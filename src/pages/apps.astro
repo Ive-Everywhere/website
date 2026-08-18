@@ -13,9 +13,12 @@ import CtaBand from '../components/site/CtaBand.astro';
  * Apps — a hybrid home + platform page (Krishna, 2026-08-17). Apps is a big,
  * distinct story, so it gets the platform template's depth plus a home-style
  * 2×2 grid in the middle. Copy is Ona-voice; capabilities are from the shipped
- * Eluu Apps spec (projects/eluu-apps): agent-built apps over MCP, live
- * <slug>.eluu.site + custom domains, static or server (E2B, scale-to-zero),
- * per-app database + object storage, share private/team/public.
+ * Eluu Apps spec (projects/eluu-apps): agent-built apps published to a live
+ * <slug>.eluu.site or custom domain, static or server (E2B, scale-to-zero),
+ * per-app database + object storage, shared private/team/public. The MCP point
+ * appears ONLY as "equip the coding agent you already use (Claude Code, Codex)
+ * to publish to a URL" — Krishna, 2026-08-17: protocol availability on its own
+ * is moot; the value is giving an external agent a place to ship what it builds.
  */
 
 const SIGNUP = 'https://app.eluu.ai/signup';
@@ -24,28 +27,28 @@ const DEMO = 'https://cal.com/krishna-kaipa-wh7ao3/15min';
 const tiles = [
   {
     eyebrow: 'Built by agents',
-    title: 'Your agents ship the app',
-    body: 'An agent builds the tool, calls publish, and hands you a live URL — no infra, no deploy step, no human in the loop.',
+    title: 'Your agent ships it, not just builds it',
+    body: 'Tell an agent to build the tool. It writes the app, publishes it, and hands back a live link — no deploy step, no human in the loop.',
   },
   {
-    eyebrow: 'Or by anyone',
-    title: 'No infrastructure to touch',
-    body: 'Bring an HTML file or point a build at it and it is live on its own link. No servers to configure, no pipeline to babysit.',
+    eyebrow: 'Any coding agent',
+    title: 'Ship from the agent you already use',
+    body: 'Point Claude Code or Codex at Eluu and it publishes straight to a URL. The agent on your desk finally has somewhere to put what it builds.',
   },
   {
-    eyebrow: 'Full stack',
-    title: 'Static page to server app',
-    body: 'Ship a static site, or a full server app with its own database and storage. It scales to zero and wakes in a blink.',
+    eyebrow: 'Static to server',
+    title: 'A page today, a full app tomorrow',
+    body: 'Start with an HTML file on a link. Grow into a server app with its own database and storage — same platform, nothing to migrate.',
   },
   {
-    eyebrow: 'Share it',
-    title: 'Private, team, or public',
-    body: 'Flip one toggle to keep it to yourself, share it with your team, or put it on the open web — on eluu.site or your own domain.',
+    eyebrow: 'Yours to share',
+    title: 'Private, team, or public — one toggle',
+    body: 'Keep it to yourself, hand it to your team, or put it on the open web. On eluu.site or your own domain.',
   },
 ];
 
 const stats = [
-  { value: 'One step', label: 'from build to a live URL', needsVerify: false },
+  { value: 'One step', label: 'from built to a live URL', needsVerify: false },
   { value: '.eluu.site', label: 'a link for every app, or your own domain', needsVerify: false },
   { value: 'Scale to zero', label: 'server apps sleep, wake in ~170ms', needsVerify: false },
 ];
@@ -54,7 +57,7 @@ const features = [
   {
     navLabel: 'A real URL',
     headline: 'Every app gets a live link',
-    body: 'Publish and it is online at your-app.eluu.site, or wire up your own custom domain. Share the link and it just works.',
+    body: 'Publish and it is online at your-app.eluu.site, or wire up your own domain. Share the link and it just works.',
     icon: 'ri-global-line',
   },
   {
@@ -76,9 +79,9 @@ const features = [
     icon: 'ri-share-forward-line',
   },
   {
-    navLabel: 'Built over MCP',
-    headline: 'Agents ship apps on their own',
-    body: 'An agent creates, pushes files, and publishes over the same protocol it uses for everything else — so "build me a tracker" ends with a link, not a code dump.',
+    navLabel: 'Any coding agent',
+    headline: 'The agent on your desk can ship here',
+    body: 'Claude Code, Codex, or your own agent publishes to a live URL over MCP — so the tool it builds ends as a link you can open, not a code dump you have to host.',
     icon: 'ri-terminal-box-line',
   },
 ];
@@ -98,20 +101,20 @@ const details = [
   <PillarHero
     eyebrow="Apps"
     headline="Any agent can build an app. Eluu gives it a URL."
-    subhead="Your agents — or anyone on your team — build a dashboard, a tracker, an internal tool, and ship it to a real link in one step. Static site to full server app, with its own database and storage."
+    subhead="Your agents build the dashboard, the tracker, the internal tool — and ship it to a real link in one step. Static page or full server app, database and storage included."
     primaryCta={{ label: 'Start for free', href: SIGNUP }}
     secondaryCta={{ label: 'Book a demo', href: DEMO }}
   />
 
   <Explanation
-    heading="Building the app got easy. Shipping it didn't. Until now."
-    body="You can generate a working app in minutes, then it dies on your laptop — no host, no URL, no way to share it. Eluu takes it the last mile: publish to a live link, give it a database and storage, and share it private, with your team, or with the world."
+    heading="Stop configuring. Start shipping."
+    body="The app builds in minutes — then it dies on your laptop with no host, no URL, no way to share. Eluu ships it the last mile: one step to a live link, a database and storage built in, and sharing with a toggle. Nothing to configure."
     linkLabel="See what you can build"
     linkHref="/cookbook"
     artTitle="An agent builds an app and publishes it to a live URL that opens in a browser."
   />
 
-  <AppsGrid heading="One platform, from prompt to production." tiles={tiles} />
+  <AppsGrid heading="From prompt to production, in one platform." tiles={tiles} />
 
   <StatBand stats={stats} />
 
