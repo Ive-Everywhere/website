@@ -1,6 +1,20 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"></head><body>
-<!-- RULE 1+4: bare header glyph (no tile), and the status lane is a RADIO —
-     the correct affordance for a selector. No green here; nothing completed. -->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* structures the kit doesn't cover: the maroon-soft selected band + left accent
+     bar, its small "Your subscription" pill, and monochrome-ink brand marks. */
+  .mk svg { width: 26px; height: 26px; color: var(--ink); }
+  .row--sel { position: relative; background: var(--maroon-soft); }
+  .row--sel::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--maroon); }
+  .pill--sub {
+    display: inline-flex; align-items: center; flex: none; white-space: nowrap;
+    height: 32px; padding: 0 14px; border-radius: 10px;
+    background: var(--maroon); color: #fff; font-size: 17px; font-weight: 530;
+  }
+</style>
+</head><body>
+<!-- RULE 1+4: bare header glyph, radios stay the ONE status lane at the right
+     edge (unchanged from the approved shape). RULE 7: the selected-row band +
+     accent bar + pill + filled radio read as ONE maroon accent moment, not four. -->
 <div class="stage cv-lav">
   <div class="card">
     <div class="hd hd--band">
@@ -9,13 +23,22 @@
       <span class="hd__r"><span class="pill pill--mono">no lock-in</span></span>
     </div>
     <div class="list">
-      <div class="row row--tint"><span class="row__b"><div class="row__t">Claude Opus 4.5</div><div class="row__s row__s--mono">on your Claude Code subscription</div></span>
-        <span class="st st--pick is-on"></span></div>
-      <div class="row"><span class="row__b"><div class="row__t">Codex</div><div class="row__s row__s--mono">on your OpenAI plan</div></span>
-        <span class="st st--pick"></span></div>
-      <div class="row"><span class="row__b"><div class="row__t">Any open harness</div><div class="row__s row__s--mono">your own API keys</div></span>
-        <span class="st st--pick"></span></div>
+      <div class="row row--sel">
+        <span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v20M2 12h20M5.05 5.05l13.9 13.9M18.95 5.05L5.05 18.95"/></svg></span>
+        <span class="row__b"><div class="row__t">Claude Opus 4.5</div><div class="row__s">On your Claude subscription</div></span>
+        <span class="pill--sub">Your subscription</span>
+        <span class="st st--pick is-on"></span>
+      </div>
+      <div class="row">
+        <span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M12 2.5L20.2 7.25V16.75L12 21.5L3.8 16.75V7.25Z"/><path d="M12 7.5L16.5 10V15L12 17.5L7.5 15V10Z"/></svg></span>
+        <span class="row__b"><div class="row__t">Codex</div><div class="row__s">On your OpenAI plan</div></span>
+        <span class="st st--pick"></span>
+      </div>
+      <div class="row">
+        <span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M14 9l2 2"/></svg></span>
+        <span class="row__b"><div class="row__t">Any open model</div><div class="row__s">Your own API keys</div></span>
+        <span class="st st--pick"></span>
+      </div>
     </div>
-    <div class="foot"><span>No lock-in — swap the model, keep the agent</span></div>
   </div>
 </div></body></html>

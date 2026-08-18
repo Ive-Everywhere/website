@@ -1,20 +1,55 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"></head><body>
-<!-- RULE 2: NO row marks at all — the rules themselves are the content.
-     RULE 6: memory dissolves downward, implying far more than four. -->
+<!-- Krishna correction: NO header — each memory rule is its own card, blur-stacked.
+     Fix (supervisor): the reveal step must exceed the title band so every card
+     shows its OWN rule (rev 1 stepped 50px under a 92px card, hiding all titles).
+     Now steps 82px: front card fully readable, each next reveals its title +
+     label, back two recede with blur. One maroon accent: the newest-card dot. -->
+<style>
+  .mem-stack { position: relative; width: 640px; height: 470px; }
+  .mem-card {
+    position: absolute; left: 50%; width: 620px;
+    background: var(--panel); border-radius: 18px; padding: 20px 26px;
+    transform-origin: top center;
+    box-shadow: 0 16px 34px -16px rgba(30, 28, 30, .17), 0 4px 11px -5px rgba(30, 28, 30, .06);
+  }
+  /* step 82px = title band (pad 20 + title 30 + label 22) fully clears the card above */
+  .mem-c1 { transform: translateX(-50%) translateY(0px)   scale(1);    z-index: 6; }
+  .mem-c2 { transform: translateX(-50%) translateY(96px)  scale(.99);  z-index: 5; }
+  .mem-c3 { transform: translateX(-50%) translateY(192px) scale(.98);  z-index: 4; }
+  .mem-c4 { transform: translateX(-50%) translateY(285px) scale(.965); z-index: 3; opacity: .62; filter: blur(.7px); }
+  .mem-c5 { transform: translateX(-50%) translateY(372px) scale(.95);  z-index: 2; opacity: .3;  filter: blur(1.8px); }
+  .mem-t { font-size: 26px; font-weight: 450; letter-spacing: -.008em; line-height: 1.2; color: var(--ink); display: flex; align-items: center; gap: 11px; }
+  .mem-s { font-size: 19px; color: var(--soft); margin-top: 5px; line-height: 1.3; }
+  .mem-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--maroon); flex: none; }
+  .mem-more {
+    position: absolute; left: 50%; transform: translateX(-50%); bottom: 40px;
+    font-family: var(--mono); font-size: 16px; color: var(--soft);
+    background: var(--panel); border: 1px solid var(--hair); border-radius: 999px; padding: 8px 16px;
+    box-shadow: 0 4px 12px -5px rgba(30,28,30,.1); z-index: 7;
+  }
+</style>
 <div class="stage cv-warm">
-  <div class="card">
-    <div class="hd hd--band">
-      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a3.5 3.5 0 0 0-3.5 3.5v.1A3 3 0 0 0 6 10.5a3 3 0 0 0 .8 2A3 3 0 0 0 6 15a3 3 0 0 0 3 3h.2A3 3 0 0 0 12 20zM12 4a3.5 3.5 0 0 1 3.5 3.5v.1A3 3 0 0 1 18 10.5a3 3 0 0 1-.8 2A3 3 0 0 1 18 15a3 3 0 0 1-3 3h-.2A3 3 0 0 1 12 20z"/></svg></span>
-      <span class="hd__t">Memory</span>
-      <span class="hd__r"><span class="pill pill--mono">128 notes</span></span>
+  <div class="mem-stack">
+    <div class="mem-card mem-c1">
+      <div class="mem-t"><span class="mem-dot"></span>Acme pays net-60, not net-30</div>
+      <div class="mem-s">learned from 3 invoices</div>
     </div>
-    <div class="list list--fade-soft">
-      <div class="row"><span class="row__b"><div class="row__t">Acme pays net-60, not net-30</div><div class="row__s">learned from 3 invoices</div></span></div>
-      <div class="row"><span class="row__b"><div class="row__t">Anything over $10k needs Priya</div><div class="row__s">approval policy</div></span></div>
-      <div class="row"><span class="row__b"><div class="row__t">Q3 close excludes intercompany</div><div class="row__s">from the close playbook</div></span></div>
-      <div class="row row--g1"><span class="row__b"><div class="row__t">EU invoices need a VAT id</div><div class="row__s">compliance rule</div></span></div>
-      <div class="row row--g2"><span class="row__b"><div class="row__t">Northwind bills quarterly</div><div class="row__s">learned from 2 renewals</div></span></div>
+    <div class="mem-card mem-c2">
+      <div class="mem-t">Anything over $10k needs Priya</div>
+      <div class="mem-s">approval policy</div>
     </div>
-    <div class="foot"><span class="foot__av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ledger&backgroundColor=c5f2e0" alt=""></span><span><b>Ledger</b> learned this across 1,204 tasks</span></div>
+    <div class="mem-card mem-c3">
+      <div class="mem-t">Q3 close excludes intercompany</div>
+      <div class="mem-s">from the close playbook</div>
+    </div>
+    <div class="mem-card mem-c4">
+      <div class="mem-t">EU invoices need a VAT id</div>
+      <div class="mem-s">compliance rule</div>
+    </div>
+    <div class="mem-card mem-c5">
+      <div class="mem-t">Northwind bills quarterly</div>
+      <div class="mem-s">learned from 2 renewals</div>
+    </div>
+    <div class="mem-more">+ 123 more</div>
   </div>
 </div></body></html>
