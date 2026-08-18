@@ -32,7 +32,7 @@ export const primaryNav: NavItem[] = [
   },
   */
   { label: 'Cookbook', href: '/cookbook' },
-  { label: 'Docs', href: '/docs' },
+  { label: 'Docs', href: 'https://docs.eluu.ai' },
   { label: 'Pricing', href: '/pricing' },
 ];
 

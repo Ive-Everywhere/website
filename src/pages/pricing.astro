@@ -1,6 +1,506 @@
 ---
-// Footer/legal page — served from the canonical eluu.ai page for now so the
-// content stays authoritative (important for legal). Replace with a native v3
-// page when one is built. 302 = temporary, so it flips cleanly when v3 owns it.
-return Astro.redirect('https://eluu.ai/pricing', 302);
+import Base from '../layouts/Base.astro';
+import Button from '../components/ui/Button.astro';
+
+/**
+ * Pricing page, rev 2 (Krishna, 2026-08-18). Modelled 1-1 on Ona's pricing:
+ * two SOLID-COLOR cards + compare table + FAQ — but built strictly from the
+ * home page's own design language, nothing invented:
+ *
+ *   - Cloud card  = the maroon band (bg-band-surface + band-* ramp), the same
+ *     surface as CapabilityTabs / Proof quote. Mirrors Ona's solid brown card.
+ *   - Enterprise  = the peach CTA pairing (accent-peach-200 / -800), the same
+ *     surface as CtaBand. Mirrors Ona's solid blue card.
+ *   - Cards, radius 28, padding p-6 lg:p-10 — same shell as Proof/Security.
+ *   - Stats reuse Proof's gradient-number stat cards on bg-card-surface.
+ *   - Section headings: left-aligned t-landing-h3, page-shell gutter-188 py-14.
+ *
+ * Model (decided in chat, 2026-08-18): self-serve buys ELUU COMPUTE UNITS
+ * (ECUs) via a plan dropdown ($20/$50/$100/$200/$500 per month). Customers who
+ * do NOT bring their own model toggle on AI CREDITS (token spend) as an add-on.
+ * The agent-hour readout stays the value lens. Enterprise = the whole platform
+ * + inference in the customer's environment.
+ *
+ * PLACEHOLDERS pending Krishna: ECU-per-$ ratio (1 ECU ≈ $1 here, top tier
+ * +10% mirroring Ona), AI-credit amounts, expiry policy in the FAQ.
+ */
+
+const SIGNUP = 'https://app.eluu.ai/signup';
+const DEMO = 'https://cal.com/krishna-kaipa-wh7ao3/30min';
+
+/* 1 ECU = $0.25 (Krishna, 2026-08-18), so 4 ECUs per dollar; top tier +10%. */
+const plans = [
+  { price: 20, ecus: '80', note: '' },
+  { price: 50, ecus: '200', note: '' },
+  { price: 100, ecus: '400', note: '' },
+  { price: 200, ecus: '800', note: '' },
+  { price: 500, ecus: '2,200', note: '10% more monthly ECUs' },
+];
+
+const aiCredits = [
+  { price: 20, label: '$20 in AI credits' },
+  { price: 50, label: '$50 in AI credits' },
+  { price: 100, label: '$100 in AI credits' },
+  { price: 200, label: '$200 in AI credits' },
+];
+
+/* Every row is a check. The one exception: Slack carries its real multicolour
+ * mark (Krishna, 2026-08-18 — "only add colored logo for slack for now"). */
+const cloudFeatures = [
+  { text: 'Unlimited agents' },
+  { text: 'Up to 20 parallel sessions' },
+  { text: 'A full cloud computer per agent' },
+  { text: 'Connect your Claude Code or Codex subscription' },
+  { text: 'Any harness, any model, your own keys' },
+  { text: '200+ first party integrations' },
+  { text: 'Bring any MCP server' },
+  { text: 'Work with agents in Slack', slackLogo: true },
+  { text: 'Jobs, schedules, and API triggers' },
+  { text: 'Apps with a database, storage, and a live URL' },
+  { text: 'Team memory and shared skills' },
+  { text: 'Approvals and audit logs on every action' },
+  { text: 'Spend caps and per-agent budgets' },
+  { text: 'Basic support' },
+];
+
+const enterpriseFeatures = [
+  'Everything in Cloud',
+  'Deploy in your VPC',
+  'Private inference — models never leave your perimeter',
+  'Custom parallel scale — hundreds of sessions',
+  'SSO and OIDC identity and access controls',
+  'Fine grained roles, permissions and policies',
+  'Org-wide secrets',
+  'Detailed audit trails on every human and agent action',
+  'Complete network and data residency control',
+  'Uptime guarantees (SLAs)',
+  'Dedicated account manager, forward deployed engineer and premium support',
+];
+
+const compareGroups = [
+  {
+    name: 'Eluu compute units (ECUs)',
+    rows: [
+      { label: 'Included ECUs', cloud: '80 – 2,200 / month', ent: 'Custom' },
+      { label: 'AI credits (model tokens)', cloud: 'Optional add-on', ent: 'Custom' },
+      { label: 'Pooled across your team', cloud: true, ent: true },
+      { label: 'Spend caps and per-agent budgets', cloud: true, ent: true },
+      { label: 'Agent-hour cost reporting', cloud: true, ent: true },
+    ],
+  },
+  {
+    name: 'Models & harnesses',
+    rows: [
+      { label: 'Connect your Claude Code or Codex subscription', cloud: true, ent: true },
+      { label: 'Bring your own keys (BYOK)', cloud: true, ent: true },
+      { label: 'Any harness — no vendor lock-in', cloud: true, ent: true },
+      { label: 'Private inference in your perimeter', cloud: false, ent: true },
+    ],
+  },
+  {
+    name: 'Integrations & channels',
+    rows: [
+      { label: 'First party integrations', cloud: '200+', ent: '200+' },
+      { label: 'Bring any MCP server', cloud: true, ent: true },
+      { label: 'Work with agents in Slack', cloud: true, ent: true },
+      { label: 'Kick off work from email or the API', cloud: true, ent: true },
+    ],
+  },
+  {
+    name: 'Agents & workforce',
+    rows: [
+      { label: 'Agents', cloud: 'Unlimited', ent: 'Unlimited' },
+      { label: 'Parallel sessions', cloud: 'Up to 20', ent: 'Hundreds' },
+      { label: 'Full cloud computer per agent', cloud: true, ent: true },
+      { label: 'Machine tiers', cloud: 'S / M / L', ent: 'Custom' },
+      { label: 'Team memory and shared skills', cloud: true, ent: true },
+      { label: 'Jobs, schedules, triggers', cloud: true, ent: true },
+    ],
+  },
+  {
+    name: 'Apps',
+    rows: [
+      { label: 'Publish to a live subdomain', cloud: true, ent: true },
+      { label: 'Custom domains', cloud: true, ent: true },
+      { label: 'Database and object storage per app', cloud: true, ent: true },
+      { label: 'Private / team / public sharing', cloud: true, ent: true },
+      { label: 'Server apps with scale-to-zero', cloud: true, ent: true },
+    ],
+  },
+  {
+    name: 'Security & governance',
+    rows: [
+      { label: 'Per-agent, per-tool access control', cloud: true, ent: true },
+      { label: 'Approval flows on sensitive actions', cloud: true, ent: true },
+      { label: 'Secrets kept out of the model’s context', cloud: true, ent: true },
+      { label: 'Audit logs', cloud: 'Standard', ent: 'Detailed, org-wide' },
+      { label: 'Secrets', cloud: 'User, project', ent: 'User, project, org-wide' },
+      { label: 'SSO and OIDC', cloud: false, ent: true },
+      { label: 'Fine grained roles, permissions and policies', cloud: false, ent: true },
+      { label: 'Deploy in your VPC', cloud: false, ent: true },
+      { label: 'Data residency and network control', cloud: false, ent: true },
+    ],
+  },
+  {
+    name: 'Support',
+    rows: [
+      { label: 'Support level', cloud: 'Docs and basic support', ent: 'Dedicated' },
+      { label: 'Uptime guarantees (SLAs)', cloud: false, ent: true },
+      { label: 'Forward deployed engineers', cloud: false, ent: true },
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: 'What is an Eluu compute unit?',
+    a: 'An ECU is a normalized unit of the compute your agents run on — machine time, storage, apps. You get four ECUs per dollar, pooled across your whole team.',
+  },
+  {
+    q: 'What are AI credits?',
+    a: 'AI credits cover model tokens when Eluu is your LLM hub. If you bring your own Claude, Codex, or API keys, you do not need them — tokens stay on your existing bill.',
+  },
+  {
+    q: 'Do I pay per seat?',
+    a: 'No. Invite your whole team at no extra cost. You pay for what your agents actually do, not for headcount.',
+  },
+  {
+    q: 'What does "agent hour" mean?',
+    a: 'It is what an hour of an agent’s work costs you — compute plus tokens, divided by the hours it ran. It lets you weigh an agent against the job it does.',
+  },
+  {
+    q: 'Can I run Eluu in my own cloud?',
+    a: 'Yes, on Enterprise. We deploy the whole platform, including inference, inside your environment, so nothing leaves your perimeter.',
+  },
+];
 ---
+
+<Base
+  title="Pricing, Eluu"
+  description="Pay for compute, not seats. Choose a compute plan, add AI credits only if you need them, and see what an hour of every agent's work costs. Or run the whole platform in your own environment."
+>
+  {/* ————— Hero ————— */}
+  <section class="bg-bg-white-0">
+    <div class="page-shell gutter-187 flex flex-col items-center gap-3 pt-16 pb-12 text-center">
+      <p class="t-mono-md text-text-sub-600">Pricing</p>
+      <h1 class="t-landing-h1 text-text-strong-950 max-w-[820px] text-balance">
+        Pay for compute, not seats.
+      </h1>
+      <p class="t-paragraph-md text-text-sub-600 max-w-[660px] text-pretty">
+        Choose a compute plan. Add AI credits only if you need them. Invite your whole team
+        at no extra cost.
+      </p>
+    </div>
+  </section>
+
+  {/* ————— The two cards ————— */}
+  <section class="bg-bg-white-0">
+    <div class="page-shell gutter-188 pb-6">
+      <div class="grid gap-6 lg:grid-cols-2 lg:gap-9">
+        {/* Cloud — the maroon band voice */}
+        <div class="bg-band-surface flex flex-col gap-8 rounded-[28px] p-6 lg:p-10">
+          <div class="flex flex-col gap-3">
+            <div class="flex items-baseline justify-between gap-4">
+              <p class="t-h4 text-band-ink">Cloud</p>
+              <p class="t-h6 text-band-ink">from <span class="t-h5">$20</span> / month</p>
+            </div>
+            <p class="t-paragraph-md text-band-muted">Ideal for individuals and teams</p>
+          </div>
+
+          {/* Plan dropdown */}
+          <div class="flex flex-col gap-4">
+            <div class="relative" id="plan-dd">
+              <button
+                type="button"
+                class="bg-band-card text-band-card-ink t-label-md flex w-full items-center justify-between rounded-2xl px-5 py-4"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+              >
+                <span data-dd-label>Select a plan</span>
+                <i class="ri-arrow-down-s-line text-[20px] transition-transform" data-dd-chevron aria-hidden="true"></i>
+              </button>
+              <div
+                class="bg-band-card absolute inset-x-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl shadow-lg"
+                role="listbox"
+                data-dd-panel
+              >
+                {plans.map((p) => (
+                  <button
+                    type="button"
+                    role="option"
+                    data-dd-option
+                    data-price={p.price}
+                    data-label={`$${p.price} / ${p.ecus} ECUs per month`}
+                    class="text-band-card-ink t-label-md border-stroke-soft-200 hover:bg-bg-soft-200 flex w-full flex-col items-start gap-0.5 border-b px-5 py-4 text-left last:border-b-0"
+                  >
+                    <span>${p.price} / {p.ecus} ECUs per month</span>
+                    {p.note && <span class="t-paragraph-xs text-band-card-body">{p.note}</span>}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* How models are paid for — a segmented control, the cleanest
+                either/or on a pricing card (radio rows read as a form). One
+                caption line under it carries the explanation. */}
+            <div class="flex flex-col gap-2.5">
+              <div class="bg-band-well flex rounded-2xl p-1" role="radiogroup" aria-label="How will you pay for the model?">
+                <button
+                  type="button"
+                  class="t-label-sm flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 transition-colors"
+                  data-mode="byo"
+                  role="radio"
+                  aria-checked="true"
+                >
+                  <i class="ri-claude-fill text-[18px]" aria-hidden="true"></i>
+                  <i class="ri-openai-fill -ml-1 text-[18px]" aria-hidden="true"></i>
+                  Bring my subscription
+                </button>
+                <button
+                  type="button"
+                  class="t-label-sm flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 transition-colors"
+                  data-mode="credits"
+                  role="radio"
+                  aria-checked="false"
+                >
+                  <i class="ri-money-dollar-circle-line text-[18px]" aria-hidden="true"></i>
+                  Buy AI credits
+                </button>
+              </div>
+              <p class="t-paragraph-xs text-band-muted" id="mode-caption">
+                Claude Code, Codex, or your own keys. Tokens stay on your bill.
+              </p>
+              <div class="relative hidden" id="credits-dd">
+                <button
+                  type="button"
+                  class="bg-band-card text-band-card-ink t-label-md flex w-full items-center justify-between rounded-2xl px-5 py-4"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                >
+                  <span data-dd-label>Select AI credits</span>
+                  <i class="ri-arrow-down-s-line text-[20px] transition-transform" data-dd-chevron aria-hidden="true"></i>
+                </button>
+                <div
+                  class="bg-band-card absolute inset-x-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl shadow-lg"
+                  role="listbox"
+                  data-dd-panel
+                >
+                  {aiCredits.map((c) => (
+                    <button
+                      type="button"
+                      role="option"
+                      data-dd-option
+                      data-price={c.price}
+                      data-label={`${c.label} per month`}
+                      class="text-band-card-ink t-label-md border-stroke-soft-200 hover:bg-bg-soft-200 flex w-full items-center border-b px-5 py-4 text-left last:border-b-0"
+                    >
+                      {c.label} per month
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <p class="t-label-md text-band-muted">Total <span class="t-h6 text-band-ink" id="total">$20</span> / month</p>
+          </div>
+
+          <ul class="flex flex-col gap-3.5">
+            {cloudFeatures.map((f) => (
+              <li class="flex items-start gap-3">
+                {f.slackLogo ? (
+                  /* Slack's official four-colour mark, inline so it keeps its
+                     brand colours on the maroon card. Sized to the check slot. */
+                  <svg class="mt-0.5 size-5 shrink-0" viewBox="0 0 127 127" aria-hidden="true">
+                    <path d="M27.2 80c0 7.3-5.9 13.2-13.2 13.2C6.7 93.2.8 87.3.8 80c0-7.3 5.9-13.2 13.2-13.2h13.2V80zm6.6 0c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2v33c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V80z" fill="#E01E5A"/>
+                    <path d="M47 27.2c-7.3 0-13.2-5.9-13.2-13.2C33.8 6.7 39.7.8 47 .8c7.3 0 13.2 5.9 13.2 13.2v13.2H47zm0 6.6c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H14c-7.3 0-13.2-5.9-13.2-13.2C.8 39.7 6.7 33.8 14 33.8h33z" fill="#36C5F0"/>
+                    <path d="M99.8 47c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H99.8V47zm-6.6 0c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V14C66.8 6.7 72.7.8 80 .8c7.3 0 13.2 5.9 13.2 13.2v33z" fill="#2EB67D"/>
+                    <path d="M80 99.8c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V99.8H80zm0-6.6c-7.3 0-13.2-5.9-13.2-13.2 0-7.3 5.9-13.2 13.2-13.2h33c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H80z" fill="#ECB22E"/>
+                  </svg>
+                ) : (
+                  <i class="ri-check-line text-band-muted shrink-0 text-[20px]" aria-hidden="true"></i>
+                )}
+                <span class="t-paragraph-md text-band-ink">{f.text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Enterprise — the peach CTA voice */}
+        <div class="bg-accent-peach-200 flex flex-col gap-8 rounded-[28px] p-6 lg:p-10">
+          <div class="flex flex-col gap-3">
+            <div class="flex items-baseline justify-between gap-4">
+              <p class="t-h4 text-accent-peach-800">Enterprise</p>
+              <p class="t-h6 text-accent-peach-800">Custom pricing</p>
+            </div>
+            <p class="t-paragraph-md text-accent-peach-800 opacity-64">
+              Maximum security, compliance and control
+            </p>
+          </div>
+
+          <div>
+            <Button
+              variant="peach"
+              href={DEMO}
+              label="Request a demo"
+              rightIcon="ri-arrow-right-up-long-line"
+              chipIcon
+              class="max-w-full"
+            />
+          </div>
+
+          <ul class="flex flex-col gap-3.5">
+            {enterpriseFeatures.map((f) => (
+              <li class="flex items-start gap-3">
+                <i class="ri-check-line text-accent-peach-800 shrink-0 text-[20px] opacity-64" aria-hidden="true"></i>
+                <span class="t-paragraph-md text-accent-peach-800">{f}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ————— Compare table ————— */}
+  <section class="bg-bg-white-0">
+    <div class="page-shell gutter-188 flex flex-col gap-8 py-14 lg:gap-12">
+      <h2 class="t-landing-h3 text-text-strong-950">Compare plans.</h2>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[640px] border-collapse text-left">
+          <thead>
+            <tr class="border-stroke-sub-300 border-b">
+              <th class="w-1/2 py-4 pr-4"></th>
+              <th class="w-1/4 px-4 py-4 text-center">
+                <span class="t-h6 text-text-strong-950 block">Cloud</span>
+                <span class="t-paragraph-xs text-text-soft-400">from $20 / month</span>
+              </th>
+              <th class="w-1/4 px-4 py-4 text-center">
+                <span class="t-h6 text-text-strong-950 block">Enterprise</span>
+                <span class="t-paragraph-xs text-text-soft-400">custom pricing</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {compareGroups.map((group) => (
+              <>
+                <tr>
+                  <td colspan="3" class="pt-8 pb-3">
+                    <span class="t-mono-sm text-text-sub-600">{group.name}</span>
+                  </td>
+                </tr>
+                {group.rows.map((row) => (
+                  <tr class="border-stroke-soft-200 border-b">
+                    <td class="t-paragraph-md text-text-sub-600 py-3.5 pr-4">{row.label}</td>
+                    <td class="px-4 py-3.5 text-center">
+                      {typeof row.cloud === 'boolean'
+                        ? row.cloud
+                          ? <i class="ri-check-line text-primary-dark text-[20px]" aria-hidden="true"></i>
+                          : <span class="text-text-disabled-300" aria-hidden="true">–</span>
+                        : <span class="t-paragraph-sm text-text-strong-950">{row.cloud}</span>}
+                    </td>
+                    <td class="px-4 py-3.5 text-center">
+                      {typeof row.ent === 'boolean'
+                        ? row.ent
+                          ? <i class="ri-check-line text-primary-dark text-[20px]" aria-hidden="true"></i>
+                          : <span class="text-text-disabled-300" aria-hidden="true">–</span>
+                        : <span class="t-paragraph-sm text-text-strong-950">{row.ent}</span>}
+                    </td>
+                  </tr>
+                ))}
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  {/* ————— FAQ ————— */}
+  <section class="bg-bg-white-0">
+    <div class="page-shell gutter-188 flex flex-col gap-8 pb-14 lg:gap-12">
+      <h2 class="t-landing-h3 text-text-strong-950">Questions.</h2>
+      <div class="flex max-w-[860px] flex-col">
+        {faqs.map((item) => (
+          <div class="border-stroke-soft-200 flex flex-col gap-2 border-b py-6 first:pt-0">
+            <p class="t-h6 text-text-strong-950">{item.q}</p>
+            <p class="t-paragraph-md text-text-sub-600 text-pretty">{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Plan + AI-credit dropdowns, the AI-credits toggle, and the running total.
+  // Plain DOM, no island: this is select-a-value UI, not app state.
+  let planPrice = 20;
+  let creditsOn = false;
+  let creditsPrice = 0;
+
+  const totalEl = document.getElementById('total');
+  const renderTotal = () => {
+    if (totalEl) totalEl.textContent = `$${planPrice + (creditsOn ? creditsPrice : 0)}`;
+  };
+
+  const wireDropdown = (rootId: string, onPick: (price: number) => void) => {
+    const root = document.getElementById(rootId);
+    if (!root) return;
+    const trigger = root.querySelector('button[aria-haspopup]') as HTMLButtonElement;
+    const label = trigger.querySelector('[data-dd-label]') as HTMLElement;
+    const chevron = trigger.querySelector('[data-dd-chevron]') as HTMLElement;
+    const panel = root.querySelector('[data-dd-panel]') as HTMLElement;
+
+    const setOpen = (open: boolean) => {
+      panel.classList.toggle('hidden', !open);
+      chevron.classList.toggle('rotate-180', open);
+      trigger.setAttribute('aria-expanded', String(open));
+    };
+
+    trigger.addEventListener('click', () => setOpen(panel.classList.contains('hidden')));
+    document.addEventListener('click', (e) => {
+      if (!root.contains(e.target as Node)) setOpen(false);
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-dd-option]').forEach((opt) => {
+      opt.addEventListener('click', () => {
+        label.textContent = opt.dataset.label ?? '';
+        setOpen(false);
+        onPick(Number(opt.dataset.price));
+      });
+    });
+  };
+
+  wireDropdown('plan-dd', (price) => {
+    planPrice = price;
+    renderTotal();
+  });
+  wireDropdown('credits-dd', (price) => {
+    creditsPrice = price;
+    renderTotal();
+  });
+
+  const creditsDd = document.getElementById('credits-dd');
+  const caption = document.getElementById('mode-caption');
+  const segments = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-mode]'));
+  const setMode = (mode: string) => {
+    creditsOn = mode === 'credits';
+    creditsDd?.classList.toggle('hidden', !creditsOn);
+    if (caption)
+      caption.textContent = creditsOn
+        ? 'No subscription or keys needed. Eluu covers the model tokens.'
+        : 'Claude Code, Codex, or your own keys. Tokens stay on your bill.';
+    segments.forEach((s) => {
+      const on = s.dataset.mode === mode;
+      s.setAttribute('aria-checked', String(on));
+      s.classList.toggle('bg-band-card', on);
+      s.classList.toggle('text-band-card-ink', on);
+      s.classList.toggle('text-band-muted', !on);
+    });
+    renderTotal();
+  };
+  segments.forEach((s) => s.addEventListener('click', () => setMode(s.dataset.mode!)));
+
+  setMode('byo');
+</script>
