@@ -1,28 +1,226 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"></head><body>
-<!-- Ona's env-guardrails pattern: outer chrome, inner white pane, label/value
-     pairs, a uniform chip grid, and one mono strip. -->
-<div class="stage cv-blue">
-  <div class="card card--chrome">
-    <div class="hd">
-      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
-      <span><span class="hd__t">Agent computer</span></span>
-      <span class="hd__r"><span class="pill"><span class="pill__dot"></span>Running</span></span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>feat3-computer</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;450;480&family=JetBrains+Mono:wght@400;450&display=swap');
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+:root{
+  --ink:#1e1c1e; --sub:#55525b; --soft:#a09da6; --hair:#ecebee;
+  --panel:#ffffff; --chrome:#f4f3f6;
+  --maroon:#755a68; --maroon-deep:#5d374b;
+  --green:#17a34a; --dash:#d9d7de;
+}
+
+body{ font-family:'Inter', sans-serif; -webkit-font-smoothing:antialiased; }
+
+/* ── stage ─────────────────────────────────────────────────────────────── */
+.stage{
+  position:relative; width:1224px; height:1224px; overflow:hidden;
+  background:
+    radial-gradient(90% 70% at 20% 8%, #e9ecf8, transparent 60%),
+    linear-gradient(160deg,#eef0f7,#f3f1f4);
+}
+
+/* ── card ──────────────────────────────────────────────────────────────── */
+.card{
+  position:absolute; left:62px; top:96px; width:1100px;
+  background:var(--panel); border-radius:28px; overflow:hidden;
+  box-shadow: 0 30px 70px -30px rgba(30,28,30,.22), 0 8px 22px -10px rgba(30,28,30,.08);
+}
+
+/* ── 1. browser tab bar ───────────────────────────────────────────────── */
+.tabbar{
+  height:96px; display:flex; align-items:center; gap:22px;
+  padding:0 56px; border-bottom:1px solid var(--hair);
+}
+.mark{
+  width:34px; height:34px; border-radius:6px; background:var(--maroon);
+  flex:none; display:flex; align-items:center; justify-content:center;
+}
+.tab1{ font-family:'Inter'; font-weight:450; font-size:40px; line-height:1; color:var(--ink); flex:none; }
+.icon-plus{ width:22px; height:22px; color:var(--soft); flex:none; }
+.tab2{ position:relative; height:100%; display:flex; align-items:center; gap:12px; flex:none; }
+.tab2 .dot{ width:18px; height:18px; border-radius:50%; background:var(--green); flex:none; }
+.tab2 .label{ font-family:'Inter'; font-weight:450; font-size:40px; line-height:1; color:var(--ink); }
+.icon-close{ width:18px; height:18px; color:var(--soft); flex:none; }
+.tab2 .underline{ position:absolute; left:0; right:0; bottom:0; height:3px; background:var(--ink); }
+.tabbar__spacer{ flex:1; }
+.icon-split{ width:32px; height:32px; color:var(--soft); flex:none; }
+
+/* ── 2. mono ID row ───────────────────────────────────────────────────── */
+.idrow{
+  display:flex; align-items:baseline; gap:14px;
+  padding:34px 56px; line-height:1;
+}
+.idrow__label{ font-family:'JetBrains Mono'; font-weight:400; font-size:28px; color:var(--sub); }
+.idrow__value{ font-family:'JetBrains Mono'; font-weight:400; font-size:28px; color:var(--ink); }
+
+/* ── 3. toggle block ──────────────────────────────────────────────────── */
+.togglerow{ display:flex; align-items:center; gap:24px; padding:40px 56px; }
+.toggle{
+  width:92px; height:52px; border-radius:999px; background:var(--green);
+  display:flex; align-items:center; padding:4px; flex:none;
+}
+.toggle .knob{
+  width:44px; height:44px; border-radius:50%; background:#fff; margin-left:auto;
+  box-shadow:0 1px 3px rgba(0,0,0,.25);
+}
+.togglerow__text{ display:flex; flex-direction:column; gap:6px; }
+.togglerow__title{ font-family:'Inter'; font-weight:480; font-size:40px; line-height:1; color:var(--ink); }
+.togglerow__sub{ font-family:'Inter'; font-weight:400; font-size:30px; line-height:1; color:var(--sub); }
+.togglerow__spacer{ flex:1; }
+.autostop{ display:flex; align-items:center; gap:8px; }
+.autostop__label{ font-family:'Inter'; font-weight:400; font-size:30px; line-height:1; color:var(--sub); }
+.icon-chevron{ width:20px; height:20px; color:var(--sub); flex:none; }
+
+/* ── 4. hairline ──────────────────────────────────────────────────────── */
+.hr{ height:1px; background:var(--hair); }
+
+/* ── 5. timeline ──────────────────────────────────────────────────────── */
+.timeline{ position:relative; padding:36px 0 320px; }
+.rail{
+  position:absolute; left:77px; width:2px;
+  background-image: repeating-linear-gradient(to bottom, var(--dash) 0 4px, transparent 4px 10px);
+}
+.step{ position:relative; z-index:1; height:135px; display:flex; align-items:center; gap:34px; padding:0 56px; }
+.step .disc{
+  width:44px; height:44px; border-radius:50%; background:var(--green); flex:none;
+  display:flex; align-items:center; justify-content:center;
+}
+.step .disc svg{ width:22px; height:22px; }
+.step__text{ display:flex; flex-direction:column; gap:9px; }
+.step__title{ font-family:'Inter'; font-weight:480; font-size:33px; line-height:1; color:var(--ink); }
+.step__detail{ font-family:'Inter'; font-weight:400; font-size:29px; line-height:1; color:var(--sub); }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="card">
+
+    <!-- 1. browser tab bar -->
+    <div class="tabbar">
+      <span class="mark">
+        <svg viewBox="0 0 34 34" width="34" height="34">
+          <line x1="11.2" y1="12.2" x2="11.2" y2="21.8" stroke="#ffffff" stroke-width="5.3" stroke-linecap="round"/>
+          <line x1="22.8" y1="21.8" x2="22.8" y2="15.4" stroke="#ffffff" stroke-width="5.3" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="tab1">Close the July books</span>
+      <span class="icon-plus">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </span>
+      <span class="tab2">
+        <span class="dot"></span>
+        <span class="label">Computer</span>
+        <span class="icon-close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+        </span>
+        <span class="underline"></span>
+      </span>
+      <span class="tabbar__spacer"></span>
+      <span class="icon-split">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2"/><line x1="12" y1="4.5" x2="12" y2="19.5"/></svg>
+      </span>
     </div>
-    <div class="pane">
-      <div class="kv">
-        <div><div class="kv__l">Machine</div><div class="kv__v kv__v--mono">8 vCPU · 32 GB</div></div>
-        <div><div class="kv__l">Lifetime</div><div class="kv__v kv__v--mono">ephemeral</div></div>
-      </div>
-      <div class="sep"></div>
-      <div class="chips">
-        <span class="chip"><span class="chip__ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>Browser</span>
-        <span class="chip"><span class="chip__ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>Terminal</span>
-        <span class="chip"><span class="chip__ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>Files</span>
-        <span class="chip"><span class="chip__ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>Test suite</span>
-        <span class="chip"><span class="chip__ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>Secrets</span>
-      </div>
-      <div class="sep"></div>
-      <div class="strip"><span class="dim">agent ~/acme $</span> npm run build<br><span class="ok">✓</span> <span class="dim">compiled · deployed to preview</span></div>
+
+    <!-- 2. mono ID row -->
+    <div class="idrow">
+      <span class="idrow__label">ID</span>
+      <span class="idrow__value">0198a7c2-41d3-8f00-b2e6-9c41a7f3d2c1</span>
     </div>
+
+    <!-- 3. toggle block -->
+    <div class="togglerow">
+      <span class="toggle"><span class="knob"></span></span>
+      <span class="togglerow__text">
+        <span class="togglerow__title">Running</span>
+        <span class="togglerow__sub">Started 2 mins ago</span>
+      </span>
+      <span class="togglerow__spacer"></span>
+      <span class="autostop">
+        <span class="autostop__label">Auto-stop after 30m</span>
+        <span class="icon-chevron">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </span>
+      </span>
+    </div>
+
+    <!-- 4. hairline -->
+    <div class="hr"></div>
+
+    <!-- 5. timeline -->
+    <div class="timeline">
+      <div class="rail" style="top:103.5px; height:675px;"></div>
+
+      <div class="step">
+        <span class="disc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg>
+        </span>
+        <span class="step__text">
+          <span class="step__title">Woke on schedule</span>
+          <span class="step__detail">Daily &middot; 7:00 AM</span>
+        </span>
+      </div>
+
+      <div class="step">
+        <span class="disc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg>
+        </span>
+        <span class="step__text">
+          <span class="step__title">Started its computer</span>
+          <span class="step__detail">8 vCPU / 32 GB / 100 GB disk &middot; eu-west</span>
+        </span>
+      </div>
+
+      <div class="step">
+        <span class="disc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg>
+        </span>
+        <span class="step__text">
+          <span class="step__title">Mounted the agent drive</span>
+          <span class="step__detail">close-playbook.md &middot; 4 files</span>
+        </span>
+      </div>
+
+      <div class="step">
+        <span class="disc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg>
+        </span>
+        <span class="step__text">
+          <span class="step__title">Connected 6 integrations</span>
+          <span class="step__detail">Stripe &middot; Sheets &middot; QuickBooks &middot; Gmail&hellip;</span>
+        </span>
+      </div>
+
+      <div class="step">
+        <span class="disc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg>
+        </span>
+        <span class="step__text">
+          <span class="step__title">Loaded 3 skills</span>
+          <span class="step__detail">Month-end close &middot; Reconcile &middot; Board pack</span>
+        </span>
+      </div>
+
+      <div class="step">
+        <span class="disc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg>
+        </span>
+        <span class="step__text">
+          <span class="step__title">Opened the browser</span>
+        </span>
+      </div>
+
+    </div>
+
   </div>
-</div></body></html>
+</div>
+
+</body>
+</html>

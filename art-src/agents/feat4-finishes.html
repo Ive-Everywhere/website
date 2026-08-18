@@ -1,26 +1,163 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"></head><body>
-<!-- RULE 5: the header pill is NEUTRAL; green is only the completion glyph.
-     The deliverable is distinguished by a tinted row, not by a heavy tile. -->
-<div class="stage cv-sand">
-  <div class="card">
-    <div class="hd hd--band">
-      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
-      <span class="hd__t">Month-end close</span>
-      <span class="hd__r"><span class="pill pill--mono">1m 12s</span></span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;450;480&family=JetBrains+Mono:wght@400;450&display=swap');
+
+:root{
+  --ink:#1e1c1e;
+  --sub:#55525b;
+  --soft:#a09da6;
+  --hairline:#ecebee;
+  --accent:#755a68;
+  --accent-deep:#5d374b;
+  --green:#17a34a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{background:transparent;}
+body{font-family:'Inter',sans-serif;}
+
+.stage{
+  position:relative;
+  width:1224px;height:1224px;
+  overflow:hidden;
+  background:
+    radial-gradient(85% 70% at 20% 10%, #eaf3ec, transparent 62%),
+    linear-gradient(160deg,#f1f4f0,#f5f2ef);
+}
+
+/* card bleeds off the bottom stage edge — only the top corners are ever
+   inside the visible frame, so only they are rounded. */
+.card{
+  position:absolute;
+  left:137px; top:140px;
+  width:951px; height:1200px;
+  background:#ffffff;
+  border-radius:28px 28px 0 0;
+  box-shadow:0 30px 70px -30px rgba(30,28,30,.22), 0 8px 22px -10px rgba(30,28,30,.08);
+  overflow:hidden;
+}
+
+.hd{
+  position:absolute; left:137px; top:140px;
+  width:951px; height:92px;
+  background:#e8f2ea;
+  border-radius:28px 28px 0 0;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 40px;
+}
+.hd__l{display:flex; align-items:center; gap:12px;}
+.hd__chev{color:var(--soft); flex-shrink:0;}
+.hd__dot{width:18px; height:18px; border-radius:50%; background:var(--accent); flex-shrink:0;}
+.hd__t{
+  font-family:'JetBrains Mono', monospace; font-weight:400; font-size:34px;
+  color:var(--ink);
+}
+.hd__pill{
+  background:#ffffff; border-radius:999px; height:60px;
+  display:flex; align-items:center; padding:0 26px;
+  font-family:'JetBrains Mono', monospace; font-weight:400; font-size:30px;
+  color:var(--ink);
+}
+
+.row{
+  position:absolute; left:137px; width:951px; height:132px;
+  padding:30px 64px 0 64px;
+  display:flex; align-items:flex-start; justify-content:space-between;
+}
+.row__l{display:flex; align-items:flex-start; gap:20px;}
+.ord{
+  width:48px; flex-shrink:0; padding-top:2px;
+  font-family:'JetBrains Mono', monospace; font-weight:400; font-size:33px;
+  color:var(--soft);
+}
+.txt{display:flex; flex-direction:column;}
+.txt__t{
+  font-family:'JetBrains Mono', monospace; font-weight:400; font-size:33px;
+  color:var(--ink); line-height:1.1;
+}
+.txt__s{
+  margin-top:10px;
+  font-family:'Inter',sans-serif; font-weight:400; font-size:27px;
+  color:var(--sub);
+}
+.st{width:44px; height:44px; flex-shrink:0; margin-top:2px;}
+
+.ghost{position:absolute; left:137px; width:951px; height:132px; padding:30px 64px 0 64px;}
+.ghost__t{width:280px; height:16px; border-radius:8px; background:#d9d7de;}
+.ghost__s{width:170px; height:12px; border-radius:6px; background:#e4e2e6; margin-top:14px;}
+.ghost__st{width:44px; height:44px; border-radius:50%; border:2px solid #ecebee; position:absolute; right:64px; top:30px;}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="card"></div>
+
+  <div class="hd">
+    <div class="hd__l">
+      <svg class="hd__chev" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      <span class="hd__dot"></span>
+      <span class="hd__t">Closing the July books...</span>
     </div>
-    <div class="list">
-      <div class="row"><span class="mk"><img src="live/assets/stripe.svg" alt=""></span>
-        <span class="row__b"><div class="row__t">Pulled 142 payouts</div><div class="row__s row__s--mono">Stripe · July</div></span>
-        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
-      <div class="row"><span class="mk"><img src="live/assets/googlesheets.svg" alt=""></span>
-        <span class="row__b"><div class="row__t">Matched 3,208 ledger rows</div><div class="row__s row__s--mono">139 of 142 reconciled</div></span>
-        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
-      <div class="row"><span class="mk"><img src="live/assets/gmail.svg" alt=""></span>
-        <span class="row__b"><div class="row__t">Emailed 3 exceptions</div><div class="row__s row__s--mono">awaiting your sign-off</div></span>
-        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
-      <div class="row row--tint"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--maroon)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6"/></svg></span>
-        <span class="row__b"><div class="row__t row__t--mono">reports/july.md</div><div class="row__s">Board pack, written and delivered</div></span>
-        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></div>
-    </div>
+    <span class="hd__pill">3/5</span>
   </div>
-</div></body></html>
+
+  <!-- row 1 — done -->
+  <div class="row" style="top:232px;">
+    <div class="row__l">
+      <span class="ord">1.</span>
+      <div class="txt"><div class="txt__t">142 payouts &rarr; ledger</div><div class="txt__s">Stripe &middot; 1 min ago</div></div>
+    </div>
+    <svg class="st" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="var(--green,#17a34a)"/><path d="M13 22.5l6 6L31.5 15" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+
+  <!-- row 2 — done -->
+  <div class="row" style="top:364px;">
+    <div class="row__l">
+      <span class="ord">2.</span>
+      <div class="txt"><div class="txt__t">3,208 rows &rarr; matched</div><div class="txt__s">Sheets &middot; 40 sec ago</div></div>
+    </div>
+    <svg class="st" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#17a34a"/><path d="M13 22.5l6 6L31.5 15" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+
+  <!-- row 3 — done -->
+  <div class="row" style="top:496px;">
+    <div class="row__l">
+      <span class="ord">3.</span>
+      <div class="txt"><div class="txt__t">139 entries &rarr; posted</div><div class="txt__s">QuickBooks &middot; just now</div></div>
+    </div>
+    <svg class="st" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#17a34a"/><path d="M13 22.5l6 6L31.5 15" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+
+  <!-- row 4 — active, dissolve level 1 -->
+  <div class="row" style="top:628px; filter:blur(1.5px); opacity:.65;">
+    <div class="row__l">
+      <span class="ord">4.</span>
+      <div class="txt"><div class="txt__t">3 exceptions &rarr; sign-off</div><div class="txt__s">Gmail &middot; sending</div></div>
+    </div>
+    <svg class="st" viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" fill="none" stroke="#ecebee" stroke-width="2.4"/><path d="M22 3a19 19 0 0 1 19 19" fill="none" stroke="#a09da6" stroke-width="2.4" stroke-linecap="round"/></svg>
+  </div>
+
+  <!-- row 5 — pending, dissolve level 2 -->
+  <div class="row" style="top:760px; filter:blur(3px); opacity:.35;">
+    <div class="row__l">
+      <span class="ord">5.</span>
+      <div class="txt"><div class="txt__t">board pack &rarr; delivered</div><div class="txt__s">reports/july.md</div></div>
+    </div>
+    <svg class="st" viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" fill="none" stroke="#ecebee" stroke-width="2.4"/></svg>
+  </div>
+
+  <!-- ghost continuation rows — abstract, no data, selling the dissolve down to the crop -->
+  <div class="ghost" style="top:892px; filter:blur(4px); opacity:.16;">
+    <div class="ghost__t"></div><div class="ghost__s"></div><div class="ghost__st"></div>
+  </div>
+  <div class="ghost" style="top:1024px; filter:blur(5px); opacity:.08;">
+    <div class="ghost__t"></div><div class="ghost__s"></div><div class="ghost__st"></div>
+  </div>
+  <div class="ghost" style="top:1156px; filter:blur(6px); opacity:.05;">
+    <div class="ghost__t"></div><div class="ghost__s"></div><div class="ghost__st"></div>
+  </div>
+</div>
+</body>
+</html>
