@@ -1,0 +1,103 @@
+---
+/**
+ * Legal / policy text pages (terms, privacy). The page body is authored inline
+ * as plain HTML (h2/h3/p/ul/a) and slotted in; this layout wraps it in the v3
+ * chrome (Base → Navbar/Footer) and a single-column prose measure styled with
+ * the design tokens. No CTA band on a legal page.
+ *
+ * Props mirror the previous prod LegalLayout so the page files carry over
+ * unchanged: title, pageTitle, path, description, updatedDate.
+ */
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  pageTitle: string;
+  path?: string;
+  description?: string;
+  updatedDate?: string;
+}
+
+const {
+  title,
+  pageTitle,
+  description,
+  updatedDate = 'February 24, 2026',
+} = Astro.props;
+---
+
+<Base
+  title={`${title} — Eluu`}
+  description={description ?? `${pageTitle} for the Eluu AI platform.`}
+  cta={false}
+>
+  <section class="bg-bg-white-0">
+    <div class="page-shell gutter-188 pt-16 pb-20 lg:pt-20">
+      <article class="mx-auto max-w-[760px]">
+        <header class="border-stroke-soft-200 flex flex-col gap-3 border-b pb-8">
+          <h1 class="t-landing-h3 text-text-strong-950">{pageTitle}</h1>
+          <p class="t-label-md text-text-soft-400">Updated {updatedDate}</p>
+        </header>
+        <div class="legal-prose pt-8">
+          <slot />
+        </div>
+      </article>
+    </div>
+  </section>
+</Base>
+
+<style is:global>
+  .legal-prose {
+    color: var(--text-sub-600);
+    font-size: 16px;
+    line-height: 1.7;
+    letter-spacing: 0.003em;
+  }
+  .legal-prose > :first-child {
+    margin-top: 0;
+  }
+  .legal-prose p {
+    margin: 0 0 1.1em;
+  }
+  .legal-prose h2 {
+    color: var(--text-strong-950);
+    font-size: 24px;
+    font-weight: 480;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin: 1.9em 0 0.6em;
+  }
+  .legal-prose h3 {
+    color: var(--text-strong-950);
+    font-size: 19px;
+    font-weight: 480;
+    letter-spacing: -0.005em;
+    margin: 1.5em 0 0.5em;
+  }
+  .legal-prose ul,
+  .legal-prose ol {
+    margin: 0 0 1.1em;
+    padding-left: 1.35em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45em;
+  }
+  .legal-prose li {
+    padding-left: 0.2em;
+  }
+  .legal-prose li::marker {
+    color: var(--text-soft-400);
+  }
+  .legal-prose a {
+    color: var(--primary-base);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .legal-prose a:hover {
+    color: var(--primary-dark);
+  }
+  .legal-prose strong {
+    color: var(--text-strong-950);
+    font-weight: 480;
+  }
+</style>

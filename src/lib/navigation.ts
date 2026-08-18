@@ -59,16 +59,6 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
   },
   */
   {
-    heading: 'Compare',
-    links: [
-      { label: 'vs ChatGPT', href: '/compare/chatgpt' },
-      { label: 'vs Claude', href: '/compare/claude' },
-      { label: 'vs Copilot', href: '/compare/copilot' },
-      { label: 'vs Zapier', href: '/compare/zapier' },
-      { label: 'vs building in-house', href: '/compare/building-in-house' },
-    ],
-  },
-  {
     heading: 'Company',
     links: [
       { label: 'Blog', href: '/blog' },
@@ -82,7 +72,6 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
     links: [
       { label: 'Terms', href: '/terms' },
       { label: 'Privacy', href: '/privacy' },
-      { label: 'Cookie Preferences', href: '/cookies' },
     ],
   },
 ];
