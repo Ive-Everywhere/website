@@ -1,0 +1,136 @@
+---
+title: Walk into every call already briefed
+description: Build a one-page account brief before every meeting, sourced from the CRM, email history, and the web.
+publishedAt: 2026-08-19
+icon: ri-search-eye-line
+category: Sales
+collection: Pipeline & prospecting
+featured: false
+order: 10
+difficulty: starter
+skills:
+  - name: Account brief format
+    description: One-page structure - context, stakeholders, talking points, risk.
+    body: |
+      Give the account brief a consistent one-page structure so every rep and every meeting reads the same way.
+
+      ## Method
+      1. Pull the account record from the CRM: deal stage, deal value, last activity date, full email thread history.
+      2. Pull calendar invite attendees; note each person's title and any prior interaction on file.
+      3. Research the company on the web: news, funding, leadership changes, product launches from the last 90 days.
+      4. Draft company context in 2-3 sentences: what they do, why this deal matters now.
+      5. List stakeholders with role and one line of prior interaction each.
+      6. Write exactly three talking points tied to the researched signals, and one risk to watch.
+      7. Hand the draft to the Source verification skill before it ships.
+
+      ## Rules
+      - The brief is always exactly one page — cut content before you add a second page.
+      - Always list exactly three talking points and exactly one risk, never more, never fewer.
+      - Reuse a brief already built on this account this week instead of rebuilding from scratch.
+      - The deal-size threshold that triggers a companion slide deck is set on first run, then stored in memory.
+
+      ## Output
+      A one-page markdown brief with four sections — Context, Stakeholders, Talking points (3), Risk (1) — saved to `reports/account-briefs/{{account}}-{{date}}.md` and posted to the delivery Slack channel.
+  - name: Source verification
+    description: Every factual claim links back to its source before it ships.
+    body: |
+      Confirm every factual claim in the brief traces to a real source before delivery, and drop what can't be sourced.
+
+      ## Method
+      1. Scan the draft brief for every factual claim: news, funding figures, leadership changes, headcount, product launches.
+      2. For each claim, find the source: a news article, the company site, a press release, or a LinkedIn profile update.
+      3. Attach the source as an inline markdown link next to the claim.
+      4. If no source confirms a claim, delete the claim from the brief — never guess or soften it into a vague statement.
+      5. Re-read the brief once more to confirm no unlinked factual claim remains.
+
+      ## Rules
+      - Internal CRM data (deal stage, past emails) needs no external citation — only claims about the outside world do.
+      - One source per claim is the minimum bar; prefer a primary source (company site, filing, press release) over a secondhand mention.
+      - A dropped claim is not replaced with a vaguer version of itself — it is simply removed.
+      - Never mark a claim verified without opening and reading the source page.
+
+      ## Output
+      The same one-page brief, with every external factual claim followed by its source link, and a one-line note of any claim dropped for lack of a source.
+  - name: Slide builder
+    description: Turn the brief into a deck for exec-level or large-deal meetings.
+    body: |
+      Turn a verified account brief into a slide deck for exec-level or large-value meetings.
+
+      ## Method
+      1. Check whether the deal value exceeds the deal-size threshold, or an exec-level title is on the attendee list.
+      2. If neither condition is met, skip this skill — no deck is built.
+      3. Pull the verified brief's four sections: context, stakeholders, talking points, risk.
+      4. Build one slide per section using the presentation (pptx) skill, matching the team's existing deck style.
+      5. Carry over only claims already verified in the brief — do not add new research at this stage.
+      6. Save the deck alongside the brief in the same report folder.
+
+      ## Rules
+      - The exec-title list and the deal-size threshold that trigger this skill are set on first run, then stored in memory.
+      - Never introduce a claim in the deck that wasn't already verified in the source brief.
+      - Keep the deck to one slide per brief section — four slides, not a generic pitch deck.
+      - The deck is internal prep, same as the brief — it never goes to the prospect.
+
+      ## Output
+      A `.pptx` file with one slide per brief section, saved to `reports/account-briefs/` next to the source brief.
+jobs:
+  - name: Pre-meeting account brief sweep
+    cadence: Every 30 minutes on weekdays
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the account-research-brief skill from your skills folder; its
+      first-run answers are in memory.
+      1. Check the calendar for meetings in the next 2 hours with no brief yet.
+      2. Run the skill's method: pull the account, research the company, note attendees, and draft the brief.
+      3. Post the brief to the delivery Slack channel and save it to reports/account-briefs/.
+      If a required input is missing or a check fails, post what you found
+      and hold — never send the brief to the prospect or anyone outside the team.
+goal: build a one-page account brief before every meeting
+integrations: [hubspot, googlecalendar, gmail, slack]
+whatItDoes:
+  - Pulls the account's deal stage, value, and full email history from the CRM
+  - Researches recent news, funding, and leadership changes from the last 90 days
+  - Notes each attendee's role and any prior interaction on file
+  - Delivers a one-page brief with talking points before the meeting starts
+howToUse:
+  - Connect HubSpot, your calendar, Gmail, and Slack to the agent
+  - Set the trigger to fire 2 hours before each meeting
+  - Paste the prompt and answer its first-run questions once — deal-size threshold, delivery channel — it remembers them
+  - Review the brief before the call; it never goes to the prospect
+workflow:
+  - kind: trigger
+    title: 2 hours before each meeting
+    body: Fires off the calendar invite, no manual kickoff.
+  - kind: prompt
+    title: Pull the account
+    body: Deal stage, value, and every past email thread from the CRM.
+  - kind: prompt
+    title: Research the company
+    body: News, funding, and leadership changes from the last 90 days.
+  - kind: prompt
+    title: Draft the brief
+    body: One page - context, stakeholders, three talking points, one risk.
+  - kind: result
+    title: Deliver before the call
+    body: Posted to Slack, plus saved to reports/.
+prompt: |
+  Build the account research brief for {{account}}.
+
+  1. Pull the account record from {{crm}} for {{account}} — stage, deal value,
+     last activity, and every past email thread. Check memory first for a brief
+     built on this account this week and reuse it if found.
+  2. Research {{account}} on the web: recent news, funding or leadership
+     changes, and product launches from the last 90 days.
+  3. Identify the attendees on the Google Calendar invite; note their role and
+     any prior interaction on file.
+  4. Draft a one-page brief: company context, stakeholders, three talking
+     points, and one risk to watch.
+  5. Verify every factual claim in the brief links to a source URL; drop
+     anything you cannot source rather than guess.
+  6. If the deal is over {{deal_size_threshold}} or an exec-level attendee is
+     on the invite, build a companion slide with the presentation skill.
+  7. Post the brief to Slack ({{delivery_channel}}) two hours before the
+     meeting and save it to `reports/account-briefs/{{account}}-{{date}}.md`.
+
+  Do not send the brief, or any research in it, to the prospect or anyone
+  outside the team — it is internal prep only, surface it for the rep instead.
+---

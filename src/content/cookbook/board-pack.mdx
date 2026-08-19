@@ -11,10 +11,80 @@ difficulty: intermediate
 skills:
   - name: KPI narrative
     description: Write the context around each number
+    body: |
+      Write one short paragraph of context for each headline metric, not just the number.
+
+      ## Method
+      1. Pull each metric — revenue, burn, runway, pipeline, win rate — from its source system.
+      2. Compare the current value against last month's value.
+      3. State the direction and size of the move.
+      4. State the likely driver, citing the source data behind it.
+      5. State what it means for next month in one sentence.
+      6. Keep each paragraph to a few sentences, one metric at a time.
+
+      ## Rules
+      - Every figure must trace back to its source system; never write an inferred number.
+      - State direction and magnitude before explaining the cause.
+      - Mark an uncertain driver as "likely" or "unclear" — never present a guess as fact.
+      - Never write a paragraph that repeats the number without adding context.
+
+      ## Output
+      One short paragraph per KPI — value, move vs last month, driver, and forward look — in the order the deck presents them.
   - name: Deck assembly
     description: Build the pack in your format
+    body: |
+      Build this month's pack in the same structure as last month's, with the TL;DR at the top.
+
+      ## Method
+      1. Open last month's pack as the format reference.
+      2. Match its section order, headings, and level of detail.
+      3. Drop this month's KPI narratives into the matching sections.
+      4. Build the one-page TL;DR: headline numbers and the single biggest change.
+      5. Check that every section from last month's pack is present in this month's.
+      6. Flag any structural difference before finalizing.
+
+      ## Rules
+      - Structure follows last month's pack; don't redesign the format mid-cycle.
+      - The TL;DR is always page one, headline numbers only.
+      - Every section from last month appears again, even when the update is "no change."
+      - Save the draft for review — never send the pack directly.
+
+      ## Output
+      reports/board/{{month}}.md — a shareable doc, TL;DR first, followed by the full pack in last month's section order.
   - name: Variance flags
     description: Catch what moved vs last month
+    body: |
+      Catch what moved against last month before the pack finalizes.
+
+      ## Method
+      1. Compare every headline metric to its prior-month value.
+      2. Compute the delta, both absolute and percent.
+      3. Rank the deltas by size.
+      4. Flag any move that looks off — a sign flip, an outsized swing, or a number that contradicts the narrative.
+      5. Attach each flag to its KPI narrative for review.
+      6. Re-check flagged numbers against source data before the deck finalizes.
+
+      ## Rules
+      - The "looks off" threshold is a move beyond a set range (set on first run, then stored in memory).
+      - Every flagged number is re-checked against its source before the pack ships.
+      - Never silently correct a number — flag it and let the PM decide.
+      - Flags surface during drafting, not after the pack has gone out.
+
+      ## Output
+      A variance list — metric, prior value, current value, delta, flag reason — attached to the draft pack for review.
+jobs:
+  - name: Monthly board pack draft
+    cadence: A day before the board meeting, monthly
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the board-pack skill from your skills folder; its first-run
+      answers are in memory.
+      1. Identify this month's reporting period and the board meeting date.
+      2. Run the skill's method: pull the KPIs, write the narrative, flag
+         variances against last month, and assemble the deck in last month's format.
+      3. Save the draft to reports/board/{{month}}.md.
+      If a required input is missing or a check fails, post what you found
+      and hold — never send the pack directly, hold it as a draft for review.
 goal: draft this month's board pack from the live numbers
 integrations: [googlesheets, stripe, hubspot]
 whatItDoes:

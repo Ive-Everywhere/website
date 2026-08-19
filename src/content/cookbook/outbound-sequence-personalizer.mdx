@@ -1,0 +1,130 @@
+---
+title: Personalize outbound with verified signals
+description: Personalize outbound from a real signal per lead, then fact-check every claim before it queues.
+publishedAt: 2026-08-19
+icon: ri-mail-send-line
+category: Sales
+collection: Pipeline & prospecting
+featured: false
+order: 14
+difficulty: advanced
+skills:
+  - name: Signal-grounded personalization
+    description: First line built from one real, recent signal, not a template
+    body: |
+      Build each first line from one real, recent signal about the lead, never a mail-merge template.
+
+      ## Method
+      1. Pull new leads added to the sequence in the CRM since the last run.
+      2. For each lead, search for one recent, real signal: a post, a hire, a funding round, a product launch.
+      3. Only use signals from within the stored signal window (days back).
+      4. If no signal is found within the window, do not fabricate one — flag the lead for manual write-up instead.
+      5. Draft the first line from that single signal, naming it specifically rather than alluding to it vaguely.
+      6. Hand the draft to Sequence voice, then to Claim verification, before it queues.
+
+      ## Rules
+      - The signal window (how many days back counts as "recent") is set on first run, then stored in memory.
+      - One real signal per lead is the bar — never blend multiple weak signals into one vague line.
+      - A lead with no findable signal is flagged for manual write-up, never given a generic line instead.
+
+      ## Output
+      One draft first line per lead, each tagged with its source signal and signal date, passed downstream for voice and verification.
+  - name: Claim verification
+    description: Second-pass check of every factual claim against its source
+    body: |
+      Run a second-pass, independent check of every factual claim in a draft before it can queue.
+
+      ## Method
+      1. Spawn a second-pass sub-agent reviewer, separate from the drafting step.
+      2. Hand it only the draft line and its source signal URL — not the drafting agent's reasoning.
+      3. Have the sub-agent independently confirm the claim against the source, letting it run as long as it needs.
+      4. Reject any line the sub-agent cannot confirm from the source.
+      5. For a rejected line, revise it to only what's confirmed, or drop it — never substitute a generic line.
+      6. Let the sub-agent finish fully before touching the queue.
+
+      ## Rules
+      - The verification pass runs independently — it never sees the drafting agent's own reasoning, only the claim and the source.
+      - A failed claim is revised or dropped; it is never replaced with a generic, unverifiable line.
+      - Never touch or release the queue before the sub-agent's pass completes.
+
+      ## Output
+      Each draft marked verified or flagged, with the sub-agent's confirmation note, before it reaches the CRM queue.
+  - name: Sequence voice
+    description: Match the team's tone, length, and structure
+    body: |
+      Match every drafted line to the team's stored tone, length, and structure.
+
+      ## Method
+      1. Read the team's tone and voice guide from memory.
+      2. Check the drafted first line against the guide's length limit and structural pattern.
+      3. Adjust word choice and sentence length to match the team's established voice.
+      4. Confirm the line still centers the real signal after the voice pass — voice edits never remove the grounding fact.
+      5. Apply the same voice pass to the rest of the sequence step, not just the first line.
+
+      ## Rules
+      - The team's tone and voice guide is set on first run, then stored in memory.
+      - A voice edit never removes or blurs the specific signal the line is grounded in.
+      - Keep sequence steps at the length and structure the guide specifies — no exceptions per lead.
+
+      ## Output
+      A voice-matched draft, same signal grounding intact, ready for the Claim verification sub-agent pass.
+jobs:
+  - name: New-lead outbound personalization sweep
+    cadence: Every 30 minutes on weekdays
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the outbound-sequence-personalizer skill from your skills folder;
+      its first-run answers are in memory.
+      1. Pull leads added to the sequence in the CRM since the last run.
+      2. Run the skill's method: find one real signal per lead, draft the line, and pass it through sub-agent verification.
+      3. Stage verified drafts in the CRM and post a summary to #sales-outbound.
+      If a required input is missing or a check fails, post what you found
+      and hold — never send any email directly, queue every draft in the CRM instead.
+goal: draft signal-grounded first lines and verify every claim before they queue
+integrations: [hubspot, gmail, slack]
+whatItDoes:
+  - Finds one real, recent signal for every new lead added to the sequence
+  - Drafts a personalized first line grounded in that signal, not a template
+  - Runs a second-pass sub-agent that verifies every claim against its source
+  - Queues only verified drafts in the CRM and flags the rest for you
+howToUse:
+  - Connect HubSpot and Gmail, and pick the sequence this runs against
+  - Set the trigger to fire whenever new leads are added to the sequence
+  - Paste the prompt and answer its first-run questions once, signal window, tone, and it remembers
+  - Review the leads flagged with no verifiable signal; verified drafts wait in the CRM
+workflow:
+  - kind: trigger
+    title: New leads added
+    body: Fires for leads added to the sequence since the last run.
+  - kind: prompt
+    title: Research each lead
+    body: "One recent, real signal: post, hire, funding, launch."
+  - kind: prompt
+    title: Draft the personalized line
+    body: Grounded in the signal, in the team's voice.
+  - kind: prompt
+    title: Verify every claim
+    body: A second-pass sub-agent checks each fact against its source.
+  - kind: result
+    title: Queue for review
+    body: Verified drafts staged in the CRM, summary to Slack.
+prompt: |
+  Personalize this run's outbound for {{sequence}}.
+
+  1. Pull the new leads added to {{sequence}} in {{crm}} since the last run.
+  2. For each lead, find one recent, real signal, a post, a hire, a funding
+     round, a product launch, from the last {{signal_window_days}} days.
+  3. Draft a personalized first line and the rest of the sequence step from
+     that signal, in the team's sequence voice.
+  4. Validate: spawn a second-pass sub-agent reviewer. Hand it each draft and
+     its source signal only, not your reasoning, and have it verify every
+     factual claim against the source URL independently, rejecting any line
+     it cannot confirm. This can run as long as it needs, let the sub-agent
+     finish before you touch the queue.
+  5. Revise or drop every flagged line. Do not substitute a generic line for
+     a failed claim; leave that lead for manual write-up instead.
+  6. Stage the verified drafts in {{crm}} and post a summary to
+     #sales-outbound: leads queued, leads flagged for manual review.
+
+  Do not send any email directly, queue every draft, verified or not, in the CRM for the rep to review and send instead.
+---

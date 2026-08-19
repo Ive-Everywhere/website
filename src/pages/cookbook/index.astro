@@ -1,13 +1,15 @@
 ---
 /**
  * The Cookbook, `/cookbook`. A browsable gallery of recipes, each a real
- * prompt + workflow you can run today. Layout is ours: hero, category filter,
- * collection cards, a featured strip, then the full grid. Cards link to the
- * recipe detail at `/cookbook/<slug>`.
+ * prompt + workflow you can run today. Layout is ours: hero + search, the
+ * collection cards full-width on top, a separator, then the category rail
+ * (the RailFeatures pattern the pillar pages use) beside the recipe grid.
+ * Cards link to the recipe detail at `/cookbook/<slug>`; collection cards
+ * link to `/cookbook/collections/<slug>`.
  */
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { catColor } from '../../lib/cookbook';
+import { catColor, catIcon, catShort, collectionMeta, collectionSlug } from '../../lib/cookbook';
 
 const recipes = (await getCollection('cookbook', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order,
@@ -16,14 +18,7 @@ const recipes = (await getCollection('cookbook', ({ data }) => !data.draft)).sor
 const categories = [...new Set(recipes.map((r) => r.data.category))];
 
 // Collections: group by the optional `collection` field, keep first-seen order.
-const collectionMeta: Record<string, { blurb: string; tint: string }> = {
-  'Month-end pack': { blurb: 'Everything finance runs at close.', tint: 'bg-[#eef1f7]' },
-  'Revenue ops': { blurb: 'Keep the pipeline honest.', tint: 'bg-[#eef4ee]' },
-  'Incident response': { blurb: 'From page to fix to post-mortem.', tint: 'bg-[#f3eef4]' },
-};
 const collections = [...new Set(recipes.map((r) => r.data.collection).filter(Boolean))] as string[];
-
-const featured = recipes.filter((r) => r.data.featured);
 ---
 
 <Base
@@ -31,7 +26,9 @@ const featured = recipes.filter((r) => r.data.featured);
   description="A gallery of agent recipes, real prompts and workflows you can run across your tools today."
 >
   <section class="bg-bg-white-0">
-    <div class="page-shell gutter-188 flex flex-col gap-12 pt-16 pb-14">
+    {/* Wider shell than the marketing pages: the grid needs the room, so the
+        188px gutters drop to a fixed 64px on lg. */}
+    <div class="page-shell flex flex-col gap-12 pt-16 pb-14 lg:px-16">
       {/* hero */}
       <div class="flex flex-col items-center gap-5 text-center">
         <p class="t-mono-md text-text-soft-400">Cookbook</p>
@@ -42,50 +39,68 @@ const featured = recipes.filter((r) => r.data.featured);
           Practical prompts and workflows across your whole tool stack. Copy one, point it
           at your systems, and let it run.
         </p>
+        {/* search */}
+        <label
+          class="border-black/[0.08] bg-bg-white-0 focus-within:border-black/[0.2] mt-2 flex min-h-12 w-full max-w-[560px] items-center gap-2.5 rounded-[12px] border px-4 text-left transition-colors"
+        >
+          <i class="ri-search-line text-text-soft-400 text-[20px]" aria-hidden="true"></i>
+          <input
+            type="search"
+            placeholder="Search recipes — try “redline”, “forecast”, “questionnaire”…"
+            class="t-label-md text-text-strong-950 placeholder:text-text-soft-400 min-w-0 flex-1 bg-transparent outline-none"
+            data-search-input
+            aria-label="Search recipes"
+          />
+        </label>
       </div>
 
-      {/* category filter, static chips (progressive: a tiny script filters the grid) */}
-      <div class="flex flex-wrap items-center justify-center gap-2.5" data-cat-bar>
-        <button
-          type="button"
-          data-cat="all"
-          class="t-label-md text-text-strong-950 bg-bg-soft-200 aria-[pressed=true]:bg-text-strong-950 aria-[pressed=true]:text-bg-white-0 min-h-9 rounded-full px-4 transition-colors"
-          aria-pressed="true">All</button>
-        {
-          categories.map((c) => (
-            <button
-              type="button"
-              data-cat={c}
-              class="t-label-md text-text-sub-600 bg-bg-soft-200 hover:text-text-strong-950 aria-[pressed=true]:bg-text-strong-950 aria-[pressed=true]:text-bg-white-0 min-h-9 rounded-full px-4 transition-colors"
-              aria-pressed="false">{c}</button>
-          ))
-        }
-      </div>
-
-      {/* collections */}
+      {/* collections: one row, side-scroll, arrows top right. Each opens its
+          own page. */}
       {
         collections.length > 0 && (
-          <div class="flex flex-col gap-5">
-            <p class="t-mono-md text-text-soft-400 uppercase tracking-[0.08em]">Collections</p>
-            <div class="grid gap-6 lg:grid-cols-3">
+          <div class="flex flex-col gap-5" data-collections-row>
+            <div class="flex items-center justify-between">
+              <p class="t-mono-md text-text-soft-400 uppercase tracking-[0.08em]">Collections</p>
+              <div class="flex items-center gap-2">
+                <button
+                  type="button"
+                  data-coll-prev
+                  aria-label="Scroll collections left"
+                  class="border-black/[0.1] text-text-strong-950 hover:bg-bg-weak-50 disabled:text-text-disabled-300 disabled:hover:bg-transparent flex size-10 items-center justify-center rounded-full border transition-colors"
+                >
+                  <i class="ri-arrow-left-line text-[18px]" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  data-coll-next
+                  aria-label="Scroll collections right"
+                  class="border-black/[0.1] text-text-strong-950 hover:bg-bg-weak-50 disabled:text-text-disabled-300 disabled:hover:bg-transparent flex size-10 items-center justify-center rounded-full border transition-colors"
+                >
+                  <i class="ri-arrow-right-line text-[18px]" aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+            <div
+              data-coll-track
+              class="-mx-1 flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-1 pb-1 [scrollbar-width:none]"
+            >
               {collections.map((name) => {
                 const meta = collectionMeta[name] ?? { blurb: '', tint: 'bg-bg-soft-200' };
                 const count = recipes.filter((r) => r.data.collection === name).length;
                 return (
-                  <button
-                    type="button"
-                    data-collection={name}
-                    class={`${meta.tint} border border-black/[0.06] flex flex-col gap-2 rounded-[20px] p-7 text-left transition-transform hover:-translate-y-0.5`}
+                  <a
+                    href={`/cookbook/collections/${collectionSlug(name)}`}
+                    class={`${meta.tint} flex w-[320px] shrink-0 snap-start flex-col gap-2.5 rounded-[20px] p-7 text-left transition-transform hover:-translate-y-0.5 sm:w-[360px]`}
                   >
-                    <p class="t-label-xs text-text-soft-400 font-mono uppercase tracking-[0.08em]">
+                    <p class="t-label-xs text-text-strong-950/55 font-mono uppercase tracking-[0.1em]">
                       Collection · {count} {count === 1 ? 'recipe' : 'recipes'}
                     </p>
-                    <h3 class="t-h6 text-text-strong-950">{name}</h3>
-                    <p class="t-label-md text-text-sub-600">{meta.blurb}</p>
-                    <span class="t-label-sm text-text-strong-950 mt-2 inline-flex items-center gap-1">
+                    <h3 class="t-h5 text-text-strong-950">{name}</h3>
+                    <p class="t-label-md text-text-strong-950/70">{meta.blurb}</p>
+                    <span class="t-label-md text-text-strong-950 mt-4 inline-flex items-center gap-1.5">
                       Browse collection <span aria-hidden="true">→</span>
                     </span>
-                  </button>
+                  </a>
                 );
               })}
             </div>
@@ -93,65 +108,98 @@ const featured = recipes.filter((r) => r.data.featured);
         )
       }
 
-      {/* featured */}
-      {
-        featured.length > 0 && (
-          <div class="flex flex-col gap-5">
-            <p class="t-mono-md text-text-soft-400 uppercase tracking-[0.08em]">Featured</p>
-            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {featured.map((r) => (
-                <a
-                  href={`/cookbook/${r.id}`}
-                  class={`${catColor(r.data.category).surface} border border-black/[0.06] flex flex-col gap-4 rounded-[18px] p-5 transition-transform hover:-translate-y-0.5`}
-                >
-                  <span class={`${catColor(r.data.category).tile} ${catColor(r.data.category).ink} flex size-11 items-center justify-center rounded-[12px]`}>
-                    <i class={`${r.data.icon} text-[22px]`} aria-hidden="true" />
-                  </span>
-                  <div class="flex flex-1 flex-col gap-1.5">
-                    <h3 class="t-label-lg text-text-strong-950">{r.data.title}</h3>
-                    <p class="t-label-md text-text-sub-600 line-clamp-3">{r.data.description}</p>
-                  </div>
-                  <span class={`${catColor(r.data.category).ink} t-label-xs font-mono uppercase tracking-[0.06em]`}>
-                    {r.data.category}
-                  </span>
-                </a>
-              ))}
-            </div>
-          </div>
-        )
-      }
+      {/* separator between the collections and the recipe browser */}
+      <hr class="border-black/[0.08]" data-separator />
 
-      {/* all recipes */}
-      <div class="flex flex-col gap-5">
-        <p class="t-mono-md text-text-soft-400 uppercase tracking-[0.08em]">All recipes</p>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-grid>
+      {/* rail + recipes, the same left-nav pattern the pillar pages use.
+          Below `lg` the rail lies down as a horizontally scrollable row. */}
+      <div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-8">
+        {/* category rail. Active row: fill + icon + strong label, matching
+            RailFeatures. The icon keeps its box at all times and only its
+            opacity changes, so rows never shift when the selection moves. */}
+        <nav
+          class="-mx-1 flex gap-1 overflow-x-auto px-1 [scrollbar-width:none] lg:sticky lg:top-24 lg:mx-0 lg:w-[220px] lg:shrink-0 lg:flex-col lg:gap-2.5 lg:overflow-visible lg:px-0"
+          aria-label="Categories"
+          data-cat-bar
+        >
+          <button
+            type="button"
+            data-cat="all"
+            aria-pressed="true"
+            class="group text-text-soft-400 aria-[pressed=true]:bg-bg-sub-300 aria-[pressed=true]:text-text-strong-950 focus-visible:outline-primary-base flex min-h-[44px] shrink-0 items-center gap-2 rounded-[8px] px-3 text-left whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 lg:min-h-[48px]"
+          >
+            <i
+              class="ri-apps-2-line size-6 shrink-0 text-[24px] leading-none opacity-0 transition-opacity duration-200 group-aria-[pressed=true]:opacity-100"
+              aria-hidden="true"></i>
+            <span class="t-label-lg">All recipes</span>
+          </button>
           {
-            recipes.map((r) => (
-              <a
-                href={`/cookbook/${r.id}`}
-                data-card
-                data-card-cat={r.data.category}
-                data-card-collection={r.data.collection ?? ''}
-                class={`${catColor(r.data.category).surface} border border-black/[0.06] flex flex-col gap-4 rounded-[18px] p-6 transition-transform hover:-translate-y-0.5`}
+            categories.map((c) => (
+              <button
+                type="button"
+                data-cat={c}
+                aria-pressed="false"
+                class="group text-text-soft-400 aria-[pressed=true]:bg-bg-sub-300 aria-[pressed=true]:text-text-strong-950 focus-visible:outline-primary-base flex min-h-[44px] shrink-0 items-center gap-2 rounded-[8px] px-3 text-left whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 lg:min-h-[48px]"
               >
-                <span class={`${catColor(r.data.category).tile} ${catColor(r.data.category).ink} flex size-12 items-center justify-center rounded-[13px]`}>
-                  <i class={`${r.data.icon} text-[24px]`} aria-hidden="true" />
-                </span>
-                <div class="flex flex-1 flex-col gap-2">
-                  <h3 class="t-h6 text-text-strong-950">{r.data.title}</h3>
-                  <p class="t-label-md text-text-sub-600 text-pretty">{r.data.description}</p>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class={`${catColor(r.data.category).ink} t-label-xs bg-bg-white-0/60 rounded-full px-2.5 py-1 font-mono`}>
-                    {r.data.category}
-                  </span>
-                  <span class="t-label-xs text-text-soft-400 rounded-full px-1 py-1 font-mono capitalize">
-                    {r.data.difficulty}
-                  </span>
-                </div>
-              </a>
+                <i
+                  class={`${catIcon(c)} size-6 shrink-0 text-[24px] leading-none opacity-0 transition-opacity duration-200 group-aria-[pressed=true]:opacity-100`}
+                  aria-hidden="true"
+                />
+                <span class="t-label-lg">{catShort(c)}</span>
+              </button>
             ))
           }
+        </nav>
+
+        {/* recipes column */}
+        <div class="flex min-w-0 flex-1 flex-col gap-10">
+          {/* all recipes */}
+          <div class="flex flex-col gap-5">
+            <p class="t-mono-md text-text-soft-400 uppercase tracking-[0.08em]" data-grid-label>
+              All recipes
+            </p>
+            <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3" data-grid>
+              {
+                recipes.map((r) => (
+                  <a
+                    href={`/cookbook/${r.id}`}
+                    data-card
+                    data-card-cat={r.data.category}
+                    data-card-search={[
+                      r.data.title,
+                      r.data.description,
+                      r.data.category,
+                      r.data.collection ?? '',
+                      r.data.integrations.join(' '),
+                      r.data.difficulty,
+                    ]
+                      .join(' ')
+                      .toLowerCase()}
+                    class={`${catColor(r.data.category).surface} border border-black/[0.06] flex flex-col gap-4 rounded-[18px] p-6 transition-transform hover:-translate-y-0.5`}
+                  >
+                    <span class={`${catColor(r.data.category).tile} ${catColor(r.data.category).ink} flex size-12 items-center justify-center rounded-[13px]`}>
+                      <i class={`${r.data.icon} text-[24px]`} aria-hidden="true" />
+                    </span>
+                    <div class="flex flex-1 flex-col gap-2">
+                      <h3 class="t-h6 text-text-strong-950">{r.data.title}</h3>
+                      <p class="t-label-md text-text-sub-600 text-pretty">{r.data.description}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class={`${catColor(r.data.category).ink} t-label-xs bg-bg-white-0/60 rounded-full px-2.5 py-1 font-mono`}>
+                        {r.data.category}
+                      </span>
+                      <span class="t-label-xs text-text-soft-400 rounded-full px-1 py-1 font-mono capitalize">
+                        {r.data.difficulty}
+                      </span>
+                    </div>
+                  </a>
+                ))
+              }
+            </div>
+            <p class="t-label-md text-text-sub-600 hidden" data-empty>
+              No recipes match. Clear the search or pick another category.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -159,32 +207,67 @@ const featured = recipes.filter((r) => r.data.featured);
 </Base>
 
 <script>
-  // Category filter, no framework needed.
+  // Category rail + search filter the grid together, no framework needed.
   const bar = document.querySelector<HTMLElement>('[data-cat-bar]');
+  const input = document.querySelector<HTMLInputElement>('[data-search-input]');
   const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-card]'));
-  const grid = document.querySelector<HTMLElement>('[data-grid]');
-  const setCat = (btn: HTMLButtonElement | null) => {
-    bar?.querySelectorAll<HTMLButtonElement>('[data-cat]').forEach((b) =>
-      b.setAttribute('aria-pressed', String(b === btn)),
-    );
+  const collectionsRow = document.querySelector<HTMLElement>('[data-collections-row]');
+  const separator = document.querySelector<HTMLElement>('[data-separator]');
+  const gridLabel = document.querySelector<HTMLElement>('[data-grid-label]');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+
+  let cat = 'all';
+  let query = '';
+
+  const apply = () => {
+    const browsing = cat === 'all' && query === '';
+    let shown = 0;
+    for (const card of cards) {
+      const hit =
+        (cat === 'all' || card.dataset.cardCat === cat) &&
+        (query === '' || (card.dataset.cardSearch ?? '').includes(query));
+      card.style.display = hit ? '' : 'none';
+      if (hit) shown += 1;
+    }
+    // While filtering, drop the browse sections so results stand alone.
+    if (collectionsRow) collectionsRow.style.display = browsing ? '' : 'none';
+    if (separator) separator.style.display = browsing ? '' : 'none';
+    if (gridLabel) gridLabel.textContent = browsing ? 'All recipes' : `${shown} ${shown === 1 ? 'recipe' : 'recipes'}`;
+    empty?.classList.toggle('hidden', shown > 0);
   };
-  const filterBy = (test: (c: HTMLElement) => boolean) => {
-    for (const card of cards) card.style.display = test(card) ? '' : 'none';
-  };
+
   bar?.addEventListener('click', (e) => {
     const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-cat]');
     if (!btn) return;
-    const cat = btn.dataset.cat;
-    setCat(btn);
-    filterBy((c) => cat === 'all' || c.dataset.cardCat === cat);
+    cat = btn.dataset.cat ?? 'all';
+    bar
+      .querySelectorAll<HTMLButtonElement>('[data-cat]')
+      .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    apply();
   });
-  // Collection cards filter the grid to that collection and scroll to it.
-  document.querySelectorAll<HTMLButtonElement>('[data-collection]').forEach((cb) => {
-    cb.addEventListener('click', () => {
-      const name = cb.dataset.collection;
-      setCat(bar?.querySelector<HTMLButtonElement>('[data-cat="all"]') ?? null);
-      filterBy((c) => c.dataset.cardCollection === name);
-      grid?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+
+  input?.addEventListener('input', () => {
+    query = input.value.trim().toLowerCase();
+    apply();
   });
+
+  // Collections carousel: arrows scroll one card at a time and disable at the ends.
+  const track = document.querySelector<HTMLElement>('[data-coll-track]');
+  const prev = document.querySelector<HTMLButtonElement>('[data-coll-prev]');
+  const next = document.querySelector<HTMLButtonElement>('[data-coll-next]');
+  if (track && prev && next) {
+    const step = () => {
+      const card = track.firstElementChild as HTMLElement | null;
+      return card ? card.offsetWidth + 24 : 384; // card + gap-6
+    };
+    const sync = () => {
+      prev.disabled = track.scrollLeft <= 4;
+      next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+    };
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync, { passive: true });
+    sync();
+  }
 </script>

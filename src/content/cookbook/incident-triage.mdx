@@ -11,10 +11,79 @@ difficulty: advanced
 skills:
   - name: Root-cause tracing
     description: Correlate errors with deploys
+    body: |
+      Correlate the error signature with recent deploys to find the regression.
+
+      ## Method
+      1. Read the last hour of error logs.
+      2. Identify the failing endpoint and the recurring error signature.
+      3. Pull the list of deploys in the same time window.
+      4. Correlate the error's onset time against each deploy's timestamp.
+      5. Narrow to the most likely deploy and commit.
+      6. Check the commit diff for a change that plausibly explains the error signature.
+
+      ## Rules
+      - Correlate by time first, then confirm against the code diff — never name a cause from timing alone.
+      - Point to the specific commit and line that plausibly caused the error, not just "a recent deploy."
+      - If two deploys land in the same window, check both before choosing one.
+      - State a confidence level whenever the correlation is not conclusive.
+
+      ## Output
+      A root-cause summary — failing endpoint, error signature, suspect commit, confidence — handed to PR and test authoring.
   - name: PR + test authoring
     description: Guard the path, add a test
+    body: |
+      Open a PR that guards the failing path and adds a regression test.
+
+      ## Method
+      1. Locate the code path identified by root-cause tracing.
+      2. Write a guard that prevents the failure — validation, fallback, or bounds check.
+      3. Write a regression test that reproduces the original failure and confirms the guard fixes it.
+      4. Run the test suite locally to confirm the new test passes and nothing else breaks.
+      5. Open a PR containing the guard, the test, and a description linking the root cause.
+
+      ## Rules
+      - Every fix ships with a regression test; never open a guard without a test proving it.
+      - The PR description states the root cause and the failing endpoint plainly.
+      - Never merge automatically — the PR always waits for human approval.
+      - Keep the guard scoped to the failing path; don't fold in unrelated refactors.
+
+      ## Output
+      An open PR — guard, regression test, linked root-cause description — awaiting approval, plus the filed P1 bug.
   - name: Post-mortem writing
     description: Draft the RCA once it ships
+    body: |
+      Draft the RCA once the fix ships, held for review before it goes out.
+
+      ## Method
+      1. Pull the incident timeline: alert time, triage start, root cause found, fix merged.
+      2. State customer impact: affected endpoint, duration, scope.
+      3. State the root cause in plain terms, linked to the commit.
+      4. List the fix and the regression test guarding against recurrence.
+      5. List any follow-up actions if the cause points to a broader gap.
+      6. Draft the customer-facing status note as a separate document from the internal RCA.
+
+      ## Rules
+      - Draft only after the fix has shipped, never before.
+      - The customer status note and the internal post-mortem are separate documents, for separate audiences.
+      - Every timeline entry carries a timestamp; no approximate times.
+      - Follow-up actions stay open items — the post-mortem does not close them itself.
+
+      ## Output
+      Two drafts held for review — an internal post-mortem (timeline, cause, fix, follow-ups) and a customer status note.
+jobs:
+  - name: Incident triage poll
+    cadence: Every 5 minutes, polling the alerts channel and pager feed
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the incident-triage skill from your skills folder; its first-run
+      answers are in memory.
+      1. Check the alerts channel and pager feed for a new active incident.
+      2. If one is active, run the skill's method: trace the root cause,
+         open the guarded PR with a regression test, file the P1 bug.
+      3. Draft the customer status note and the post-mortem once the fix ships.
+      If a required input is missing or a check fails, post what you found
+      and hold — never merge or roll anything back without approval.
 goal: triage the incident, open the fix, and write the post-mortem
 integrations: [github, linear, zendesk]
 whatItDoes:

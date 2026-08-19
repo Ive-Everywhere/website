@@ -1,0 +1,137 @@
+---
+title: Score every account's renewal risk weekly
+description: Score every account's renewal risk weekly from usage and tickets, and flag what changed.
+publishedAt: 2026-08-19
+icon: ri-radar-line
+category: Customer Engineering
+collection: Customer health
+featured: false
+order: 24
+difficulty: intermediate
+skills:
+  - name: Health scoring
+    description: Composite score from usage, tickets, and sentiment, weighted per policy.
+    body: |
+      Produce one composite renewal-risk score per account from usage, tickets, and sentiment.
+
+      ## Method
+      1. Pull usage trend from PostHog, ticket volume and sentiment from the support tool, and days-to-renewal from the CRM.
+      2. Weight each input per the scoring policy to produce a low/medium/high score.
+      3. Recompute the score for every active account on each weekly run.
+      4. Note which input drove the score, not just the final tier.
+      5. Store this week's scores for next week's diff.
+
+      ## Rules
+      - Weighting between usage, tickets, and renewal proximity: (set on first run, then stored in memory).
+      - Always record the driving signal alongside the score, never the score alone.
+      - Recompute every account weekly — never carry forward a stale score.
+      - A high-risk tier requires at least two independent signals, per the week-over-week guardrail.
+
+      ## Output
+      A per-account score (low/medium/high) with the driving signal named, for every active account.
+  - name: Renewal-date awareness
+    description: Weight risk higher as the renewal date approaches.
+    body: |
+      Weight renewal risk higher as the account's renewal date approaches.
+
+      ## Method
+      1. Pull each account's renewal date from the CRM.
+      2. Increase the risk weighting as days-to-renewal shrinks, per the scoring policy.
+      3. Treat the same usage drop as more urgent at 30 days to renewal than at 200 days.
+      4. Flag accounts entering their final renewal window even at a stable usage score.
+      5. Recompute the weighting every week, since the same account moves closer to renewal each run.
+      6. Reset the urgency weighting once an account renews.
+
+      ## Rules
+      - Days-to-renewal thresholds that raise urgency: (set on first run, then stored in memory).
+      - Renewal proximity adjusts the score weighting; it never overrides the usage and ticket signals.
+      - Flag an approaching renewal window even without another risk signal present.
+      - Clear the urgency flag immediately after a confirmed renewal, so it does not linger on the account.
+
+      ## Output
+      A renewal-proximity adjustment applied to each account's score, with days-to-renewal shown.
+  - name: Week-over-week diff
+    description: Compare against last week's saved snapshot.
+    body: |
+      Compare this week's scores against last week's snapshot so only real change gets surfaced.
+
+      ## Method
+      1. Load last week's snapshot from reports/renewal-risk/.
+      2. Compare each account's current tier against its prior tier.
+      3. Group the results: moved up a tier, moved down, new to the portfolio, unchanged.
+      4. Surface only accounts that moved or are newly high-risk in the escalation.
+      5. Note the specific signal that changed for every account in the moved group.
+      6. Save this week's full snapshot for next week's comparison.
+
+      ## Rules
+      - Always diff against the immediately prior week's snapshot, never an older one.
+      - Report unchanged accounts as a count only, not individually, to keep the escalation short.
+      - A newly high-risk account needs two independent signals before it counts as "moved."
+      - Keep every weekly snapshot on file — never overwrite or discard past history.
+
+      ## Output
+      A diff summary: accounts moved up, moved down, new, and recovered, versus last week.
+jobs:
+  - name: Weekly renewal-risk radar run
+    cadence: Every Monday, 7:00 AM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the renewal-risk-radar skill from your skills folder; its
+      first-run answers are in memory.
+      1. Score every active account's renewal risk from usage and tickets.
+      2. Diff against last week; confirm new high-risk flags need two signals.
+      3. Patch the view and post the top at-risk accounts to the channel.
+      If a required input is missing or a check fails, post what you found
+      and hold — never contact the customer or touch the CRM without approval.
+goal: score every account's renewal risk weekly and flag what changed before it surprises the team
+integrations: [posthog, zendesk, salesforce, slack]
+whatItDoes:
+  - Scores every account's renewal risk from usage, tickets, and renewal date
+  - Diffs this week's scores against last week, what moved, what's new
+  - Requires two independent signals before flagging an account high-risk
+  - Publishes the live portfolio view and escalates the top risks to Slack
+howToUse:
+  - Connect PostHog, your support tool, Salesforce, and Slack
+  - Set the trigger for Monday morning, ahead of the CS leadership sync
+  - Paste the prompt and set your risk-scoring weighting for the policy
+  - Review the portfolio view and the escalated accounts each week
+workflow:
+  - kind: trigger
+    title: Every Monday, 7:00 AM
+    body: Before the CS leadership sync.
+  - kind: prompt
+    title: Score every account
+    body: Usage trend, ticket sentiment, and days to renewal.
+  - kind: prompt
+    title: Diff against last week
+    body: What moved risk tier, what's new, what recovered.
+  - kind: prompt
+    title: Rank the portfolio
+    body: Sort by renewal value at risk, not just risk score.
+  - kind: result
+    title: Publish + escalate
+    body: Portfolio view updated, top-risk accounts posted to Slack.
+prompt: |
+  Run the weekly renewal-risk radar.
+
+  1. Pull every active account from {{crm}} with its renewal date, usage
+     trend from PostHog, and open/recent ticket sentiment from
+     {{support_tool}}.
+  2. Score each account's renewal risk (low/medium/high) using the weighting
+     in {{scoring_policy}}: usage trend, ticket volume/sentiment, and
+     days-to-renewal.
+  3. Diff this week's scores against last week's snapshot in
+     `reports/renewal-risk/`: what moved tier, what's new, what recovered.
+  4. Validation: for every account newly flagged high-risk, confirm at
+     least two independent signals support it (for example a usage drop plus
+     a negative ticket) before it publishes. A single noisy signal downgrades
+     the account to medium instead.
+  5. Rank the high-risk accounts by renewal value at stake, not risk score
+     alone.
+  6. Patch the renewal-risk-radar view with this week's scores, don't rebuild
+     it, and post the top {{escalation_count}} at-risk accounts, with the
+     driving signal, to {{delivery_channel}}.
+
+  Do not contact the customer or change the CRM renewal stage, the radar
+  flags for the CSM and account owner to act on.
+---

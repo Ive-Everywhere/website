@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* wf1's fleet grid, verbatim bones: 2-column cells, avatar the one mark,
+     fixed 104px cells, last row faded. The green dot-label carries the
+     shortlist score instead of "running" — still the only green. */
+  .fleet { display:grid; grid-template-columns:1fr 1fr; }
+  .fc { display:flex; align-items:center; gap:14px; height:104px; padding:0 26px; }
+  .fc:nth-child(odd) { border-right:1px solid var(--hair); }
+  .fc:not(:nth-last-child(-n+2)) { border-bottom:1px solid var(--hair); }
+  .fc__av { width:34px; height:34px; border-radius:50%; flex:none; overflow:hidden; }
+  .fc__av img { width:100%; height:100%; display:block; }
+  .fc__b { min-width:0; flex:1; }
+  .fc__name { font-size:21px; font-weight:480; letter-spacing:-.006em; color:var(--ink); line-height:1.2; }
+  .fc__meta { display:flex; align-items:center; gap:8px; margin-top:4px; }
+  .fc__role { font-size:17px; color:var(--soft); }
+  .fc__run { display:inline-flex; align-items:center; gap:5px; font-size:14px; font-weight:450; color:var(--ok); }
+  .fc__run i { width:6px; height:6px; border-radius:50%; background:var(--ok); flex:none; display:block; }
+  .fc--more { justify-content:center; }
+  .fc__more { font-family:var(--mono); font-size:22px; color:var(--soft); }
+</style>
+</head><body>
+<!-- TEXT-ONLY variant of agents/wf1-fleet.html: the candidate shortlist as the
+     roster grid. Human photos for candidates per the kit's avatar rule. -->
+<div class="stage cv-cream">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M3.5 20c.6-3.4 2.9-5.5 5.5-5.5s4.9 2.1 5.5 5.5"/><circle cx="17.5" cy="15.5" r="3.2"/><path d="M16.2 15.5h2.6M17.5 14.2v2.6"/></svg></span>
+      <span class="hd__t">Shortlist · Senior AE</span>
+      <span class="hd__r"><span class="pill">5 of 62 · overnight</span></span>
+    </div>
+    <div class="fleet">
+      <div class="fc">
+        <span class="fc__av"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt=""></span>
+        <span class="fc__b"><div class="fc__name">Sofia Marsh</div><div class="fc__meta"><span class="fc__role">118% quota, 3 yrs</span><span class="fc__run"><i></i>92</span></div></span>
+      </div>
+      <div class="fc">
+        <span class="fc__av"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt=""></span>
+        <span class="fc__b"><div class="fc__name">Daniel Okafor</div><div class="fc__meta"><span class="fc__role">built EMEA book</span><span class="fc__run"><i></i>88</span></div></span>
+      </div>
+      <div class="fc">
+        <span class="fc__av"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></span>
+        <span class="fc__b"><div class="fc__name">Lena Fischer</div><div class="fc__meta"><span class="fc__role">enterprise, health</span><span class="fc__run"><i></i>85</span></div></span>
+      </div>
+      <div class="fc">
+        <span class="fc__av"><img src="https://randomuser.me/api/portraits/men/75.jpg" alt=""></span>
+        <span class="fc__b"><div class="fc__name">James Whitfield</div><div class="fc__meta"><span class="fc__role">strong outbound</span><span class="fc__run"><i></i>81</span></div></span>
+      </div>
+      <div class="fc row--g1">
+        <span class="fc__av"><img src="https://randomuser.me/api/portraits/women/12.jpg" alt=""></span>
+        <span class="fc__b"><div class="fc__name">Ana Souza</div><div class="fc__meta"><span class="fc__role">4 yrs closing</span><span class="fc__run"><i></i>78</span></div></span>
+      </div>
+      <div class="fc fc--more row--g1">
+        <span class="fc__more">57 passed on</span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

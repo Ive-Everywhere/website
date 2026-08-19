@@ -31,32 +31,36 @@ const kindMeta: Record<string, { label: string; icon: string; cls: string }> = {
 };
 
 const kebab = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-const promptSteps = d.workflow.filter((s: any) => s.kind === 'prompt' || s.kind === 'shell');
 
-// The short, copyable fetch-prompt. Points at the .md so the agent pulls the rest.
+// The short, copyable install-prompt. The agent saves the recipe as a skill,
+// answers land in memory, jobs are offered — then one supervised run.
 const shortPrompt =
-  `You're running the "${d.title}" recipe from the Eluu cookbook.\n` +
-  `Fetch https://eluu.ai/cookbook/${slug}.md for the workflow, skills, and prompts, ` +
-  `then ${d.goal || 'run it end to end'} against my connected tools.`;
+  `Install the "${d.title}" recipe from the Eluu cookbook.\n` +
+  `1. Fetch https://eluu.ai/cookbook/${slug}/skill.md and save it into your skills folder as "${slug}".\n` +
+  `2. Ask me its first-run questions and store my answers in memory.\n` +
+  (d.jobs.length
+    ? `3. Offer to schedule the recurring jobs listed in the skill; only create the ones I approve.\n4. Then run the skill once end to end so we can review the output together.`
+    : `3. Then run the skill once end to end so we can review the output together.`);
 
 // The file tree shown on the right, derived from the recipe. Every FILE row is
 // a real, fetchable URL — the same ones the recipe.md links to.
 type Node = { name: string; kind: 'dir' | 'file'; depth: number; href?: string };
 const tree: Node[] = [{ name: `${slug}/`, kind: 'dir', depth: 0 }];
 tree.push({ name: 'recipe.md', kind: 'file', depth: 1, href: `/cookbook/${slug}.md` });
-tree.push({ name: 'workflow.json', kind: 'file', depth: 1, href: `/cookbook/${slug}/workflow.json` });
+tree.push({ name: 'skill.md', kind: 'file', depth: 1, href: `/cookbook/${slug}/skill.md` });
+if (d.jobs.length) {
+  tree.push({ name: 'jobs-setup/', kind: 'dir', depth: 1 });
+  d.jobs.forEach((j: any) =>
+    tree.push({ name: `${kebab(j.name)}.md`, kind: 'file', depth: 2, href: `/cookbook/${slug}/jobs-setup/${kebab(j.name)}.md` }),
+  );
+}
 if (d.skills.length) {
   tree.push({ name: 'skills/', kind: 'dir', depth: 1 });
   d.skills.forEach((s: any) =>
     tree.push({ name: `${kebab(s.name)}.md`, kind: 'file', depth: 2, href: `/cookbook/${slug}/skills/${kebab(s.name)}.md` }),
   );
 }
-if (promptSteps.length) {
-  tree.push({ name: 'prompts/', kind: 'dir', depth: 1 });
-  promptSteps.forEach((s: any) =>
-    tree.push({ name: `${kebab(s.title)}.md`, kind: 'file', depth: 2, href: `/cookbook/${slug}/prompts/${kebab(s.title)}.md` }),
-  );
-}
+tree.push({ name: 'workflow.json', kind: 'file', depth: 1, href: `/cookbook/${slug}/workflow.json` });
 ---
 
 <Base title={`${d.title}, Cookbook, Eluu`} description={d.description}>
@@ -74,9 +78,24 @@ if (promptSteps.length) {
         <p class="t-paragraph-md text-text-sub-600 text-pretty">{d.description}</p>
       </div>
       <div class="flex flex-wrap items-center gap-3">
-        <a href="https://app.eluu.ai" class="t-label-md bg-text-strong-950 text-bg-white-0 hover:opacity-90 inline-flex min-h-11 items-center gap-2 rounded-full px-5 transition-opacity">
-          Use this recipe <i class="ri-arrow-right-up-long-line" aria-hidden="true"></i>
-        </a>
+        {/* Copies the install-prompt, then counts down to app.eluu.ai. In the
+            copied state the button lightens, shows a check, and carries the ×
+            inside itself to cancel the redirect. */}
+        <button type="button" data-use class="t-label-md bg-text-strong-950 text-bg-white-0 hover:opacity-90 inline-flex min-h-11 items-center gap-2 rounded-full px-5 transition-colors">
+          <i class="ri-check-line text-[18px]" data-use-check hidden aria-hidden="true"></i>
+          <span data-use-label>Use this recipe</span>
+          <i class="ri-arrow-right-up-long-line" data-use-icon aria-hidden="true"></i>
+          <span
+            data-use-cancel
+            hidden
+            role="button"
+            tabindex="0"
+            aria-label="Cancel the redirect"
+            class="hover:bg-black/[0.08] -mr-1.5 flex size-7 items-center justify-center rounded-full transition-colors"
+          >
+            <i class="ri-close-line text-[18px]" aria-hidden="true"></i>
+          </span>
+        </button>
         <span class="t-label-xs text-text-soft-400 bg-bg-white-0 rounded-full px-3 py-1.5 font-mono uppercase tracking-[0.06em]">{d.category}</span>
         <span class="t-label-xs text-text-soft-400 bg-bg-white-0 rounded-full px-3 py-1.5 font-mono capitalize">{d.difficulty}</span>
       </div>
@@ -243,5 +262,62 @@ if (promptSteps.length) {
     } catch {
       /* clipboard blocked */
     }
+  });
+
+  // "Use this recipe": copy the prompt, lighten the button, count down to
+  // Eluu. The × inside the button cancels; the prompt stays on the clipboard.
+  const use = document.querySelector<HTMLButtonElement>('[data-use]');
+  const useLabel = document.querySelector<HTMLElement>('[data-use-label]');
+  const useIcon = document.querySelector<HTMLElement>('[data-use-icon]');
+  const useCheck = document.querySelector<HTMLElement>('[data-use-check]');
+  const cancel = document.querySelector<HTMLElement>('[data-use-cancel]');
+  let timer: ReturnType<typeof setInterval> | null = null;
+
+  const DARK = ['bg-text-strong-950', 'text-bg-white-0', 'hover:opacity-90'];
+  const LIGHT = ['bg-bg-soft-200', 'text-text-strong-950'];
+
+  const reset = () => {
+    if (timer) clearInterval(timer);
+    timer = null;
+    if (useLabel) useLabel.textContent = 'Use this recipe';
+    useIcon?.removeAttribute('hidden');
+    useCheck?.setAttribute('hidden', '');
+    cancel?.setAttribute('hidden', '');
+    use?.classList.remove(...LIGHT);
+    use?.classList.add(...DARK);
+  };
+
+  use?.addEventListener('click', async () => {
+    if (timer) return; // already counting
+    try {
+      if (pre) await navigator.clipboard.writeText(pre.innerText);
+    } catch {
+      /* clipboard blocked, still redirect */
+    }
+    let n = 4;
+    if (useLabel) useLabel.textContent = `Copied prompt — opening Eluu in ${n}`;
+    useIcon?.setAttribute('hidden', '');
+    useCheck?.removeAttribute('hidden');
+    cancel?.removeAttribute('hidden');
+    use.classList.remove(...DARK);
+    use.classList.add(...LIGHT);
+    timer = setInterval(() => {
+      n -= 1;
+      if (n <= 0) {
+        if (timer) clearInterval(timer);
+        window.location.href = 'https://app.eluu.ai';
+        return;
+      }
+      if (useLabel) useLabel.textContent = `Copied prompt — opening Eluu in ${n}`;
+    }, 1000);
+  });
+
+  const onCancel = (e: Event) => {
+    e.stopPropagation();
+    reset();
+  };
+  cancel?.addEventListener('click', onCancel);
+  cancel?.addEventListener('keydown', (e) => {
+    if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') onCancel(e);
   });
 </script>

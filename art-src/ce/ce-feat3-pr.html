@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* sec2's stacked label/value fields, verbatim bones. RULE 7: the one maroon
+     accent is the PR ref, nothing else. */
+  .fields { padding: 6px 30px 30px; }
+  .field__l { font-size: 20px; color: var(--soft); }
+  .field__v { font-size: 26px; font-weight: 450; margin-top: 5px; letter-spacing: -.008em; }
+  .field__v--mono { font-family: var(--mono); font-weight: 450; font-size: 24px; }
+  .field__v--maroon { color: var(--maroon-deep); }
+</style>
+</head><body>
+<!-- TEXT-ONLY variant of agents/sec2-keys.html: the drafted fix as the
+     label/value pane. Short title, no wrap. -->
+<div class="stage cv-blue">
+  <div class="card">
+    <div class="hd hd--rule">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><circle cx="18" cy="6" r="2.6"/><path d="M6 8.6v6.8M18 8.6c0 4-3 5.4-6.5 5.4H9"/></svg></span>
+      <span class="hd__t">The fix, as a PR</span>
+      <span class="hd__r"><span class="pill pill--mono">+12 −3</span></span>
+    </div>
+    <div class="fields">
+      <div class="field"><div class="field__l">Pull request</div><div class="field__v field__v--mono field__v--maroon">acme/checkout-api #4132</div></div>
+      <div class="sep"></div>
+      <div class="field"><div class="field__l">Change</div><div class="field__v">Cap pg-pool at 50, retry on ECONNRESET</div></div>
+      <div class="sep"></div>
+      <div class="field"><div class="field__l">Reproduced on its own computer</div><div class="field__v">checkout 500 → 200 after the patch</div></div>
+      <div class="sep"></div>
+      <div class="field"><div class="field__l">Tests</div><div class="field__v">214 passed · 3 added for the retry path</div></div>
+    </div>
+  </div>
+</div></body></html>

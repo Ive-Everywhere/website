@@ -1,0 +1,127 @@
+---
+title: Stress-test the spec before it ships
+description: Run seven stakeholder personas against a PRD in parallel and get a ranked list of what to fix.
+publishedAt: 2026-08-19
+icon: ri-bug-line
+category: Product
+collection: Ship & tell
+featured: false
+order: 52
+difficulty: advanced
+skills:
+  - name: Persona scoring rubric
+    description: 5 dimensions, 0-100, one verdict per persona.
+    body: |
+      Score a PRD as one stakeholder persona, against fixed dimensions and anchors, not gut feel.
+
+      ## Method
+      1. Read the PRD fully from your persona's perspective — eng lead, designer, CFO, sales, support, legal, or skeptical exec.
+      2. Score each of the 5 dimensions — {{scoring_dimensions}} (set on first run, then stored in memory) — from 0 to 100.
+      3. Anchor each score: 30 means the dimension is barely addressed or actively wrong for this persona's stake; 70 means it's workable with named gaps; 90 means it fully holds up to this persona's scrutiny.
+      4. Write one sentence of reasoning per dimension score — no unexplained numbers.
+      5. Roll the 5 scores into one verdict: ship, revise, or reject, using the team's stored threshold (set on first run, then stored in memory).
+      6. List the specific gaps that pulled the score down, in order of severity.
+
+      ## Rules
+      - Score only from your assigned persona's stake — an eng lead does not score business case the way a CFO would.
+      - A score below the reject threshold on any single dimension (set on first run, then stored in memory) forces a reject verdict regardless of the average.
+      - Every score needs a one-line reason; an unexplained score is incomplete and gets re-run.
+      - Stay consistent with the anchors across runs — do not drift the meaning of a 70 between PRDs.
+
+      ## Output
+      Five dimension scores (0-100) with one-line reasoning each, one verdict (ship/revise/reject), and a ranked list of gaps.
+  - name: Cross-persona synthesis
+    description: Merge 7 independent reviews into one prioritized fix list, no double-counting.
+    body: |
+      Merge 7 independent persona reviews into one prioritized fix list, without double-counting overlapping gaps.
+
+      ## Method
+      1. Collect all 7 persona scorecards, each with its 5 dimension scores, verdict, and gap list.
+      2. Pool every gap across all 7 reviews into one list.
+      3. Merge gaps that describe the same underlying issue from different personas — note which personas raised it, don't list it twice.
+      4. Order the merged list blockers first: anything tied to a reject verdict from any persona outranks anything tied only to a revise.
+      5. Flag genuine disagreements separately — where personas reached opposite verdicts or conflicting recommendations on the same point — instead of averaging them into a single score.
+      6. Confirm every one of the 7 verdicts is represented somewhere in the final output before closing it out.
+
+      ## Rules
+      - Never average away a disagreement between personas — a legal reject and a sales ship on the same clause is a flag, not a wash.
+      - Blockers (any reject-tied gap) always rank above revise-tied gaps, regardless of which persona raised them.
+      - Do not drop a persona's finding just because another persona didn't raise it — a single-persona blocker still blocks.
+      - Keep the merged list traceable: every fix item names which persona(s) raised it.
+
+      ## Output
+      One prioritized fix list (blockers first), a separate short list of flagged persona disagreements, and the 7 source verdicts for reference.
+  - name: PRD completeness check
+    description: Confirm Non-goals, metrics, and scope sections exist before scoring starts.
+    body: |
+      Confirm the PRD has Problem, Non-goals, and Requirements sections filled in before any persona scores it.
+
+      ## Method
+      1. Open the PRD at {{prd_path}} and locate the Problem, Non-goals, Requirements, and metrics sections.
+      2. Check that each required section exists and has real content — a heading with no text under it does not count.
+      3. Check that the Non-goals section lists actual exclusions, not a placeholder line like "TBD."
+      4. Check that any quantitative claim in the PRD has a source or is marked "[baseline needed: ...]" rather than left bare.
+      5. If every required section passes, clear the PRD to move to persona scoring.
+      6. If any section is missing or empty, stop before fan-out and return the specific gap instead of scoring an incomplete draft.
+
+      ## Rules
+      - Non-goals is mandatory — a PRD with an empty or missing Non-goals section does not proceed to scoring.
+      - Do not guess at missing content to let the PRD pass; flag the gap and stop.
+      - This check runs once per PRD version — re-run it if the PRD is revised and resubmitted.
+      - Completeness is a gate, not a score — it blocks fan-out, it does not count as one of the 5 scored dimensions.
+
+      ## Output
+      A pass/fail result. On fail: the specific missing or empty section(s), returned instead of a scorecard. On pass: clearance to fan out.
+jobs: []
+goal: stress-test a PRD from 7 stakeholder personas and produce a ranked fix list
+integrations: [drive, notion, slack]
+whatItDoes:
+  - Confirms the PRD has a Problem, Non-goals, and Requirements section first
+  - Runs 7 persona sub-agents in parallel — eng, design, CFO, sales, support, legal, exec
+  - Scores each dimension 0-100 with a ship, revise, or reject verdict
+  - Merges all 7 verdicts into one prioritized, non-duplicated fix list
+howToUse:
+  - Connect Drive or Notion, and Slack, for the PRD and delivery
+  - Set the trigger for when a PRD is marked ready for review
+  - Paste the prompt; on first run, set your 5 scoring dimensions and PRD location
+  - Review the scorecard and fix list; you decide what to accept or reject
+workflow:
+  - kind: trigger
+    title: PRD ready for review
+    body: Fired manually or on a status change in the doc.
+  - kind: prompt
+    title: Fan out to 7 personas
+    body: Eng lead, designer, CFO, sales, support, legal, skeptical exec — each its own sub-agent.
+  - kind: prompt
+    title: Score independently
+    body: Each persona scores 0-100 across 5 dimensions with a ship/revise/reject verdict.
+  - kind: prompt
+    title: Synthesize the fix list
+    body: Merge all 7 verdicts into one prioritized list of what to fix.
+  - kind: result
+    title: Deliver the teardown
+    body: Scorecard posted to Slack, full teardown saved to the drive.
+prompt: |
+  Run the 7-persona PRD stress test.
+
+  1. Read the PRD at {{prd_path}} and confirm it has a Problem, Non-goals, and
+     Requirements section; if any is missing, stop and flag the gap instead of
+     scoring.
+  2. Fan out to 7 independent sub-agents, one per persona: eng lead, designer,
+     CFO, sales, support, legal, and a skeptical exec. Run all 7 concurrently
+     in the cloud, not in sequence.
+  3. Each sub-agent scores the PRD 0-100 across 5 dimensions —
+     {{scoring_dimensions}} — from its persona's stake, and returns a
+     ship / revise / reject verdict with its reasoning.
+  4. Validation: confirm all 7 sub-agents returned a full score set (all 5
+     dimensions) and a verdict; re-run any persona that came back incomplete
+     before synthesizing.
+  5. Synthesize the 7 reviews into one prioritized fix list: blockers first,
+     then the disagreements between personas worth flagging on their own.
+  6. Post the scorecard (7 verdicts, top 5 fixes) to {{delivery_channel}} and
+     save the full teardown to
+     `reports/prd-stress-test/{{prd_slug}}-{{date}}.md`.
+
+  Never edit the PRD directly — every fix is a recommendation for the PRD's
+  owner to accept or reject.
+---

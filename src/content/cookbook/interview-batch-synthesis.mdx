@@ -1,0 +1,142 @@
+---
+title: Synthesize interview transcripts into JTBD themes
+description: Synthesize a batch of interview transcripts into JTBD statements and themes, every quote verbatim and sourced.
+publishedAt: 2026-08-19
+icon: ri-mic-line
+category: Product
+collection: Discovery
+featured: false
+order: 51
+difficulty: intermediate
+skills:
+  - name: JTBD extraction
+    description: Pull job statements and pains from raw transcript text.
+    body: |
+      Pull job-to-be-done statements and pains from raw transcript text, one per real signal.
+
+      ## Method
+      1. Read the full transcript, not just the summary or highlights.
+      2. Identify moments where the interviewee describes a goal, a workaround, or a frustration in their own words.
+      3. Phrase each as a JTBD statement: "when [situation], I want to [motivation], so I can [outcome]."
+      4. Separately, capture each distinct pain as its own line, not folded into the JTBD statement.
+      5. Tag each JTBD and pain with the persona it came from, if known.
+      6. Attach the supporting verbatim quote to each extracted statement (see the verbatim-quote policy).
+      7. Discard a candidate JTBD that has no supporting line in the transcript — do not infer one from context alone.
+
+      ## Rules
+      - One JTBD statement per distinct goal; do not merge two different goals into one statement for brevity.
+      - Every JTBD and pain must trace to a specific line in the transcript.
+      - Do not extract a JTBD from a hypothetical or a leading question the interviewer asked — only from what the interviewee actually said.
+      - Persona tags follow the team's stored persona list; do not invent a new persona name mid-run.
+
+      ## Output
+      Per transcript: a list of JTBD statements and a list of pains, each with persona tag and supporting quote reference.
+  - name: Verbatim-quote policy
+    description: Every quote is exact, with speaker, timestamp, and date; no paraphrase-as-quote.
+    body: |
+      Attach one exact, sourced quote per finding — speaker, timestamp, and date — never a paraphrase.
+
+      ## Method
+      1. For each JTBD or pain finding, locate the transcript line that best supports it.
+      2. Copy the line exactly as transcribed — no smoothing, no summarizing, no combining lines.
+      3. Attach the speaker's name, the timestamp in the transcript, and the interview date.
+      4. Re-read the quote against the transcript once more before it leaves the draft; any mismatch fails the check.
+      5. If no line reads cleanly as a standalone quote, drop the quote and keep the finding without one.
+      6. Carry the same quote forward unchanged if it's cited again in a later theme rollup.
+
+      ## Rules
+      - A quote is verbatim, with speaker, timestamp, and date, or it is not a quote — never paraphrase-as-quote.
+      - Every quote traces back to one specific transcript and one specific moment in it.
+      - A missing quote never blocks a finding from shipping — the finding stands on its own without one.
+      - Quotes stay internal; this policy governs sourcing, not distribution (see the recipe's own guardrail on sharing).
+
+      ## Output
+      Per finding: either one verbatim quote (speaker, timestamp, date) or no quote field, with the finding still recorded.
+  - name: Contradiction flagging
+    description: Compare new findings against stored synthesis memory and surface disagreements.
+    body: |
+      Compare this batch's findings against stored synthesis memory and surface disagreements instead of overwriting them.
+
+      ## Method
+      1. Load the running JTBD/theme inventory from memory before rolling up this batch.
+      2. For each new theme or JTBD, check whether a prior synthesis made a claim that conflicts with it.
+      3. If it reinforces a prior finding, increment its supporting-interview count in memory.
+      4. If it conflicts, do not silently replace the prior finding — record both, with their respective evidence and dates.
+      5. Write a short contradiction note explaining what changed: new segment, new context, or a genuine reversal.
+      6. Leave the resolution of a contradiction to the PM — this skill surfaces it, it does not decide which finding wins.
+
+      ## Rules
+      - Never overwrite a prior synthesis finding without a flagged contradiction note — silent overwrites are a hard fail.
+      - A contradiction needs its own supporting quote, same verbatim standard as any other finding.
+      - Low-confidence disagreement (one interview against many) is still flagged, just labeled with its weight of evidence.
+      - Contradictions accumulate in memory across batches; do not delete a past contradiction once logged, even after it's resolved.
+
+      ## Output
+      A contradictions list: each entry names the prior finding, the new finding, supporting evidence for both, and a status (open/resolved).
+jobs:
+  - name: Biweekly interview batch synthesis
+    cadence: Every other Monday at 6:00 AM, or as soon as the transcript batch threshold is reached
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the interview-batch-synthesis skill from your skills folder; its
+      first-run answers (transcripts folder, batch size, contradiction
+      policy) are in memory.
+      1. List every new transcript in the stored interviews folder since
+         the last run and confirm the batch reached the stored minimum size.
+      2. Extract JTBD statements and pains per transcript, roll them into
+         themes, and flag any contradiction against synthesis memory.
+      3. Patch the research-insights view and post the synthesis summary
+         to the stored delivery channel.
+      If a required input is missing or a check fails, post what you found
+      and hold — never share interview content outside the team's surfaces.
+goal: synthesize a batch of interview transcripts into JTBD statements and contradictions
+integrations: [drive, notion, slack]
+whatItDoes:
+  - Reads every new transcript in the interviews folder since the last run
+  - Extracts JTBD statements and pains, one verbatim quote per finding
+  - Rolls the batch into themes, counted by supporting interview
+  - Flags contradictions against stored synthesis memory instead of overwriting it
+howToUse:
+  - Connect Drive, Notion, and Slack to the agent
+  - Set the trigger for a batch threshold, or a biweekly sweep
+  - Paste the prompt; on first run, set the folder, batch size, and contradiction policy
+  - Review the new themes and contradiction flags; the rest updates the view
+workflow:
+  - kind: trigger
+    title: New batch or biweekly
+    body: Fires once transcripts cross the threshold, or on schedule.
+  - kind: prompt
+    title: Read the batch
+    body: Every new transcript in the interviews folder since last run.
+  - kind: prompt
+    title: Extract JTBD + themes
+    body: Jobs, pains, and quotes per interview, then rolled up.
+  - kind: prompt
+    title: Flag contradictions
+    body: Where this batch disagrees with stored synthesis memory.
+  - kind: result
+    title: Publish + post
+    body: Research-insights view updated, synthesis posted to #product.
+prompt: |
+  Run the interview batch synthesis.
+
+  1. List every new transcript in {{interviews_folder}} since the last synthesis
+     run ({{last_run_date}}), and confirm the batch has reached
+     {{min_batch_size}}; if not, stop and wait for the next sweep.
+  2. For each transcript, extract job-to-be-done statements and pains, with one
+     verbatim quote per finding — speaker, timestamp, and date, never
+     paraphrased.
+  3. Roll the batch up into themes across interviews, noting how many distinct
+     interviews support each theme.
+  4. Cross-check each theme against the synthesis memory from past batches;
+     flag anything that contradicts a prior finding instead of silently
+     overwriting it.
+  5. Validation: confirm every quote in the output matches the source
+     transcript's exact wording, speaker, and timestamp before it ships.
+  6. Patch the research-insights view with the new themes and contradictions,
+     save the batch report to `reports/research/{{date}}-synthesis.md`, and
+     post the synthesis summary to {{delivery_channel}}.
+
+  Never share interview content or quotes outside the team's surfaces — this
+  synthesis stays internal.
+---

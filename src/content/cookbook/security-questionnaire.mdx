@@ -1,0 +1,140 @@
+---
+title: Clear security questionnaires without guessing
+description: Draft every answer from an approved library with citations, then verify each one before it ships.
+publishedAt: 2026-08-19
+icon: ri-shield-check-line
+category: Customer Engineering
+collection: Deal support
+featured: false
+order: 20
+difficulty: advanced
+skills:
+  - name: Answer library maintenance
+    description: Grow and version the approved-answer library from every completed questionnaire
+    body: |
+      Grow and version the approved-answer library so every new questionnaire starts with more coverage than the last.
+
+      ## Method
+      1. Store the library as one row per question pattern, not per questionnaire.
+      2. Give each row six fields: question pattern, approved answer text, evidence citation, version number, last-updated date, approver name.
+      3. When a questionnaire completes, collect every answer the human reviewer signed off on.
+      4. Add each signed-off answer as a new row, or a new version of an existing row if the wording changed.
+      5. Search the library by closest-match on question pattern before drafting any new answer.
+      6. Retire a superseded version by marking it inactive — never delete it, so past citations still resolve.
+
+      ## Rules
+      - Only a human-approved answer enters the library; an agent-drafted-but-unreviewed answer never does.
+      - Every row carries an evidence citation — a policy doc, a control ID, or a prior signed answer.
+      - Version every edit; never overwrite a row in place.
+      - Categories that always need human review regardless of a library match: (set on first run, then stored in memory).
+
+      ## Output
+      An updated answer-library sheet: new or versioned rows, each with question pattern, answer, citation, version, date, approver.
+  - name: Evidence citation
+    description: Every answer cites the policy doc, control, or prior answer it came from
+    body: |
+      Tie every drafted answer to the evidence that makes it true, so nothing ships as an unsupported claim.
+
+      ## Method
+      1. For each question, identify the specific policy doc, control, or prior approved answer that supports the draft.
+      2. Quote or paraphrase the exact clause used, not the whole source document.
+      3. Attach the citation inline: source name, section or control ID, and library version if drawn from the answer library.
+      4. If no evidence exists for a claim, do not draft the claim — mark the question open instead.
+      5. When two sources partially support an answer, cite both and note where they diverge.
+
+      ## Rules
+      - Every drafted answer carries at least one citation; zero citations means it is a guess, not a draft.
+      - Cite the most specific source available — a control ID over a general policy statement.
+      - Never invent a source to fill a gap in the evidence.
+      - Flag any citation older than (set on first run, then stored in memory) months for a freshness check.
+
+      ## Output
+      Each drafted answer paired with its citation: source name, section or control ID, and version or date.
+  - name: Adversarial review
+    description: Second-pass check that tries to refute each drafted answer before it ships
+    body: |
+      Refute every drafted answer before it ships, so nothing overstates the company's real security posture.
+
+      ## Method
+      1. Spawn a second-pass sub-agent that did not write the original drafts.
+      2. Give it only the answer library and the policy docs — not the drafter's reasoning.
+      3. Have it independently re-derive an answer for each question from the library and policy docs alone.
+      4. Compare its re-derived answer against the drafted answer and flag any mismatch.
+      5. Reject any drafted answer that overstates a control, invents a certification, or lacks a citation the reviewer can verify.
+      6. Return each answer as approved, revise, or open — never a silent pass-through.
+
+      ## Rules
+      - The reviewer works from source documents only, never from the drafter's confidence or phrasing.
+      - Reject on overstatement even when the underlying fact is directionally true.
+      - Reject on missing evidence — a plausible answer without a verifiable citation does not pass.
+      - On disagreement between reviewer and drafter, escalate to the review queue instead of guessing.
+
+      ## Output
+      A per-question verdict list: approved, revise, or open, each with the reviewer's stated reason.
+jobs:
+  - name: Questionnaire inbox watch
+    cadence: Every 30 minutes on weekdays
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the security-questionnaire skill from your skills folder; its
+      first-run answers are in memory.
+      1. Check the drive folder and Salesforce for a new questionnaire.
+      2. Draft every answer from the library and run the adversarial review.
+      3. Save the file and post the summary to the delivery channel.
+      If a required input is missing or a check fails, post what you found
+      and hold — never submit a questionnaire to the customer without approval.
+goal: draft security questionnaire answers from the approved library and verify every one before sign-off
+integrations: [drive, googlesheets, salesforce, slack]
+whatItDoes:
+  - Parses every question from the incoming file into a row-by-row list
+  - Drafts each answer from the approved library, citing its source
+  - Runs a second-pass sub-agent that tries to refute every drafted answer
+  - Grows the answer library and flags open rows for sign-off
+howToUse:
+  - Connect Drive, the answer library sheet, Salesforce, and Slack to the agent
+  - Set the trigger, a new file in the drive folder or an opportunity attachment
+  - Paste the prompt and adjust which categories always need human review
+  - It answers its first-run questions once and remembers; you review flagged and open rows
+workflow:
+  - kind: trigger
+    title: New questionnaire lands
+    body: Dropped in the drive folder or attached to a Salesforce opportunity.
+  - kind: shell
+    title: Parse the file
+    body: Extract every question from the XLSX/CSV/PDF into a row-by-row list.
+  - kind: prompt
+    title: Draft from the library
+    body: Match each question to the approved-answer library, cite the source.
+  - kind: prompt
+    title: Second-pass review
+    body: A sub-agent checks every drafted answer against the library and policy docs.
+  - kind: result
+    title: Deliver for sign-off
+    body: Completed file plus a flagged-answers summary posted to Slack.
+prompt: |
+  Clear the security questionnaire for {{account}}. This can run in the
+  cloud as long as the questionnaire takes — a 300-row file completes in
+  one run.
+
+  1. Parse {{questionnaire_file}} and extract every question into a
+     row-by-row list, keeping the original question ID.
+  2. For each question, search the approved-answer library in
+     {{answer_library}} for the closest match. Draft an answer and cite the
+     library entry or policy doc it came from.
+  3. For any question with no library match, draft an answer from
+     {{policy_docs}} only if the evidence supports it. Otherwise mark it
+     open and add it to the review queue instead of guessing.
+  4. Spawn a second-pass sub-agent reviewer. Have it try to refute every
+     drafted answer against the library and {{policy_docs}}, and reject any
+     answer that overstates or invents a security posture claim.
+  5. Revise or open every answer the reviewer rejects. Never substitute a
+     plausible-sounding claim for one the reviewer could not verify.
+  6. Add every newly-approved answer back to {{answer_library}} so the next
+     questionnaire starts smaller.
+  7. Save the completed file to
+     reports/questionnaires/{{account}}-{{date}}.md and post a summary to
+     {{delivery_channel}}: rows answered, rows open, rows flagged.
+
+  Open rows block submission until a human resolves them — never submit a
+  completed questionnaire to the customer or prospect directly.
+---

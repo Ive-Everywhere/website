@@ -1,0 +1,75 @@
+---
+/**
+ * A collection page, `/cookbook/collections/<slug>`. One page per collection —
+ * the gallery's collection cards link here instead of filtering in place, so a
+ * collection is a shareable URL of its own.
+ */
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import { catColor, collectionMeta, collectionSlug } from '../../../lib/cookbook';
+
+export async function getStaticPaths() {
+  const recipes = await getCollection('cookbook', ({ data }) => !data.draft);
+  const names = [...new Set(recipes.map((r) => r.data.collection).filter(Boolean))] as string[];
+  return names.map((name) => ({ params: { slug: collectionSlug(name) }, props: { name } }));
+}
+
+const { name } = Astro.props;
+const recipes = (
+  await getCollection('cookbook', ({ data }) => !data.draft && data.collection === name)
+).sort((a, b) => a.data.order - b.data.order);
+const meta = collectionMeta[name] ?? { blurb: '', tint: 'bg-bg-soft-200' };
+---
+
+<Base title={`${name}, Eluu Cookbook`} description={meta.blurb || `Recipes in the ${name} collection.`}>
+  <section class="bg-bg-white-0">
+    <div class="page-shell flex flex-col gap-12 pt-16 pb-14 lg:px-16">
+      {/* hero */}
+      <div class="flex flex-col gap-5">
+        <a
+          href="/cookbook"
+          class="t-label-md text-text-sub-600 hover:text-text-strong-950 inline-flex w-fit items-center gap-1 transition-colors"
+        >
+          <span aria-hidden="true">←</span> Cookbook
+        </a>
+        <p class="t-mono-md text-text-soft-400 uppercase tracking-[0.08em]">
+          Collection · {recipes.length} {recipes.length === 1 ? 'recipe' : 'recipes'}
+        </p>
+        <h1 class="t-landing-h2 text-text-strong-950 max-w-[820px] text-balance">{name}</h1>
+        {meta.blurb && <p class="t-paragraph-md text-text-sub-600 max-w-[560px]">{meta.blurb}</p>}
+      </div>
+
+      {/* recipes */}
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          recipes.map((r) => (
+            <a
+              href={`/cookbook/${r.id}`}
+              class={`${catColor(r.data.category).surface} border border-black/[0.06] flex flex-col gap-4 rounded-[18px] p-6 transition-transform hover:-translate-y-0.5`}
+            >
+              <span
+                class={`${catColor(r.data.category).tile} ${catColor(r.data.category).ink} flex size-12 items-center justify-center rounded-[13px]`}
+              >
+                <i class={`${r.data.icon} text-[24px]`} aria-hidden="true" />
+              </span>
+              <div class="flex flex-1 flex-col gap-2">
+                <h3 class="t-h6 text-text-strong-950">{r.data.title}</h3>
+                <p class="t-label-md text-text-sub-600 text-pretty">{r.data.description}</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span
+                  class={`${catColor(r.data.category).ink} t-label-xs bg-bg-white-0/60 rounded-full px-2.5 py-1 font-mono`}
+                >
+                  {r.data.category}
+                </span>
+                <span class="t-label-xs text-text-soft-400 rounded-full px-1 py-1 font-mono capitalize">
+                  {r.data.difficulty}
+                </span>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

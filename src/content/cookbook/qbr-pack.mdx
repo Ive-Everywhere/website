@@ -1,0 +1,134 @@
+---
+title: Build the QBR deck before the agenda
+description: Assemble the QBR deck from usage, tickets, and account history, with every claim tied to real data.
+publishedAt: 2026-08-19
+icon: ri-slideshow-3-line
+category: Customer Engineering
+collection: Customer health
+featured: false
+order: 23
+difficulty: intermediate
+skills:
+  - name: QBR narrative structure
+    description: Wins, usage story, risks, and the ask, in that order.
+    body: |
+      Build the account story in a fixed order: wins, usage story, risks, then the ask.
+
+      ## Method
+      1. Open with the top 3 wins since the last QBR, each backed by a usage or ticket data point.
+      2. Follow with the usage story: adoption trend since {{last_qbr_date}}.
+      3. State any open risk plainly, without softening language.
+      4. Close with one clear ask for next quarter.
+      5. Keep the section order fixed: wins, usage story, risks, ask — do not reorder per account.
+
+      ## Rules
+      - Follow the fixed order every time: wins, usage story, risks, ask.
+      - A claimed win needs a real data point behind it before it enters the narrative.
+      - State risks directly — no vague language standing in for a real concern.
+      - What counts as a "win" worth including: (set on first run, then stored in memory).
+
+      ## Output
+      A structured narrative with four labeled sections: wins, usage story, risks, next-quarter ask.
+  - name: Value-story grounding
+    description: Tie every claimed win to a real usage or ticket data point.
+    body: |
+      Tie every claimed win or risk to a real usage or ticket data point before it reaches the deck.
+
+      ## Method
+      1. For each claimed win, name the exact PostHog metric or ticket that supports it.
+      2. For each claimed risk, name the exact signal: a usage drop, an unresolved ticket, a sentiment shift.
+      3. Re-check every claim against its source after the narrative is drafted.
+      4. Drop any line with no real number or ticket behind it — do not soften it, remove it.
+      5. Keep the data point visible next to the claim in the narrative draft.
+
+      ## Rules
+      - No claim ships without a named data source: a metric, a ticket ID, or a contract fact.
+      - Drop unsupported claims entirely; never rephrase one to sound more defensible than the data allows.
+      - Prefer a specific number over a general trend description.
+      - Recheck grounding every run — never carry forward a prior quarter's unverified claim.
+
+      ## Output
+      A grounded narrative where every win and risk line has its source data point attached.
+  - name: Presentation builder
+    description: Turn the narrative into a formatted deck with the pptx skill.
+    body: |
+      Turn the validated narrative into a formatted deck using the presentation (pptx) skill.
+
+      ## Method
+      1. Take the validated narrative, wins, usage story, risks, ask, as the deck's content source.
+      2. Structure the deck: title slide, wins, usage story, risks, next-quarter ask.
+      3. Apply the team's standard QBR deck template and branding.
+      4. Keep slide text tied to the same data points cited in the narrative — add no unsourced detail on the slide.
+      5. Save the deck to documents/qbr/{{account}}-{{quarter}}.pptx.
+
+      ## Rules
+      - Never add a claim to a slide that is not already in the validated narrative.
+      - Standard QBR deck template or brand: (set on first run, then stored in memory).
+      - Keep one slide per narrative section — do not compress or drop a section for length.
+      - The deck is a draft for the CSM to review and present, never sent to the customer directly.
+
+      ## Output
+      A .pptx deck at documents/qbr/{{account}}-{{quarter}}.pptx, plus the text narrative it was built from.
+jobs:
+  - name: QBR calendar watch
+    cadence: Every morning on weekdays
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the qbr-pack skill from your skills folder; its first-run
+      answers are in memory.
+      1. Check the calendar for a QBR scheduled two weeks out with no
+         pack built yet.
+      2. Pull the account story, draft the narrative, and drop any claim
+         with no real data point.
+      3. Build the deck and post the summary to the delivery channel.
+      If a required input is missing or a check fails, post what you found
+      and hold — never send the deck to the customer without approval.
+goal: assemble the QBR deck from usage, tickets, and account history and ground every claim in real data
+integrations: [posthog, zendesk, salesforce, slack]
+whatItDoes:
+  - Pulls usage trend, ticket history, and contract facts since the last QBR
+  - Drafts the narrative, top wins, open risks, and the ask
+  - Drops any win not backed by a real usage or ticket data point
+  - Builds the deck and a text narrative, ready for the CSM to review
+howToUse:
+  - Connect PostHog, your support tool, Salesforce, and Slack
+  - Set the trigger to the QBR date on the calendar, or run it manually
+  - Paste the prompt and set what counts as a "win" for your policy
+  - Review the deck and narrative before the customer meeting
+workflow:
+  - kind: trigger
+    title: QBR scheduled on the calendar
+    body: Or a manual kickoff two weeks out.
+  - kind: prompt
+    title: Pull the account story
+    body: Usage trend, ticket history, and value delivered since the last QBR.
+  - kind: prompt
+    title: Draft the narrative
+    body: Wins, risks, and the ask for next quarter.
+  - kind: shell
+    title: Build the deck
+    body: Turn the narrative into slides with the presentation skill.
+  - kind: result
+    title: Deliver for review
+    body: Deck saved to drive, summary posted to Slack.
+prompt: |
+  Build the QBR pack for {{account}}, quarter {{quarter}}.
+
+  1. Pull {{account}}'s usage trend from PostHog, ticket history from
+     {{support_tool}}, and deal/contract facts from {{crm}} since the last
+     QBR ({{last_qbr_date}}).
+  2. Draft the narrative: top 3 wins (with the usage or ticket data behind
+     each), any open risk, and the ask for next quarter.
+  3. Validation: check every claimed win and risk against its source data
+     point. Drop any line that isn't backed by a real number or a real
+     ticket, don't soften it, remove it.
+  4. Build the deck from the narrative using the presentation skill: title,
+     wins, usage story, risks, next-quarter ask.
+  5. Save the deck to `documents/qbr/{{account}}-{{quarter}}.pptx` and a text
+     version of the narrative to `reports/qbr/{{account}}-{{quarter}}.md`.
+  6. Post a summary to {{delivery_channel}}: deck link, top win, top risk,
+     for the CSM to review before the customer meeting.
+
+  Do not send the deck to the customer directly, it is a draft for the CSM
+  to review, adjust tone on, and present themselves.
+---

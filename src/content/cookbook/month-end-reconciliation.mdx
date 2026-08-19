@@ -11,10 +11,84 @@ difficulty: starter
 skills:
   - name: Ledger matching
     description: Match payouts to the ledger line by line
+    body: |
+      Match every payout to exactly one ledger line, or flag it as an exception.
+
+      ## Method
+      1. Pull every payout and charge for the period from Stripe.
+      2. Pull the master ledger for the same period from Google Sheets.
+      3. Build a match key from date, amount, and counterparty or reference ID for each payout.
+      4. Match each payout to the ledger line whose key and amount agree within tolerance.
+      5. Re-check near-misses — same amount with a different date, or same date with a different amount — before ruling out a match.
+      6. Mark any payout with no ledger line, and any ledger line with no payout, as unmatched.
+      7. Pass matched pairs through to posting; pass unmatched items to the exception policy.
+
+      ## Rules
+      - A match requires the reference ID or counterparty to agree, plus amount within tolerance (set on first run, then stored in memory).
+      - Never merge two partial matches to force a tie-out.
+      - Unmatched ledger lines count as exceptions too, not only unmatched payouts.
+      - Treat same-amount, same-counterparty, same-day pairs as possible duplicates, not automatic matches.
+
+      ## Output
+      A matched-pairs list (payout ID, ledger line ID, amount) and an unmatched-items list, each with a one-line reason, handed to the exception policy.
   - name: Exception policy
     description: Apply your approval thresholds
+    body: |
+      Apply the approval thresholds and hold anything that fails a check for sign-off.
+
+      ## Method
+      1. Run every matched and unmatched payout through the checks below.
+      2. Check whether the amount is at or over the approval threshold.
+      3. Check whether an invoice is on file for the payout.
+      4. Check whether the payout looks like a duplicate of another this period.
+      5. Tag each failed item with the check it failed and a one-line reason.
+      6. Hold every failed item from posting; route it to the exceptions email.
+      7. Post only items that passed every check.
+
+      ## Rules
+      - The approval threshold is $1,000 (set on first run, then stored in memory); at or above it always holds for sign-off.
+      - A payout with no matching invoice is always an exception, regardless of amount.
+      - Same amount, same counterparty, same day is flagged as a possible duplicate, never auto-dismissed or auto-merged.
+      - Never post anything that failed a check — surface it for sign-off instead.
+      - Every exception carries a one-line reason; no unexplained flags.
+
+      ## Output
+      An exceptions list (amount, check failed, one-line reason) emailed for sign-off, separate from the entries posted to the ledger.
   - name: Close checklist
     description: Run the steps in order, every time
+    body: |
+      Run the reconciliation steps in the same order, every period, and confirm totals tie out before closing.
+
+      ## Method
+      1. Confirm the period and pull the payouts for it.
+      2. Run ledger matching to produce matched and unmatched lists.
+      3. Run the exception policy checks on the full set.
+      4. Post the clean, matched entries to the ledger.
+      5. Email the exceptions for sign-off.
+      6. Save the reconciliation report to reports/{{period}}-close.md.
+      7. Confirm the report totals tie to the ledger before marking the period closed.
+
+      ## Rules
+      - Steps run in this order every time; never post before matching and checking are complete.
+      - The period stays open until every exception is resolved or explicitly signed off.
+      - A totals mismatch between the report and the ledger blocks close and reopens the exception queue.
+      - Checklist progress is stored so a rerun resumes from where it left off, not from scratch.
+
+      ## Output
+      reports/{{period}}-close.md, containing matched count, exception count, ledger totals, and a close status of open or closed.
+jobs:
+  - name: Month-end close run
+    cadence: The 1st of every month at 7:00 AM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the month-end-reconciliation skill from your skills folder; its
+      first-run answers are in memory.
+      1. Confirm the period to close (the prior calendar month).
+      2. Run the close checklist: pull payouts, match the ledger, apply the
+         exception policy, post the clean entries, save the report.
+      3. Email the exceptions for sign-off.
+      If a required input is missing or a check fails, post what you found
+      and hold — never post anything that failed a check without approval.
 goal: reconcile the month-end close and surface only the exceptions
 integrations: [stripe, googlesheets, gmail]
 whatItDoes:

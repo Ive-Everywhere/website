@@ -44,6 +44,14 @@ const artTitles: Record<string, string> = {
     'A carousel of triggers, a schedule, a Slack message, an email and an API call, each starting an agent run without a person present.',
   'c3-b-audit':
     'A live security stream showing each agent action as it is checked against permissions and written to an audit trail.',
+  'sol-finance':
+    'A month-end close running on its own: payouts pulled from Stripe, ledger rows matched, exceptions emailed for sign-off, and the board pack refreshed.',
+  'sol-sales':
+    'A CRM updating itself after a call: the record enriched, the follow-up drafted, and a quiet deal flagged for a nudge.',
+  'sol-ce':
+    'An incident worked end to end: the alert triaged, the logs searched, a fix drafted as a pull request, and the runbook written.',
+  'sol-people':
+    'A hiring pipeline moving on its own: résumés screened and graded, interviews briefed, and a week-one onboarding plan prepared.',
 };
 
 const artTitle = data.pitch.art
@@ -74,6 +82,11 @@ const artTitle = data.pitch.art
     linkHref={data.pitch.linkHref}
     art={data.pitch.art}
     artTitle={artTitle}
+    artZoom={
+      /* Krishna, 2026-08-19: solutions cards at 0.9× the pillar default; the
+         People card is denser (two registers) and gets 0.85×. */
+      data.pitch.art === 'sol-people' ? 1.105 : data.pitch.art?.startsWith('sol-') ? 1.17 : 1.3
+    }
   />
 
   {/* 3. THREE NUMBERS. Security calls this slot "three statements", same

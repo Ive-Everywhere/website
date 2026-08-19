@@ -1,0 +1,135 @@
+---
+title: Draft the RFP from your past answers
+description: Turn a new RFP into a full draft from your past-response library, validated section by section.
+publishedAt: 2026-08-19
+icon: ri-file-edit-line
+category: Customer Engineering
+collection: Deal support
+featured: false
+order: 21
+difficulty: intermediate
+skills:
+  - name: Past-response library
+    description: Reuse and adapt the closest prior RFP answer per section
+    body: |
+      Reuse the closest prior RFP answer per section so no section starts from a blank page.
+
+      ## Method
+      1. Keep the library indexed by section topic, not by individual RFP.
+      2. For each new section, search the library for the closest topic match from a past deal.
+      3. Adapt the matched answer to the new RFP's exact wording and scope — do not paste it unchanged.
+      4. Cite the past deal the answer came from in an inline note.
+      5. When no close match exists, draft from the policy docs or product docs only, and mark the section "new content."
+      6. After the RFP closes, add any newly written section back to the library under its topic.
+
+      ## Rules
+      - Adapt, never paste verbatim — every reused section must fit the new RFP's exact question.
+      - A section with no library match is marked "new content" and reviewed by a human before it ships.
+      - Index the library by topic, not recency, so the search finds the closest match.
+      - Refresh sections older than (set on first run, then stored in memory) months before reuse.
+
+      ## Output
+      Each section drafted with its source noted: reused-and-adapted, with the past deal cited, or new content flagged for review.
+  - name: Section validation
+    description: Check every drafted section against its library source before it ships
+    body: |
+      Check every drafted section against its cited source before the draft goes to the team.
+
+      ## Method
+      1. Re-read each section after drafting, sentence by sentence.
+      2. Trace each sentence back to its source: a library answer, a policy doc, or a product doc.
+      3. Flag any sentence that makes a claim its cited source does not actually support.
+      4. Flag any sentence carrying no citation at all.
+      5. Leave flagged sentences in place with a visible flag — never silently delete or soften them.
+      6. Summarize flags by section in the delivery post: reused, new, flagged.
+
+      ## Rules
+      - Every sentence in the draft traces to a named source or carries a flag.
+      - Never force-fit a citation to a sentence it does not actually support.
+      - New-content sections always carry at least one review flag, even if well written.
+      - Report flagged sections separately from reused ones so review starts in the right place.
+
+      ## Output
+      A section-by-section validation summary: reused, new, or flagged, with the reason for each flag.
+  - name: Proposal voice
+    description: Match the team's tone and formatting standard
+    body: |
+      Match the team's established tone and formatting standard across every drafted section.
+
+      ## Method
+      1. Read the standard response outline and formatting rules stored in memory.
+      2. Match sentence length, formality, and terminology to the team's past submitted RFPs.
+      3. Use the product's approved feature and plan names — never an internal codename.
+      4. Keep section headers and numbering in the format the RFP itself requests.
+      5. Run a final pass across the full draft to smooth tone gaps between reused and new sections.
+
+      ## Rules
+      - Match the RFP's required structure exactly — section order, numbering, page limits.
+      - Use only approved product and company terminology, never internal shorthand.
+      - Keep reused and newly drafted sections indistinguishable in tone after the final pass.
+      - Log any team style correction as a lasting formatting rule in memory, not a one-off fix.
+
+      ## Output
+      A fully formatted draft in the RFP's required structure, saved to documents/rfps/{{account}}-{{date}}.md.
+jobs:
+  - name: RFP inbox watch
+    cadence: Every 30 minutes on weekdays
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the rfp-first-draft skill from your skills folder; its first-run
+      answers are in memory.
+      1. Check Salesforce opportunities and the drive folder for a new RFP.
+      2. Map its sections to the outline and draft each from the response
+         library, validating every section against its cited source.
+      3. Save the draft and post the section summary to the delivery channel.
+      If a required input is missing or a check fails, post what you found
+      and hold — never submit the response to the prospect without approval.
+goal: draft an RFP response from the past-response library and validate every section before it goes to the team
+integrations: [drive, notion, salesforce, slack]
+whatItDoes:
+  - Maps the new RFP's sections to your standard response outline
+  - Drafts each section from the closest past answer in the library
+  - Flags any sentence not backed by the library or a named source
+  - Marks brand-new sections for human review before the draft ships
+howToUse:
+  - Connect Drive, Notion, Salesforce, and Slack to the agent
+  - Set the trigger, a new RFP logged against an opportunity or dropped in Drive
+  - Paste the prompt and adjust the standard response outline for your team
+  - It answers its first-run questions once and remembers; you review new and flagged sections
+workflow:
+  - kind: trigger
+    title: New RFP received
+    body: Logged against a Salesforce opportunity or dropped in the drive folder.
+  - kind: prompt
+    title: Outline the sections
+    body: Match the RFP's structure to the standard response outline.
+  - kind: prompt
+    title: Draft from the library
+    body: Pull the closest past answer per section, adapt to this RFP.
+  - kind: prompt
+    title: Validate per section
+    body: Check every section against its library source and flag unsupported claims.
+  - kind: result
+    title: Deliver the draft
+    body: Full draft saved to drive, section-by-section flags posted to Slack.
+prompt: |
+  Draft the RFP response for {{account}}.
+
+  1. Read {{rfp_file}} and map its sections to the standard response outline
+     stored in memory.
+  2. For each section, search {{response_library}} for the closest past
+     answer to a similar RFP. Draft an adapted response and cite the past
+     deal it came from.
+  3. For any section with no close match, draft from {{policy_docs}} or
+     {{product_docs}} only, and mark it "new content" so a human reviews it
+     first.
+  4. Re-read every drafted section against its cited source. Flag any
+     sentence that isn't backed by the library or a named source doc.
+  5. Compile the draft in the RFP's required format and save it to
+     documents/rfps/{{account}}-{{date}}.md.
+  6. Post a section-by-section summary to {{delivery_channel}}: sections
+     reused, sections new, sections flagged for review.
+
+  Never submit the response to the prospect or the RFP portal — it is a
+  draft for the proposal lead to review, edit, and submit.
+---

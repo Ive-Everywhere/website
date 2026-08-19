@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* wf4's spend-panel bones: uniform rows, avatar mark, one bar system, mono
+     lane on the right. Bars = scorecard fit; the one amber row = the
+     borderline candidate flagged for a human look. */
+  :root { --amber: #b8792e; }
+  .cost-row { display: flex; align-items: center; gap: 20px; height: 104px; flex: none; padding: 0 30px; border-bottom: 1px solid var(--hair); }
+  .cost-row:last-child { border-bottom: 0; }
+  .cost-av { width: 46px; height: 46px; border-radius: 50%; overflow: hidden; flex: none; }
+  .cost-av img { width: 100%; height: 100%; display: block; }
+  .cost-name { width: 150px; flex: none; font-size: 25px; font-weight: 450; letter-spacing: -.008em; color: var(--ink); }
+  .cost-bar { position: relative; flex: 1; height: 10px; border-radius: 999px; background: var(--tint); }
+  .cost-bar__fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--maroon); }
+  .cost-bar__fill--warn { background: var(--amber); }
+  .cost-bar__tick { position: absolute; top: -5px; bottom: -5px; width: 2px; border-radius: 1px; background: #cfccc4; }
+  .cost-val { width: 96px; flex: none; text-align: right; font-family: var(--mono); font-weight: 450; font-size: 23px; color: var(--ink); }
+  .cost-val--warn { color: var(--amber); }
+</style>
+</head><body>
+<!-- TEXT-ONLY variant of agents/wf4-cost.html: résumés graded against the
+     scorecard. The tick = the interview bar; one amber = borderline. -->
+<div class="stage cv-blue">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></span>
+      <span class="hd__t">Screening · 62 read</span>
+      <span class="hd__r"><span class="pill">graded on the scorecard</span></span>
+    </div>
+    <div class="list">
+      <div class="cost-row">
+        <span class="cost-av"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt=""></span>
+        <span class="cost-name">Sofia</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill" style="width:92%"></span>
+          <span class="cost-bar__tick" style="left:75%"></span>
+        </span>
+        <span class="cost-val">92</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-av"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt=""></span>
+        <span class="cost-name">Daniel</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill" style="width:88%"></span>
+          <span class="cost-bar__tick" style="left:75%"></span>
+        </span>
+        <span class="cost-val">88</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-av"><img src="https://randomuser.me/api/portraits/men/75.jpg" alt=""></span>
+        <span class="cost-name">James</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill cost-bar__fill--warn" style="width:74%"></span>
+          <span class="cost-bar__tick" style="left:75%"></span>
+        </span>
+        <span class="cost-val cost-val--warn">74</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-av"><img src="https://randomuser.me/api/portraits/men/41.jpg" alt=""></span>
+        <span class="cost-name">Tom</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill" style="width:58%"></span>
+          <span class="cost-bar__tick" style="left:75%"></span>
+        </span>
+        <span class="cost-val">58</span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

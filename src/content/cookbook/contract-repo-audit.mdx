@@ -1,0 +1,125 @@
+---
+title: Index every signed contract, verified
+description: Sweep the whole contract drive, index every key term, and verify a random sample with a second pass.
+publishedAt: 2026-08-19
+icon: ri-archive-drawer-line
+category: Legal
+collection: Contract lifecycle
+featured: false
+order: 45
+difficulty: advanced
+skills:
+  - name: Key-term extraction
+    description: Parties, dates, value, governing law, and renewal terms
+    body: |
+      Pull the standard key terms from any contract in the repository, consistently across file types.
+
+      ## Method
+      1. Take the parsed full text of a contract from the document-parsing skill.
+      2. Identify the parties, effective date, term length, contract value, governing law, and renewal/notice terms.
+      3. Extract each field as its literal text plus a normalized value, for example a date in ISO format.
+      4. Where a field is genuinely absent from the contract, record it as not-found, not a blank.
+      5. Link every extracted field back to the source page or clause it came from.
+      6. Add any org-specific fields beyond the default six to the same row.
+
+      ## Rules
+      - Extract only what the contract text states; never infer a term from a template default.
+      - Not-found is a distinct value from an empty extraction error — never conflate the two.
+      - Fields beyond the default six that matter for this org's index (set on first run, then stored in memory).
+      - Every field must carry a source-page reference for the index to be auditable.
+
+      ## Output
+      One row per contract: parties, effective date, term, value, governing law, renewal terms, plus a source-file link for each field.
+  - name: Document parsing
+    description: Bulk read Word and PDF contracts across a drive (Anthropic docx/pdf skill)
+    body: |
+      Bulk-read every Word and PDF contract across the drive into extractable full text.
+
+      ## Method
+      1. Sweep {{drive_root}} and list every contract file, docx and PDF.
+      2. Convert each file to full text, preserving page numbers for later citation.
+      3. Skip and log any file that fails to parse, corrupted, password-protected, or image-only, rather than silently omitting it.
+      4. Batch the sweep so a large repository completes without manual chunking.
+      5. Hand each contract's text to the key-term-extraction skill.
+
+      ## Rules
+      - A failed parse is logged and reported, never dropped silently from the index.
+      - Page-level references are preserved so every extracted field can be traced back.
+      - Drive folders in scope for the sweep (set on first run, then stored in memory).
+      - Long runs are expected — this is a one-off bulk sweep, not a per-file interactive job.
+
+      ## Output
+      Full text per contract file, with page references, plus a parse-failure log for files the sweep could not read.
+  - name: Sample verification
+    description: Re-extract a random subset and compare to certify accuracy
+    body: |
+      Independently re-extract a random sample of contracts and certify the index's accuracy before publishing.
+
+      ## Method
+      1. Randomly select {{sample_pct}}% of indexed contracts, without weighting toward any type.
+      2. Re-extract key terms for the sample with no access to the first pass's output.
+      3. Compare the two extractions field by field for each sampled contract.
+      4. Where both passes agree, mark the contract verified-by-sample.
+      5. Where they disagree, mark the contract disagreement-flagged rather than silently picking one value.
+      6. Compute the agreement rate across the sample and log it for trend tracking.
+
+      ## Rules
+      - The re-extraction pass must have no visibility into the first pass's results.
+      - Disagreements are flagged, never resolved automatically by picking either pass.
+      - Default sample percentage (set on first run, then stored in memory; suggest 10%).
+      - A declining agreement rate across runs signals the extraction skill needs review, not the sample size.
+
+      ## Output
+      A verification status per sampled contract, verified-by-sample or disagreement-flagged, plus an overall agreement-rate figure for the run summary.
+jobs: []
+goal: index every contract in the repository and verify a random sample before publishing
+integrations: [drive, googlesheets, slack]
+whatItDoes:
+  - Sweeps the whole drive and parses every contract on file
+  - Extracts parties, dates, value, governing law, and renewal terms
+  - Independently re-extracts a random sample and flags any disagreement, unverified
+  - Publishes a searchable index with a confidence state per contract
+howToUse:
+  - Connect Drive, your tracker sheet, and Slack to the agent
+  - Kick it off manually; it's a one-off, not a daily job
+  - Paste the prompt and set your sample percentage and drive scope
+  - Review the flagged and disagreement contracts before anyone treats them as certified
+workflow:
+  - kind: trigger
+    title: One-off audit
+    body: Manual kickoff, long cloud run.
+  - kind: shell
+    title: Bulk parse every contract
+    body: Extract text from every docx/PDF in the drive with Anthropic's document skill.
+  - kind: prompt
+    title: Extract key terms
+    body: Parties, effective date, term, value, governing law, and renewal terms per contract.
+  - kind: prompt
+    title: Verify a random sample
+    body: A second, independent pass re-extracts terms for the sample percentage and compares against the first pass.
+  - kind: result
+    title: Publish the index
+    body: Searchable index view goes live; any contract that failed verification is flagged, not published silently.
+prompt: |
+  Audit the contract repository. This is a one-off run and may take hours in
+  the cloud if the repository is large.
+
+  1. Sweep {{drive_root}} for every contract file and parse each with the
+     document skill into full text.
+  2. Extract key terms per contract: parties, effective date, term length,
+     contract value, governing law, and renewal/notice terms.
+  3. Build the full index: one row per contract, all extracted fields, with a
+     link to the source file.
+  4. Randomly select {{sample_pct}}% of contracts and re-extract their terms
+     independently, with no access to the first pass's output. Compare the two
+     extractions; mark any contract where the passes disagree as unverified
+     rather than silently correcting it.
+  5. Publish the index view with every contract's status: verified-by-sample,
+     unverified (not sampled), or disagreement-flagged.
+  6. Post a summary to {{delivery_channel}}: total contracts indexed, sample
+     size, agreement rate, and the list of flagged contracts for manual review.
+
+  Never treat an unsampled contract's index entry as certified. The index
+  states its own confidence level per contract; only human review upgrades a
+  flagged entry.
+---
