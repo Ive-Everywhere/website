@@ -11,10 +11,60 @@ difficulty: intermediate
 skills:
   - name: ICP fit scoring
     description: Score companies 0-100 against the stored ICP definition.
+    body: |
+      Score every candidate company 0-100 against the stored ICP definition for the segment.
+
+      ## Method
+      1. Read the segment's ICP definition from memory: industry, size, signals.
+      2. For each candidate company remaining after the CRM diff, check it against each ICP criterion.
+      3. Score the company 0-100 based on how many criteria it matches and how strongly.
+      4. Bucket each scored company into act-now, nurture, or long-term based on its score.
+      5. Write a one-line reason for the score, citing the specific criteria matched.
+
+      ## Rules
+      - The ICP definition (industry, size, signals) is set on first run per segment, then stored in memory and reused every refresh.
+      - A score without a stated reason never publishes — every company needs its one-line justification.
+      - The score thresholds for act-now / nurture / long-term buckets are set on first run, then stored in memory.
+
+      ## Output
+      A scored list: company, 0-100 score, bucket, one-line reason — ready for CRM diff's final safety pass.
   - name: CRM diff
     description: Remove accounts already owned, in-flight, or inside the cooldown window.
+    body: |
+      Remove any candidate company already owned, in an active deal, or inside the closed-lost cooldown window.
+
+      ## Method
+      1. Pull every account currently in the CRM.
+      2. Remove candidates that match an owned account, an account in an active deal, or an account closed-lost within the cooldown window.
+      3. Re-run this check a second time on the top 20 act-now accounts immediately before publishing.
+      4. If any account changed status mid-run (became active), remove it at this second pass even if it scored well.
+
+      ## Rules
+      - The cooldown period after closed-lost, before an account is eligible again, is set on first run, then stored in memory.
+      - The top 20 act-now accounts always get a second, fresh CRM check right before publishing — no exceptions.
+      - Never publish a candidate still inside its cooldown window, regardless of ICP score.
+
+      ## Output
+      The candidate list with owned, active, and cooldown accounts removed — true whitespace only — flowing into ICP fit scoring.
   - name: TAM sourcing
     description: Build the candidate list for a segment from public sources.
+    body: |
+      Build the initial candidate company list for a segment from public sources.
+
+      ## Method
+      1. Read the segment's ICP definition (industry, size, signals) from memory.
+      2. Search public sources — company directories, news, funding databases — for companies matching those criteria.
+      3. Record each candidate with the specific criteria it appears to match.
+      4. Deduplicate the list before handing it to CRM diff.
+      5. Note the source for each candidate's inclusion, so a later reviewer can trace why it's on the list.
+
+      ## Rules
+      - Only include a company if it matches at least one concrete ICP signal, not a vague industry guess.
+      - Every candidate carries a note on why it was included, tied to a specific ICP criterion.
+      - Never source from a paywalled or unverifiable list without recording where it came from.
+
+      ## Output
+      A deduplicated candidate company list with per-company inclusion notes, handed to CRM diff before scoring.
 goal: build a scored whitespace list for a new segment and keep it current
 integrations: [hubspot, googlesheets, slack]
 whatItDoes:

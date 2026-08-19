@@ -11,10 +11,66 @@ difficulty: intermediate
 skills:
   - name: NDA policy
     description: The organization's standard terms and acceptable variance per clause
+    body: |
+      Check each NDA clause against the org's standard terms and acceptable variance. Never approve a near-miss.
+
+      ## Method
+      1. Load the NDA policy from memory: term length, mutual vs. one-way default, governing law, and the confidential-information definition.
+      2. Parse the incoming NDA into clauses using the document-parsing skill.
+      3. Compare each clause's exact wording to the corresponding policy line, not a general impression of similarity.
+      4. Mark each clause within-policy or deviation, citing the specific policy line used.
+      5. Re-read every within-policy clause a second time against the exact policy wording before finalizing.
+      6. Treat any near-miss, such as a term length one month over, as a deviation.
+
+      ## Rules
+      - Decide a deviation against the exact policy wording, never a rough approximation.
+      - Near-misses are deviations, not passes — no informal tolerance beyond the stored variance.
+      - Acceptable variance per clause is defined once (set on first run, then stored in memory).
+      - Counterparties that always escalate regardless of terms are checked first (set on first run, then stored in memory).
+
+      ## Output
+      A clause list, each marked within-policy or deviation, with the policy line cited per clause — feeding directly into the checklist-formatting skill.
   - name: Document parsing
     description: Read the incoming NDA in Word form with Anthropic's docx skill
+    body: |
+      Extract clause-level text from the incoming NDA in Word form for the policy check.
+
+      ## Method
+      1. Fetch the NDA at {{contract_path}} from Drive or the email attachment.
+      2. Convert the docx into a clause-by-clause structure, keeping section headings and numbering intact.
+      3. Identify the term-length, mutuality, governing-law, and confidentiality-definition clauses specifically, since the policy check depends on locating them.
+      4. Flag any NDA that isn't a standard docx, a scanned image or unusual template, rather than guessing at its structure.
+      5. Hand the structured clauses to the NDA-policy skill for comparison.
+
+      ## Rules
+      - Never infer clause meaning from surrounding text if the clause itself is ambiguous — flag it instead.
+      - Preserve the original clause numbering in every output reference, so the checklist can cite it precisely.
+      - Non-standard formats are flagged for manual read, not force-parsed.
+      - Supported source formats beyond docx, such as scanned PDFs (set on first run, then stored in memory).
+
+      ## Output
+      A clause-by-clause structure with each clause's number, heading, and text, ready for policy comparison.
   - name: Checklist formatting
     description: Clause-by-clause pass/deviation record attached to every recommendation
+    body: |
+      Produce a consistent clause-by-clause pass/deviation record attached to every NDA recommendation.
+
+      ## Method
+      1. Take the within-policy/deviation list from the NDA-policy skill.
+      2. List every clause in document order, not grouped by outcome.
+      3. For each clause, show the policy line it was checked against, and the call.
+      4. For deviations, state the specific gap between the clause and policy in one line.
+      5. Roll up to a single recommendation: recommend-approval if every clause passed, escalated if any deviated.
+      6. Attach the full checklist to the recommendation, deviations listed first if escalated.
+
+      ## Rules
+      - Every clause in the NDA appears in the checklist, not just the deviations.
+      - The recommendation label is derived only from the checklist, never asserted independently.
+      - Checklist format stays identical across every NDA so reviewers can scan it quickly.
+      - "Recommend approval" is a suggestion, never a signature — {{reviewer}} always countersigns.
+
+      ## Output
+      A checklist document, one row per clause with pass/deviation and policy citation, headed by a recommend-approval or escalated label.
 goal: check an incoming NDA against standard terms and recommend approval with a clause-by-clause checklist
 integrations: [drive, gmail, slack]
 whatItDoes:

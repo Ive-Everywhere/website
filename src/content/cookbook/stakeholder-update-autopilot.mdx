@@ -11,10 +11,67 @@ difficulty: intermediate
 skills:
   - name: SCQA structure
     description: Situation, Complication, Question, Answer, in that order, every time.
+    body: |
+      Assemble the weekly update in fixed Situation, Complication, Question, Answer order, every time.
+
+      ## Method
+      1. Write Situation: the factual state of {{team}}/{{project}} right now, drawn from this week's real linear and posthog data.
+      2. Write Complication: what changed since last week — a slip, a blocker, a metric move — stated plainly, not softened.
+      3. Write Question: the one question the complication raises for the reader (e.g. "does this change the launch date?").
+      4. Write Answer: what the team is doing about it, or the decision already made.
+      5. Keep each section to a few sentences; this is a status update, not a narrative essay.
+      6. Re-read the four sections in order and confirm each answers only its own question, with no overlap.
+
+      ## Rules
+      - Sections always appear in Situation, Complication, Question, Answer order — never reordered or merged.
+      - Complication only includes real state changes (linear or posthog); it does not include speculation about what might happen.
+      - Answer states an actual decision or next step, not a vague "we're looking into it."
+      - If there is no real complication this week, say so plainly rather than inventing one to fill the section.
+
+      ## Output
+      A four-section update (Situation, Complication, Question, Answer), each grounded in this week's real linear and posthog data.
   - name: Zero-input assembly
     description: Build entirely from Linear/PostHog state changes and memory; never wait on manual input.
+    body: |
+      Build the weekly update entirely from linear, posthog, and memory — never wait on manual PM input.
+
+      ## Method
+      1. Pull every linear issue in {{team}}/{{project}} that changed state since last Friday.
+      2. Pull posthog trend data for {{key_metrics}} versus target and versus last week.
+      3. Pull any decisions or risks the PM logged in memory during the week.
+      4. Build the full update from these three sources alone — do not pause the run to ask the PM for input.
+      5. If a needed data source is unreachable, note the gap explicitly in the update rather than skipping it silently.
+      6. Deliver on schedule (Friday, 3:00 PM) whether or not the PM has engaged with the draft first.
+
+      ## Rules
+      - The update runs and delivers even if the PM says nothing all week — silence is not a reason to skip the job.
+      - Every claim in the update must trace to a linear state change, a posthog number, or a logged memory entry — no manual additions mid-run.
+      - A missing or unreachable source is disclosed in the update, never silently omitted.
+      - The PM can review before it posts, but the assembly itself never depends on that review happening.
+
+      ## Output
+      A complete SCQA update assembled from linear, posthog, and memory alone, delivered on schedule with no manual input step.
   - name: Quiet-week honesty
     description: A week with no real movement gets the short variant, never padded.
+    body: |
+      Give a week with no real movement the short honest variant, never padded to look busy.
+
+      ## Method
+      1. After assembling the week's linear and posthog data, check whether anything meaningfully changed: a ship, a slip, a metric move past the noise threshold.
+      2. If real movement exists, deliver the full four-section SCQA update.
+      3. If nothing meaningfully moved, switch to the short variant: a few lines stating the week was quiet, plus anything genuinely still in flight.
+      4. Do not fill a quiet week with routine activity (in-progress tickets with no state change, metrics within normal range) dressed up as news.
+      5. Confirm the "quiet" threshold against the definition set on first run, then stored in memory — not a personal judgment call each week.
+      6. Deliver the short variant on the same schedule as the full one; a quiet week is not a reason to skip delivery.
+
+      ## Rules
+      - A quiet week always gets the short variant — padding it to look busy is a hard no.
+      - The quiet-week threshold is defined once (set on first run, then stored in memory) and applied consistently.
+      - The short variant still posts on schedule; it is shorter, not skipped.
+      - Routine, unchanged activity never counts as a Complication just to fill the section.
+
+      ## Output
+      Either a full SCQA update or a short honest variant (a few lines), chosen by the stored quiet-week threshold, both delivered on schedule.
 goal: assemble the weekly SCQA stakeholder update from Linear and PostHog with zero user input
 integrations: [linear, posthog, slack]
 whatItDoes:

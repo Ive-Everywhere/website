@@ -11,10 +11,95 @@ difficulty: advanced
 skills:
   - name: Invoice field schema
     description: The exact fields every invoice must yield, vendor, amount, date, PO, line items
+    body: |
+      Define the exact fields every invoice extraction must produce, so both
+      passes and the ledger post agree on structure.
+
+      ## Method
+      1. List the required fields: vendor name, invoice amount, invoice
+         date, PO number, line items (description, quantity, unit price).
+      2. Specify the expected type and format for each field (currency, ISO
+         date, string).
+      3. Mark which fields are required versus optional per invoice type.
+      4. Reject any extraction pass missing a required field — do not fill
+         it with a guess.
+      5. Version the schema so a schema change doesn't silently break past
+         comparisons.
+
+      ## Rules
+      - Every field a downstream step depends on (amount, PO number) is
+        required, not optional.
+      - Never invent a value for a missing required field — flag the
+        invoice as incomplete instead.
+      - Field list and formats (set on first run, then stored in memory).
+      - Normalize currency and date formats before any comparison; never
+        compare raw, unformatted text.
+
+      ## Output
+      A field spec — `{vendor, amount, date, po_number, line_items[]}` —
+      that every extraction pass and the ledger post conform to.
   - name: Dual-pass reconciliation
     description: Compare two independent extractions and isolate disagreeing fields
+    body: |
+      Accept a value only when two independent extraction passes agree on
+      it, field by field.
+
+      ## Method
+      1. Run two extraction sub-agents against the same parsed invoice text,
+         each without seeing the other's output.
+      2. Compare the two passes field by field against the invoice field
+         schema.
+      3. Where both passes agree exactly, after normalizing format, accept
+         the value.
+      4. Where the passes disagree on any field, do not guess or average —
+         flag that field as a mismatch.
+      5. Roll mismatched fields up to an invoice-level status; a clean
+         invoice has zero mismatched fields.
+      6. Build the mismatch queue entry: field name, pass-1 value, pass-2
+         value, side by side.
+
+      ## Rules
+      - Never accept a value when the two passes disagree — hold it, do not
+        pick one arbitrarily.
+      - Never post an invoice to the ledger on a single unreconciled pass.
+      - Run the two passes independently; one must not see the other's
+        extraction before finishing.
+      - Field-normalization rules for the comparison, currency and date
+        format (set on first run, then stored in memory).
+
+      ## Output
+      A result per invoice: accepted `{field: value}` pairs, plus a
+      mismatch list `{field, pass_1_value, pass_2_value}`, queued to
+      `{{review_channel}}` when non-empty.
   - name: PO matching
     description: Match a reconciled invoice to its purchase order and flag quantity or price gaps
+    body: |
+      Match a fully-reconciled invoice against its open purchase order and
+      flag any quantity or price gap.
+
+      ## Method
+      1. Take only invoices with zero mismatches from the reconciliation
+         step.
+      2. Look up the PO number in `{{ledger_sheet}}` and pull its quantity,
+         price, and vendor.
+      3. Recompute the invoice total from its line items independently,
+         rather than trusting the invoice's stated total.
+      4. Compare quantity and price against the PO's figures.
+      5. Flag any variance outside `{{tolerance_pct}}` as a PO gap.
+      6. Confirm the vendor name matches exactly, not fuzzily.
+
+      ## Rules
+      - Never post an invoice whose recomputed total doesn't tie to the
+        invoice's stated total — hold it instead.
+      - Never approve a PO variance yourself — queue every gap for
+        sign-off.
+      - PO-match tolerance (set on first run, then stored in memory).
+      - A vendor-name mismatch always fails the match, even when amount and
+        quantity agree.
+
+      ## Output
+      A match result per invoice: `{matched: true/false, variance_pct,
+      gap_reason}`, feeding the post-or-queue decision.
 goal: extract every invoice with two independent passes and post only what reconciles clean
 integrations: [gmail, drive, googlesheets, slack]
 whatItDoes:

@@ -11,10 +11,68 @@ difficulty: intermediate
 skills:
   - name: Coverage splitting
     description: Assign scorecard competencies across the panel with no gaps or overlap
+    body: |
+      Assign every scorecard competency to exactly one interviewer before any packet goes out.
+
+      ## Method
+      1. Pull the scorecard for the role from the agent's drive.
+      2. List every competency the scorecard defines.
+      3. Pull the confirmed panel for this loop from {{calendar}}.
+      4. Assign each competency to exactly one panelist, matched to their strength or past assignment pattern.
+      5. Check the assignment for gaps (an unassigned competency) or overlap (two owners for one competency).
+      6. If a gap or overlap exists, hold the packets and flag it instead of sending an incomplete split.
+      7. Save the finalized split as this loop's assignment record.
+
+      ## Rules
+      - Every competency gets exactly one owner — no gaps, no overlap, no exceptions.
+      - Reuse the standing competency-split-by-panel-size pattern in memory when the panel size matches a past loop (set on first run, then stored in memory).
+      - Never send packets while any competency is unassigned.
+      - Update the standing split pattern in memory when a new panel size is seen.
+
+      ## Output
+      An assignment table: one row per competency, mapped to its one interviewer, confirmed gap-free before packets go out.
   - name: Interviewer packet format
     description: Résumé, focus area, and suggested questions per interviewer
+    body: |
+      Give each interviewer exactly what they need to run their slot, and nothing they don't.
+
+      ## Method
+      1. Pull the candidate's résumé and the interviewer's assigned focus area from the coverage split.
+      2. Draft 2-3 suggested questions targeted at that focus area's competency.
+      3. Assemble the packet as one page: résumé, focus area, and the suggested questions.
+      4. Confirm the packet references only this interviewer's assigned competency, not the full scorecard.
+      5. Send the packet to the interviewer {{packet_lead_time}} before their slot.
+      6. Log the send time per interviewer for the debrief-chasing step to reference.
+
+      ## Rules
+      - Keep each packet to one page — focus area and questions only, no full candidate file.
+      - Default lead time is {{packet_lead_time}} before the slot (set on first run, then stored in memory).
+      - Never send a packet before the coverage split confirms it is gap-free.
+      - Keep packets inside the hiring team's channel — never post candidate material broadly.
+
+      ## Output
+      One packet per interviewer: candidate résumé, their assigned focus area, and 2-3 suggested questions, sent ahead of their slot.
   - name: Debrief rollup
     description: Combine panel scores into one scorecard with the gaps flagged
+    body: |
+      Turn scattered panel scores into one scorecard, with any missing piece called out.
+
+      ## Method
+      1. After each slot, check whether that panelist's scorecard is logged.
+      2. If not logged within {{debrief_deadline_hours}} hours, chase that panelist directly.
+      3. Once all scores are in, pull them into one combined scorecard, grouped by competency.
+      4. Flag any competency where the score is missing, contradictory, or borderline.
+      5. Summarize the panel's overall read in two or three lines, without recommending a decision.
+      6. Post the rolled-up scorecard to {{delivery_channel}} for the hiring manager.
+
+      ## Rules
+      - Chase a panelist only after {{debrief_deadline_hours}} hours (set on first run, then stored in memory) — not before.
+      - Roll up scores exactly as submitted — never adjust or average away a panelist's rating.
+      - Flag gaps and contradictions explicitly; do not smooth them into a single number.
+      - Never recommend advance or reject — the hiring manager makes that call, not the rollup.
+
+      ## Output
+      A combined scorecard: one row per competency with each panelist's score, flagged gaps, and a short overall summary.
 goal: prep a focus-area packet per interviewer and roll up the debrief scores after the loop
 integrations: [notion, googlecalendar, gmail, slack]
 whatItDoes:

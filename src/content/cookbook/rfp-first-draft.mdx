@@ -11,10 +11,66 @@ difficulty: intermediate
 skills:
   - name: Past-response library
     description: Reuse and adapt the closest prior RFP answer per section
+    body: |
+      Reuse the closest prior RFP answer per section so no section starts from a blank page.
+
+      ## Method
+      1. Keep the library indexed by section topic, not by individual RFP.
+      2. For each new section, search the library for the closest topic match from a past deal.
+      3. Adapt the matched answer to the new RFP's exact wording and scope — do not paste it unchanged.
+      4. Cite the past deal the answer came from in an inline note.
+      5. When no close match exists, draft from the policy docs or product docs only, and mark the section "new content."
+      6. After the RFP closes, add any newly written section back to the library under its topic.
+
+      ## Rules
+      - Adapt, never paste verbatim — every reused section must fit the new RFP's exact question.
+      - A section with no library match is marked "new content" and reviewed by a human before it ships.
+      - Index the library by topic, not recency, so the search finds the closest match.
+      - Refresh sections older than (set on first run, then stored in memory) months before reuse.
+
+      ## Output
+      Each section drafted with its source noted: reused-and-adapted, with the past deal cited, or new content flagged for review.
   - name: Section validation
     description: Check every drafted section against its library source before it ships
+    body: |
+      Check every drafted section against its cited source before the draft goes to the team.
+
+      ## Method
+      1. Re-read each section after drafting, sentence by sentence.
+      2. Trace each sentence back to its source: a library answer, a policy doc, or a product doc.
+      3. Flag any sentence that makes a claim its cited source does not actually support.
+      4. Flag any sentence carrying no citation at all.
+      5. Leave flagged sentences in place with a visible flag — never silently delete or soften them.
+      6. Summarize flags by section in the delivery post: reused, new, flagged.
+
+      ## Rules
+      - Every sentence in the draft traces to a named source or carries a flag.
+      - Never force-fit a citation to a sentence it does not actually support.
+      - New-content sections always carry at least one review flag, even if well written.
+      - Report flagged sections separately from reused ones so review starts in the right place.
+
+      ## Output
+      A section-by-section validation summary: reused, new, or flagged, with the reason for each flag.
   - name: Proposal voice
     description: Match the team's tone and formatting standard
+    body: |
+      Match the team's established tone and formatting standard across every drafted section.
+
+      ## Method
+      1. Read the standard response outline and formatting rules stored in memory.
+      2. Match sentence length, formality, and terminology to the team's past submitted RFPs.
+      3. Use the product's approved feature and plan names — never an internal codename.
+      4. Keep section headers and numbering in the format the RFP itself requests.
+      5. Run a final pass across the full draft to smooth tone gaps between reused and new sections.
+
+      ## Rules
+      - Match the RFP's required structure exactly — section order, numbering, page limits.
+      - Use only approved product and company terminology, never internal shorthand.
+      - Keep reused and newly drafted sections indistinguishable in tone after the final pass.
+      - Log any team style correction as a lasting formatting rule in memory, not a one-off fix.
+
+      ## Output
+      A fully formatted draft in the RFP's required structure, saved to documents/rfps/{{account}}-{{date}}.md.
 goal: draft an RFP response from the past-response library and validate every section before it goes to the team
 integrations: [drive, notion, salesforce, slack]
 whatItDoes:

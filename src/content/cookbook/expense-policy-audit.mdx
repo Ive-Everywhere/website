@@ -11,10 +11,94 @@ difficulty: starter
 skills:
   - name: Expense policy reader
     description: Apply the written policy line by line, citing the clause for every call
+    body: |
+      Apply the written expense policy line by line, citing the exact
+      clause behind every approve or flag decision.
+
+      ## Method
+      1. Re-read `{{policy_doc}}` fresh each run, not a cached summary, so
+         policy updates take effect immediately.
+      2. For each expense line, identify the policy clause that governs its
+         category and amount.
+      3. Compare the line's amount and category against that clause's limit
+         and conditions.
+      4. Record the clause reference alongside the decision, not just the
+         decision itself.
+      5. If no clause clearly applies, do not approve by default — route to
+         ambiguity escalation instead.
+
+      ## Rules
+      - Never approve a line without a cited policy clause attached to the
+        decision.
+      - Never issue or authorize reimbursement — approval marks the line
+        ready for payment sign-off, nothing more.
+      - Approval limit above which a line always escalates regardless of
+        policy fit (set on first run, then stored in memory).
+      - Re-read the policy document every run; never rely on a memorized
+        version from a prior run.
+
+      ## Output
+      A decision per line: `{line_id, decision, policy_clause, reasoning}`.
   - name: Ambiguity escalation
     description: When policy language doesn't clearly cover a line, escalate rather than guess
+    body: |
+      Escalate any expense line the written policy doesn't clearly cover,
+      instead of guessing.
+
+      ## Method
+      1. Take lines where the policy reader found no clearly applicable
+         clause.
+      2. Check whether the ambiguity is about category, amount, or missing
+         context.
+      3. Draft a short note describing exactly what's ambiguous and which
+         clauses were considered.
+      4. Route the line to the exception queue with that note attached;
+         never auto-approve it.
+      5. Track recurring ambiguity types over time so gaps in the written
+         policy surface.
+
+      ## Rules
+      - Never resolve an ambiguous line by inferring intent — escalate
+        every time, no exceptions.
+      - Never treat silence in the policy as implicit approval.
+      - What counts as "clearly covered" versus ambiguous (set on first
+        run, then stored in memory).
+      - Log every escalation reason so recurring policy gaps become
+        visible to the controller.
+
+      ## Output
+      An escalation entry per line: `{line_id, ambiguity_reason,
+      clauses_considered}`, added to the exception queue.
   - name: Receipt-to-claim match
     description: Confirm the receipt in Drive actually supports the claimed amount and vendor
+    body: |
+      Confirm the receipt in Drive actually supports the claimed vendor,
+      amount, and date before any approval.
+
+      ## Method
+      1. Locate the receipt file in `{{drive_folder}}` linked to the
+         expense line.
+      2. Extract vendor, amount, and date from the receipt image or PDF.
+      3. Compare each field exactly against the claimed value in
+         `{{expense_sheet}}`, recomputing the comparison independently
+         rather than trusting a prior match flag.
+      4. Treat any mismatch, however small, as a failed match.
+      5. If no receipt is found, treat the line as unmatched, not as a
+         pass.
+
+      ## Rules
+      - Never approve a line where the receipt amount, vendor, or date
+        differs from the claim, even slightly.
+      - A missing or unreadable receipt always fails the match — never
+        assume it would have matched.
+      - Acceptable rounding tolerance for amount matching, if any (set on
+        first run, then stored in memory).
+      - Never edit the claimed amount to match the receipt — flag the
+        discrepancy instead.
+
+      ## Output
+      A match result per line: `{line_id, receipt_found, matched,
+      mismatch_fields}`.
 goal: check every expense line against policy and queue only the genuine exceptions
 integrations: [googlesheets, gmail, drive, slack]
 whatItDoes:

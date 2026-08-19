@@ -11,10 +11,62 @@ difficulty: intermediate
 skills:
   - name: Forecast rollup
     description: Aggregate by rep, stage, and commit category
+    body: |
+      Aggregate every open deal into one forecast total by rep, stage, and commit category.
+
+      ## Method
+      1. Pull every open deal from the CRM.
+      2. Group deals by rep, then by stage, then by commit category: commit, best-case, pipeline.
+      3. Sum deal value within each group to build the rollup totals.
+      4. Cross-check the rollup total against a fresh CRM export a second time before publishing.
+      5. If the two totals don't tie out exactly, hold the run and flag the mismatch instead of publishing.
+
+      ## Rules
+      - The CRM field that marks commit category is set on first run, then stored in memory.
+      - The rollup total must tie out exactly against a second, independent CRM pull — no approximate match.
+      - Never publish a rollup that failed its tie-out check; flag the mismatch and hold instead.
+
+      ## Output
+      A rollup table — rep, stage, commit category, dollar total — written into the weekly-forecast view.
   - name: Week-over-week diff
     description: Compare against last week's saved snapshot
+    body: |
+      Compare this week's rollup against last week's saved snapshot to show what changed.
+
+      ## Method
+      1. Load last week's snapshot from `reports/forecast/`.
+      2. Compare it deal-by-deal against this week's rollup.
+      3. Classify each difference: moved stage, slipped date, newly added, or closed.
+      4. Summarize the net change in forecast total, week over week.
+      5. Save this week's rollup as the new snapshot at `reports/forecast/{{week}}.md` for next week's diff.
+
+      ## Rules
+      - Always diff against last week's actual saved snapshot, never against an assumed or recreated baseline.
+      - Every deal that changed status gets one of the four labels — moved, slipped, new, closed — no unlabeled changes.
+      - Save the new snapshot only after the rollup has passed its tie-out check.
+      - If last week's snapshot file is missing, say so plainly and skip the diff rather than inventing a baseline.
+
+      ## Output
+      A week-over-week summary — moved, slipped, new, closed deals, and net forecast change — plus the saved snapshot file for next week.
   - name: Coaching signal detection
     description: Flag reps needing attention, not just deals at risk
+    body: |
+      Flag reps who need attention, not just individual deals at risk.
+
+      ## Method
+      1. For each rep, check every open deal against the stalled-days threshold.
+      2. Flag commit-category deals with no logged activity since the last review.
+      3. Calculate each rep's pipeline coverage ratio against their quota.
+      4. Flag any rep under the stored coverage-ratio threshold.
+      5. Rank the flagged reps by severity and select the top three signals for the summary.
+
+      ## Rules
+      - The stalled-days threshold and the target coverage ratio are set on first run, then stored in memory.
+      - A coaching signal names the rep and the pattern, not just a single deal — this is about the rep's pipeline, not one deal.
+      - Never adjust or override a rep's forecast number while detecting signals — flag only, the manager resolves it with the rep.
+
+      ## Output
+      A ranked list of coaching signals (rep, signal type, evidence), with the top three included in the #sales-leadership summary.
 goal: roll up the weekly forecast and flag the coaching signals before the Monday call
 integrations: [hubspot, googlesheets, slack]
 whatItDoes:

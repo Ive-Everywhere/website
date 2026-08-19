@@ -11,10 +11,69 @@ difficulty: advanced
 skills:
   - name: Redline playbook
     description: Fallback position per clause type, limitation of liability, indemnity, termination, IP assignment, attorney-authored
+    body: |
+      Apply the attorney-authored playbook's fallback position to every recognized clause. Never substitute your own judgment of what is fair.
+
+      ## Method
+      1. Load the redline playbook from memory before parsing the MSA.
+      2. Match each parsed clause to a playbook clause type (limitation of liability, indemnity, termination, IP assignment, and others in scope).
+      3. Pull that clause type's preferred position, fallback position, and walk-away line.
+      4. Compare the counterparty's language against the fallback position, not the preferred one.
+      5. Where the clause falls short of the fallback, draft the tracked-changes edit that reaches it, with a one-line rationale citing the playbook entry.
+      6. Where the clause type has no playbook entry, stop and do not draft an edit.
+
+      ## Rules
+      - Never invent a fallback position; apply only what the playbook states.
+      - Unrecognized clause types are always flagged for {{reviewer}}, never redlined.
+      - Walk-away lines are reported for awareness only — only {{reviewer}} decides to walk.
+      - Clause types in scope for v1 vs. always-escalate (set on first run, then stored in memory).
+      - Counterparties on a do-not-auto-redline list are checked before drafting starts (set on first run, then stored in memory).
+
+      ## Output
+      One tracked-changes edit per deviating clause, each tagged with clause type, playbook citation, and rationale; unrecognized clause types listed separately as flags, not edits.
   - name: Document parsing
     description: Read and write tracked-changes Word documents with Anthropic's docx skill, modified
+    body: |
+      Extract clause-level structure from the incoming MSA and write tracked-changes edits back into the Word file, using Anthropic's docx skill with legal-specific modifications.
+
+      ## Method
+      1. Fetch the MSA at {{contract_path}} from Drive.
+      2. Convert the docx to a clause-by-clause structure, preserving section numbers and heading hierarchy.
+      3. Normalize clause boundaries so multi-paragraph clauses stay together during classification.
+      4. Pass each clause to the redline-playbook skill for classification and drafting.
+      5. Write every accepted edit back into the docx as a tracked change, never a silent replacement.
+      6. Save the redlined docx to `contracts/{{counterparty}}/{{contract_path}}-redlined.docx`.
+
+      ## Rules
+      - Preserve the original document's formatting and numbering; do not restructure the contract.
+      - Every edit must appear as a visible tracked change — never auto-accept changes.
+      - Keep a mapping from each tracked change back to its source clause for the adversarial review pass.
+      - Contract length or page count that triggers a chunked parse (set on first run, then stored in memory).
+
+      ## Output
+      A single docx file with tracked-changes edits inline, plus a clause-index list mapping each edit to its clause number and playbook citation.
   - name: Adversarial review
     description: Second pass that tries to refute every proposed redline before it ships
+    body: |
+      Independently re-check every proposed redline against the playbook and reject any edit not compelled by it.
+
+      ## Method
+      1. Re-read the playbook and the clause blind — do not see the first pass's rationale before forming your own view.
+      2. For each proposed redline, attempt to justify the counterparty's original text as acceptable.
+      3. If a justification for the original text succeeds, reject the redline.
+      4. If it fails, confirm the redline matches the fallback position, not just any deviation.
+      5. Check the rationale cites the correct playbook entry for that clause type.
+      6. Remove any redline you cannot confirm rather than shipping it unverified.
+      7. Log which edits passed, which were rejected, and why.
+
+      ## Rules
+      - Treat rejection as the default; only confirmed edits survive.
+      - Never see the first pass's stated rationale before attempting your own justification of the original text.
+      - An edit not compelled by the playbook is removed, not softened.
+      - Escalate systematic disagreement patterns (set on first run, then stored in memory) for playbook review.
+
+      ## Output
+      A confirmed redline list, a subset of the first pass, plus a rejected-edit log with the reason for each rejection — both handed to {{reviewer}}.
 goal: produce a first-pass tracked-changes redline of an incoming MSA, checked against the playbook
 integrations: [drive, gmail, slack]
 whatItDoes:

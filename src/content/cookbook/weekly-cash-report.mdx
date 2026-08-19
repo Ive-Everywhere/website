@@ -11,10 +11,99 @@ difficulty: intermediate
 skills:
   - name: 13-week build methodology
     description: Structure the roll, opening balance, inflows, outflows, closing balance, per week
+    body: |
+      Structure the 13-week cash roll consistently: opening balance,
+      inflows, outflows, closing balance, per week.
+
+      ## Method
+      1. Start from the tied-out current cash balance as week 1's opening
+         balance.
+      2. Pull expected inflows for each of the 13 weeks from `{{ar_sheet}}`
+         (Stripe payouts, invoices due).
+      3. Pull expected outflows for each week from `{{ap_sheet}}`
+         (payables, payroll, recurring spend).
+      4. Compute each week's closing balance: opening plus inflows minus
+         outflows.
+      5. Carry each week's closing balance forward as the next week's
+         opening balance.
+      6. Independently re-sum all 13 weeks' closing balances against the
+         final week's figure; hold the publish if they don't tie out.
+
+      ## Rules
+      - Never publish the roll without the second, independent re-sum
+        passing.
+      - Hold the publish and name the exact week that broke if the re-sum
+        disagrees.
+      - Never initiate a transfer or payment based on this forecast — it is
+        for visibility only.
+      - Weekly cadence and rounding convention (set on first run, then
+        stored in memory).
+
+      ## Output
+      A 13-row table: `{week, opening_balance, inflows, outflows,
+      closing_balance}`, written to the weekly-cash-report view.
   - name: Cash-alert thresholds
     description: What balance, or how many weeks out, triggers an alert
+    body: |
+      Decide which balance or timing conditions in the 13-week roll are
+      worth an immediate alert.
+
+      ## Method
+      1. Scan every week's closing balance in the finished roll.
+      2. Compare each closing balance against `{{min_balance}}`.
+      3. Flag any week at or below that threshold, and any week where the
+         balance goes negative.
+      4. Note how many weeks out the first flagged week sits, so urgency is
+         visible at a glance.
+      5. Compose one alert per breach, naming the week and the shortfall
+         amount.
+
+      ## Rules
+      - Alert immediately on any negative or sub-threshold week — do not
+        wait for the next scheduled run.
+      - Report every breach, not just the worst one, even if a later week
+        recovers.
+      - Minimum balance threshold (set on first run, then stored in
+        memory).
+      - Alerts describe the shortfall; they never recommend or trigger a
+        transfer.
+
+      ## Output
+      An alert list: `{week, closing_balance, shortfall_amount}`, posted to
+      `{{delivery_channel}}` immediately when non-empty.
   - name: Source reconciliation
     description: Tie the rollup's starting balance to the ledger before publishing
+    body: |
+      Tie the roll's starting cash balance to the ledger, bank, and Stripe
+      before the roll begins.
+
+      ## Method
+      1. Pull the current balance from `{{ledger_sheet}}`.
+      2. Pull the latest bank balance and the latest Stripe balance
+         independently.
+      3. Compare all three figures against each other, not just ledger to
+         one source.
+      4. Compute the variance between each pair and compare against
+         `{{tie_out_tolerance}}`.
+      5. If any pair exceeds tolerance, hold the roll and report which
+         sources disagree and by how much.
+      6. Record the tie-out result before the build starts, so the roll
+         always carries evidence it started from an agreed balance.
+
+      ## Rules
+      - Never start the 13-week build on an untied starting balance.
+      - Hold the roll, don't approximate, when sources disagree beyond
+        tolerance.
+      - Tie-out tolerance between bank, Stripe, and ledger (set on first
+        run, then stored in memory).
+      - Never adjust the ledger figure to force a tie-out — flag the
+        discrepancy for the controller instead.
+      - Re-run the tie-out fresh every week; never reuse a prior week's
+        result.
+
+      ## Output
+      A tie-out result: `{ledger_balance, bank_balance, stripe_balance,
+      max_variance, within_tolerance}`.
 goal: build and publish a live 13-week cash rollup, refreshed weekly
 integrations: [stripe, googlesheets, slack]
 whatItDoes:

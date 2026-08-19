@@ -11,10 +11,67 @@ difficulty: starter
 skills:
   - name: Account brief format
     description: One-page structure - context, stakeholders, talking points, risk.
+    body: |
+      Give the account brief a consistent one-page structure so every rep and every meeting reads the same way.
+
+      ## Method
+      1. Pull the account record from the CRM: deal stage, deal value, last activity date, full email thread history.
+      2. Pull calendar invite attendees; note each person's title and any prior interaction on file.
+      3. Research the company on the web: news, funding, leadership changes, product launches from the last 90 days.
+      4. Draft company context in 2-3 sentences: what they do, why this deal matters now.
+      5. List stakeholders with role and one line of prior interaction each.
+      6. Write exactly three talking points tied to the researched signals, and one risk to watch.
+      7. Hand the draft to the Source verification skill before it ships.
+
+      ## Rules
+      - The brief is always exactly one page — cut content before you add a second page.
+      - Always list exactly three talking points and exactly one risk, never more, never fewer.
+      - Reuse a brief already built on this account this week instead of rebuilding from scratch.
+      - The deal-size threshold that triggers a companion slide deck is set on first run, then stored in memory.
+
+      ## Output
+      A one-page markdown brief with four sections — Context, Stakeholders, Talking points (3), Risk (1) — saved to `reports/account-briefs/{{account}}-{{date}}.md` and posted to the delivery Slack channel.
   - name: Source verification
     description: Every factual claim links back to its source before it ships.
+    body: |
+      Confirm every factual claim in the brief traces to a real source before delivery, and drop what can't be sourced.
+
+      ## Method
+      1. Scan the draft brief for every factual claim: news, funding figures, leadership changes, headcount, product launches.
+      2. For each claim, find the source: a news article, the company site, a press release, or a LinkedIn profile update.
+      3. Attach the source as an inline markdown link next to the claim.
+      4. If no source confirms a claim, delete the claim from the brief — never guess or soften it into a vague statement.
+      5. Re-read the brief once more to confirm no unlinked factual claim remains.
+
+      ## Rules
+      - Internal CRM data (deal stage, past emails) needs no external citation — only claims about the outside world do.
+      - One source per claim is the minimum bar; prefer a primary source (company site, filing, press release) over a secondhand mention.
+      - A dropped claim is not replaced with a vaguer version of itself — it is simply removed.
+      - Never mark a claim verified without opening and reading the source page.
+
+      ## Output
+      The same one-page brief, with every external factual claim followed by its source link, and a one-line note of any claim dropped for lack of a source.
   - name: Slide builder
     description: Turn the brief into a deck for exec-level or large-deal meetings.
+    body: |
+      Turn a verified account brief into a slide deck for exec-level or large-value meetings.
+
+      ## Method
+      1. Check whether the deal value exceeds the deal-size threshold, or an exec-level title is on the attendee list.
+      2. If neither condition is met, skip this skill — no deck is built.
+      3. Pull the verified brief's four sections: context, stakeholders, talking points, risk.
+      4. Build one slide per section using the presentation (pptx) skill, matching the team's existing deck style.
+      5. Carry over only claims already verified in the brief — do not add new research at this stage.
+      6. Save the deck alongside the brief in the same report folder.
+
+      ## Rules
+      - The exec-title list and the deal-size threshold that trigger this skill are set on first run, then stored in memory.
+      - Never introduce a claim in the deck that wasn't already verified in the source brief.
+      - Keep the deck to one slide per brief section — four slides, not a generic pitch deck.
+      - The deck is internal prep, same as the brief — it never goes to the prospect.
+
+      ## Output
+      A `.pptx` file with one slide per brief section, saved to `reports/account-briefs/` next to the source brief.
 goal: build a one-page account brief before every meeting
 integrations: [hubspot, googlecalendar, gmail, slack]
 whatItDoes:

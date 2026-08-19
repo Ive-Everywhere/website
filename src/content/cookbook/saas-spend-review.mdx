@@ -11,10 +11,98 @@ difficulty: intermediate
 skills:
   - name: Contract tracker schema
     description: The fields every SaaS line needs, vendor, cost, seats, renewal date, owner
+    body: |
+      Define the fields every SaaS contract line needs so the tracker stays
+      consistent across vendors and runs.
+
+      ## Method
+      1. List required fields: vendor, annual cost, seat count, renewal
+         date, owner, contract document link.
+      2. Specify the format for each field (currency, date, integer seat
+         count).
+      3. Validate every row in `{{contract_sheet}}` against the schema
+         before using it downstream.
+      4. Flag any row missing a required field rather than treating it as
+         zero-cost or non-renewing.
+      5. Keep the schema versioned so adding a field doesn't silently break
+         existing rows.
+
+      ## Rules
+      - Never treat a missing renewal date or cost as "no action needed" —
+        flag it as incomplete instead.
+      - Every contract row must link to its source document in
+        `{{drive_folder}}` for later cross-check.
+      - Required field list and formats (set on first run, then stored in
+        memory).
+      - Normalize currency figures to one currency before any cost
+        comparison.
+
+      ## Output
+      A validated row set: `{vendor, annual_cost, seats, renewal_date,
+      owner, doc_link, complete}`.
   - name: Utilization threshold policy
     description: What seat-usage rate counts as underused, by tool category
+    body: |
+      Decide what seat-usage rate counts as underused, by tool category,
+      and flag contracts under it.
+
+      ## Method
+      1. For each tool with usage data, pull seats paid for and seats
+         actively used over `{{usage_window_days}}` days.
+      2. Compute utilization percent independently — active seats divided
+         by paid seats, not a cached figure from the sheet.
+      3. Compare the computed rate against that tool category's
+         utilization threshold.
+      4. Flag any tool under threshold, with the dollar value of unused
+         seats attached.
+      5. For tools with no usage data available, mark utilization as
+         unknown, not zero.
+
+      ## Rules
+      - Never flag a tool as underused without usage data to support it —
+        mark unknown instead of guessing.
+      - Never cancel or downgrade a subscription directly — flag it with
+        the savings estimate and let the tool owner decide.
+      - Utilization threshold per tool category (set on first run, then
+        stored in memory).
+      - Recompute the utilization rate each run; never carry forward a
+        stale prior calculation.
+
+      ## Output
+      A flag list: `{vendor, seats_paid, seats_used, utilization_pct,
+      dollars_at_stake}`.
   - name: Renewal notice windows
     description: How far ahead a renewal must surface to still cancel or renegotiate
+    body: |
+      Surface a renewal far enough ahead that the team can still cancel or
+      renegotiate.
+
+      ## Method
+      1. Compute days until renewal for every contract from
+         `{{contract_sheet}}`'s renewal date.
+      2. Compare that figure against `{{notice_window_days}}` for the
+         contract's category.
+      3. For any contract inside the window, cross-check the renewal date
+         against the original contract document in `{{drive_folder}}`
+         before alerting.
+      4. If the sheet date and the document date disagree, hold the alert
+         and flag the discrepancy instead of firing on the stale value.
+      5. Compose the alert with the dollar value of the contract and the
+         days remaining.
+
+      ## Rules
+      - Never alert on a renewal date pulled only from the sheet — always
+        cross-check the source document first.
+      - Hold the alert, don't guess, when the sheet and the contract
+        document disagree on the date.
+      - Notice window length per contract category (set on first run, then
+        stored in memory).
+      - Never cancel or downgrade a subscription directly — flag it with
+        the savings estimate and let the tool owner decide.
+
+      ## Output
+      A renewal alert list: `{vendor, renewal_date, days_remaining,
+      dollar_value}`, posted to `{{delivery_channel}}`.
 goal: track SaaS contracts and flag renewals and underused seats before they cost money
 integrations: [googlesheets, gmail, slack, stripe]
 whatItDoes:

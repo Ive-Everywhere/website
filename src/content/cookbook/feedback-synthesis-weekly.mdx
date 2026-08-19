@@ -11,10 +11,68 @@ difficulty: intermediate
 skills:
   - name: Theme clustering
     description: Group raw feedback into named themes by topic, not keyword.
+    body: |
+      Group raw feedback messages into named, topic-based themes instead of leaving them as an unsorted list.
+
+      ## Method
+      1. Collect every raw feedback item pulled this run from slack, zendesk, and intercom.
+      2. Read each item and identify the underlying topic, not just the surface keyword — two messages using different words can be the same theme.
+      3. Group items into named themes; use a short, specific theme name (e.g. "CSV export missing columns", not "exports").
+      4. Check existing theme names in memory before creating a new one; reuse an existing name if the topic matches.
+      5. Count distinct customers per theme, not raw message count — one customer posting five times is one vote.
+      6. Merge near-duplicate themes; split a theme that actually covers two distinct topics.
+      7. Store the final theme list with customer counts for this run.
+
+      ## Rules
+      - A theme needs at least (set on first run, then stored in memory) distinct customers to surface in the digest.
+      - Never invent a theme from a single ambiguous message — leave it unclustered instead.
+      - Theme names stay stable across weeks; renaming a theme requires a deliberate merge decision, not a fresh label each run.
+      - Keep the split between "feedback channel" and "support issue" as defined on first run.
+
+      ## Output
+      A list of themes, each with: theme name, distinct customer count, and the list of source message/ticket IDs it was built from.
   - name: Verbatim-quote policy
     description: Every quote is exact and sourced; loose-fit quotes get dropped, not forced.
+    body: |
+      Attach one exact, sourced quote per theme — never a paraphrase standing in as a quote.
+
+      ## Method
+      1. For each theme, scan its source messages for one line that best represents the theme.
+      2. Copy the quote exactly as written — same words, same spelling, same punctuation.
+      3. Attach the speaker's name (or handle) and a link back to the source message or ticket.
+      4. Confirm the link resolves before attaching it to the theme.
+      5. If no message in the theme reads cleanly as a standalone quote, do not force one — leave the theme without a quote.
+      6. Re-check the quote against the source text once more before delivery; a single altered word fails this check.
+
+      ## Rules
+      - A quote is verbatim or it does not ship — no summarizing, no cleaning up grammar, no combining two messages into one quote.
+      - Every quote carries a source link; a quote without a resolvable link is dropped.
+      - One quote per theme maximum for the weekly digest, chosen for clarity, not necessarily length.
+      - Dropping a quote never blocks the theme itself — the theme and its count still ship.
+
+      ## Output
+      Per theme: either one verbatim quote with speaker and source link, or no quote field at all (theme count still included).
   - name: Trend delta
     description: Compare theme counts against last week's snapshot.
+    body: |
+      Compare this week's theme counts against last week's snapshot to surface what's rising, falling, or new.
+
+      ## Method
+      1. Load last week's theme snapshot from `reports/feedback/`.
+      2. Match this week's themes to last week's by name; treat an unmatched new theme as "new."
+      3. Compute the change in distinct-customer count for each matched theme.
+      4. Rank themes by absolute change first, then by raw count, to surface what moved most.
+      5. Flag any theme that dropped off entirely (had a count last week, zero this week) as "resolved or quiet," not deleted.
+      6. Write this week's counts back as the new snapshot for next week's comparison.
+
+      ## Rules
+      - Always diff against the most recent snapshot, never against an arbitrary earlier week.
+      - A theme with no prior snapshot is always "new" — do not backfill a fabricated prior count.
+      - Report the delta as a real number or arrow, never a vague "up" or "down" without the count behind it.
+      - Keep the snapshot file even for themes that don't make the top 5 — the full history stays for future diffs.
+
+      ## Output
+      Per theme: this week's count, last week's count, and the delta (new / rising / falling / flat), ranked by movement.
 goal: synthesize the week's feedback into themes with counts and trend deltas
 integrations: [slack, zendesk, intercom, notion]
 whatItDoes:

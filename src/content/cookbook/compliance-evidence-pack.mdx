@@ -11,10 +11,67 @@ difficulty: intermediate
 skills:
   - name: Control-to-evidence mapping
     description: The org's controls and where the evidence for each lives
+    body: |
+      Match every item in an audit or questionnaire request to the internal control it corresponds to.
+
+      ## Method
+      1. Load the control library from memory or Notion.
+      2. Read the request at {{request_source}} and list every item it asks for, one line each.
+      3. For each item, search the control library for the matching control by name or description.
+      4. Where a clear match exists, record the control ID and its owner.
+      5. Where no control matches, flag the item as unmapped rather than guessing at a nearest fit.
+      6. Add newly-seen items that map to an existing but undocumented control back into the library.
+
+      ## Rules
+      - Never map an item to a control on approximate similarity alone — the match must be defensible.
+      - An unmapped item is flagged, never silently skipped or answered without a control reference.
+      - Control library location, Notion or a policy doc (set on first run, then stored in memory).
+      - Growing the library from new requests only happens with a clear, confirmed match.
+
+      ## Output
+      A request-item-to-control map, one row per item, with unmapped items marked separately for the citation step to skip.
   - name: Citation verification
     description: Confirm every cited document exists, is current, and supports the claim
+    body: |
+      Confirm every cited document in the evidence pack exists, is current, and actually supports the claim made.
+
+      ## Method
+      1. Take the draft evidence entries, each with a claim and a cited source.
+      2. Re-open every cited source directly, not from a cached description of it.
+      3. Confirm the document exists at the stated path or URL.
+      4. Confirm it is the current version, not a superseded draft.
+      5. Read the cited section and confirm it actually supports the specific claim made.
+      6. Drop or flag any citation that fails any of these checks, rather than shipping it.
+
+      ## Rules
+      - A citation that cannot be re-opened and confirmed is never left in the final pack.
+      - "Current version" is checked explicitly, not assumed from a recent-looking filename.
+      - Standard turnaround expectation for audit requests (set on first run, then stored in memory).
+      - Flag, do not silently remove, a claim whose only citation fails — the gap must stay visible.
+
+      ## Output
+      A verified or flagged status per citation, with the failure reason recorded for anything that did not hold up.
   - name: Evidence pack formatting
     description: One request item, one answer, one citation, consistently
+    body: |
+      Assemble one consistent evidence entry per request item, each with its answer and citation.
+
+      ## Method
+      1. Take the mapped items and their verified citations.
+      2. Format each as one entry: the original ask, the answer, and the citation.
+      3. Order entries to match the original request's item order.
+      4. Group unmapped or uncited items into a clearly separated flagged section.
+      5. Add a summary line: items answered, items flagged as unmapped or uncited.
+      6. Save the pack to `reports/compliance/{{requester}}-{{date}}.md`.
+
+      ## Rules
+      - Every request item appears in the pack, answered or flagged — none are silently omitted.
+      - Flagged items are visually separated, never mixed in with confirmed answers.
+      - Pack format stays identical across requesters so a reviewer can scan quickly.
+      - The pack always routes to {{reviewer}} for sign-off before it leaves the team, never straight to the requester.
+
+      ## Output
+      A single evidence-pack document at `reports/compliance/{{requester}}-{{date}}.md`, one entry per request item plus a flagged-items section and summary line.
 goal: map an audit or questionnaire request to evidence, with every claim cited, in one pack
 integrations: [drive, notion, googlesheets, slack]
 whatItDoes:

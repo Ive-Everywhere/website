@@ -11,10 +11,67 @@ difficulty: advanced
 skills:
   - name: Handbook indexing
     description: Break the handbook into cited, stable sections
+    body: |
+      Break the current handbook into stable, citable sections the Q&A app can quote from directly.
+
+      ## Method
+      1. Pull the current handbook from {{handbook_source}}.
+      2. Split it into sections at natural policy boundaries, such as PTO, parental leave, or expenses.
+      3. Assign each section a stable ID that survives future re-indexing.
+      4. Record the handbook version this index was built from.
+      5. Exclude any compensation, pay-band, or performance-review content, even if it lives in the same source.
+      6. Store the versioned index in the agent's drive, replacing the prior version only once the new one is confirmed complete.
+
+      ## Rules
+      - Index policy content only — exclude comp, pay-band, and performance-review sections even if present in the source.
+      - Keep section IDs stable across re-indexing so old citations don't break.
+      - Re-index the full handbook on every new upload to {{handbook_source}} — never patch a stale index.
+      - Record the version in force at index time so every answer can be traced back to it.
+
+      ## Output
+      A versioned, sectioned index in the agent's drive: one stable ID and one quotable excerpt per policy section.
   - name: Citation-grounded answering
     description: Answer only from indexed text, always with a citation
+    body: |
+      Answer an employee's question only from indexed handbook text, and show exactly where the answer came from.
+
+      ## Method
+      1. Read the employee's question as submitted through the app.
+      2. Search the indexed sections for text that addresses the question.
+      3. Draft an answer using only language the matched section supports.
+      4. Attach the section ID and the exact quote the answer draws from.
+      5. Re-check the quote against the claim word for word before showing the answer.
+      6. If no section supports a confident answer, do not answer — hand off to escalation routing instead.
+
+      ## Rules
+      - Answer from indexed sections only — never from general knowledge or inference about policy intent.
+      - Every answer must show its section ID and quote; an answer with no citation does not ship.
+      - Confirm the citation supports the claim word for word before displaying the answer.
+      - When confidence is low, escalate rather than hedge — never answer "probably" or "it depends."
+
+      ## Output
+      An answer with its supporting section ID and verbatim quote, or no answer at all when the handbook doesn't cover it.
   - name: Escalation routing
     description: Route low-confidence questions to HR instead of guessing
+    body: |
+      Route what the handbook can't answer to HR, instead of guessing or leaving the employee stuck.
+
+      ## Method
+      1. Receive the question that citation-grounded answering could not confidently answer.
+      2. Package the question with any partial match found in the index, if one exists.
+      3. Post it to {{hr_escalation_channel}} with the employee's question attached.
+      4. Tell the employee HR will follow up, without implying an answer is coming from the app.
+      5. Log the escalation to `people/handbook-escalations/{{date}}.md`.
+      6. Note recurring escalation topics as a signal the handbook may need an update.
+
+      ## Rules
+      - Escalate rather than infer — a low-confidence match is not a basis for an answer.
+      - Route every escalation to {{hr_escalation_channel}} (set on first run, then stored in memory), never a broader channel.
+      - Log every escalation, even a duplicate topic, so recurring gaps are visible.
+      - Never tell the employee a guessed answer while an escalation is pending.
+
+      ## Output
+      An escalation logged to `people/handbook-escalations/{{date}}.md` and posted to {{hr_escalation_channel}}, with the employee's question attached.
 goal: build a shareable app that answers handbook questions with citations and escalates what it can't answer
 integrations: [notion, drive, slack]
 whatItDoes:

@@ -10,10 +10,72 @@ difficulty: intermediate
 skills:
   - name: App scaffolding
     description: Provision database, storage, UI
+    body: |
+      Provision the database, storage, and UI shell the described app needs.
+
+      ## Method
+      1. Read the plain-English description of the tool to replace.
+      2. Identify the data model the description implies.
+      3. Provision a database with that schema.
+      4. Provision object storage for exports or file needs.
+      5. Scaffold the UI shell: the views and controls the description calls for.
+      6. Configure the scheduled refresh job for the data.
+      7. Run the scaffold once end to end before handing off to data wiring.
+
+      ## Rules
+      - Scaffold only what the description calls for; never add speculative features.
+      - The database schema must match the sources it will be wired to, not a generic template.
+      - Refresh cadence defaults to daily (set on first run, then stored in memory).
+      - Confirm the scaffold runs before moving on to data wiring.
+      - Keep provisioning idempotent — rerunning the scaffold step must not duplicate resources.
+
+      ## Output
+      A provisioned database, storage, and UI shell, ready for data wiring, with the refresh job configured.
   - name: Data wiring
     description: Seed it from your systems
+    body: |
+      Seed the app from the connected data sources and keep it refreshed.
+
+      ## Method
+      1. Identify the data sources connected for this app.
+      2. Map each source's fields to the app's schema.
+      3. Seed the app's database from an initial pull.
+      4. Verify the seeded data matches the source counts.
+      5. Confirm the scheduled refresh job re-pulls and updates correctly.
+      6. Log the first successful refresh so later runs have a baseline to diff against.
+
+      ## Rules
+      - Every field in the app maps to a real source field; never seed placeholder data.
+      - The seed pass is verified against source counts before it's called done.
+      - The refresh job follows the source's own update pattern, not a blind full replace by default.
+      - Any source field that can't be mapped cleanly gets flagged, not dropped silently.
+      - Never wire a data source the team hasn't explicitly connected to the agent.
+
+      ## Output
+      A seeded app database matching source data, with a scheduled refresh confirmed against source counts.
   - name: Deploy + share
     description: TLS, domain, team access
+    body: |
+      Deploy the app to a shareable URL with TLS and team access set.
+
+      ## Method
+      1. Deploy the scaffolded, wired app.
+      2. Provision TLS on the {{name}}.eluu.site domain.
+      3. Set team access permissions.
+      4. Confirm the app loads and the wired data displays correctly.
+      5. Run a quick smoke check on each view before sharing.
+      6. Share the live URL with the team.
+
+      ## Rules
+      - Never share the URL before confirming the app loads and the data displays correctly.
+      - Team access follows the same permission boundaries as the source data it displays.
+      - The refresh cadence stays visible on the app, e.g. a "last updated" line.
+      - Report the live URL back only once it's confirmed working.
+      - Never expose the app publicly beyond the team without explicit approval.
+      - Re-verify TLS and access settings if the domain or team roster changes.
+
+      ## Output
+      A live {{name}}.eluu.site URL — TLS-enabled, team access set, confirmed working — shared with the team.
 goal: build and deploy the internal app to replace the tool
 integrations: [googlesheets, stripe, slack]
 whatItDoes:

@@ -11,10 +11,66 @@ difficulty: starter
 skills:
   - name: Renewal-clause extraction
     description: Identify notice windows, auto-renewal triggers, and term length
+    body: |
+      Identify the notice window, auto-renewal trigger, and term length in every contract on the weekly sweep.
+
+      ## Method
+      1. Read the parsed contract text from the document-parsing skill.
+      2. Locate the term-length clause and record the current contract end date.
+      3. Locate the auto-renewal clause and record its trigger condition.
+      4. Locate the notice-window clause and record how many days before the end date notice is required.
+      5. Where a contract has no auto-renewal clause, record that explicitly rather than leaving the field blank.
+      6. Pass the extracted dates to the deadline-diff-policy skill for comparison against last week's snapshot.
+
+      ## Rules
+      - Extract the notice-window length from the clause text itself, never from a template assumption.
+      - A missing auto-renewal clause is recorded as none, distinct from an unparsed field.
+      - Contract types out of scope for this sweep, such as NDAs (set on first run, then stored in memory).
+      - Every extracted date must cite the clause it came from, for the re-confirmation step before alerting.
+
+      ## Output
+      Per contract: term length, auto-renewal trigger or none, notice-window length, current end date, each with a clause citation.
   - name: Document parsing
     description: Read contracts in Word or PDF form (Anthropic docx/pdf skill)
+    body: |
+      Read each contract in the repository in Word or PDF form for the weekly renewal sweep.
+
+      ## Method
+      1. Sweep {{contract_repo_path}} for contracts not yet in the renewal tracker.
+      2. Convert each file to full text, keeping clause references for later citation.
+      3. Locate the sections most likely to hold term, renewal, and notice language to speed extraction.
+      4. Skip and log any file that fails to parse rather than dropping it from the sweep silently.
+      5. Hand parsed text to the renewal-clause-extraction skill.
+
+      ## Rules
+      - A parse failure is logged for manual follow-up, never silently excluded from the tracker.
+      - Keep clause references so a flagged deadline can be re-confirmed against the source text.
+      - Contract repository folder location (set on first run, then stored in memory).
+      - Re-parse only contracts new since the last sweep, not the full repository every week.
+
+      ## Output
+      Full text and clause references for each newly-swept contract, handed to the renewal-clause-extraction skill.
   - name: Deadline-diff policy
     description: What counts as newly inside the window vs already flagged
+    body: |
+      Decide what counts as newly inside the notice window versus already flagged, to avoid repeat alerts.
+
+      ## Method
+      1. Load last week's tracker snapshot from memory.
+      2. Compare this week's extracted dates to last week's for every contract.
+      3. Flag a contract as newly-inside-window if it entered the notice window since the last run.
+      4. Flag a contract as changed if its extracted term, renewal, or notice dates differ from last week.
+      5. For every newly-flagged contract, re-confirm the notice-window length against the actual clause text before alerting.
+      6. Do not alert on a contract already flagged in a prior run with no change.
+
+      ## Rules
+      - Never alert off a stale or previously-corrected date — always re-confirm against current clause text first.
+      - A contract flagged last week and unchanged this week is not re-alerted.
+      - Default notice-lead reminder window, for example 60 days (set on first run, then stored in memory).
+      - The tracker is patched with current state every run, never rebuilt from scratch.
+
+      ## Output
+      An updated tracker snapshot plus an alert list of contracts newly inside {{notice_lead_days}} days of their deadline, each with owner and re-confirmed date.
 goal: track every contract's notice deadline and remind the owner before the window closes
 integrations: [drive, googlesheets, slack]
 whatItDoes:

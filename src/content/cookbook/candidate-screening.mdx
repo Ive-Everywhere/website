@@ -10,10 +10,72 @@ difficulty: starter
 skills:
   - name: Scorecard grading
     description: Score with the evidence
+    body: |
+      Grade every applicant against the role's scorecard, with evidence for each criterion.
+
+      ## Method
+      1. Read the scorecard and job spec from the agent's drive.
+      2. Read every résumé and cover note in the applicant inbox.
+      3. Score each scorecard criterion for each applicant.
+      4. Write one line of evidence per criterion, drawn from the application.
+      5. Total the score for each applicant.
+      6. Flag any applicant missing the information needed to score a criterion.
+      7. Note applications that arrived after the cutoff, but still grade them.
+
+      ## Rules
+      - Every score needs one line of evidence; never score without a citation from the application.
+      - Grade strictly against the scorecard on file, not a general impression.
+      - Never infer a criterion from something the application doesn't state.
+      - Missing information is flagged for review, not scored as a zero by default.
+      - Use the same scorecard version across every applicant in the batch; don't reweight mid-run.
+
+      ## Output
+      A per-applicant score table — criterion, score, evidence line — for every application read that night.
   - name: Shortlist ranking
     description: Rank the top few with gaps
+    body: |
+      Rank the top candidates from the graded scores and note the gaps for each.
+
+      ## Method
+      1. Sort all graded applicants by total scorecard score.
+      2. Take the top 5.
+      3. List the strongest matched criteria for each.
+      4. List the gaps against the scorecard for each.
+      5. Flag any candidate sitting close to the cutoff as borderline.
+      6. Compare this batch's shortlist against the last hiring digest for the same role.
+      7. Note any applicant who was borderline last time and applied again.
+
+      ## Rules
+      - Rank by total scorecard score, not by any single criterion.
+      - Every shortlisted candidate lists both strengths and gaps — never one without the other.
+      - Borderline cases near the cutoff surface for the hiring manager, never auto-cut.
+      - Never reject anyone automatically; only the human advances or passes a candidate.
+      - Keep the shortlist size at 5 unless the panel changes it (set on first run, then stored in memory).
+
+      ## Output
+      A ranked shortlist of 5 — name, score, top strengths, gaps — with borderline cases called out separately.
   - name: Interview scheduling
     description: Book the holds
+    body: |
+      Book interview holds for the top candidates and send the weekly digest.
+
+      ## Method
+      1. Take the top 3 from the shortlist.
+      2. Check the interview panel's availability.
+      3. Send interview holds to the top 3 candidates.
+      4. Confirm each hold lands on the candidate's and the panel's calendars.
+      5. Compile the week's applicant volume, shortlist, and scheduled interviews.
+      6. Send the digest to the panel.
+
+      ## Rules
+      - Only the top-ranked count set on first run (default 3, stored in memory) get holds sent automatically.
+      - Holds go out only after the shortlist has been reviewed, not before.
+      - The digest includes the full shortlist, not only the candidates scheduled.
+      - Never advance or pass a candidate without the human's one-tap decision.
+      - If a candidate declines a hold, notify the hiring manager rather than silently rebooking.
+
+      ## Output
+      Calendar holds sent to the top 3 candidates, plus a weekly hiring digest — volume, shortlist, scheduled interviews — to the panel.
 goal: screen the applicants against the scorecard and shortlist the top few
 integrations: [notion, gmail, linear]
 whatItDoes:

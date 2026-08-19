@@ -11,10 +11,63 @@ difficulty: advanced
 skills:
   - name: Signal-grounded personalization
     description: First line built from one real, recent signal, not a template
+    body: |
+      Build each first line from one real, recent signal about the lead, never a mail-merge template.
+
+      ## Method
+      1. Pull new leads added to the sequence in the CRM since the last run.
+      2. For each lead, search for one recent, real signal: a post, a hire, a funding round, a product launch.
+      3. Only use signals from within the stored signal window (days back).
+      4. If no signal is found within the window, do not fabricate one — flag the lead for manual write-up instead.
+      5. Draft the first line from that single signal, naming it specifically rather than alluding to it vaguely.
+      6. Hand the draft to Sequence voice, then to Claim verification, before it queues.
+
+      ## Rules
+      - The signal window (how many days back counts as "recent") is set on first run, then stored in memory.
+      - One real signal per lead is the bar — never blend multiple weak signals into one vague line.
+      - A lead with no findable signal is flagged for manual write-up, never given a generic line instead.
+
+      ## Output
+      One draft first line per lead, each tagged with its source signal and signal date, passed downstream for voice and verification.
   - name: Claim verification
     description: Second-pass check of every factual claim against its source
+    body: |
+      Run a second-pass, independent check of every factual claim in a draft before it can queue.
+
+      ## Method
+      1. Spawn a second-pass sub-agent reviewer, separate from the drafting step.
+      2. Hand it only the draft line and its source signal URL — not the drafting agent's reasoning.
+      3. Have the sub-agent independently confirm the claim against the source, letting it run as long as it needs.
+      4. Reject any line the sub-agent cannot confirm from the source.
+      5. For a rejected line, revise it to only what's confirmed, or drop it — never substitute a generic line.
+      6. Let the sub-agent finish fully before touching the queue.
+
+      ## Rules
+      - The verification pass runs independently — it never sees the drafting agent's own reasoning, only the claim and the source.
+      - A failed claim is revised or dropped; it is never replaced with a generic, unverifiable line.
+      - Never touch or release the queue before the sub-agent's pass completes.
+
+      ## Output
+      Each draft marked verified or flagged, with the sub-agent's confirmation note, before it reaches the CRM queue.
   - name: Sequence voice
     description: Match the team's tone, length, and structure
+    body: |
+      Match every drafted line to the team's stored tone, length, and structure.
+
+      ## Method
+      1. Read the team's tone and voice guide from memory.
+      2. Check the drafted first line against the guide's length limit and structural pattern.
+      3. Adjust word choice and sentence length to match the team's established voice.
+      4. Confirm the line still centers the real signal after the voice pass — voice edits never remove the grounding fact.
+      5. Apply the same voice pass to the rest of the sequence step, not just the first line.
+
+      ## Rules
+      - The team's tone and voice guide is set on first run, then stored in memory.
+      - A voice edit never removes or blurs the specific signal the line is grounded in.
+      - Keep sequence steps at the length and structure the guide specifies — no exceptions per lead.
+
+      ## Output
+      A voice-matched draft, same signal grounding intact, ready for the Claim verification sub-agent pass.
 goal: draft signal-grounded first lines and verify every claim before they queue
 integrations: [hubspot, gmail, slack]
 whatItDoes:

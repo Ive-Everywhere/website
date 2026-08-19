@@ -11,10 +11,66 @@ difficulty: advanced
 skills:
   - name: Answer library maintenance
     description: Grow and version the approved-answer library from every completed questionnaire
+    body: |
+      Grow and version the approved-answer library so every new questionnaire starts with more coverage than the last.
+
+      ## Method
+      1. Store the library as one row per question pattern, not per questionnaire.
+      2. Give each row six fields: question pattern, approved answer text, evidence citation, version number, last-updated date, approver name.
+      3. When a questionnaire completes, collect every answer the human reviewer signed off on.
+      4. Add each signed-off answer as a new row, or a new version of an existing row if the wording changed.
+      5. Search the library by closest-match on question pattern before drafting any new answer.
+      6. Retire a superseded version by marking it inactive — never delete it, so past citations still resolve.
+
+      ## Rules
+      - Only a human-approved answer enters the library; an agent-drafted-but-unreviewed answer never does.
+      - Every row carries an evidence citation — a policy doc, a control ID, or a prior signed answer.
+      - Version every edit; never overwrite a row in place.
+      - Categories that always need human review regardless of a library match: (set on first run, then stored in memory).
+
+      ## Output
+      An updated answer-library sheet: new or versioned rows, each with question pattern, answer, citation, version, date, approver.
   - name: Evidence citation
     description: Every answer cites the policy doc, control, or prior answer it came from
+    body: |
+      Tie every drafted answer to the evidence that makes it true, so nothing ships as an unsupported claim.
+
+      ## Method
+      1. For each question, identify the specific policy doc, control, or prior approved answer that supports the draft.
+      2. Quote or paraphrase the exact clause used, not the whole source document.
+      3. Attach the citation inline: source name, section or control ID, and library version if drawn from the answer library.
+      4. If no evidence exists for a claim, do not draft the claim — mark the question open instead.
+      5. When two sources partially support an answer, cite both and note where they diverge.
+
+      ## Rules
+      - Every drafted answer carries at least one citation; zero citations means it is a guess, not a draft.
+      - Cite the most specific source available — a control ID over a general policy statement.
+      - Never invent a source to fill a gap in the evidence.
+      - Flag any citation older than (set on first run, then stored in memory) months for a freshness check.
+
+      ## Output
+      Each drafted answer paired with its citation: source name, section or control ID, and version or date.
   - name: Adversarial review
     description: Second-pass check that tries to refute each drafted answer before it ships
+    body: |
+      Refute every drafted answer before it ships, so nothing overstates the company's real security posture.
+
+      ## Method
+      1. Spawn a second-pass sub-agent that did not write the original drafts.
+      2. Give it only the answer library and the policy docs — not the drafter's reasoning.
+      3. Have it independently re-derive an answer for each question from the library and policy docs alone.
+      4. Compare its re-derived answer against the drafted answer and flag any mismatch.
+      5. Reject any drafted answer that overstates a control, invents a certification, or lacks a citation the reviewer can verify.
+      6. Return each answer as approved, revise, or open — never a silent pass-through.
+
+      ## Rules
+      - The reviewer works from source documents only, never from the drafter's confidence or phrasing.
+      - Reject on overstatement even when the underlying fact is directionally true.
+      - Reject on missing evidence — a plausible answer without a verifiable citation does not pass.
+      - On disagreement between reviewer and drafter, escalate to the review queue instead of guessing.
+
+      ## Output
+      A per-question verdict list: approved, revise, or open, each with the reviewer's stated reason.
 goal: draft security questionnaire answers from the approved library and verify every one before sign-off
 integrations: [drive, googlesheets, salesforce, slack]
 whatItDoes:

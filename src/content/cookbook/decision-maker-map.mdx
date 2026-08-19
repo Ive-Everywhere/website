@@ -11,10 +11,63 @@ difficulty: intermediate
 skills:
   - name: Closed-won pattern mining
     description: Extract buying-committee roles from won deals in the CRM.
+    body: |
+      Extract the buying-committee roles that recur across past closed-won deals in the CRM.
+
+      ## Method
+      1. Pull the last N closed-won deals from the CRM (N is the lookback window).
+      2. For each deal, list every contact who touched it and the role they played: economic buyer, champion, technical evaluator, legal, etc.
+      3. Match each contact's role against the org's stored role definitions in memory.
+      4. Count how often each role appears across the pulled deals to find the recurring pattern.
+      5. Write the resulting pattern — which roles show up in most wins — back to memory as the standing buying-committee pattern.
+      6. Refresh the pattern each time new deals close, rather than mining from scratch every run.
+
+      ## Rules
+      - The lookback window (number of deals to mine) is set on first run, then stored in memory.
+      - The org's buying-committee role definitions are set on first run, then stored in memory — ask before guessing a role.
+      - A role with no match in the CRM data stays out of the pattern; do not invent a role to fill a gap.
+
+      ## Output
+      A standing "buying-committee pattern" note in memory: role name, how many closed-won deals included it, refreshed after each new close.
   - name: Role confidence scoring
     description: Score each mapped stakeholder's fit and cite the evidence.
+    body: |
+      Score how confidently each person mapped to a target account fills a buying-committee role.
+
+      ## Method
+      1. Take the proposed role-to-person match for the target account from Org research.
+      2. Score title match: does the person's current title align with the role definition.
+      3. Score seniority: does their level match what the role typically requires.
+      4. Score evidence strength: how many independent sources back the title (one source is weak, two or more is strong).
+      5. Combine the three factors into one confidence label per stakeholder: confirmed, likely, or open.
+      6. Mark any role with no confident candidate as open rather than forcing a low-confidence guess.
+
+      ## Rules
+      - A role only earns "confirmed" when title, seniority, and at least one public source all align.
+      - Never assign a person to a role on title match alone — seniority and evidence must also support it.
+      - An "open" role is a valid, expected output — it is not a failure to fix by guessing.
+
+      ## Output
+      Per stakeholder: name, mapped role, confidence label (confirmed / likely / open), and the evidence cited — written into the account's row in the decision-maker-map tracker view.
   - name: Org research
     description: Confirm every title from a public source before it's mapped.
+    body: |
+      Confirm every mapped stakeholder's title from a public source before it enters the map.
+
+      ## Method
+      1. Research the target account's current org: names, titles, and reporting signals.
+      2. For each person, check at least one public source: the company site, LinkedIn, or press coverage.
+      3. Record the source URL alongside the name and title.
+      4. If a title can't be confirmed by any public source, exclude that person from the map instead of listing an unconfirmed title.
+      5. Note the research date, since titles change and a stale org chart misleads the rep.
+
+      ## Rules
+      - Every person entering the map needs at least one dated, public source URL attached to their title.
+      - Never carry forward a title from a stale internal note without re-confirming it against a current public source.
+      - If sources disagree on a title, use the most recent one and note the conflict.
+
+      ## Output
+      A list of account employees, each with name, title, source URL, and research date — feeding into Role confidence scoring before the map publishes.
 goal: map the buying committee for each target account from closed-won patterns
 integrations: [hubspot, googlesheets, slack]
 whatItDoes:

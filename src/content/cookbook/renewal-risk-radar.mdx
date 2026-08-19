@@ -11,10 +11,66 @@ difficulty: intermediate
 skills:
   - name: Health scoring
     description: Composite score from usage, tickets, and sentiment, weighted per policy.
+    body: |
+      Produce one composite renewal-risk score per account from usage, tickets, and sentiment.
+
+      ## Method
+      1. Pull usage trend from PostHog, ticket volume and sentiment from the support tool, and days-to-renewal from the CRM.
+      2. Weight each input per the scoring policy to produce a low/medium/high score.
+      3. Recompute the score for every active account on each weekly run.
+      4. Note which input drove the score, not just the final tier.
+      5. Store this week's scores for next week's diff.
+
+      ## Rules
+      - Weighting between usage, tickets, and renewal proximity: (set on first run, then stored in memory).
+      - Always record the driving signal alongside the score, never the score alone.
+      - Recompute every account weekly — never carry forward a stale score.
+      - A high-risk tier requires at least two independent signals, per the week-over-week guardrail.
+
+      ## Output
+      A per-account score (low/medium/high) with the driving signal named, for every active account.
   - name: Renewal-date awareness
     description: Weight risk higher as the renewal date approaches.
+    body: |
+      Weight renewal risk higher as the account's renewal date approaches.
+
+      ## Method
+      1. Pull each account's renewal date from the CRM.
+      2. Increase the risk weighting as days-to-renewal shrinks, per the scoring policy.
+      3. Treat the same usage drop as more urgent at 30 days to renewal than at 200 days.
+      4. Flag accounts entering their final renewal window even at a stable usage score.
+      5. Recompute the weighting every week, since the same account moves closer to renewal each run.
+      6. Reset the urgency weighting once an account renews.
+
+      ## Rules
+      - Days-to-renewal thresholds that raise urgency: (set on first run, then stored in memory).
+      - Renewal proximity adjusts the score weighting; it never overrides the usage and ticket signals.
+      - Flag an approaching renewal window even without another risk signal present.
+      - Clear the urgency flag immediately after a confirmed renewal, so it does not linger on the account.
+
+      ## Output
+      A renewal-proximity adjustment applied to each account's score, with days-to-renewal shown.
   - name: Week-over-week diff
     description: Compare against last week's saved snapshot.
+    body: |
+      Compare this week's scores against last week's snapshot so only real change gets surfaced.
+
+      ## Method
+      1. Load last week's snapshot from reports/renewal-risk/.
+      2. Compare each account's current tier against its prior tier.
+      3. Group the results: moved up a tier, moved down, new to the portfolio, unchanged.
+      4. Surface only accounts that moved or are newly high-risk in the escalation.
+      5. Note the specific signal that changed for every account in the moved group.
+      6. Save this week's full snapshot for next week's comparison.
+
+      ## Rules
+      - Always diff against the immediately prior week's snapshot, never an older one.
+      - Report unchanged accounts as a count only, not individually, to keep the escalation short.
+      - A newly high-risk account needs two independent signals before it counts as "moved."
+      - Keep every weekly snapshot on file — never overwrite or discard past history.
+
+      ## Output
+      A diff summary: accounts moved up, moved down, new, and recovered, versus last week.
 goal: score every account's renewal risk weekly and flag what changed before it surprises the team
 integrations: [posthog, zendesk, salesforce, slack]
 whatItDoes:

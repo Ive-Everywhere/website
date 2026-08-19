@@ -11,10 +11,66 @@ difficulty: starter
 skills:
   - name: Deal scoring
     description: Rank by value and slip-risk
+    body: |
+      Rank open deals by value at risk and flag the ones going stale.
+
+      ## Method
+      1. Pull all open deals from HubSpot.
+      2. Diff against last week's snapshot to see what moved stage or slipped.
+      3. Compute days since last logged activity for each deal.
+      4. Flag deals with no activity for 21+ days as stalled.
+      5. Rank stalled deals by deal value, highest value at risk first.
+      6. Note current stage and owner alongside each ranked deal.
+
+      ## Rules
+      - Stall is defined as 21+ days with no logged activity (set on first run, then stored in memory).
+      - Rank by value at risk first, not by recency or stage alone.
+      - A deal that moved stage this week is not stalled, even if the last note is old.
+      - Every stalled deal shows days-since-activity as evidence, not just the stalled label.
+
+      ## Output
+      A ranked list of stalled deals — owner, value, stage, days stalled — plus the week-over-week forecast diff.
   - name: Follow-up drafting
     description: Personalize from the thread
+    body: |
+      Draft one personalized follow-up per stalled deal, ready for the owner to send.
+
+      ## Method
+      1. Pull the last email or call thread for the deal.
+      2. Pull the current stage and any open next step.
+      3. Draft a short follow-up to the deal contact, referencing the last conversation.
+      4. Tailor the ask to the stage — next step, or re-engagement if it's gone cold.
+      5. Attach the draft to the deal owner, not to an auto-send queue.
+
+      ## Rules
+      - Every draft references something specific from the last thread — no generic templates.
+      - Drafts route to the deal owner for review; the agent never sends on its own.
+      - Match the tone of the existing thread rather than restarting cold-outreach voice.
+      - Skip drafting for deals already marked closed-won or closed-lost.
+
+      ## Output
+      One ready-to-send draft email per stalled deal, tagged to its owner, included in the morning summary.
   - name: Forecast diff
     description: Compare against last week
+    body: |
+      Compare this week's pipeline against last week's snapshot and summarize the net movement.
+
+      ## Method
+      1. Load last week's stored pipeline snapshot.
+      2. Pull this week's open deals from HubSpot.
+      3. Match deals across both snapshots by deal ID.
+      4. Identify what's new, what slipped stage, what closed, and what dropped out.
+      5. Total pipeline value for both weeks and compute the delta.
+      6. Store this week's snapshot for next week's comparison.
+
+      ## Rules
+      - Comparison is always week-over-week, same day of week.
+      - A deal missing from this week's pull is flagged as closed or dropped, never silently ignored.
+      - Backward stage slippage is called out separately from stalled deals.
+      - This week's snapshot must be saved before the run ends, or the next diff breaks.
+
+      ## Output
+      A forecast diff summary — total then vs now, what slipped, what's new, what closed — posted to #sales each morning.
 goal: score the pipeline and draft the stalled-deal follow-ups
 integrations: [hubspot, gmail, slack]
 whatItDoes:

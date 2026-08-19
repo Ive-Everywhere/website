@@ -11,10 +11,66 @@ difficulty: intermediate
 skills:
   - name: Theme clustering
     description: Group raw tickets into root-cause themes, not surface tags.
+    body: |
+      Group raw tickets into root-cause themes instead of relying on surface-level tags.
+
+      ## Method
+      1. Pull every ticket opened or closed in the support tools since the last digest.
+      2. Read each ticket's actual content, not just its assigned tag.
+      3. Group tickets by the underlying root cause they describe.
+      4. Merge tickets that use different tags but describe the same root issue.
+      5. Split a tag that actually covers two distinct root causes into separate themes.
+      6. Count tickets per theme and select 2-3 representative examples.
+
+      ## Rules
+      - Cluster by root cause, never by the ticket's existing tag alone.
+      - A theme needs a minimum ticket count of (set on first run, then stored in memory) to be reported.
+      - Keep the theme taxonomy in memory and refine it as new patterns emerge, don't restart it weekly.
+      - Prefer a specific root-cause label over a vague catch-all theme name.
+
+      ## Output
+      A list of themes, each with a ticket count and 2-3 representative ticket links.
   - name: Trend diffing
     description: Compare theme volume against the last digest.
+    body: |
+      Compare this week's theme volumes against the last digest to surface real movement.
+
+      ## Method
+      1. Load last week's saved digest from reports/voc-digest/.
+      2. Match this week's themes to last week's by root cause, not by label text.
+      3. Compute the change in ticket count per theme: grew, shrank, unchanged, new.
+      4. Track how many consecutive weeks a theme has appeared, even as its ticket count fluctuates.
+      5. Note whether a shrinking theme is resolved (fixed) or just quiet this week.
+      6. Save this week's digest as the baseline for next week's diff.
+
+      ## Rules
+      - Always diff against the immediately prior digest, never an older one.
+      - A theme counts as "new" only if it did not appear in the prior digest under any label.
+      - Track consecutive-week streaks precisely — the escalation threshold depends on this count.
+      - Keep every weekly digest on file for the running trend history.
+
+      ## Output
+      A trend line per theme: grew, shrank, unchanged, or new, plus its consecutive-week streak.
   - name: Verbatim sourcing
     description: Every theme keeps its supporting ticket links, not paraphrase-only.
+    body: |
+      Keep every theme backed by real, verifiable ticket links, never paraphrase alone.
+
+      ## Method
+      1. For each theme, attach 2-3 actual ticket links, not summarized descriptions.
+      2. Re-read each linked ticket and confirm it genuinely supports the theme's stated description.
+      3. Drop any ticket that is only a loose or partial match — do not force-fit it to hit a quota.
+      4. Prefer tickets with a direct customer quote over ones requiring inference.
+      5. Carry the same verified links forward if a theme repeats across weeks.
+
+      ## Rules
+      - Every theme ships with real ticket links attached, never description-only.
+      - Drop a loosely matching ticket instead of forcing it to fit a theme.
+      - A theme with zero genuinely supporting tickets does not get reported.
+      - Preserve verbatim customer language in representative excerpts where used.
+
+      ## Output
+      Each reported theme paired with 2-3 verified ticket links and, where available, a verbatim excerpt.
 goal: synthesize the week's support tickets into themes and route the top signal to product
 integrations: [zendesk, intercom, slack, linear]
 whatItDoes:

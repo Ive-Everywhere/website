@@ -11,10 +11,63 @@ difficulty: starter
 skills:
   - name: Meeting brief format
     description: Three-bullet prep note from CRM and email history
+    body: |
+      Produce a consistent three-bullet prep note for every meeting on today's calendar.
+
+      ## Method
+      1. Pull today's calendar and, for each meeting, the last CRM touch and email thread with the attendees.
+      2. Identify the last touchpoint: what was discussed or agreed at the previous interaction.
+      3. Identify one open question still unresolved from that touchpoint.
+      4. Identify one concrete thing that would move the deal or relationship forward at this meeting.
+      5. Write exactly three bullets, in that order, per meeting.
+      6. Skip meeting types on the stored skip-list (internal syncs, 1:1s) rather than generating a note for them.
+
+      ## Rules
+      - Always exactly three bullets per meeting: last touchpoint, open question, next move — never more.
+      - The list of meeting types to skip is set on first run, then grows in memory as new internal-only types appear.
+      - Never invent a "last touchpoint" when no CRM touch or email thread exists — say so plainly instead.
+
+      ## Output
+      One three-bullet prep note per qualifying meeting, grouped under today's date, posted to the delivery Slack channel each morning.
   - name: CRM field mapping
     description: Which fields to update after each meeting type
+    body: |
+      Know which CRM fields to update after each meeting type, so logging is consistent rather than guessed.
+
+      ## Method
+      1. For every meeting that completed since the last run, check the CRM for an existing logged update.
+      2. If none exists, identify the meeting type (discovery, demo, negotiation, etc.) from the calendar event.
+      3. Look up which fields that meeting type requires: stage, next step, notes, or others per the stored mapping.
+      4. Draft the field update using only information from the calendar event and any linked notes — never invent detail.
+      5. Queue the drafted update for one-tap approval rather than writing it directly.
+
+      ## Rules
+      - Which CRM fields to update per meeting type is set on first run, then stored in memory.
+      - Never draft a CRM update for a meeting with no notes or calendar detail to draw from.
+      - Every CRM update queues for approval; the skill never writes to the CRM directly.
+
+      ## Output
+      A queued CRM field-update draft per completed meeting: stage, next step, notes — listed for one-tap approval.
   - name: Follow-up drafting
     description: Personalize from the call notes and the prior thread
+    body: |
+      Draft a personalized follow-up email for each completed meeting, ready for the rep to review and send.
+
+      ## Method
+      1. Pull the call notes and the prior email thread for each completed meeting.
+      2. Identify what was agreed or promised during the meeting.
+      3. Draft a follow-up that references the specific discussion, not a generic template.
+      4. Match the follow-up's tone and length to the prior thread's style.
+      5. Attach the drafted CRM field update as context, so the rep sees both together.
+      6. Queue the draft — do not send it.
+
+      ## Rules
+      - Every follow-up must reference at least one specific detail from the actual call notes, never a generic close.
+      - The skill never sends an email; every draft queues for the rep's review and send decision.
+      - Never draft a follow-up for a meeting with no call notes to personalize from.
+
+      ## Output
+      One draft follow-up email per completed meeting, queued alongside its CRM update, delivered to Slack for one-tap approval.
 goal: prep today's meetings and log yesterday's CRM updates and follow-ups
 integrations: [googlecalendar, hubspot, gmail, slack]
 whatItDoes:

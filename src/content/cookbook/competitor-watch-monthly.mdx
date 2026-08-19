@@ -11,10 +11,67 @@ difficulty: advanced
 skills:
   - name: DHM scoring
     description: Score Delight, Hard-to-copy, Margin, each score tied to a source URL.
+    body: |
+      Score a competitor on Delight, Hard-to-copy, and Margin, each score tied to a cited source URL.
+
+      ## Method
+      1. Gather this month's live sources for {{competitor}}: pricing page, changelog, recent reviews, job postings.
+      2. Score Delight: how much the competitor's product experience stands out to its users, based on reviews and changelog evidence.
+      3. Score Hard-to-copy: how defensible the competitor's advantage is — technical depth, data moat, integration lock-in — based on job postings and product evidence.
+      4. Score Margin: what the competitor's pricing and cost structure imply about their unit economics, based on the pricing page.
+      5. For each of the 3 scores, attach the specific URL that supports it — no score ships without one.
+      6. Where evidence is thin or absent for a dimension, mark it explicitly rather than scoring on impression alone.
+
+      ## Rules
+      - Every score ties to at least one cited URL; a score with no citation does not ship.
+      - Score from evidence on the page, not from general reputation or memory of the competitor.
+      - Use the same DHM definitions run over run so scores are comparable month to month.
+      - A thin-evidence dimension is marked as such, not silently scored low or skipped.
+
+      ## Output
+      Three scores (Delight, Hard-to-copy, Margin) for {{competitor}}, each with its supporting source URL and a one-line rationale.
   - name: Source citation
     description: Every claim in the profile links to the live page it came from.
+    body: |
+      Back every claim in the competitor profile with a link to the live page it came from.
+
+      ## Method
+      1. As each claim is drafted (pricing, feature, hire, review sentiment), capture the exact URL it came from.
+      2. Attach the URL inline next to the claim, not bundled in a separate reference list at the end.
+      3. Distinguish load-bearing claims (pricing, a specific feature) from supplementary ones (general review sentiment) per the sources set on first run.
+      4. Before publishing, re-fetch every load-bearing URL and confirm the page still supports the claim as written.
+      5. If a re-fetch shows the page has changed or no longer supports the claim, update or remove the claim before it ships.
+      6. Never carry forward a citation from a previous month without re-verifying it this month.
+
+      ## Rules
+      - No claim in the profile ships without a source URL next to it.
+      - Load-bearing claims are re-fetched and re-verified every run, not assumed still true from last month.
+      - If a source page is gone or paywalled, mark the claim as unverifiable rather than leaving the old citation in place.
+      - Supplementary claims (general sentiment) still cite a source, even if they skip the re-fetch requirement.
+
+      ## Output
+      A profile where every claim carries an inline source URL, with load-bearing URLs re-verified as of this run's date.
   - name: Diff-against-last-run
     description: Isolate only what changed since the previous profile.
+    body: |
+      Isolate what changed for {{competitor}} since last month's saved profile, instead of restating everything.
+
+      ## Method
+      1. Load last month's profile for {{competitor}} from `competitive/{{competitor}}.md`.
+      2. Compare this month's DHM scores, pricing, changelog entries, and job postings against the prior version field by field.
+      3. List only what changed: a new price point, a new feature, a score that moved, a new hire pattern.
+      4. For each change, note the direction and magnitude — not just "pricing changed" but what it changed from and to.
+      5. Where a linear roadmap item relates to a change, name it as context, without editing the roadmap itself.
+      6. Write the updated profile with this month's full state, plus a changelog entry summarizing the diff.
+
+      ## Rules
+      - Report only real changes; do not restate unchanged findings as if they were new.
+      - Every diffed item carries its own source citation, same standard as any other claim in the profile.
+      - The changelog section in the profile accumulates over time — do not overwrite prior months' changelog entries.
+      - Tying a change to a roadmap item is informational only; it never triggers an edit to the roadmap.
+
+      ## Output
+      A "what changed" list (field, old value, new value, source), appended as a dated changelog entry inside the updated profile.
 goal: refresh a competitor profile monthly and surface what changed, with every claim cited
 integrations: [drive, notion, slack]
 whatItDoes:

@@ -11,10 +11,70 @@ difficulty: starter
 skills:
   - name: Past-hire calibration
     description: Pull what worked from the last successful hires in this role
+    body: |
+      Pull what worked from the last successful hires in this role before any draft starts.
+
+      ## Method
+      1. Read the intake form for the open role: level, team, and must-haves.
+      2. Query {{ats_or_sheet}} for the last {{lookback_hires}} successful hires at this level or role.
+      3. Pull each hire's final JD text and the sourcing criteria used to find them.
+      4. Extract the responsibilities, must-haves, and channels that repeat across those hires.
+      5. Flag anything that changed since the last calibration, such as a new must-have or level bar.
+      6. Write a short calibration note per role family and save it to memory.
+      7. Hand the note to the JD and sourcing-brief drafting steps.
+
+      ## Rules
+      - Draw only from closed, successful hires — never an open req or a rejected candidate.
+      - Default lookback is {{lookback_hires}} hires (set on first run, then stored in memory).
+      - Refresh the calibration note every time a new hire closes in this role family.
+      - If the ATS record for a past hire is incomplete, flag the gap instead of guessing its content.
+
+      ## Output
+      A calibration note: a short bullet list of common responsibilities, must-haves, and sourcing channels, with the source hires it drew from.
   - name: Bias-language check
     description: Screen the JD for gendered or exclusionary language before it ships
+    body: |
+      Screen a drafted job description for language that narrows or discourages qualified candidates, and fix it — don't just flag it.
+
+      ## Method
+      1. Read the full JD draft before it goes anywhere else.
+      2. Scan for gendered terms, such as "rockstar," "he/she," or aggressive competitive language.
+      3. Scan for unnecessary requirements: a degree, a years-of-experience minimum, or a tool not actually needed day one.
+      4. Scan for jargon walls — internal acronyms or insider phrasing an outside candidate can't parse.
+      5. Rewrite every flagged instance in place with neutral, outcomes-based language.
+      6. Re-read the rewritten draft once to confirm no flagged pattern remains.
+      7. Return the clean draft, plus a short list of what was changed and why.
+
+      ## Rules
+      - Rewrite every flag before the JD ships — never hand back a flag-only list for someone else to fix.
+      - Treat the three categories (gendered terms, unnecessary requirements, jargon walls) as the minimum scan, not the ceiling.
+      - Keep the role's genuine must-haves; cut only what isn't actually required for day one.
+      - Never soften a real requirement to pass the check — flag it as a policy question instead of silently dropping it.
+
+      ## Output
+      The rewritten JD text, plus a change log: each flagged phrase, its category, and its replacement.
   - name: Sourcing brief format
     description: Target profiles, channels, and search strings for a sourcer
+    body: |
+      Turn the calibrated JD into a brief a sourcer can act on without asking follow-up questions.
+
+      ## Method
+      1. Read the finished JD and the past-hire calibration note for this role.
+      2. Draft 2-3 target profile archetypes: company type, title, and years of relevant experience.
+      3. List the channels most likely to surface each archetype, such as LinkedIn, niche boards, or the referral pool.
+      4. Write a starter Boolean search string per archetype, using the JD's must-haves as keywords.
+      5. Note any deliberate exclusion, such as a competitor to avoid poaching from, if the hiring manager flagged one.
+      6. Package the brief as one page, mapped one section per archetype.
+      7. Attach the brief to the JD for the same sign-off pass.
+
+      ## Rules
+      - Ground every archetype in the past-hire calibration note, not a generic persona.
+      - Keep the brief to one page — a sourcer should not need to read past it to start.
+      - Never send the brief to a sourcer before the hiring manager signs off in {{delivery_channel}}.
+      - Update the Boolean strings if the JD changes after sign-off.
+
+      ## Output
+      A one-page sourcing brief: 2-3 target archetypes, their channels, and a starter Boolean string per archetype.
 goal: draft a calibrated JD and sourcing brief from past-hire signal, not a blank page
 integrations: [notion, googlesheets, gmail, slack]
 whatItDoes:
