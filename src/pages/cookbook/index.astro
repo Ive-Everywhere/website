@@ -19,8 +19,6 @@ const categories = [...new Set(recipes.map((r) => r.data.category))];
 
 // Collections: group by the optional `collection` field, keep first-seen order.
 const collections = [...new Set(recipes.map((r) => r.data.collection).filter(Boolean))] as string[];
-
-const featured = recipes.filter((r) => r.data.featured);
 ---
 
 <Base
@@ -56,19 +54,43 @@ const featured = recipes.filter((r) => r.data.featured);
         </label>
       </div>
 
-      {/* collections, full width above the rail row, each a page of its own */}
+      {/* collections: one row, side-scroll, arrows top right. Each opens its
+          own page. */}
       {
         collections.length > 0 && (
           <div class="flex flex-col gap-5" data-collections-row>
-            <p class="t-mono-md text-text-soft-400 uppercase tracking-[0.08em]">Collections</p>
-            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="flex items-center justify-between">
+              <p class="t-mono-md text-text-soft-400 uppercase tracking-[0.08em]">Collections</p>
+              <div class="flex items-center gap-2">
+                <button
+                  type="button"
+                  data-coll-prev
+                  aria-label="Scroll collections left"
+                  class="border-black/[0.1] text-text-strong-950 hover:bg-bg-weak-50 disabled:text-text-disabled-300 disabled:hover:bg-transparent flex size-10 items-center justify-center rounded-full border transition-colors"
+                >
+                  <i class="ri-arrow-left-line text-[18px]" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  data-coll-next
+                  aria-label="Scroll collections right"
+                  class="border-black/[0.1] text-text-strong-950 hover:bg-bg-weak-50 disabled:text-text-disabled-300 disabled:hover:bg-transparent flex size-10 items-center justify-center rounded-full border transition-colors"
+                >
+                  <i class="ri-arrow-right-line text-[18px]" aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+            <div
+              data-coll-track
+              class="-mx-1 flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-1 pb-1 [scrollbar-width:none]"
+            >
               {collections.map((name) => {
                 const meta = collectionMeta[name] ?? { blurb: '', tint: 'bg-bg-soft-200' };
                 const count = recipes.filter((r) => r.data.collection === name).length;
                 return (
                   <a
                     href={`/cookbook/collections/${collectionSlug(name)}`}
-                    class={`${meta.tint} flex flex-col gap-2.5 rounded-[20px] p-8 text-left transition-transform hover:-translate-y-0.5`}
+                    class={`${meta.tint} flex w-[320px] shrink-0 snap-start flex-col gap-2.5 rounded-[20px] p-7 text-left transition-transform hover:-translate-y-0.5 sm:w-[360px]`}
                   >
                     <p class="t-label-xs text-text-strong-950/55 font-mono uppercase tracking-[0.1em]">
                       Collection · {count} {count === 1 ? 'recipe' : 'recipes'}
@@ -131,34 +153,6 @@ const featured = recipes.filter((r) => r.data.featured);
 
         {/* recipes column */}
         <div class="flex min-w-0 flex-1 flex-col gap-10">
-          {/* featured */}
-          {
-            featured.length > 0 && (
-              <div class="flex flex-col gap-5" data-featured-row>
-                <p class="t-mono-md text-text-soft-400 uppercase tracking-[0.08em]">Featured</p>
-                <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                  {featured.map((r) => (
-                    <a
-                      href={`/cookbook/${r.id}`}
-                      class={`${catColor(r.data.category).surface} border border-black/[0.06] flex flex-col gap-4 rounded-[18px] p-5 transition-transform hover:-translate-y-0.5`}
-                    >
-                      <span class={`${catColor(r.data.category).tile} ${catColor(r.data.category).ink} flex size-11 items-center justify-center rounded-[12px]`}>
-                        <i class={`${r.data.icon} text-[22px]`} aria-hidden="true" />
-                      </span>
-                      <div class="flex flex-1 flex-col gap-1.5">
-                        <h3 class="t-label-lg text-text-strong-950">{r.data.title}</h3>
-                        <p class="t-label-md text-text-sub-600 line-clamp-3">{r.data.description}</p>
-                      </div>
-                      <span class={`${catColor(r.data.category).ink} t-label-xs font-mono uppercase tracking-[0.06em]`}>
-                        {r.data.category}
-                      </span>
-                    </a>
-                  ))}
-                </div>
-              </div>
-            )
-          }
-
           {/* all recipes */}
           <div class="flex flex-col gap-5">
             <p class="t-mono-md text-text-soft-400 uppercase tracking-[0.08em]" data-grid-label>
@@ -219,7 +213,6 @@ const featured = recipes.filter((r) => r.data.featured);
   const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-card]'));
   const collectionsRow = document.querySelector<HTMLElement>('[data-collections-row]');
   const separator = document.querySelector<HTMLElement>('[data-separator]');
-  const featuredRow = document.querySelector<HTMLElement>('[data-featured-row]');
   const gridLabel = document.querySelector<HTMLElement>('[data-grid-label]');
   const empty = document.querySelector<HTMLElement>('[data-empty]');
 
@@ -239,7 +232,6 @@ const featured = recipes.filter((r) => r.data.featured);
     // While filtering, drop the browse sections so results stand alone.
     if (collectionsRow) collectionsRow.style.display = browsing ? '' : 'none';
     if (separator) separator.style.display = browsing ? '' : 'none';
-    if (featuredRow) featuredRow.style.display = browsing ? '' : 'none';
     if (gridLabel) gridLabel.textContent = browsing ? 'All recipes' : `${shown} ${shown === 1 ? 'recipe' : 'recipes'}`;
     empty?.classList.toggle('hidden', shown > 0);
   };
@@ -258,4 +250,24 @@ const featured = recipes.filter((r) => r.data.featured);
     query = input.value.trim().toLowerCase();
     apply();
   });
+
+  // Collections carousel: arrows scroll one card at a time and disable at the ends.
+  const track = document.querySelector<HTMLElement>('[data-coll-track]');
+  const prev = document.querySelector<HTMLButtonElement>('[data-coll-prev]');
+  const next = document.querySelector<HTMLButtonElement>('[data-coll-next]');
+  if (track && prev && next) {
+    const step = () => {
+      const card = track.firstElementChild as HTMLElement | null;
+      return card ? card.offsetWidth + 24 : 384; // card + gap-6
+    };
+    const sync = () => {
+      prev.disabled = track.scrollLeft <= 4;
+      next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+    };
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync, { passive: true });
+    sync();
+  }
 </script>
