@@ -1,0 +1,72 @@
+---
+title: Clear security questionnaires without guessing
+description: Draft every answer from an approved library with citations, then verify each one before it ships.
+publishedAt: 2026-08-19
+icon: ri-shield-check-line
+category: Customer Engineering
+collection: Deal support
+featured: false
+order: 20
+difficulty: advanced
+skills:
+  - name: Answer library maintenance
+    description: Grow and version the approved-answer library from every completed questionnaire
+  - name: Evidence citation
+    description: Every answer cites the policy doc, control, or prior answer it came from
+  - name: Adversarial review
+    description: Second-pass check that tries to refute each drafted answer before it ships
+goal: draft security questionnaire answers from the approved library and verify every one before sign-off
+integrations: [drive, googlesheets, salesforce, slack]
+whatItDoes:
+  - Parses every question from the incoming file into a row-by-row list
+  - Drafts each answer from the approved library, citing its source
+  - Runs a second-pass sub-agent that tries to refute every drafted answer
+  - Grows the answer library and flags open rows for sign-off
+howToUse:
+  - Connect Drive, the answer library sheet, Salesforce, and Slack to the agent
+  - Set the trigger, a new file in the drive folder or an opportunity attachment
+  - Paste the prompt and adjust which categories always need human review
+  - It answers its first-run questions once and remembers; you review flagged and open rows
+workflow:
+  - kind: trigger
+    title: New questionnaire lands
+    body: Dropped in the drive folder or attached to a Salesforce opportunity.
+  - kind: shell
+    title: Parse the file
+    body: Extract every question from the XLSX/CSV/PDF into a row-by-row list.
+  - kind: prompt
+    title: Draft from the library
+    body: Match each question to the approved-answer library, cite the source.
+  - kind: prompt
+    title: Second-pass review
+    body: A sub-agent checks every drafted answer against the library and policy docs.
+  - kind: result
+    title: Deliver for sign-off
+    body: Completed file plus a flagged-answers summary posted to Slack.
+prompt: |
+  Clear the security questionnaire for {{account}}. This can run in the
+  cloud as long as the questionnaire takes — a 300-row file completes in
+  one run.
+
+  1. Parse {{questionnaire_file}} and extract every question into a
+     row-by-row list, keeping the original question ID.
+  2. For each question, search the approved-answer library in
+     {{answer_library}} for the closest match. Draft an answer and cite the
+     library entry or policy doc it came from.
+  3. For any question with no library match, draft an answer from
+     {{policy_docs}} only if the evidence supports it. Otherwise mark it
+     open and add it to the review queue instead of guessing.
+  4. Spawn a second-pass sub-agent reviewer. Have it try to refute every
+     drafted answer against the library and {{policy_docs}}, and reject any
+     answer that overstates or invents a security posture claim.
+  5. Revise or open every answer the reviewer rejects. Never substitute a
+     plausible-sounding claim for one the reviewer could not verify.
+  6. Add every newly-approved answer back to {{answer_library}} so the next
+     questionnaire starts smaller.
+  7. Save the completed file to
+     reports/questionnaires/{{account}}-{{date}}.md and post a summary to
+     {{delivery_channel}}: rows answered, rows open, rows flagged.
+
+  Open rows block submission until a human resolves them — never submit a
+  completed questionnaire to the customer or prospect directly.
+---

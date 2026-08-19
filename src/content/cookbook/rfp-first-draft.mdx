@@ -1,0 +1,66 @@
+---
+title: Draft the RFP from your past answers
+description: Turn a new RFP into a full draft from your past-response library, validated section by section.
+publishedAt: 2026-08-19
+icon: ri-file-edit-line
+category: Customer Engineering
+collection: Deal support
+featured: false
+order: 21
+difficulty: intermediate
+skills:
+  - name: Past-response library
+    description: Reuse and adapt the closest prior RFP answer per section
+  - name: Section validation
+    description: Check every drafted section against its library source before it ships
+  - name: Proposal voice
+    description: Match the team's tone and formatting standard
+goal: draft an RFP response from the past-response library and validate every section before it goes to the team
+integrations: [drive, notion, salesforce, slack]
+whatItDoes:
+  - Maps the new RFP's sections to your standard response outline
+  - Drafts each section from the closest past answer in the library
+  - Flags any sentence not backed by the library or a named source
+  - Marks brand-new sections for human review before the draft ships
+howToUse:
+  - Connect Drive, Notion, Salesforce, and Slack to the agent
+  - Set the trigger, a new RFP logged against an opportunity or dropped in Drive
+  - Paste the prompt and adjust the standard response outline for your team
+  - It answers its first-run questions once and remembers; you review new and flagged sections
+workflow:
+  - kind: trigger
+    title: New RFP received
+    body: Logged against a Salesforce opportunity or dropped in the drive folder.
+  - kind: prompt
+    title: Outline the sections
+    body: Match the RFP's structure to the standard response outline.
+  - kind: prompt
+    title: Draft from the library
+    body: Pull the closest past answer per section, adapt to this RFP.
+  - kind: prompt
+    title: Validate per section
+    body: Check every section against its library source and flag unsupported claims.
+  - kind: result
+    title: Deliver the draft
+    body: Full draft saved to drive, section-by-section flags posted to Slack.
+prompt: |
+  Draft the RFP response for {{account}}.
+
+  1. Read {{rfp_file}} and map its sections to the standard response outline
+     stored in memory.
+  2. For each section, search {{response_library}} for the closest past
+     answer to a similar RFP. Draft an adapted response and cite the past
+     deal it came from.
+  3. For any section with no close match, draft from {{policy_docs}} or
+     {{product_docs}} only, and mark it "new content" so a human reviews it
+     first.
+  4. Re-read every drafted section against its cited source. Flag any
+     sentence that isn't backed by the library or a named source doc.
+  5. Compile the draft in the RFP's required format and save it to
+     documents/rfps/{{account}}-{{date}}.md.
+  6. Post a section-by-section summary to {{delivery_channel}}: sections
+     reused, sections new, sections flagged for review.
+
+  Never submit the response to the prospect or the RFP portal — it is a
+  draft for the proposal lead to review, edit, and submit.
+---
