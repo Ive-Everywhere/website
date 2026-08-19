@@ -74,6 +74,19 @@ skills:
 
       ## Output
       A confirmed redline list, a subset of the first pass, plus a rejected-edit log with the reason for each rejection — both handed to {{reviewer}}.
+jobs:
+  - name: Contracts inbox watch
+    cadence: Every 30 minutes on weekdays, check the contracts-inbox folder
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the msa-redline-first-pass skill from your skills folder; its
+      first-run answers are in memory.
+      1. Check the contracts-inbox folder in Drive for any new MSA since the last run.
+      2. For each new MSA, run the redline-playbook method: parse, classify,
+         draft tracked-changes redlines, then the adversarial review pass.
+      3. Save the redlined docx and post the summary and flags to Slack.
+      If a required input is missing or a check fails, post what you found
+      and hold — the lawyer decides; never send a redline to the counterparty.
 goal: produce a first-pass tracked-changes redline of an incoming MSA, checked against the playbook
 integrations: [drive, gmail, slack]
 whatItDoes:

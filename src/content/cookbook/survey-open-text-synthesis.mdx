@@ -1,5 +1,5 @@
 ---
-title: Read every engagement comment, safely
+title: Synthesize engagement survey comments into anonymous themes
 description: Synthesize open-text engagement comments into themes, with anonymity guardrails on quotes and small groups.
 publishedAt: 2026-08-19
 icon: ri-chat-poll-line
@@ -55,7 +55,7 @@ skills:
   - name: Quote paraphrasing
     description: Paraphrase or count-only represent every theme, never verbatim
     body: |
-      Represent each surviving theme in words that carry the meaning without exposing who said it.
+      Paraphrase each surviving theme's sentiment without quoting any respondent's exact words.
 
       ## Method
       1. Take the anonymity-floor-cleared theme list.
@@ -73,6 +73,22 @@ skills:
 
       ## Output
       A themed write-up: each theme with its respondent count and a paraphrase or cleared quote, ready for the insights view and #people.
+jobs:
+  - name: Survey close watch
+    cadence: Weekly poll of {{survey_source}} for a newly closed survey
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the survey-open-text-synthesis skill from your skills folder; its
+      first-run answers are in memory.
+      1. Check {{survey_source}} for a survey that closed since the last
+         run.
+      2. If found, run the skill's method: cluster the open-text responses
+         into themes, then apply the anonymity floor and paraphrasing.
+      3. Diff against the last synthesis, update the research-insights
+         view, and post the summary to #people.
+      If a theme falls below {{min_respondents}} or the export is
+      incomplete, post what you found and hold — never attribute a comment
+      to an individual or publish a small-group theme.
 goal: synthesize open-text survey comments into themes without exposing any individual respondent
 integrations: [googlesheets, slack, drive]
 whatItDoes:

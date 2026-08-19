@@ -71,6 +71,19 @@ skills:
 
       ## Output
       An updated tracker snapshot plus an alert list of contracts newly inside {{notice_lead_days}} days of their deadline, each with owner and re-confirmed date.
+jobs:
+  - name: Weekly renewal sweep
+    cadence: Every Monday morning
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the contract-renewal-notice-radar skill from your skills folder; its
+      first-run answers are in memory.
+      1. Sweep the contract repository for contracts not yet in the renewal tracker.
+      2. Run the renewal-clause extraction and deadline-diff method, re-confirming
+         any contract newly inside its notice window.
+      3. Update the renewal tracker and post the alert list to Slack.
+      If a required input is missing or a check fails, post what you found
+      and hold — the lawyer decides; never send a notice to a counterparty.
 goal: track every contract's notice deadline and remind the owner before the window closes
 integrations: [drive, googlesheets, slack]
 whatItDoes:

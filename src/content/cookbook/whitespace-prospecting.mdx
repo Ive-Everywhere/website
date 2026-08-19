@@ -1,5 +1,5 @@
 ---
-title: Find the list before anyone else does
+title: Build a scored whitespace target list
 description: Build a scored TAM list for a new segment, diffed against the CRM so it's true whitespace.
 publishedAt: 2026-08-19
 icon: ri-focus-3-line
@@ -65,6 +65,29 @@ skills:
 
       ## Output
       A deduplicated candidate company list with per-company inclusion notes, handed to CRM diff before scoring.
+jobs:
+  - name: Monthly whitespace refresh
+    cadence: 1st business day of the month at 9:00 AM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the whitespace-prospecting skill from your skills folder; its
+      first-run answers are in memory.
+      1. Re-run the TAM build and CRM diff for every segment with a stored ICP.
+      2. Score the refreshed list and re-check the top 20 act-now accounts a second time.
+      3. Update the whitespace view and post the top 20 per segment to #sales-ops.
+      If a required input is missing or a check fails, post what you found
+      and hold — never add an account to an outbound sequence directly.
+  - name: New segment brief detection
+    cadence: Every day at 9:00 AM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the whitespace-prospecting skill from your skills folder; its
+      first-run answers are in memory.
+      1. Check #sales-ops for a new segment brief posted since the last run.
+      2. If found, ask for the ICP definition on first mention and save it to memory.
+      3. Run the skill's method to build, diff, score, and publish the list for the new segment.
+      If a required input is missing or a check fails, post what you found
+      and hold — never add an account to an outbound sequence directly.
 goal: build a scored whitespace list for a new segment and keep it current
 integrations: [hubspot, googlesheets, slack]
 whatItDoes:

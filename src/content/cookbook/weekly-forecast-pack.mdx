@@ -67,6 +67,18 @@ skills:
 
       ## Output
       A ranked list of coaching signals (rep, signal type, evidence), with the top three included in the #sales-leadership summary.
+jobs:
+  - name: Monday forecast rollup
+    cadence: Every Monday at 7:00 AM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the weekly-forecast-pack skill from your skills folder; its
+      first-run answers are in memory.
+      1. Pull every open deal from the CRM for this week's rollup.
+      2. Run the skill's method: roll up by rep and stage, diff against last week, and flag coaching signals.
+      3. Update the forecast view, save this week's snapshot, and post the summary to #sales-leadership.
+      If a required input is missing or a check fails, post what you found
+      and hold — never change a rep's forecast number in the CRM.
 goal: roll up the weekly forecast and flag the coaching signals before the Monday call
 integrations: [hubspot, googlesheets, slack]
 whatItDoes:

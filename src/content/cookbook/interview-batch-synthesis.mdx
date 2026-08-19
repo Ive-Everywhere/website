@@ -1,5 +1,5 @@
 ---
-title: Turn a transcript pile into signal
+title: Synthesize interview transcripts into JTBD themes
 description: Synthesize a batch of interview transcripts into JTBD statements and themes, every quote verbatim and sourced.
 publishedAt: 2026-08-19
 icon: ri-mic-line
@@ -73,6 +73,22 @@ skills:
 
       ## Output
       A contradictions list: each entry names the prior finding, the new finding, supporting evidence for both, and a status (open/resolved).
+jobs:
+  - name: Biweekly interview batch synthesis
+    cadence: Every other Monday at 6:00 AM, or as soon as the transcript batch threshold is reached
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the interview-batch-synthesis skill from your skills folder; its
+      first-run answers (transcripts folder, batch size, contradiction
+      policy) are in memory.
+      1. List every new transcript in the stored interviews folder since
+         the last run and confirm the batch reached the stored minimum size.
+      2. Extract JTBD statements and pains per transcript, roll them into
+         themes, and flag any contradiction against synthesis memory.
+      3. Patch the research-insights view and post the synthesis summary
+         to the stored delivery channel.
+      If a required input is missing or a check fails, post what you found
+      and hold — never share interview content outside the team's surfaces.
 goal: synthesize a batch of interview transcripts into JTBD statements and contradictions
 integrations: [drive, notion, slack]
 whatItDoes:

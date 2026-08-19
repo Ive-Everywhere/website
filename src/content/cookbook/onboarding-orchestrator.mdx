@@ -72,6 +72,22 @@ skills:
 
       ## Output
       A day-one-readiness summary: overall status line, then each open or blocked step with its owner, posted to {{delivery_channel}}.
+jobs:
+  - name: Onboarding checklist chase
+    cadence: Daily, while any new hire's onboarding is still open
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the onboarding-orchestrator skill from your skills folder; its
+      first-run answers are in memory.
+      1. Pull every open row from the onboarding-orchestrator tracker view.
+      2. Run the skill's method: check each system directly, update status,
+         remind any owner overdue by {{reminder_threshold_days}} days, and
+         escalate to {{people_ops_lead}} past {{escalation_threshold_days}}.
+      3. On a start date, post the day-one-readiness summary to
+         {{delivery_channel}}.
+      If a step's source system can't be confirmed, post what you found and
+      hold — never mark a step complete or provision access without the
+      People Ops lead's sign-off.
 goal: run the new-hire checklist across every system and chase whoever's step is stuck
 integrations: [notion, googlesheets, slack, gmail, googlecalendar]
 whatItDoes:

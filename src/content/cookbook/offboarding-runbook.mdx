@@ -73,6 +73,37 @@ skills:
 
       ## Output
       A confirmed-vs-unconfirmed report: one row per access item, its verification state, and the source-system check that produced it — delivered to a restricted channel only.
+jobs:
+  - name: Offboarding request watch
+    cadence: Daily poll for a newly confirmed termination date
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the offboarding-runbook skill from your skills folder; its
+      first-run answers are in memory.
+      1. Check for any exit where HR has confirmed a termination date since
+         the last run.
+      2. For each new exit, run the skill's method: build the access
+         checklist, then trigger or ticket revocation for every item.
+      3. Hand the logged actions to the re-verification pass.
+      If the role-type access inventory is missing an employee's system,
+      post what you found and hold — never mark an item revoked without
+      the independent re-check.
+  - name: Access re-verification pass
+    cadence: Runs {{reverify_delay_hours}} hours after each revocation action
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the offboarding-runbook skill from your skills folder; its
+      first-run answers are in memory.
+      1. Pull every revocation action logged but not yet independently
+         confirmed.
+      2. Run the skill's method: query each source system directly and mark
+         the item confirmed or unconfirmed.
+      3. Escalate anything still unconfirmed {{escalation_hours}} hours
+         after {{termination_date}} to {{security_escalation_channel}}, and
+         post the confirmed-vs-unconfirmed report to {{delivery_channel}}.
+      If a system can't be queried directly, post what you found and hold —
+      never mark an access item closed on a triggered action alone, and
+      keep employee-specific detail inside People Ops and Security only.
 goal: run the offboarding checklist and independently confirm every access revocation actually took effect
 integrations: [slack, googlesheets, gmail, notion]
 whatItDoes:

@@ -72,6 +72,22 @@ skills:
 
       ## Output
       An escalation logged to `people/handbook-escalations/{{date}}.md` and posted to {{hr_escalation_channel}}, with the employee's question attached.
+jobs:
+  - name: Handbook version watch
+    cadence: Poll {{handbook_source}} daily for a new handbook version
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the policy-qa-app skill from your skills folder; its first-run
+      answers are in memory.
+      1. Check {{handbook_source}} for a version newer than the current
+         index.
+      2. If found, run the skill's method: re-index the full handbook,
+         excluding comp, pay-band, and performance content.
+      3. Redeploy the app and update its "last updated" line to the new
+         version.
+      If re-indexing fails or leaves a section unclear, post what you found
+      and hold — never publish an answer the handbook does not explicitly
+      cover.
 goal: build a shareable app that answers handbook questions with citations and escalates what it can't answer
 integrations: [notion, drive, slack]
 whatItDoes:

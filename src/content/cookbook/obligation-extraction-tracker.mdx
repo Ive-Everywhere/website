@@ -71,6 +71,33 @@ skills:
 
       ## Output
       A reconciled obligation list ready for the tracker view, plus a disagreement log noting what triggered each third read and its outcome.
+jobs:
+  - name: Executed contracts watch
+    cadence: Every 30 minutes on weekdays, check the executed-contracts folder
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the obligation-extraction-tracker skill from your skills folder; its
+      first-run answers are in memory.
+      1. Check the executed-contracts folder for any newly signed contract
+         since the last run.
+      2. For each new contract, run the dual-pass extraction and
+         reconciliation method, then publish reconciled obligations to the tracker.
+      3. Schedule the deadline reminders and post the summary to Slack.
+      If a required input is missing or a check fails, post what you found
+      and hold — the lawyer decides; never mark an obligation satisfied.
+  - name: Weekly obligation catch-all sweep
+    cadence: Every Monday morning
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the obligation-extraction-tracker skill from your skills folder; its
+      first-run answers are in memory.
+      1. Sweep the executed-contracts folder for any contract not yet
+         extracted, in case the inbox watch missed one.
+      2. Run the dual-pass extraction and reconciliation method on each, then
+         publish reconciled obligations to the tracker.
+      3. Post the summary of obligations added and flagged to Slack.
+      If a required input is missing or a check fails, post what you found
+      and hold — the lawyer decides; never mark an obligation satisfied.
 goal: extract every obligation from a signed contract with two independent passes and track it to deadline
 integrations: [drive, googlesheets, slack, gmail]
 whatItDoes:

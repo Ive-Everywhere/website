@@ -76,6 +76,19 @@ skills:
 
       ## Output
       reports/{{period}}-close.md, containing matched count, exception count, ledger totals, and a close status of open or closed.
+jobs:
+  - name: Month-end close run
+    cadence: The 1st of every month at 7:00 AM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the month-end-reconciliation skill from your skills folder; its
+      first-run answers are in memory.
+      1. Confirm the period to close (the prior calendar month).
+      2. Run the close checklist: pull payouts, match the ledger, apply the
+         exception policy, post the clean entries, save the report.
+      3. Email the exceptions for sign-off.
+      If a required input is missing or a check fails, post what you found
+      and hold — never post anything that failed a check without approval.
 goal: reconcile the month-end close and surface only the exceptions
 integrations: [stripe, googlesheets, gmail]
 whatItDoes:

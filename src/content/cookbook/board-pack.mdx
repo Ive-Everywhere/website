@@ -72,6 +72,19 @@ skills:
 
       ## Output
       A variance list — metric, prior value, current value, delta, flag reason — attached to the draft pack for review.
+jobs:
+  - name: Monthly board pack draft
+    cadence: A day before the board meeting, monthly
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the board-pack skill from your skills folder; its first-run
+      answers are in memory.
+      1. Identify this month's reporting period and the board meeting date.
+      2. Run the skill's method: pull the KPIs, write the narrative, flag
+         variances against last month, and assemble the deck in last month's format.
+      3. Save the draft to reports/board/{{month}}.md.
+      If a required input is missing or a check fails, post what you found
+      and hold — never send the pack directly, hold it as a draft for review.
 goal: draft this month's board pack from the live numbers
 integrations: [googlesheets, stripe, hubspot]
 whatItDoes:

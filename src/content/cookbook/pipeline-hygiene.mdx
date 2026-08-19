@@ -71,6 +71,19 @@ skills:
 
       ## Output
       A forecast diff summary — total then vs now, what slipped, what's new, what closed — posted to #sales each morning.
+jobs:
+  - name: Daily pipeline review
+    cadence: Every weekday at 8:00 AM, before standup
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the pipeline-hygiene skill from your skills folder; its first-run
+      answers are in memory.
+      1. Pull open deals from HubSpot and diff against last week's snapshot.
+      2. Run the skill's method: score stalled deals, draft follow-ups, and
+         compute the forecast diff.
+      3. Post the summary to #sales with each draft attached.
+      If a required input is missing or a check fails, post what you found
+      and hold — never send a follow-up without the owner reviewing it first.
 goal: score the pipeline and draft the stalled-deal follow-ups
 integrations: [hubspot, gmail, slack]
 whatItDoes:

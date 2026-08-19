@@ -68,6 +68,18 @@ skills:
 
       ## Output
       One draft follow-up email per completed meeting, queued alongside its CRM update, delivered to Slack for one-tap approval.
+jobs:
+  - name: Daily meeting prep and CRM sweep
+    cadence: Every weekday at 7:00 AM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the meeting-prep-and-followup skill from your skills folder; its
+      first-run answers are in memory.
+      1. Pull today's calendar and yesterday's completed meetings.
+      2. Run the skill's method: draft today's prep notes, then draft yesterday's CRM updates and follow-ups.
+      3. Post today's prep and yesterday's drafts to the delivery channel and queue CRM updates for approval.
+      If a required input is missing or a check fails, post what you found
+      and hold — never write to the CRM or send a follow-up without approval.
 goal: prep today's meetings and log yesterday's CRM updates and follow-ups
 integrations: [googlecalendar, hubspot, gmail, slack]
 whatItDoes:

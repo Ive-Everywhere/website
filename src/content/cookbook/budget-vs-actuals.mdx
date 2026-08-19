@@ -98,6 +98,20 @@ skills:
       ## Output
       A diff summary: `{recurring, newly_flagged, cleared}`, appended to
       this month's pack.
+jobs:
+  - name: Monthly variance pack
+    cadence: Monthly, after the period's books close
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the budget-vs-actuals skill from your skills folder; its
+      first-run answers are in memory.
+      1. Confirm actuals are finalized for the period before starting.
+      2. Pull budget and actuals by owner, compute variance, and flag
+         lines over each owner's materiality threshold.
+      3. Draft the narrative, diff against last month's pack, and save
+         the new pack.
+      If a required input is missing or a check fails, post what you found
+      and hold — never change a budget or actuals figure in the source sheet.
 goal: draft the monthly budget-vs-actuals pack with a narrative line on every material variance
 integrations: [googlesheets, gmail, slack]
 whatItDoes:

@@ -72,6 +72,20 @@ skills:
 
       ## Output
       A single evidence-pack document at `reports/compliance/{{requester}}-{{date}}.md`, one entry per request item plus a flagged-items section and summary line.
+jobs:
+  - name: Evidence-request queue watch
+    cadence: Every 30 minutes on weekdays, check the evidence-request queue
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the compliance-evidence-pack skill from your skills folder; its
+      first-run answers are in memory.
+      1. Check the evidence-request queue for any new audit or questionnaire
+         request since the last run.
+      2. For each new request, run the control-mapping and
+         citation-verification method, then assemble the evidence pack.
+      3. Save the pack to reports/compliance/ and post the summary to Slack.
+      If a required input is missing or a check fails, post what you found
+      and hold — the lawyer decides; never send the pack to the requester.
 goal: map an audit or questionnaire request to evidence, with every claim cited, in one pack
 integrations: [drive, notion, googlesheets, slack]
 whatItDoes:

@@ -71,6 +71,19 @@ skills:
 
       ## Output
       A checklist document, one row per clause with pass/deviation and policy citation, headed by a recommend-approval or escalated label.
+jobs:
+  - name: NDA inbox watch
+    cadence: Every 30 minutes on weekdays, check the NDA-inbox folder and email
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the nda-triage skill from your skills folder; its first-run answers
+      are in memory.
+      1. Check the NDA-inbox folder and email for any new NDA since the last run.
+      2. For each new NDA, run the policy-check method: parse, compare every
+         clause to the NDA policy, and build the checklist.
+      3. Post the recommend-approval packet or escalation to Slack.
+      If a required input is missing or a check fails, post what you found
+      and hold — the lawyer decides; never mark an NDA approved or countersign it.
 goal: check an incoming NDA against standard terms and recommend approval with a clause-by-clause checklist
 integrations: [drive, gmail, slack]
 whatItDoes:

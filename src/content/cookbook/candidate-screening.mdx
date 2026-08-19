@@ -76,6 +76,19 @@ skills:
 
       ## Output
       Calendar holds sent to the top 3 candidates, plus a weekly hiring digest — volume, shortlist, scheduled interviews — to the panel.
+jobs:
+  - name: Nightly candidate screening run
+    cadence: Nightly, polling the applicant inbox and ATS for new applications
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the candidate-screening skill from your skills folder; its
+      first-run answers are in memory.
+      1. Check the applicant inbox or ATS for the day's new applications.
+      2. Run the skill's method: grade against the scorecard, rank the
+         shortlist, and book holds for the top candidates.
+      3. Send the weekly hiring digest to the panel.
+      If a required input is missing or a check fails, post what you found
+      and hold — never reject a candidate automatically without approval.
 goal: screen the applicants against the scorecard and shortlist the top few
 integrations: [notion, gmail, linear]
 whatItDoes:

@@ -104,6 +104,21 @@ skills:
       ## Output
       A tie-out result: `{ledger_balance, bank_balance, stripe_balance,
       max_variance, within_tolerance}`.
+jobs:
+  - name: Weekly 13-week cash roll
+    cadence: Every Monday, 6:00 AM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the weekly-cash-report skill from your skills folder; its
+      first-run answers are in memory.
+      1. Tie out the starting cash balance against the bank and Stripe
+         before building the roll.
+      2. Pull the 13 weeks of inflows and outflows and build the
+         week-by-week roll to closing balance.
+      3. Update the weekly-cash-report view and alert on any negative or
+         under-threshold week.
+      If a required input is missing or a check fails, post what you found
+      and hold — never initiate a transfer or payment based on the forecast.
 goal: build and publish a live 13-week cash rollup, refreshed weekly
 integrations: [stripe, googlesheets, slack]
 whatItDoes:

@@ -1,5 +1,5 @@
 ---
-title: Turn support tickets into one product signal
+title: Weekly support-ticket synthesis for product
 description: Synthesize the week's support tickets into themes and route the top signal to product.
 publishedAt: 2026-08-19
 icon: ri-chat-voice-line
@@ -71,6 +71,21 @@ skills:
 
       ## Output
       Each reported theme paired with 2-3 verified ticket links and, where available, a verbatim excerpt.
+jobs:
+  - name: Weekly voice-of-customer digest run
+    cadence: Every Monday, 8:00 AM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the voice-of-customer-digest skill from your skills folder; its
+      first-run answers are in memory.
+      1. Pull every ticket since the last digest and cluster into
+         root-cause themes.
+      2. Diff volumes against last week and verify every linked ticket
+         truly supports its theme.
+      3. Post the top themes and file a Linear issue for any theme ignored
+         three weeks running.
+      If a required input is missing or a check fails, post what you found
+      and hold — never respond to or close a ticket without approval.
 goal: synthesize the week's support tickets into themes and route the top signal to product
 integrations: [zendesk, intercom, slack, linear]
 whatItDoes:

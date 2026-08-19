@@ -103,6 +103,33 @@ skills:
       ## Output
       A renewal alert list: `{vendor, renewal_date, days_remaining,
       dollar_value}`, posted to `{{delivery_channel}}`.
+jobs:
+  - name: Weekly SaaS contract sweep
+    cadence: Weekly
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the saas-spend-review skill from your skills folder; its
+      first-run answers are in memory.
+      1. Pull the SaaS contract book and check seat usage against seats
+         paid for, where usage data exists.
+      2. Flag any tool under the utilization threshold and update the
+         saas-spend-review view.
+      3. Post underutilization flags to the delivery channel with the
+         dollar amount at stake.
+      If a required input is missing or a check fails, post what you found
+      and hold — never cancel or downgrade a subscription directly.
+  - name: Pre-renewal check
+    cadence: Daily on weekdays, watching for contracts inside the notice window
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the saas-spend-review skill from your skills folder; its
+      first-run answers are in memory.
+      1. Compute days until renewal for every contract in the book.
+      2. For any contract inside the notice window, cross-check its
+         renewal date against the original contract document first.
+      3. Post the renewal alert with days remaining and dollar value.
+      If a required input is missing or a check fails, post what you found
+      and hold — never cancel or downgrade a subscription directly.
 goal: track SaaS contracts and flag renewals and underused seats before they cost money
 integrations: [googlesheets, gmail, slack, stripe]
 whatItDoes:

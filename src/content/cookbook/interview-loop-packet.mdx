@@ -1,5 +1,5 @@
 ---
-title: Never let an interviewer walk in blind
+title: Prep interviewer packets and roll up debrief scores
 description: Build a focus-area packet per interviewer, then collect and roll up debrief scores after the loop.
 publishedAt: 2026-08-19
 icon: ri-file-user-line
@@ -34,7 +34,7 @@ skills:
   - name: Interviewer packet format
     description: Résumé, focus area, and suggested questions per interviewer
     body: |
-      Give each interviewer exactly what they need to run their slot, and nothing they don't.
+      Assemble each interviewer's résumé, focus area, and suggested questions into one packet before their slot.
 
       ## Method
       1. Pull the candidate's résumé and the interviewer's assigned focus area from the coverage split.
@@ -73,6 +73,20 @@ skills:
 
       ## Output
       A combined scorecard: one row per competency with each panelist's score, flagged gaps, and a short overall summary.
+jobs:
+  - name: Loop confirmation watch
+    cadence: Daily poll of {{calendar}} for newly confirmed interview loops
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the interview-loop-packet skill from your skills folder; its
+      first-run answers are in memory.
+      1. Check {{calendar}} for any loop confirmed since the last run.
+      2. For each new loop, run the skill's method: split scorecard
+         coverage across the panel, then build and send each packet.
+      3. After each slot, chase overdue scorecards and roll up the combined
+         result to {{delivery_channel}}.
+      If a scorecard competency is unassigned, post what you found and hold
+      — never advance or reject the candidate yourself.
 goal: prep a focus-area packet per interviewer and roll up the debrief scores after the loop
 integrations: [notion, googlecalendar, gmail, slack]
 whatItDoes:

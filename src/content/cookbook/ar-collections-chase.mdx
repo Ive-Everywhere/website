@@ -93,6 +93,21 @@ skills:
       ## Output
       A drafted email per invoice: `{invoice_id, rung, tone, subject,
       body}`, queued to `{{approval_channel}}` for one-tap approval.
+jobs:
+  - name: AR dunning sweep
+    cadence: Daily each morning (or weekly sweep, per your preference)
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the ar-collections-chase skill from your skills folder; its
+      first-run answers are in memory.
+      1. Pull every open invoice from Stripe and match it against the AR
+         aging sheet; compute days overdue for each.
+      2. Run the dunning ladder policy skill to place each invoice on its
+         rung, holding out any invoice flagged as disputed.
+      3. Draft the tone-matched email for each rung and queue every draft
+         in the approval channel.
+      If a required input is missing or a check fails, post what you found
+      and hold — never send a collections email without approval.
 goal: run the dunning ladder on overdue invoices and queue every email for approval
 integrations: [stripe, googlesheets, gmail, slack]
 whatItDoes:

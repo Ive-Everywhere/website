@@ -12,7 +12,7 @@ skills:
   - name: QBR narrative structure
     description: Wins, usage story, risks, and the ask, in that order.
     body: |
-      Build the account story in a fixed order so every QBR reads the same grounded way.
+      Build the account story in a fixed order: wins, usage story, risks, then the ask.
 
       ## Method
       1. Open with the top 3 wins since the last QBR, each backed by a usage or ticket data point.
@@ -69,6 +69,20 @@ skills:
 
       ## Output
       A .pptx deck at documents/qbr/{{account}}-{{quarter}}.pptx, plus the text narrative it was built from.
+jobs:
+  - name: QBR calendar watch
+    cadence: Every morning on weekdays
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the qbr-pack skill from your skills folder; its first-run
+      answers are in memory.
+      1. Check the calendar for a QBR scheduled two weeks out with no
+         pack built yet.
+      2. Pull the account story, draft the narrative, and drop any claim
+         with no real data point.
+      3. Build the deck and post the summary to the delivery channel.
+      If a required input is missing or a check fails, post what you found
+      and hold — never send the deck to the customer without approval.
 goal: assemble the QBR deck from usage, tickets, and account history and ground every claim in real data
 integrations: [posthog, zendesk, salesforce, slack]
 whatItDoes:

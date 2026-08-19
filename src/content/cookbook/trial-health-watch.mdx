@@ -69,6 +69,20 @@ skills:
 
       ## Output
       A one-line save-play recommendation per flagged trial, tagged to the account owner.
+jobs:
+  - name: Daily trial health check
+    cadence: Daily
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the trial-health-watch skill from your skills folder; its
+      first-run answers are in memory.
+      1. Pull PostHog usage for every open trial for the lookback window.
+      2. Score each trial against its stage baseline; confirm any stall
+         with two independent signals.
+      3. Post flagged trials with a save-play suggestion to the delivery
+         channel and log today's scores.
+      If a required input is missing or a check fails, post what you found
+      and hold — never contact the prospect directly without approval.
 goal: watch active trial usage daily and flag the ones going quiet before they go dark
 integrations: [posthog, salesforce, slack]
 whatItDoes:

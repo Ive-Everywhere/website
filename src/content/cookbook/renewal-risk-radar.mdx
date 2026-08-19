@@ -1,5 +1,5 @@
 ---
-title: See churn risk before the customer says it
+title: Score every account's renewal risk weekly
 description: Score every account's renewal risk weekly from usage and tickets, and flag what changed.
 publishedAt: 2026-08-19
 icon: ri-radar-line
@@ -71,6 +71,18 @@ skills:
 
       ## Output
       A diff summary: accounts moved up, moved down, new, and recovered, versus last week.
+jobs:
+  - name: Weekly renewal-risk radar run
+    cadence: Every Monday, 7:00 AM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the renewal-risk-radar skill from your skills folder; its
+      first-run answers are in memory.
+      1. Score every active account's renewal risk from usage and tickets.
+      2. Diff against last week; confirm new high-risk flags need two signals.
+      3. Patch the view and post the top at-risk accounts to the channel.
+      If a required input is missing or a check fails, post what you found
+      and hold — never contact the customer or touch the CRM without approval.
 goal: score every account's renewal risk weekly and flag what changed before it surprises the team
 integrations: [posthog, zendesk, salesforce, slack]
 whatItDoes:

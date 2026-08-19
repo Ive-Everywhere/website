@@ -1,5 +1,5 @@
 ---
-title: The weekly update, written before you ask
+title: Assemble the weekly stakeholder update automatically
 description: Assemble the weekly SCQA update from Linear and PostHog automatically; quiet weeks stay honest, never padded.
 publishedAt: 2026-08-19
 icon: ri-newspaper-line
@@ -72,6 +72,22 @@ skills:
 
       ## Output
       Either a full SCQA update or a short honest variant (a few lines), chosen by the stored quiet-week threshold, both delivered on schedule.
+jobs:
+  - name: Weekly stakeholder update
+    cadence: Every Friday at 3:00 PM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the stakeholder-update-autopilot skill from your skills folder;
+      its first-run answers (team, key metrics, delivery channel) are in
+      memory.
+      1. Pull this week's Linear state changes and PostHog metric movement
+         for the stored team and metrics.
+      2. Assemble the update in SCQA order from that data and this week's
+         logged decisions only; use the short variant if nothing moved.
+      3. Post the update to the stored delivery channel and archive a copy
+         to `updates/`.
+      If a required input is missing or a check fails, post what you found
+      and hold — never claim a metric moved without a live PostHog number.
 goal: assemble the weekly SCQA stakeholder update from Linear and PostHog with zero user input
 integrations: [linear, posthog, slack]
 whatItDoes:

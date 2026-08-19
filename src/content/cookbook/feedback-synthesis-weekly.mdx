@@ -1,5 +1,5 @@
 ---
-title: See the theme before the tenth ticket
+title: Synthesize the week's feedback into themes
 description: Pull feedback from Slack, Zendesk, and Intercom, cluster it into themes, and track the trend against last week.
 publishedAt: 2026-08-19
 icon: ri-discuss-line
@@ -73,6 +73,21 @@ skills:
 
       ## Output
       Per theme: this week's count, last week's count, and the delta (new / rising / falling / flat), ranked by movement.
+jobs:
+  - name: Weekly feedback synthesis
+    cadence: Every Monday at 6:00 AM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the feedback-synthesis-weekly skill from your skills folder; its
+      first-run answers (feedback channel, tags, theme policy) are in memory.
+      1. Pull the week's feedback from the stored Slack channel, Zendesk, and
+         Intercom since the last run.
+      2. Cluster it into named themes, attach one verbatim sourced quote per
+         theme, and diff against last week's snapshot.
+      3. Patch the feedback-themes view and post the top 5 themes, with
+         counts and trend arrows, to the stored delivery channel.
+      If a required input is missing or a check fails, post what you found
+      and hold — never file a Linear issue from a theme without approval.
 goal: synthesize the week's feedback into themes with counts and trend deltas
 integrations: [slack, zendesk, intercom, notion]
 whatItDoes:
