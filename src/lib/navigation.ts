@@ -44,7 +44,6 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
       { label: 'Workforce', href: '/platform/workforce' },
       { label: 'Security', href: '/platform/security' },
       // { label: 'Apps', href: '/apps' },            // hidden pre-prod (Krishna)
-      { label: 'Pricing', href: '/pricing' },
     ],
   },
   /* Solutions footer column restored (Krishna, 2026-08-19). */
@@ -57,9 +56,25 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
       { label: 'People', href: '/solutions/people' },
     ],
   },
-  /* Company column (About / Careers / Contact) removed pre-prod (Krishna,
-   * 2026-08-18): the pages do not exist yet. Restore when the Modal-style
-   * company page ships (about + careers + contact with #-anchors). */
+  /* Company column (Krishna, 2026-08-19): one /about page carries all three
+   * sections, deep-linked by anchor per the Modal-style spec. */
+  {
+    heading: 'Company',
+    links: [
+      { label: 'About', href: '/about#about' },
+      { label: 'Careers', href: '/about#careers' },
+      { label: 'Contact', href: '/about#contact' },
+    ],
+  },
+  /* Resources column (Krishna, 2026-08-19). Docs is the external subdomain. */
+  {
+    heading: 'Resources',
+    links: [
+      { label: 'Cookbook', href: '/cookbook' },
+      { label: 'Docs', href: 'https://docs.eluu.ai' },
+      { label: 'Pricing', href: '/pricing' },
+    ],
+  },
   {
     heading: 'Legal',
     links: [

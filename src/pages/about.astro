@@ -1,6 +1,229 @@
 ---
-// Footer/legal page — served from the canonical eluu.ai page for now so the
-// content stays authoritative (important for legal). Replace with a native v3
-// page when one is built. 302 = temporary, so it flips cleanly when v3 owns it.
-return Astro.redirect('https://eluu.ai/about', 302);
+import Base from '../layouts/Base.astro';
+import Button from '../components/ui/Button.astro';
+import CtaBand from '../components/site/CtaBand.astro';
+import Decal from '../components/site/Decal.astro';
+
+/**
+ * Company page (Krishna, 2026-08-19). One page carries About + Careers +
+ * Contact, modelled on modal.com/company: mission hero → story prose →
+ * #careers with a role list → #contact cards → CTA band. The footer's
+ * Company column deep-links to the #about / #careers / #contact anchors
+ * (html already carries scroll-padding-top for the sticky header).
+ *
+ * Built from the home page's own language: page-shell gutter-188 sections,
+ * left-aligned t-landing-h3 headings, bg-card-surface radius-28 cards,
+ * Recipes-style hairline rows for roles.
+ *
+ * PLACEHOLDERS flagged to Krishna (do not promote to prod unconfirmed):
+ * hello@eluu.ai + hello@eluu.ai addresses, and the Slack community URL.
+ * The open-roles list renders whatever is in OPEN_ROLES — empty today, which
+ * shows the honest "no open reqs" row instead of invented jobs.
+ */
+
+const DEMO = 'https://cal.com/krishna-kaipa-wh7ao3/30min';
+
+/** Real reqs only — add {title, team, location, href} entries as they open. */
+const OPEN_ROLES: { title: string; meta: string; body: string; href: string }[] = [
+  {
+    title: 'Product Engineer',
+    meta: 'Engineering · 2–4 years',
+    body: 'Set up loop engineering and agentic engineering systems to build at scale, with Eluu, Claude Code and Codex. Guide engineering interns to production-grade code, run the technical roadmap, and help senior leadership make engineering and product calls.',
+    href: 'mailto:hello@eluu.ai?subject=Product%20Engineer',
+  },
+  {
+    title: 'AI GTM Operator',
+    meta: 'Go-to-market · 1–3 years',
+    body: 'Build the marketing pipeline for a growing startup: the email marketing infrastructure, the social machinery, and the experiments that find what works.',
+    href: 'mailto:hello@eluu.ai?subject=AI%20GTM%20Operator',
+  },
+];
+
+const contactCards = [
+  {
+    icon: 'ri-calendar-check-line',
+    title: 'Talk to us',
+    body: 'Fifteen minutes with the team, straight to the point.',
+    label: 'Book a demo',
+    href: DEMO,
+  },
+  {
+    icon: 'ri-mail-line',
+    title: 'Write to us',
+    body: 'Product questions, partnerships, anything else.',
+    label: 'hello@eluu.ai',
+    href: 'mailto:hello@eluu.ai',
+  },
+  {
+    icon: 'ri-slack-line',
+    title: 'Join the community',
+    body: 'Builders running agents on Eluu, and the team that makes it.',
+    label: 'Join the Slack',
+    href: '#',
+  },
+];
 ---
+
+<Base
+  title="Company, Eluu"
+  description="Eluu builds the agentic team for your human team: agents with real computers that finish real work. About us, open roles, and how to reach us."
+  cta={false}
+>
+  {/* The bar decal runs PARALLEL TO THE TITLE (Krishna, 2026-08-19). The
+      component positions itself `riseAbove` px ABOVE where it sits in flow, so
+      a negative value pushes it down: 74px lands its 174px band centred on the
+      two-line H1 (64px section pad + 20px eyebrow + 12px gap). Still flush to
+      the viewport's right edge, still zero height. */}
+  <Decal riseAbove={-74} />
+
+  {/* ————— Hero + About ————— */}
+  <section class="bg-bg-white-0" id="about">
+    <div class="page-shell gutter-187 flex flex-col items-center gap-3 pt-16 pb-10 text-center">
+      <p class="t-mono-md text-text-sub-600">Company</p>
+      <h1 class="t-landing-h1 text-text-strong-950 max-w-[860px] text-balance">
+        Work that does itself so you can touch grass.
+      </h1>
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-4">
+        <Button variant="primary-fancy" label="We're hiring" href="#careers" rightIcon="ri-arrow-down-line" />
+        <Button variant="neutral-lighter" label="Book a demo" href={DEMO} leftIcon="ri-play-mini-fill" />
+      </div>
+    </div>
+  </section>
+
+  {/* Founders photo, Modal-style: under the hero, above the story. */}
+  <section class="bg-bg-white-0">
+    <div class="page-shell gutter-188 flex flex-col items-center gap-4 pb-4">
+      <img
+        src="/brand/company/founders.webp"
+        alt="The two founders standing on a mountain path above a turquoise lake."
+        width="1760"
+        height="1349"
+        class="w-full max-w-[880px] rounded-[28px]"
+        loading="eager"
+      />
+      <p class="t-paragraph-sm text-text-soft-400">Krishna (right) and Kamal (left), occasionally touching grass.</p>
+    </div>
+  </section>
+
+  {/* Prose sits directly under the photo, Modal-style — no card around it
+      (Krishna, 2026-08-19), aligned to the same 880px column as the image. */}
+  <section class="bg-bg-white-0">
+    <div class="page-shell gutter-188 flex flex-col items-center py-10">
+      <div class="w-full max-w-[880px]">
+        <div class="flex flex-col gap-6">
+          <p class="t-paragraph-lg text-text-sub-600 text-pretty">
+            We started Eluu to hand agents the boring work, so people can do the creative
+            work — or go touch grass. Everything we build follows one motion: you set the
+            goal with your agents, and they execute it.
+          </p>
+          <p class="t-paragraph-lg text-text-sub-600 text-pretty">
+            We also started it because of what we kept seeing: every team buys its own AI
+            tool, and nobody builds the layer underneath — the one that powers a company,
+            not an individual or an isolated team.
+          </p>
+          <p class="t-paragraph-lg text-text-sub-600 text-pretty">
+            The industry's hardest problem today is that agents don't work on the same
+            data plane. They don't share what they learn, and they can't move work in
+            tandem. That is exactly what we build: one plane where agents share the data,
+            share the insight, and move the work together.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ————— Careers ————— */}
+  {/* Whole section lives inside one tinted box (Krishna, 2026-08-19, per
+      modal.com/company): mono eyebrow, big heading, then hairline role rows
+      with a pill "Learn more" on the right. Uses the card surface + the
+      section's own hairlines, so it stays in our palette. */}
+  <section class="bg-bg-white-0" id="careers">
+    <div class="page-shell gutter-188 py-14">
+      <div class="bg-card-surface rounded-[28px] p-6 lg:p-12">
+        <div class="flex flex-col gap-3">
+          <p class="t-mono-md text-text-sub-600">Join us</p>
+          <h2 class="t-landing-h3 text-text-strong-950">Careers</h2>
+          <p class="t-paragraph-md text-text-sub-600 max-w-[560px] text-pretty">
+            Small team, high trust, agents doing the busywork. You'll ship to production in
+            your first week.
+          </p>
+        </div>
+
+        {
+          OPEN_ROLES.length > 0 ? (
+            <div class="mt-10 flex flex-col">
+              {OPEN_ROLES.map((role) => (
+                <div class="border-stroke-sub-300 flex flex-col gap-4 border-b py-6 first:border-t lg:flex-row lg:items-center lg:gap-10">
+                  <span class="flex flex-col gap-1 lg:w-[300px] lg:shrink-0">
+                    <span class="t-h6 text-text-strong-950">{role.title}</span>
+                    <span class="t-paragraph-sm text-text-soft-400">{role.meta}</span>
+                  </span>
+                  <span class="t-paragraph-sm text-text-sub-600 flex-1 text-pretty">{role.body}</span>
+                  <a
+                    href={role.href}
+                    class="border-stroke-sub-300 t-label-sm text-text-strong-950 hover:bg-bg-white-0 inline-flex min-h-11 shrink-0 items-center gap-1.5 self-start rounded-full border px-5 transition-colors lg:self-center"
+                  >
+                    Learn more
+                    <i class="ri-arrow-right-up-long-line text-[16px] opacity-64" aria-hidden="true" />
+                  </a>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div class="border-stroke-sub-300 mt-10 flex flex-col gap-4 border-t pt-8 lg:flex-row lg:items-center lg:justify-between">
+              <div class="flex max-w-[560px] flex-col gap-2">
+                <p class="t-h6 text-text-strong-950">No open roles right now.</p>
+                <p class="t-paragraph-md text-text-sub-600 text-pretty">
+                  We hire when we meet someone exceptional. If agents doing real work is the
+                  problem you want to spend your years on, introduce yourself.
+                </p>
+              </div>
+              <Button
+                variant="primary-stroke"
+                label="hello@eluu.ai"
+                href="mailto:hello@eluu.ai"
+                rightIcon="ri-arrow-right-up-long-line"
+                class="shrink-0"
+              />
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ————— Contact ————— */}
+  <section class="bg-bg-white-0" id="contact">
+    <div class="page-shell gutter-188 flex flex-col gap-8 py-14 lg:gap-12">
+      <h2 class="t-landing-h3 text-text-strong-950">Contact.</h2>
+      <div class="grid gap-6 sm:grid-cols-3 lg:gap-9">
+        {
+          contactCards.map((card) => (
+            <div class="bg-card-surface flex flex-col gap-5 rounded-[28px] p-6 lg:p-10">
+              <i class={`${card.icon} text-icon-strong-950 text-[28px]`} aria-hidden="true" />
+              <div class="flex flex-col gap-2">
+                <p class="t-h6 text-text-strong-950">{card.title}</p>
+                <p class="t-paragraph-sm text-text-sub-600 text-pretty">{card.body}</p>
+              </div>
+              <a
+                href={card.href}
+                class="t-label-sm text-primary-dark mt-auto inline-flex min-h-11 items-center gap-1 underline-offset-4 hover:underline"
+              >
+                {card.label} <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="The best human teams have agentic teams."
+    eyebrow="Yours could start today."
+    ctaLabel="Start for free"
+    ctaHref="https://app.eluu.ai"
+    secondaryLabel="Book a demo"
+    secondaryHref={DEMO}
+  />
+</Base>
