@@ -2,8 +2,10 @@
 /**
  * The OG-image source, `/og-card`. Not a visitor page — a 1200x630 stage the
  * capture tool screenshots to produce `public/brand/og-card.png`, so the link
- * preview is a composed brand card rather than a raw logo file. Uses the
- * site's own tokens and fonts so the card can never drift from the brand.
+ * preview is a composed brand card rather than a raw logo file. Layout follows
+ * the Ona pattern: lockup + tagline on top, the product hero bleeding off the
+ * bottom edge. Uses the site's own tokens, fonts, and hero poster so the card
+ * can never drift from the brand.
  * Regenerate: screenshot this route at 1200x630 and save over og-card.png.
  */
 import '../styles/global.css';
@@ -19,31 +21,31 @@ import '../styles/global.css';
   <body style="margin:0">
     <div
       id="card"
-      style="width:1200px;height:630px;background:#F8F8F3;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:44px;font-family:'Inter Variable',ui-sans-serif,system-ui,sans-serif;"
+      style="width:1200px;height:630px;background:#F8F8F3;position:relative;overflow:hidden;font-family:'Inter Variable',ui-sans-serif,system-ui,sans-serif;"
     >
-      {/* faint field texture, the site's own decal, pinned to the corners */}
-      <img
-        src="/brand/decal-light.svg"
-        alt=""
-        style="position:absolute;right:-120px;top:-120px;width:480px;opacity:0.35;"
-      />
-      <img
-        src="/brand/decal-light.svg"
-        alt=""
-        style="position:absolute;left:-140px;bottom:-140px;width:480px;opacity:0.35;transform:rotate(180deg);"
-      />
+      {/* top: lockup + tagline, centered */}
+      <div
+        style="position:absolute;top:0;left:0;right:0;height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;"
+      >
+        <img src="/brand/logotext-256-light.svg" alt="Eluu AI" style="height:92px;" />
+        <p
+          style="margin:0;font-size:34px;line-height:1.2;font-weight:500;letter-spacing:-0.01em;color:#1E1C1E;text-align:center;"
+        >
+          The agentic team for your human team.
+        </p>
+      </div>
 
-      <img src="/brand/logotext-256-light.svg" alt="Eluu AI" style="height:150px;position:relative;" />
-      <p
-        style="margin:0;position:relative;font-size:44px;line-height:1.25;font-weight:500;letter-spacing:-0.01em;color:#1E1C1E;text-align:center;max-width:900px;"
+      {/* bottom: the product hero, a rounded window bleeding off the bottom
+          edge, Ona-style. 3000x1810 source shown at 1040 wide. */}
+      <div
+        style="position:absolute;left:80px;right:80px;top:312px;bottom:-40px;border-radius:22px;overflow:hidden;box-shadow:0 24px 60px rgba(30,28,30,0.18);border:1px solid rgba(30,28,30,0.08);background:#F1EEE4;"
       >
-        The agentic team for your human team.
-      </p>
-      <p
-        style="margin:0;position:relative;font-family:'DM Mono',ui-monospace,monospace;font-size:22px;letter-spacing:0.08em;text-transform:uppercase;color:#58564D;"
-      >
-        eluu.ai
-      </p>
+        <img
+          src="/live/assets/hero-windows-poster.webp"
+          alt=""
+          style="width:100%;height:auto;display:block;"
+        />
+      </div>
     </div>
   </body>
 </html>
