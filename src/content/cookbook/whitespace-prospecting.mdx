@@ -1,0 +1,66 @@
+---
+title: Find the list before anyone else does
+description: Build a scored TAM list for a new segment, diffed against the CRM so it's true whitespace.
+publishedAt: 2026-08-19
+icon: ri-focus-3-line
+category: Sales
+collection: Pipeline & prospecting
+featured: false
+order: 12
+difficulty: intermediate
+skills:
+  - name: ICP fit scoring
+    description: Score companies 0-100 against the stored ICP definition.
+  - name: CRM diff
+    description: Remove accounts already owned, in-flight, or inside the cooldown window.
+  - name: TAM sourcing
+    description: Build the candidate list for a segment from public sources.
+goal: build a scored whitespace list for a new segment and keep it current
+integrations: [hubspot, googlesheets, slack]
+whatItDoes:
+  - Builds a candidate company list for the segment matching your ICP
+  - Removes accounts already owned, active, or inside the cooldown window
+  - Scores what's left 0-100 and buckets it act-now, nurture, long-term
+  - Publishes the ranked list and posts the top 20 to Slack
+howToUse:
+  - Connect HubSpot, Google Sheets, and Slack to the agent
+  - Set it to run on the segment kickoff, then monthly after
+  - Paste the prompt and answer its first-run questions once — the ICP definition, cooldown window — it remembers them
+  - Review the top 20 act-now accounts before they reach the team
+workflow:
+  - kind: trigger
+    title: New segment, then monthly
+    body: One paragraph naming the segment kicks off the build.
+  - kind: prompt
+    title: Build the TAM list
+    body: Companies matching the ICP definition, from the web.
+  - kind: prompt
+    title: Diff against the CRM
+    body: Remove anything owned, active, or in cooldown.
+  - kind: prompt
+    title: Score the whitespace
+    body: Rank against the ICP; bucket act-now, nurture, long-term.
+  - kind: result
+    title: Publish the list
+    body: Whitespace view updated, top 20 posted to Slack.
+prompt: |
+  Build the whitespace list for {{segment}}.
+
+  1. Read the ICP definition for {{segment}} from memory; if this is the first
+     run for this segment, ask for it — industry, size, signals — and save it
+     before continuing.
+  2. Build a candidate company list for {{segment}} matching the ICP, sourced
+     from the web.
+  3. Pull every account in {{crm}} and remove candidates already owned, in an
+     active deal, or closed-lost within the last {{cooldown_months}} months.
+  4. Score the remaining list 0-100 against the ICP criteria and bucket into
+     act-now, nurture, or long-term.
+  5. Re-check the top 20 act-now accounts against {{crm}} a second time before
+     publishing, to confirm none became an active deal mid-run.
+  6. Update the whitespace-prospecting view with the scored list and save a
+     snapshot to `reports/whitespace/{{segment}}-{{date}}.md`.
+  7. Post the top 20 to #sales-ops, with a one-line reason each.
+
+  Do not add any account to an outbound sequence directly — hand the list to
+  the team for review and assignment first.
+---

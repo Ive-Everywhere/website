@@ -1,0 +1,67 @@
+---
+title: Know who actually signs before you call
+description: Mine closed-won deals for buying-committee roles, then map them onto every target account.
+publishedAt: 2026-08-19
+icon: ri-team-line
+category: Sales
+collection: Pipeline & prospecting
+featured: false
+order: 11
+difficulty: intermediate
+skills:
+  - name: Closed-won pattern mining
+    description: Extract buying-committee roles from won deals in the CRM.
+  - name: Role confidence scoring
+    description: Score each mapped stakeholder's fit and cite the evidence.
+  - name: Org research
+    description: Confirm every title from a public source before it's mapped.
+goal: map the buying committee for each target account from closed-won patterns
+integrations: [hubspot, googlesheets, slack]
+whatItDoes:
+  - Mines closed-won deals for the roles that show up in every win
+  - Maps current employees at the target account onto those buying-committee roles
+  - Scores each match on title fit, seniority, and evidence strength
+  - Publishes the map to a tracker and flags any role still open
+howToUse:
+  - Connect HubSpot, Google Sheets, and Slack to the agent
+  - Set it to run on a new target account, or the weekly Monday sweep
+  - Paste the prompt and answer its first-run questions once — role definitions, lookback window — it remembers them
+  - Review any open roles it couldn't confidently fill; the rest publishes on its own
+workflow:
+  - kind: trigger
+    title: New account or weekly refresh
+    body: Added to the target list, or the Monday sweep.
+  - kind: prompt
+    title: Mine the closed-won pattern
+    body: Roles that showed up in past won deals.
+  - kind: prompt
+    title: Map the target account
+    body: Match current employees to those roles, with sources.
+  - kind: prompt
+    title: Score the confidence
+    body: Per stakeholder - title match, seniority, evidence strength.
+  - kind: result
+    title: Publish the map
+    body: Tracker view updated, Slack ping to the account owner.
+prompt: |
+  Map the buying committee for {{account}}.
+
+  1. Pull the last {{lookback_deals}} closed-won deals from {{crm}} and list
+     every contact role that touched each one — economic buyer, champion,
+     technical evaluator, legal — per the role definitions stored in memory.
+  2. If this is the first run, ask for this org's buying-committee role
+     definitions and save them to memory before continuing.
+  3. Research {{account}}'s current org: names, titles, and a source (company
+     site, LinkedIn, press) for each person.
+  4. Match {{account}} employees to the closed-won role pattern and propose
+     one person per buying-committee role.
+  5. Confirm every mapped person's title is backed by at least one public
+     source; if a role has no confident match, mark it open instead of
+     guessing a name.
+  6. Write the map to the decision-maker-map tracker view, patching this
+     account's row rather than rebuilding the view.
+  7. Post the account name and any open roles to #sales.
+
+  Do not contact any mapped stakeholder directly — the map is for the account
+  owner to act on, outreach needs their sign-off.
+---

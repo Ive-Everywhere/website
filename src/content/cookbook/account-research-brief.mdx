@@ -1,0 +1,67 @@
+---
+title: Walk into every call already briefed
+description: Build a one-page account brief before every meeting, sourced from the CRM, email history, and the web.
+publishedAt: 2026-08-19
+icon: ri-search-eye-line
+category: Sales
+collection: Pipeline & prospecting
+featured: false
+order: 10
+difficulty: starter
+skills:
+  - name: Account brief format
+    description: One-page structure - context, stakeholders, talking points, risk.
+  - name: Source verification
+    description: Every factual claim links back to its source before it ships.
+  - name: Slide builder
+    description: Turn the brief into a deck for exec-level or large-deal meetings.
+goal: build a one-page account brief before every meeting
+integrations: [hubspot, googlecalendar, gmail, slack]
+whatItDoes:
+  - Pulls the account's deal stage, value, and full email history from the CRM
+  - Researches recent news, funding, and leadership changes from the last 90 days
+  - Notes each attendee's role and any prior interaction on file
+  - Delivers a one-page brief with talking points before the meeting starts
+howToUse:
+  - Connect HubSpot, your calendar, Gmail, and Slack to the agent
+  - Set the trigger to fire 2 hours before each meeting
+  - Paste the prompt and answer its first-run questions once — deal-size threshold, delivery channel — it remembers them
+  - Review the brief before the call; it never goes to the prospect
+workflow:
+  - kind: trigger
+    title: 2 hours before each meeting
+    body: Fires off the calendar invite, no manual kickoff.
+  - kind: prompt
+    title: Pull the account
+    body: Deal stage, value, and every past email thread from the CRM.
+  - kind: prompt
+    title: Research the company
+    body: News, funding, and leadership changes from the last 90 days.
+  - kind: prompt
+    title: Draft the brief
+    body: One page - context, stakeholders, three talking points, one risk.
+  - kind: result
+    title: Deliver before the call
+    body: Posted to Slack, plus saved to reports/.
+prompt: |
+  Build the account research brief for {{account}}.
+
+  1. Pull the account record from {{crm}} for {{account}} — stage, deal value,
+     last activity, and every past email thread. Check memory first for a brief
+     built on this account this week and reuse it if found.
+  2. Research {{account}} on the web: recent news, funding or leadership
+     changes, and product launches from the last 90 days.
+  3. Identify the attendees on the Google Calendar invite; note their role and
+     any prior interaction on file.
+  4. Draft a one-page brief: company context, stakeholders, three talking
+     points, and one risk to watch.
+  5. Verify every factual claim in the brief links to a source URL; drop
+     anything you cannot source rather than guess.
+  6. If the deal is over {{deal_size_threshold}} or an exec-level attendee is
+     on the invite, build a companion slide with the presentation skill.
+  7. Post the brief to Slack ({{delivery_channel}}) two hours before the
+     meeting and save it to `reports/account-briefs/{{account}}-{{date}}.md`.
+
+  Do not send the brief, or any research in it, to the prospect or anyone
+  outside the team — it is internal prep only, surface it for the rep instead.
+---

@@ -1,0 +1,66 @@
+---
+title: Walk in prepped, leave the CRM current
+description: Prep today's meetings each morning, then log yesterday's CRM updates and follow-ups automatically.
+publishedAt: 2026-08-19
+icon: ri-calendar-check-line
+category: Sales
+collection: Revenue ops
+featured: false
+order: 13
+difficulty: starter
+skills:
+  - name: Meeting brief format
+    description: Three-bullet prep note from CRM and email history
+  - name: CRM field mapping
+    description: Which fields to update after each meeting type
+  - name: Follow-up drafting
+    description: Personalize from the call notes and the prior thread
+goal: prep today's meetings and log yesterday's CRM updates and follow-ups
+integrations: [googlecalendar, hubspot, gmail, slack]
+whatItDoes:
+  - Preps every meeting today with three bullets from the CRM and email history
+  - Logs yesterday's completed meetings to the CRM before anyone has to ask
+  - Drafts a personalized follow-up for each completed meeting, ready to send
+  - Delivers the day's prep and yesterday's follow-ups to Slack each morning
+howToUse:
+  - Connect your calendar, CRM, and Slack to the agent
+  - Set the trigger for 7:00 AM, before your first meeting
+  - Paste the prompt and answer its first-run questions once, CRM fields, delivery channel, and it remembers
+  - Review the CRM updates and follow-up drafts it queues; the prep notes just post
+workflow:
+  - kind: trigger
+    title: Every morning, 7:00 AM
+    body: Before the first meeting of the day.
+  - kind: prompt
+    title: Pull today's meetings
+    body: Calendar plus last CRM touch per attendee.
+  - kind: prompt
+    title: Draft the prep notes
+    body: Three bullets per meeting from CRM and email history.
+  - kind: prompt
+    title: Log yesterday's calls
+    body: CRM field updates and follow-up drafts for completed meetings.
+  - kind: result
+    title: Deliver the day
+    body: "Slack DM: today's prep, yesterday's follow-ups ready to send."
+prompt: |
+  Run the daily meeting prep and CRM follow-up.
+
+  1. Pull every meeting on today's calendar and, for each, the last CRM touch
+     and email thread with the attendees.
+  2. Draft a three-bullet prep note per meeting: last touchpoint, open
+     question, and one thing to move forward.
+  3. For every meeting that completed since the last run, check {{crm}} for a
+     logged update. If one is missing, draft the field update, stage, next
+     step, notes, from the calendar event and any linked notes.
+  4. Draft a follow-up email for each completed meeting, personalized from
+     the call notes and the prior thread.
+  5. Validate: confirm every drafted CRM update maps to a real completed
+     meeting with notes to draw from. Never invent an update for a meeting
+     with nothing logged.
+  6. Post today's prep notes and yesterday's follow-up drafts to
+     {{delivery_channel}}, and queue the CRM updates and follow-ups for
+     one-tap approval.
+
+  Do not write to the CRM or send a follow-up without my approval, surface both for sign-off instead.
+---

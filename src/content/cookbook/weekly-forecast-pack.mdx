@@ -1,0 +1,65 @@
+---
+title: Skip the Monday forecast scramble
+description: Roll up the weekly forecast, diff it against last week, and flag the coaching signals.
+publishedAt: 2026-08-19
+icon: ri-bar-chart-box-line
+category: Sales
+collection: Revenue ops
+featured: false
+order: 15
+difficulty: intermediate
+skills:
+  - name: Forecast rollup
+    description: Aggregate by rep, stage, and commit category
+  - name: Week-over-week diff
+    description: Compare against last week's saved snapshot
+  - name: Coaching signal detection
+    description: Flag reps needing attention, not just deals at risk
+goal: roll up the weekly forecast and flag the coaching signals before the Monday call
+integrations: [hubspot, googlesheets, slack]
+whatItDoes:
+  - Rolls up every open deal by rep, stage, and commit category
+  - Diffs the rollup against last week to show what moved or slipped
+  - Flags stalled deals, thin pipeline, and silent commits that need coaching
+  - Publishes the live forecast view and posts the summary before Monday's call
+howToUse:
+  - Connect HubSpot, Sheets, and Slack to the agent
+  - Set the trigger for Monday 7:00 AM, before the forecast call
+  - Paste the prompt and answer its first-run questions once, stall days, coverage ratio, and it remembers
+  - Review the coaching signals and any tie-out mismatch; the rollup posts on its own
+workflow:
+  - kind: trigger
+    title: Every Monday, 7:00 AM
+    body: Before the forecast call.
+  - kind: prompt
+    title: Roll up the forecast
+    body: By rep, stage, and commit category.
+  - kind: prompt
+    title: Diff against last week
+    body: What moved, slipped, closed, or is new.
+  - kind: prompt
+    title: Flag coaching signals
+    body: Stalled deals, thin pipeline, silent commits.
+  - kind: result
+    title: Publish and post
+    body: Forecast view updated, summary to #sales-leadership.
+prompt: |
+  Build the weekly forecast pack for {{week}}.
+
+  1. Pull every open deal from {{crm}}, grouped by rep, stage, and commit
+     category, commit, best-case, pipeline.
+  2. Diff the rollup against last week's snapshot in reports/forecast/: what
+     moved stage, what slipped date, what's new, and what closed.
+  3. For each rep, flag coaching signals: stalled deals over {{stall_days}}
+     days, commit deals with no activity, or pipeline coverage under
+     {{coverage_ratio}}x quota.
+  4. Validate: cross-check the rollup total against a fresh CRM export a
+     second time before publishing. The forecast total must tie out exactly,
+     or the run holds and flags the mismatch instead of publishing.
+  5. Update the weekly-forecast view with the new numbers and save this
+     week's snapshot to reports/forecast/{{week}}.md.
+  6. Post the summary to #sales-leadership: total forecast, week-over-week
+     change, and the top 3 coaching signals.
+
+  Do not change a rep's forecast number in the CRM, flag discrepancies for the manager to resolve with the rep instead.
+---
