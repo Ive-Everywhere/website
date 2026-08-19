@@ -1,0 +1,68 @@
+---
+title: The weekly update, written before you ask
+description: Assemble the weekly SCQA update from Linear and PostHog automatically; quiet weeks stay honest, never padded.
+publishedAt: 2026-08-19
+icon: ri-newspaper-line
+category: Product
+collection: Ship & tell
+featured: false
+order: 54
+difficulty: intermediate
+skills:
+  - name: SCQA structure
+    description: Situation, Complication, Question, Answer, in that order, every time.
+  - name: Zero-input assembly
+    description: Build entirely from Linear/PostHog state changes and memory; never wait on manual input.
+  - name: Quiet-week honesty
+    description: A week with no real movement gets the short variant, never padded.
+goal: assemble the weekly SCQA stakeholder update from Linear and PostHog with zero user input
+integrations: [linear, posthog, slack]
+whatItDoes:
+  - Pulls every Linear issue that shipped, slipped, or moved this week
+  - Pulls PostHog metric movement against target and against last week
+  - Assembles the update in SCQA order from real state changes only
+  - Delivers the short honest variant instead of padding a quiet week
+howToUse:
+  - Connect Linear, PostHog, and the stakeholder Slack channel
+  - Set the trigger for Friday afternoon, before the week closes
+  - Paste the prompt and answer the first-run questions once, they stick
+  - Review the update before it posts, or let it run unattended
+workflow:
+  - kind: trigger
+    title: Every Friday, 3:00 PM
+    body: Before the week closes out.
+  - kind: prompt
+    title: Pull the week's activity
+    body: Linear shipped/slipped/in-flight versus last week.
+  - kind: prompt
+    title: Pull the metric movement
+    body: PostHog trends versus target, versus last week.
+  - kind: prompt
+    title: Assemble SCQA
+    body: Situation, Complication, Question, Answer, from real state changes only.
+  - kind: result
+    title: Deliver + archive
+    body: Posted to the stakeholder channel, archived to updates/.
+prompt: |
+  Assemble the weekly stakeholder update for {{team}}/{{project}}. No manual
+  input, build it from live state only.
+
+  1. Pull every Linear issue that changed state in {{team}}/{{project}} since
+     last Friday: shipped, slipped, newly in-flight.
+  2. Pull PostHog trend movement for {{key_metrics}} versus target and versus
+     last week.
+  3. Pull any decisions or risks logged in memory this week.
+  4. Assemble the update in SCQA order: Situation (where we are),
+     Complication (what changed or blocked), Question (what it means),
+     Answer (what we're doing about it).
+  5. Validation: confirm every shipped/slipped claim matches a real
+     Linear state change and every metric claim matches a live PostHog
+     number. Cut any claim that doesn't.
+  6. If nothing meaningfully moved this week, deliver the short honest
+     variant instead of padding it with routine activity.
+  7. Post the update to {{delivery_channel}} and save a copy to
+     `updates/{{week}}.md`.
+
+  Do not claim a metric moved without a live PostHog number behind it — no
+  rounding up a quiet week.
+---

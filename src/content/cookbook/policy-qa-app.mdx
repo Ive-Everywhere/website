@@ -1,0 +1,69 @@
+---
+title: Answer handbook questions with a cited app
+description: Build an app that answers handbook questions with the exact policy citation, and escalates the rest.
+publishedAt: 2026-08-19
+icon: ri-book-2-line
+category: People
+collection: Employee experience
+featured: false
+order: 63
+difficulty: advanced
+skills:
+  - name: Handbook indexing
+    description: Break the handbook into cited, stable sections
+  - name: Citation-grounded answering
+    description: Answer only from indexed text, always with a citation
+  - name: Escalation routing
+    description: Route low-confidence questions to HR instead of guessing
+goal: build a shareable app that answers handbook questions with citations and escalates what it can't answer
+integrations: [notion, drive, slack]
+whatItDoes:
+  - Indexes the handbook into sections with stable citation anchors
+  - Answers employee questions only from indexed text, with the exact quote
+  - Escalates unanswerable or low-confidence questions to HR instead of guessing
+  - Re-indexes and redeploys the app the moment the handbook changes
+howToUse:
+  - Connect Notion or Drive, wherever the handbook lives, and Slack
+  - Set the trigger to re-index on every new handbook upload
+  - Paste the prompt; first run it asks where the handbook lives and the escalation channel, then remembers
+  - Review escalated questions in the HR channel before the app answers again
+workflow:
+  - kind: trigger
+    title: Handbook changes, or employee asks
+    body: New version uploaded, or a question comes in through the app.
+  - kind: prompt
+    title: Index the handbook
+    body: Section by section, with stable citation anchors.
+  - kind: prompt
+    title: Answer with citation
+    body: Every answer quotes the exact section it came from.
+  - kind: prompt
+    title: Escalate the gap
+    body: No confident match routes to HR instead of a guess.
+  - kind: result
+    title: Publish the app
+    body: Shareable Q&A app, live and versioned to the current handbook.
+prompt: |
+  Build and maintain the handbook Q&A app.
+
+  1. Index the current handbook from {{handbook_source}} into sections with
+     stable IDs the app can cite, and record the version. Exclude any
+     compensation, pay-band, or performance-review content even if it lives
+     in the same source — the index covers policy only.
+  2. Build the Q&A app: an employee types a question, the agent searches the
+     indexed sections, and drafts an answer with the exact section ID and
+     quote it drew from.
+  3. Validation: before showing an answer, confirm the cited section
+     supports the claim word for word. If no section supports a confident
+     answer, do not answer, escalate instead.
+  4. Route unanswerable or ambiguous questions to {{hr_escalation_channel}}
+     with the employee's question attached, and tell the employee HR will
+     follow up.
+  5. Deploy the app with a shareable team link and post it in
+     {{delivery_channel}}.
+  6. On every new upload to {{handbook_source}}, re-index the full handbook,
+     redeploy, and update the app's "last updated" line to the new version.
+
+  Never answer a question the indexed handbook does not explicitly cover,
+  escalate to HR rather than infer or guess a policy.
+---

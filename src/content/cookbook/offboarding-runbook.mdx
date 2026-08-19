@@ -1,0 +1,72 @@
+---
+title: Confirm access is actually gone
+description: Run the offboarding checklist, then independently re-verify every access revocation before calling it closed.
+publishedAt: 2026-08-19
+icon: ri-shield-check-line
+category: People
+collection: Employee experience
+featured: false
+order: 65
+difficulty: advanced
+skills:
+  - name: Access inventory by role
+    description: Map the systems and permission levels a role type holds
+  - name: Revocation execution
+    description: Trigger or ticket the revocation for each system
+  - name: Independent re-verification
+    description: A second, separate check that revocation actually took effect
+goal: run the offboarding checklist and independently confirm every access revocation actually took effect
+integrations: [slack, googlesheets, gmail, notion]
+whatItDoes:
+  - Builds the access-revocation checklist from the role's system inventory
+  - Triggers revocation directly or tickets it, with a deadline set
+  - Independently re-checks each system, never trusts the trigger call alone
+  - Reports confirmed vs. unconfirmed access and escalates what's still open
+howToUse:
+  - Connect Slack, Google Sheets, Gmail, and Notion to the agent
+  - Set the trigger to fire when HR confirms a termination date
+  - Paste the prompt; first run it asks the access inventory per role type, then remembers
+  - Review the confirmed-vs-unconfirmed report in the restricted People Ops/Security channel
+workflow:
+  - kind: trigger
+    title: Termination date confirmed
+    body: HR marks the exit, checklist kicks off.
+  - kind: prompt
+    title: Build the revocation checklist
+    body: Every system the employee had access to, by role.
+  - kind: prompt
+    title: Execute or request revocation
+    body: Trigger what the agent can, ticket the rest.
+  - kind: prompt
+    title: Independently re-verify
+    body: A second pass checks each item was actually revoked.
+  - kind: result
+    title: Report confirmed vs. unconfirmed
+    body: Status to People Ops and Security, unconfirmed items escalated.
+prompt: |
+  Run the offboarding checklist for {{employee}}, effective
+  {{termination_date}}.
+
+  1. Build the access checklist from the {{role_type}} inventory: every
+     system, account, and permission level on file for this role.
+  2. For each item, trigger revocation directly where the agent has a
+     system connection, or open a ticket to {{it_owner}} with the deadline
+     set to {{termination_date}}.
+  3. Wait {{reverify_delay_hours}} hours after each revocation action, then
+     independently re-check that system directly. Do not trust the trigger
+     call or the ticket status alone.
+  4. Validation: mark an item confirmed only if the independent
+     re-check shows access is actually gone. Anything not independently
+     confirmed stays unconfirmed, never assumed closed.
+  5. Escalate every item still unconfirmed {{escalation_hours}} hours after
+     {{termination_date}} to {{security_escalation_channel}} immediately —
+     lingering access past this point is a security incident, not a
+     routine follow-up.
+  6. Post the confirmed-vs-unconfirmed report to {{delivery_channel}} and
+     update the offboarding-runbook tracker view.
+
+  Never mark an access-revocation item closed on the basis of a triggered
+  action alone, only an independent re-check confirms it, and any
+  employee-specific detail in the report stays inside People Ops and
+  Security, never a shared channel.
+---

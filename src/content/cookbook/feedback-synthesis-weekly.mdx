@@ -1,0 +1,68 @@
+---
+title: See the theme before the tenth ticket
+description: Pull feedback from Slack, Zendesk, and Intercom, cluster it into themes, and track the trend against last week.
+publishedAt: 2026-08-19
+icon: ri-discuss-line
+category: Product
+collection: Discovery
+featured: false
+order: 50
+difficulty: intermediate
+skills:
+  - name: Theme clustering
+    description: Group raw feedback into named themes by topic, not keyword.
+  - name: Verbatim-quote policy
+    description: Every quote is exact and sourced; loose-fit quotes get dropped, not forced.
+  - name: Trend delta
+    description: Compare theme counts against last week's snapshot.
+goal: synthesize the week's feedback into themes with counts and trend deltas
+integrations: [slack, zendesk, intercom, notion]
+whatItDoes:
+  - Pulls the week's feedback from Slack, Zendesk, and Intercom in one sweep
+  - Clusters raw feedback into named themes, counted by distinct customer
+  - Attaches one verbatim, sourced quote per theme — never a paraphrase
+  - Diffs this week's themes against last week and posts the top 5
+howToUse:
+  - Connect Slack, Zendesk, Intercom, and Notion to the agent
+  - Set the trigger for Monday, 6:00 AM, ahead of the planning meeting
+  - Paste the prompt; on first run, set your feedback channel, tags, and theme policy
+  - Review the top 5 themes and quotes; the rest updates in the view
+workflow:
+  - kind: trigger
+    title: Every Monday, 6:00 AM
+    body: Weekly sweep before the planning meeting.
+  - kind: prompt
+    title: Pull the week's feedback
+    body: Slack channel, Zendesk tickets, Intercom conversations since last run.
+  - kind: prompt
+    title: Cluster into themes
+    body: Group by topic, count distinct customers per theme.
+  - kind: prompt
+    title: Attach verbatim quotes
+    body: One representative quote per theme, sourced and linked.
+  - kind: result
+    title: Publish + post
+    body: Feedback-themes view updated, digest posted to #product.
+prompt: |
+  Run the weekly feedback synthesis.
+
+  1. Pull every message from {{feedback_channel}} in Slack, plus new tickets tagged
+     {{feedback_tag}} in Zendesk and Intercom, opened since the last run
+     ({{last_run_date}}).
+  2. Cluster the raw feedback into named themes by topic, not by keyword; count
+     how many distinct customers raised each theme.
+  3. For each theme, select one representative quote — exact wording, with
+     speaker and source link. Never paraphrase a quote; if none fits cleanly,
+     drop the quote and keep only the theme count.
+  4. Diff this week's theme counts against last week's snapshot in
+     `reports/feedback/{{week}}.md`; note what's rising, falling, or new.
+  5. Validation: confirm every theme's quote is verbatim against its source
+     and the link resolves; confirm every count reflects distinct customers,
+     not raw messages.
+  6. Patch the feedback-themes view with this week's themes — don't rebuild
+     it — and post the top 5, with counts and trend arrows, to
+     {{delivery_channel}}.
+
+  Never file a Linear issue from a theme without my approval — surface
+  candidate opportunities for review instead.
+---

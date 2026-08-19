@@ -1,0 +1,63 @@
+---
+title: Never let an interviewer walk in blind
+description: Build a focus-area packet per interviewer, then collect and roll up debrief scores after the loop.
+publishedAt: 2026-08-19
+icon: ri-file-user-line
+category: People
+collection: Hiring
+featured: false
+order: 61
+difficulty: intermediate
+skills:
+  - name: Coverage splitting
+    description: Assign scorecard competencies across the panel with no gaps or overlap
+  - name: Interviewer packet format
+    description: Résumé, focus area, and suggested questions per interviewer
+  - name: Debrief rollup
+    description: Combine panel scores into one scorecard with the gaps flagged
+goal: prep a focus-area packet per interviewer and roll up the debrief scores after the loop
+integrations: [notion, googlecalendar, gmail, slack]
+whatItDoes:
+  - Splits the scorecard's competencies across the panel with no overlap
+  - Builds a one-page packet per interviewer before their slot
+  - Chases each panelist for a scorecard after their slot
+  - Rolls up the panel's scores into one scorecard for the hiring manager
+howToUse:
+  - Connect Notion, your calendar, Gmail, and Slack to the agent
+  - Set the trigger to a confirmed loop on the calendar
+  - Paste the prompt and adjust the lead time and chase deadline
+  - Review the rolled-up scorecard; you make the advance-or-reject call
+workflow:
+  - kind: trigger
+    title: Loop scheduled
+    body: Interview loop confirmed on the calendar.
+  - kind: prompt
+    title: Assign focus areas
+    body: Split the scorecard competencies across the panel, no overlap.
+  - kind: prompt
+    title: Build each packet
+    body: Résumé, focus area, and suggested questions per interviewer.
+  - kind: result
+    title: Roll up + deliver
+    body: Combined debrief summary to the hiring manager and panel.
+prompt: |
+  Prep the interview loop for {{candidate}}, applying for {{role}}.
+
+  1. Pull the confirmed loop for {{candidate}} from {{calendar}} and the
+     scorecard for {{role}} from the agent's drive.
+  2. Split the scorecard's competencies across the panelists so every
+     competency has exactly one owner, no gaps, no overlap.
+  3. Build a one-page packet per interviewer: candidate résumé, their
+     assigned focus area, and 2-3 suggested questions.
+  4. Confirm every scorecard competency maps to exactly one interviewer
+     before sending. If one is unassigned, hold the packets and flag it
+     instead of sending an incomplete loop.
+  5. Send each packet to its interviewer {{packet_lead_time}} before their
+     slot, then after each slot chase that panelist for their scorecard if
+     it is not logged within {{debrief_deadline_hours}} hours.
+  6. Once all scores are in, roll up the combined scorecard and post it to
+     {{delivery_channel}} for the hiring manager.
+
+  Never advance or reject the candidate yourself — roll up the scores and
+  hand the decision to the hiring manager.
+---

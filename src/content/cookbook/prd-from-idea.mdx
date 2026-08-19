@@ -1,0 +1,66 @@
+---
+title: Go from rough idea to buildable PRD
+description: Turn a rough idea into a grounded PRD with real metrics and a Non-goals section, or it doesn't ship.
+publishedAt: 2026-08-19
+icon: ri-lightbulb-flash-line
+category: Product
+collection: Ship & tell
+featured: false
+order: 53
+difficulty: starter
+skills:
+  - name: PRD structure
+    description: Problem, goals, requirements, Non-goals, in the team's standard shape.
+  - name: Metric grounding
+    description: Every quantitative claim traces to a real PostHog number or a stored baseline.
+  - name: AI-feature extension
+    description: For AI features, add evals, confidence thresholds, and fallback behavior.
+goal: turn a rough idea into a grounded, buildable PRD with a Non-goals section
+integrations: [linear, posthog, drive, notion]
+whatItDoes:
+  - Pulls past research synthesis, related Linear issues, and live PostHog metrics
+  - Drafts the PRD with Problem, Goals, Requirements, and Non-goals sections
+  - Flags any metric without a source instead of guessing a number
+  - Adds evals and fallback behavior automatically when the feature is AI
+howToUse:
+  - Connect Linear, PostHog, and your doc destination to the agent
+  - Fire it when a rough idea drops in a doc or Slack
+  - Paste the prompt and answer the first-run questions once, memory keeps them
+  - Review the draft PRD and its metric citations before sharing
+workflow:
+  - kind: trigger
+    title: New idea dropped
+    body: A rough idea, one paragraph, in a doc or Slack, kicks it off.
+  - kind: prompt
+    title: Pull the grounding
+    body: Past research synthesis, relevant PostHog metrics, related Linear issues.
+  - kind: prompt
+    title: Draft the PRD
+    body: Problem, goals, requirements, and a Non-goals section.
+  - kind: prompt
+    title: Check every metric
+    body: Real numbers only; missing ones render as [baseline needed].
+  - kind: result
+    title: Deliver for review
+    body: Doc saved and shared, summary posted to #product.
+prompt: |
+  Turn the rough idea for {{feature_name}} into a buildable PRD.
+
+  1. Read the rough idea and pull related context: past research synthesis
+     and decisions in memory, relevant issues from {{linear_team}} in Linear,
+     and PostHog events for {{related_metric}}.
+  2. Draft the PRD: Problem, Goals, Requirements, and a Non-goals section.
+     Do not proceed to Requirements until Non-goals is filled in.
+  3. For every quantitative claim, current rate, target, volume, cite the
+     real PostHog number. If no baseline exists, write
+     "[baseline needed: {{event}}]" instead of estimating.
+  4. If {{feature_name}} is an AI feature, add the AI-PRD extension: evals,
+     confidence thresholds, and fallback behavior.
+  5. Validation: scan the full draft for any number without a source and
+     for an empty Non-goals section. Fix both before delivering.
+  6. Save the PRD to `prds/{{feature_name}}-{{date}}.md`, export it to
+     {{doc_destination}}, and post a one-line summary to #product.
+
+  Do not mark a metric as final without a live PostHog citation — surface it
+  as an assumption, never as fact.
+---

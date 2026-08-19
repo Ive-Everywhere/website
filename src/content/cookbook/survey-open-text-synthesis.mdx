@@ -1,0 +1,68 @@
+---
+title: Read every engagement comment, safely
+description: Synthesize open-text engagement comments into themes, with anonymity guardrails on quotes and small groups.
+publishedAt: 2026-08-19
+icon: ri-chat-poll-line
+category: People
+collection: Employee experience
+featured: false
+order: 64
+difficulty: intermediate
+skills:
+  - name: Open-text theme clustering
+    description: Group free-text survey answers into named themes with counts
+  - name: Anonymity floor
+    description: Suppress any theme below the minimum respondent count
+  - name: Quote paraphrasing
+    description: Paraphrase or count-only represent every theme, never verbatim
+goal: synthesize open-text survey comments into themes without exposing any individual respondent
+integrations: [googlesheets, slack, drive]
+whatItDoes:
+  - Clusters open-text survey responses into named themes with respondent counts
+  - Suppresses any theme under the minimum respondent count, no exceptions
+  - Represents every theme as a paraphrase or count only, never verbatim
+  - Diffs themes against last cycle and posts the trend to #people
+howToUse:
+  - Connect your survey tool or sheet, Drive, and Slack to the agent
+  - Set the trigger to fire when the survey response window closes
+  - Paste the prompt; first run it asks the minimum respondent count per theme, then remembers
+  - Review the theme summary and trend deltas before they post to #people
+workflow:
+  - kind: trigger
+    title: Survey closes
+    body: Export lands once the response window ends.
+  - kind: prompt
+    title: Cluster into themes
+    body: Group open-text answers by topic, count each.
+  - kind: prompt
+    title: Check the anonymity floor
+    body: Suppress any theme under the minimum respondent count.
+  - kind: prompt
+    title: Paraphrase or count-only
+    body: Represent each theme without exposing an individual.
+  - kind: result
+    title: Publish the synthesis
+    body: Themes and trend deltas to the insights view and #people.
+prompt: |
+  Synthesize the open-text responses for the {{survey}} that closed on
+  {{close_date}}.
+
+  1. Pull the open-text responses from {{survey_source}}.
+  2. Cluster the responses into named themes, with a count of respondents
+     behind each one.
+  3. Validation (the anonymity floor): drop or merge any theme with
+     fewer than {{min_respondents}} respondents into a broader theme. Never
+     publish a theme that small on its own, no matter how notable it is.
+  4. For each surviving theme, represent it with a paraphrase or a count
+     only. Do not quote any respondent verbatim, even from a large theme —
+     paraphrase the sentiment instead, and strip any detail that could
+     identify the speaker (team, tenure, unique phrasing).
+  5. Diff this cycle's themes against the last synthesis in the
+     research-insights view: what's new, what grew, what resolved.
+  6. Update the research-insights view and post the theme summary and trend
+     deltas to #people.
+
+  Never attribute a comment to an individual, and never publish a
+  small-group theme or a distinctive detail — anonymity holds even if it
+  costs specificity.
+---

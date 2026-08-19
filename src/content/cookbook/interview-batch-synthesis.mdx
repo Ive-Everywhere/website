@@ -1,0 +1,68 @@
+---
+title: Turn a transcript pile into signal
+description: Synthesize a batch of interview transcripts into JTBD statements and themes, every quote verbatim and sourced.
+publishedAt: 2026-08-19
+icon: ri-mic-line
+category: Product
+collection: Discovery
+featured: false
+order: 51
+difficulty: intermediate
+skills:
+  - name: JTBD extraction
+    description: Pull job statements and pains from raw transcript text.
+  - name: Verbatim-quote policy
+    description: Every quote is exact, with speaker, timestamp, and date; no paraphrase-as-quote.
+  - name: Contradiction flagging
+    description: Compare new findings against stored synthesis memory and surface disagreements.
+goal: synthesize a batch of interview transcripts into JTBD statements and contradictions
+integrations: [drive, notion, slack]
+whatItDoes:
+  - Reads every new transcript in the interviews folder since the last run
+  - Extracts JTBD statements and pains, one verbatim quote per finding
+  - Rolls the batch into themes, counted by supporting interview
+  - Flags contradictions against stored synthesis memory instead of overwriting it
+howToUse:
+  - Connect Drive, Notion, and Slack to the agent
+  - Set the trigger for a batch threshold, or a biweekly sweep
+  - Paste the prompt; on first run, set the folder, batch size, and contradiction policy
+  - Review the new themes and contradiction flags; the rest updates the view
+workflow:
+  - kind: trigger
+    title: New batch or biweekly
+    body: Fires once transcripts cross the threshold, or on schedule.
+  - kind: prompt
+    title: Read the batch
+    body: Every new transcript in the interviews folder since last run.
+  - kind: prompt
+    title: Extract JTBD + themes
+    body: Jobs, pains, and quotes per interview, then rolled up.
+  - kind: prompt
+    title: Flag contradictions
+    body: Where this batch disagrees with stored synthesis memory.
+  - kind: result
+    title: Publish + post
+    body: Research-insights view updated, synthesis posted to #product.
+prompt: |
+  Run the interview batch synthesis.
+
+  1. List every new transcript in {{interviews_folder}} since the last synthesis
+     run ({{last_run_date}}), and confirm the batch has reached
+     {{min_batch_size}}; if not, stop and wait for the next sweep.
+  2. For each transcript, extract job-to-be-done statements and pains, with one
+     verbatim quote per finding — speaker, timestamp, and date, never
+     paraphrased.
+  3. Roll the batch up into themes across interviews, noting how many distinct
+     interviews support each theme.
+  4. Cross-check each theme against the synthesis memory from past batches;
+     flag anything that contradicts a prior finding instead of silently
+     overwriting it.
+  5. Validation: confirm every quote in the output matches the source
+     transcript's exact wording, speaker, and timestamp before it ships.
+  6. Patch the research-insights view with the new themes and contradictions,
+     save the batch report to `reports/research/{{date}}-synthesis.md`, and
+     post the synthesis summary to {{delivery_channel}}.
+
+  Never share interview content or quotes outside the team's surfaces — this
+  synthesis stays internal.
+---

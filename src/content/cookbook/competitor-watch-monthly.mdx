@@ -1,0 +1,66 @@
+---
+title: Catch what every competitor shipped this month
+description: Refresh the competitor profile every month, diff what changed, and cite a live URL for every claim.
+publishedAt: 2026-08-19
+icon: ri-compass-3-line
+category: Product
+collection: Discovery
+featured: false
+order: 55
+difficulty: advanced
+skills:
+  - name: DHM scoring
+    description: Score Delight, Hard-to-copy, Margin, each score tied to a source URL.
+  - name: Source citation
+    description: Every claim in the profile links to the live page it came from.
+  - name: Diff-against-last-run
+    description: Isolate only what changed since the previous profile.
+goal: refresh a competitor profile monthly and surface what changed, with every claim cited
+integrations: [drive, notion, slack]
+whatItDoes:
+  - Fetches live pricing, changelog, reviews, and job postings per competitor
+  - Scores Delight, Hard-to-copy, Margin, every score tied to a cited URL
+  - Diffs this month's findings against last month's saved profile
+  - Re-fetches every load-bearing URL before publishing, no stale claims
+howToUse:
+  - Connect the drive, Notion, and the product Slack channel
+  - Set the trigger for the 1st business day, 9:00 AM
+  - Paste the prompt and set the standing watch list once
+  - Review the diff and what it means before the roadmap review
+workflow:
+  - kind: trigger
+    title: 1st business day, 9:00 AM
+    body: Monthly refresh, one competitor or the full watch list.
+  - kind: prompt
+    title: Fetch the live sources
+    body: Pricing, changelog, reviews, job postings, for each competitor.
+  - kind: prompt
+    title: Score through the DHM lens
+    body: Delight, Hard-to-copy, Margin, each claim cited.
+  - kind: prompt
+    title: Diff against last month
+    body: What changed since the last profile.
+  - kind: result
+    title: Publish + post
+    body: Profile updated in the drive, diff summary to #product.
+prompt: |
+  Refresh the competitor profile for {{competitor}}.
+
+  1. Fetch the live pricing page, changelog, recent reviews, and job
+     postings for {{competitor}}.
+  2. Score the competitor through the DHM lens (Delight, Hard-to-copy,
+     Margin). Tie every score to a cited URL, not a general impression.
+  3. Load last month's profile for {{competitor}} from
+     `competitive/{{competitor}}.md` and diff this month's findings
+     against it.
+  4. Validation: re-fetch every URL cited as a load-bearing claim,
+     pricing, a specific feature, to confirm it still says what the
+     profile claims before publishing.
+  5. Tie any meaningful change to the relevant roadmap item, if one
+     exists, without editing the roadmap itself.
+  6. Save the refreshed profile to `competitive/{{competitor}}.md` and
+     post the diff, what changed, what it means for us, to #product.
+
+  Do not restructure the roadmap from a competitive finding without my
+  approval — surface the implication, don't act on it.
+---

@@ -1,0 +1,66 @@
+---
+title: Run new-hire onboarding across every system
+description: Run the new-hire checklist across HR, IT, and the manager, chasing whoever's step is late.
+publishedAt: 2026-08-19
+icon: ri-user-add-line
+category: People
+collection: Hiring
+featured: false
+order: 62
+difficulty: intermediate
+skills:
+  - name: Onboarding checklist template
+    description: Every step across HR, IT, facilities, and the manager, by role type
+  - name: Owner chasing policy
+    description: Reminder cadence and escalation path for a stuck step
+  - name: Readiness reporting
+    description: Roll a checklist into a clear day-one-ready or at-risk status
+goal: run the new-hire checklist across every system and chase whoever's step is stuck
+integrations: [notion, googlesheets, slack, gmail, googlecalendar]
+whatItDoes:
+  - Builds the full onboarding checklist the moment an offer is accepted
+  - Tracks every step's status daily across HR, IT, and facilities
+  - Reminds owners of overdue steps, then escalates what's still stuck
+  - Reports day-one readiness to the manager and People Ops
+howToUse:
+  - Connect Notion, your tracker sheet, Slack, Gmail, and calendar
+  - Set the trigger to an offer marked accepted in the tracker
+  - Paste the prompt and adjust the reminder and escalation thresholds
+  - Review the readiness summary; confirm any step it flags as stuck
+workflow:
+  - kind: trigger
+    title: Offer accepted
+    body: New hire added to the onboarding tracker.
+  - kind: prompt
+    title: Build the checklist
+    body: Every step across HR, IT, facilities, and the manager, with owners.
+  - kind: prompt
+    title: Track and chase
+    body: Daily check of what's done, overdue, or blocked.
+  - kind: result
+    title: Report readiness
+    body: Day-one readiness status to the manager and People Ops.
+prompt: |
+  Run onboarding for {{new_hire}}, starting as {{role_type}}.
+
+  1. When {{new_hire}}'s offer is marked accepted, build their onboarding
+     checklist from the {{role_type}} template: every step, owner, and due
+     date.
+  2. Add {{new_hire}} to the onboarding-orchestrator tracker view with all
+     steps set to not-started.
+  3. Each day until the start date, check every system directly (IT ticket
+     status, payroll setup, facilities badge, manager tasks) and update the
+     tracker with what's done, overdue, or blocked.
+  4. Before marking any step complete, confirm it against the source system
+     directly — for example, the IT ticket is closed, not just assigned.
+     Never mark a step done on assumption.
+  5. Remind the owner of any step overdue by {{reminder_threshold_days}} days;
+     escalate to {{people_ops_lead}} if it is still open
+     {{escalation_threshold_days}} days later.
+  6. The morning of the start date, post a day-one-readiness summary to
+     {{delivery_channel}}: what's confirmed, what's still open.
+
+  Never mark a step complete without confirming it in its source system, and
+  never provision access or send an offer-adjacent email without the People
+  Ops lead's sign-off.
+---

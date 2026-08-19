@@ -1,0 +1,63 @@
+---
+title: Start every req from what worked
+description: Draft the job description and sourcing brief from past successful hires, not a blank page.
+publishedAt: 2026-08-19
+icon: ri-file-text-line
+category: People
+collection: Hiring
+featured: false
+order: 60
+difficulty: starter
+skills:
+  - name: Past-hire calibration
+    description: Pull what worked from the last successful hires in this role
+  - name: Bias-language check
+    description: Screen the JD for gendered or exclusionary language before it ships
+  - name: Sourcing brief format
+    description: Target profiles, channels, and search strings for a sourcer
+goal: draft a calibrated JD and sourcing brief from past-hire signal, not a blank page
+integrations: [notion, googlesheets, gmail, slack]
+whatItDoes:
+  - Pulls what worked from the last successful hires in this role
+  - Drafts an outcomes-based JD leveled against comparable roles
+  - Screens the JD for bias language and rewrites what it flags
+  - Drafts a sourcing brief with target profiles and search strings
+howToUse:
+  - Connect Notion, your hiring sheet, Gmail, and Slack to the agent
+  - Set the trigger to a new req opening, or run it on demand
+  - Paste the prompt and adjust the lookback and sign-off policy
+  - Review the JD and brief before either one goes out the door
+workflow:
+  - kind: trigger
+    title: New req opened
+    body: Hiring manager submits the intake form.
+  - kind: prompt
+    title: Pull past-hire calibration
+    body: Successful hires in this role or level, what worked.
+  - kind: prompt
+    title: Draft the JD
+    body: Outcomes-based, bias-checked language, leveled to the role.
+  - kind: result
+    title: Deliver for review
+    body: JD and sourcing brief posted to Slack, saved to the drive.
+prompt: |
+  Draft the job description and sourcing brief for the {{role}} req.
+
+  1. Read the intake form for {{role}}: level, team, must-haves, and the
+     hiring manager's notes.
+  2. Pull the last {{lookback_hires}} successful hires at this level or role
+     from {{ats_or_sheet}} and note what their JDs and sourcing criteria had
+     in common.
+  3. Draft the JD: outcomes-based responsibilities, must-have vs. nice-to-have,
+     leveled against comparable roles.
+  4. Run the JD through the bias-language check: flag and rewrite any
+     gendered, exclusionary, or unnecessarily jargon-heavy phrasing before it
+     ships.
+  5. Draft the sourcing brief: 2-3 target company or profile archetypes,
+     channels to search, and a starter Boolean string.
+  6. Post the JD and sourcing brief to {{delivery_channel}} for the hiring
+     manager's sign-off and save both to `hiring/{{role}}-{{date}}/`.
+
+  Never post the JD to a job board or send the sourcing brief to a sourcer
+  until the hiring manager approves it in {{delivery_channel}}.
+---
