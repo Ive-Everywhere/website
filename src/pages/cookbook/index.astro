@@ -20,6 +20,16 @@ const collectionMeta: Record<string, { blurb: string; tint: string }> = {
   'Month-end pack': { blurb: 'Everything finance runs at close.', tint: 'bg-[#eef1f7]' },
   'Revenue ops': { blurb: 'Keep the pipeline honest.', tint: 'bg-[#eef4ee]' },
   'Incident response': { blurb: 'From page to fix to post-mortem.', tint: 'bg-[#f3eef4]' },
+  'Pipeline & prospecting': { blurb: 'Research, map, and fill the pipeline.', tint: 'bg-[#eef2f8]' },
+  'Deal support': { blurb: 'Questionnaires, RFPs, and trials, unblocked.', tint: 'bg-[#e9f2f2]' },
+  'Customer health': { blurb: 'See risk before the customer says it.', tint: 'bg-[#eef4ef]' },
+  'Cash & spend': { blurb: 'Where the money goes, verified.', tint: 'bg-[#eef1f7]' },
+  'Contract review': { blurb: 'First-pass redlines, checked twice.', tint: 'bg-[#f4eef3]' },
+  'Contract lifecycle': { blurb: 'Nothing signed slips through.', tint: 'bg-[#f4eef3]' },
+  'Discovery': { blurb: 'What users actually say and do.', tint: 'bg-[#efeaf6]' },
+  'Ship & tell': { blurb: 'Specs stress-tested, updates honest.', tint: 'bg-[#efeaf6]' },
+  'Hiring': { blurb: 'From JD to debrief, one thread.', tint: 'bg-[#f7f0e6]' },
+  'Employee experience': { blurb: 'Answers, surveys, and clean exits.', tint: 'bg-[#f7f0e6]' },
 };
 const collections = [...new Set(recipes.map((r) => r.data.collection).filter(Boolean))] as string[];
 

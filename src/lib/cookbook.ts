@@ -16,6 +16,9 @@ export const categoryColor: Record<string, CatColor> = {
   People: { surface: 'bg-[#f7f0e6]', tile: 'bg-[#efe1cd]', ink: 'text-[#8a6a3e]' },
   Apps: { surface: 'bg-[#efeaf6]', tile: 'bg-[#e2d9ee]', ink: 'text-[#5b4b7a]' },
   Data: { surface: 'bg-[#e9f2f2]', tile: 'bg-[#d5e8e6]', ink: 'text-[#2f7676]' },
+  Legal: { surface: 'bg-[#f2eff5]', tile: 'bg-[#e4dcec]', ink: 'text-[#6a5688]' },
+  Product: { surface: 'bg-[#eff3ee]', tile: 'bg-[#dfe9dc]', ink: 'text-[#57774f]' },
+  'Customer Engineering': { surface: 'bg-[#edf2f6]', tile: 'bg-[#dbe6ef]', ink: 'text-[#3f6a8a]' },
 };
 
 export const catColor = (c: string): CatColor =>
