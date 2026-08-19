@@ -74,6 +74,17 @@ const cookbook = defineCollection({
         }),
       )
       .default([]),
+    /** Recurring jobs the agent offers to set up, served at jobs-setup/<job>.md. */
+    jobs: z
+      .array(
+        z.object({
+          name: z.string(),
+          cadence: z.string(),
+          /** Self-contained job prompt — fired runs are fresh sessions. */
+          prompt: z.string(),
+        }),
+      )
+      .default([]),
     /** One-line goal woven into the short fetch-prompt. */
     goal: z.string().default(''),
     /** The full copyable prompt shown on the right, with a Copy button. */
