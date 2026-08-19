@@ -1,0 +1,66 @@
+---
+title: Explain the variance, not just the number
+description: Compare budget to actuals per owner, write the narrative, and diff against last month's pack.
+publishedAt: 2026-08-19
+icon: ri-bar-chart-grouped-line
+category: Finance
+collection: Month-end pack
+featured: false
+order: 32
+difficulty: intermediate
+skills:
+  - name: Variance materiality policy
+    description: Which variances are worth a narrative line, by owner and threshold
+  - name: Owner narrative format
+    description: One-line context per flagged variance, what moved, why, what's next
+  - name: Month-over-month diff
+    description: Compare this pack's flags against last month's to catch recurring misses
+goal: draft the monthly budget-vs-actuals pack with a narrative line on every material variance
+integrations: [googlesheets, gmail, slack]
+whatItDoes:
+  - Pulls budget and actuals per owner and computes variance in dollars and percent
+  - Flags only variances over each owner's materiality threshold
+  - Drafts a one-line narrative for every flagged variance, what moved, why
+  - Diffs this month's flags against last month's to catch recurring misses
+howToUse:
+  - Connect the budget sheet, Gmail, and Slack to the agent
+  - Set it to fire once actuals are finalized for the period
+  - Paste the prompt; first run it asks each owner's materiality threshold, then remembers it
+  - Review the flagged variances and narrative before it posts to the channel
+workflow:
+  - kind: trigger
+    title: After the close, monthly
+    body: Fires once actuals are finalized for the period.
+  - kind: prompt
+    title: Pull budget and actuals
+    body: Line by line, by owner, from the budget sheet.
+  - kind: prompt
+    title: Compute the variance
+    body: Dollar and percent, flagged over the owner's materiality threshold.
+  - kind: prompt
+    title: Draft the narrative
+    body: One line per flagged variance, in the owner's context.
+  - kind: result
+    title: Pack + diff
+    body: Save the pack and note what changed since last month.
+prompt: |
+  Draft the budget-vs-actuals pack for {{period}}.
+
+  1. Pull this period's budget and actuals from {{budget_sheet}}, line by
+     line, grouped by owner.
+  2. Compute the variance in dollars and percent for every line; flag any
+     over that owner's materiality threshold from memory (default
+     {{materiality_pct}}%).
+  3. For each flagged line, draft a one-line narrative: what moved, the
+     likely driver, and what it means for next month.
+  4. Validation: recompute the total variance independently from the raw
+     sheet totals, not the per-line sum, and confirm it matches before
+     finalizing — hold the pack if the totals don't tie out.
+  5. Diff this month's flagged lines against last month's pack in
+     reports/budget-actuals/ and note any variance that's now recurring.
+  6. Save the pack to reports/budget-actuals/{{period}}.md and post the top
+     3 variances to {{delivery_channel}}.
+
+  Never change a budget or actuals figure in the source sheet — flag the
+  discrepancy for the owner to correct instead.
+---

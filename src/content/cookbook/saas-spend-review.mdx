@@ -1,0 +1,62 @@
+---
+title: Catch the renewal before it auto-renews
+description: Track every SaaS contract's renewal date and seat usage, and flag waste before the invoice hits.
+publishedAt: 2026-08-19
+icon: ri-refresh-line
+category: Finance
+collection: "Cash & spend"
+featured: false
+order: 35
+difficulty: intermediate
+skills:
+  - name: Contract tracker schema
+    description: The fields every SaaS line needs, vendor, cost, seats, renewal date, owner
+  - name: Utilization threshold policy
+    description: What seat-usage rate counts as underused, by tool category
+  - name: Renewal notice windows
+    description: How far ahead a renewal must surface to still cancel or renegotiate
+goal: track SaaS contracts and flag renewals and underused seats before they cost money
+integrations: [googlesheets, gmail, slack, stripe]
+whatItDoes:
+  - Tracks cost, seats, and renewal date for every contract in one place
+  - Compares seats paid for against seats actually used, where usage data exists
+  - Cross-checks each renewal date against the original contract before it alerts
+  - Flags renewals inside the notice window and seats under the utilization threshold
+howToUse:
+  - Connect the contract sheet, Drive, Gmail, and Slack to the agent
+  - Set it to run weekly, plus again 60 days before each renewal
+  - Paste the prompt and answer the first-run questions, notice window, utilization threshold, channel
+  - Review the flagged renewals and underused seats; decide whether to cancel or renegotiate
+workflow:
+  - kind: trigger
+    title: Weekly sweep, plus pre-renewal
+    body: Checks the contract tracker every week and before renewals.
+  - kind: prompt
+    title: Pull the contract book
+    body: Vendor, cost, seats, and renewal date, from the sheet.
+  - kind: prompt
+    title: Check usage vs. seats
+    body: Seats paid for against seats active, where usage data exists.
+  - kind: result
+    title: Publish and alert
+    body: Spend view updates; renewal flags post before the notice window closes.
+prompt: |
+  Review the SaaS contract book for renewals and underused seats.
+
+  1. Pull the SaaS contract book from {{contract_sheet}}: vendor, annual cost,
+     seat count, renewal date, owner.
+  2. For tools with usage data available, compare seats paid for against seats
+     actively used in the last {{usage_window_days}} days.
+  3. Flag any contract renewing within {{notice_window_days}} days, and any
+     tool under {{utilization_threshold_pct}}% seat utilization.
+  4. Before you alert on a flagged renewal, cross-check its renewal date
+     against the original contract document in {{drive_folder}}. A stale
+     sheet date must never trigger a false alarm.
+  5. Update the saas-spend-review view with cost, seats, utilization, and
+     renewal date for every contract.
+  6. Post renewal and underutilization flags to {{delivery_channel}} with the
+     dollar amount at stake for each.
+
+  Do not cancel or downgrade a subscription directly — flag it with the
+  savings estimate and let the tool owner decide.
+---

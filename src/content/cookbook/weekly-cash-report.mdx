@@ -1,0 +1,65 @@
+---
+title: Keep 13 weeks of cash always current
+description: Roll up cash position across bank, Stripe, and the ledger into a live 13-week view for the CFO.
+publishedAt: 2026-08-19
+icon: ri-line-chart-line
+category: Finance
+collection: "Cash & spend"
+featured: false
+order: 33
+difficulty: intermediate
+skills:
+  - name: 13-week build methodology
+    description: Structure the roll, opening balance, inflows, outflows, closing balance, per week
+  - name: Cash-alert thresholds
+    description: What balance, or how many weeks out, triggers an alert
+  - name: Source reconciliation
+    description: Tie the rollup's starting balance to the ledger before publishing
+goal: build and publish a live 13-week cash rollup, refreshed weekly
+integrations: [stripe, googlesheets, slack]
+whatItDoes:
+  - Ties out the starting cash balance against the bank and Stripe every week
+  - Rolls inflows and outflows across 13 weeks into one opening-to-closing view
+  - Re-sums every weekly closing balance before publishing, so nothing goes out wrong
+  - Alerts immediately if any week's closing balance turns negative or too low
+howToUse:
+  - Connect Stripe, the ledger sheet, and Slack to the agent
+  - Set it to run every Monday before the week's first cash check-in
+  - Paste the prompt and answer the first-run questions, ledger sheet, alert threshold, tie-out tolerance
+  - Review the published 13-week view; act only on the negative-balance alerts
+workflow:
+  - kind: trigger
+    title: Every Monday, 6:00 AM
+    body: Before the week's first cash check-in.
+  - kind: prompt
+    title: Pull cash inflows
+    body: Stripe payouts and receivables due in the next 13 weeks.
+  - kind: prompt
+    title: Pull cash outflows
+    body: Scheduled payables, payroll, and recurring spend from the ledger.
+  - kind: result
+    title: Publish and alert
+    body: View updates; Slack alert fires if any week goes negative.
+prompt: |
+  Build this week's 13-week cash rollup.
+
+  1. Pull the current cash balance from {{ledger_sheet}} and confirm it against
+     the latest bank and Stripe balance; they must match within
+     {{tie_out_tolerance}} before you start the roll.
+  2. Pull expected inflows for the next 13 weeks: Stripe payouts and invoices
+     due, from {{ar_sheet}}.
+  3. Pull expected outflows for the next 13 weeks: payables due, payroll dates,
+     and recurring spend, from {{ap_sheet}}.
+  4. Build the week-by-week roll, opening balance, inflows, outflows, closing
+     balance, for all 13 weeks.
+  5. Re-sum the 13 weekly closing balances a second time, independently,
+     against the final week's number. If they don't tie out, hold the publish
+     and name exactly which week broke.
+  6. Update the weekly-cash-report view with the new roll and post a one-line
+     summary to {{delivery_channel}}.
+  7. If any week's closing balance goes negative or under {{min_balance}},
+     alert {{delivery_channel}} immediately.
+
+  Do not initiate a transfer or payment based on this forecast — the view is
+  for visibility only, funding decisions stay with the CFO.
+---

@@ -1,0 +1,69 @@
+---
+title: Collect what's overdue, keep the relationship
+description: Run a tiered dunning ladder on overdue invoices, with tone that escalates only after your approval.
+publishedAt: 2026-08-19
+icon: ri-alarm-warning-line
+category: Finance
+collection: Cash & spend
+featured: false
+order: 30
+difficulty: intermediate
+skills:
+  - name: Dunning ladder policy
+    description: Which rung fires at which days-overdue, and the tone for each
+  - name: Dispute detection
+    description: Flag any invoice under dispute so it's held, never chased
+  - name: Tone calibration
+    description: Match the escalation to the relationship, not just the day count
+goal: run the dunning ladder on overdue invoices and queue every email for approval
+integrations: [stripe, googlesheets, gmail, slack]
+whatItDoes:
+  - Pulls every open invoice and computes days overdue against the aging sheet
+  - Places each invoice on the ladder by days overdue, never skipping a rung
+  - Drafts tone-matched emails and holds every disputed invoice out of the chase
+  - Queues every draft for approval, nothing sends until you say so
+howToUse:
+  - Connect Stripe, the AR aging sheet, Gmail, and Slack to the agent
+  - Set it to sweep daily, weekly, or run it on demand from Slack
+  - Paste the prompt; first run it asks your rungs, tone, and dispute field, then remembers them
+  - Review each rung's drafts in the approval channel, you approve, nothing sends alone
+workflow:
+  - kind: trigger
+    title: Every morning, or weekly sweep
+    body: Checks the AR aging report for anything overdue.
+  - kind: prompt
+    title: Pull the aging report
+    body: Open invoices from Stripe, matched against the AR sheet.
+  - kind: prompt
+    title: Place each on the ladder
+    body: Rung by days overdue, reminder, follow-up, final notice.
+  - kind: prompt
+    title: Draft the email
+    body: Tone matches the rung, never harsher than policy allows.
+  - kind: result
+    title: Queue for approval
+    body: Drafts wait in Slack; nothing sends until you approve.
+prompt: |
+  Run the collections chase for {{stripe_account}}.
+
+  1. Pull every open invoice and match it against the AR aging sheet in
+     {{ar_sheet}}; compute days overdue for each.
+  2. Exclude any invoice flagged {{dispute_field}} as disputed — hold those out
+     of the ladder entirely, and never place a disputed invoice on any rung.
+  3. Place each remaining invoice on the dunning ladder from memory (day
+     {{rung_1_days}}: reminder, day {{rung_2_days}}: follow-up, day
+     {{rung_3_days}}: final notice). Check the send-history log first and skip
+     any rung already sent for that invoice, so the same rung never fires twice.
+  4. Draft the email for each invoice's rung, in the tone defined for that
+     rung. Never escalate tone faster than the invoice has aged.
+  5. Validation: recompute each invoice's days-overdue and rung placement a
+     second time against a fresh Stripe pull before drafting, so the ladder
+     never fires on stale data.
+  6. Post all drafts to {{approval_channel}} for one-tap approval, grouped by
+     rung, with the account name and days overdue on each.
+  7. On approval, log the invoice, rung, and send date to the send-history
+     file, so the ladder always knows what has already gone out.
+
+  Never send a collections email without explicit approval, and never chase a
+  disputed invoice — hold it for the controller to resolve instead.
+---
