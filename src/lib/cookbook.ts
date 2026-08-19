@@ -43,20 +43,26 @@ export const catIcon = (c: string): string => categoryIcon[c] ?? 'ri-book-2-line
  * so the two never drift.
  */
 export const collectionMeta: Record<string, { blurb: string; tint: string }> = {
-  'Month-end pack': { blurb: 'Everything finance runs at close.', tint: 'bg-[#eef1f7]' },
-  'Revenue ops': { blurb: 'Keep the pipeline honest.', tint: 'bg-[#eef4ee]' },
-  'Incident response': { blurb: 'From page to fix to post-mortem.', tint: 'bg-[#f3eef4]' },
-  'Pipeline & prospecting': { blurb: 'Research, map, and fill the pipeline.', tint: 'bg-[#eef2f8]' },
-  'Deal support': { blurb: 'Questionnaires, RFPs, and trials, unblocked.', tint: 'bg-[#e9f2f2]' },
-  'Customer health': { blurb: 'See risk before the customer says it.', tint: 'bg-[#eef4ef]' },
-  'Cash & spend': { blurb: 'Where the money goes, verified.', tint: 'bg-[#eef1f7]' },
-  'Contract review': { blurb: 'First-pass redlines, checked twice.', tint: 'bg-[#f4eef3]' },
-  'Contract lifecycle': { blurb: 'Nothing signed slips through.', tint: 'bg-[#f4eef3]' },
-  'Discovery': { blurb: 'What users actually say and do.', tint: 'bg-[#efeaf6]' },
-  'Ship & tell': { blurb: 'Specs stress-tested, updates honest.', tint: 'bg-[#efeaf6]' },
-  'Hiring': { blurb: 'From JD to debrief, one thread.', tint: 'bg-[#f7f0e6]' },
-  'Employee experience': { blurb: 'Answers, surveys, and clean exits.', tint: 'bg-[#f7f0e6]' },
+  'Month-end pack': { blurb: 'Everything finance runs at close.', tint: 'bg-[#bfcdf6]' },
+  'Revenue ops': { blurb: 'Keep the pipeline honest.', tint: 'bg-[#cfe9d0]' },
+  'Incident response': { blurb: 'From page to fix to post-mortem.', tint: 'bg-[#ecd7f7]' },
+  'Pipeline & prospecting': { blurb: 'Research, map, and fill the pipeline.', tint: 'bg-[#c9def4]' },
+  'Deal support': { blurb: 'Questionnaires, RFPs, and trials, unblocked.', tint: 'bg-[#c6e6e0]' },
+  'Customer health': { blurb: 'See risk before the customer says it.', tint: 'bg-[#d3ecd9]' },
+  'Cash & spend': { blurb: 'Where the money goes, verified.', tint: 'bg-[#f2e4bb]' },
+  'Contract review': { blurb: 'First-pass redlines, checked twice.', tint: 'bg-[#e6d6f2]' },
+  'Contract lifecycle': { blurb: 'Nothing signed slips through.', tint: 'bg-[#dcd3f0]' },
+  'Discovery': { blurb: 'What users actually say and do.', tint: 'bg-[#d9e8c9]' },
+  'Ship & tell': { blurb: 'Specs stress-tested, updates honest.', tint: 'bg-[#cfd8f3]' },
+  'Hiring': { blurb: 'From JD to debrief, one thread.', tint: 'bg-[#f3ddc4]' },
+  'Employee experience': { blurb: 'Answers, surveys, and clean exits.', tint: 'bg-[#f0d9cf]' },
 };
+
+/** Short rail labels where the full category name would widen the menu. */
+export const categoryShort: Record<string, string> = {
+  'Customer Engineering': 'Customer Eng.',
+};
+export const catShort = (c: string): string => categoryShort[c] ?? c;
 
 /** URL slug for a collection name — same kebab rule the recipe file URLs use. */
 export const collectionSlug = (name: string): string =>
