@@ -16,9 +16,12 @@ const { showThemeSwitch = true } = Astro.props;
  * Two deliberate departures from the drawing, both recorded in the spec gaps:
  *  - Figma mixes CENTER and LEFT alignment across sibling footer links, which
  *    reads as an authoring accident. All links are left-aligned here.
- *  - The 372px "Eluu" watermark is absolutely placed so that it overflows the
- *    footer by 72px with no clip flag in the data. It is clipped here and sits
- *    behind the content.
+ *  - The "Eluu" watermark is absolutely placed so that it overflows the footer
+ *    with no clip flag in the data. It is clipped here and sits behind the
+ *    content. Krishna, 2026-08-19: it reads as a WATERMARK, not a headline —
+ *    tinted to `bg-sub-300` (one step off the page), centred in the same
+ *    188px gutter as the link columns, sized to the viewport so it spans the
+ *    footer, CENTRED under the content, and cropped 73px at the bottom edge.
  *
  * The watermark is decorative and desktop-only. It used to sit in the same
  * stacking context as the content row above it, so the social icons landed on
@@ -98,7 +101,7 @@ const year = 2026;
       </div>
     </div>
 
-    <p class="t-label-sm text-text-soft-400 mt-8">
+    <p class="t-label-sm text-text-soft-400 mt-8 lg:mb-[311px]">
       {year} Eluu AI Inc. © All rights reserved.
     </p>
   </div>
@@ -107,8 +110,8 @@ const year = 2026;
       footer's `isolate` stops it escaping into the page's stacking context. */}
   <span
     aria-hidden="true"
-    class="text-text-sub-600 pointer-events-none absolute right-0 -bottom-24 -z-10 hidden leading-none font-medium tracking-[-0.026em] select-none lg:block"
-    style="font-size:372px"
+    class="page-shell gutter-188 text-bg-sub-300 pointer-events-none absolute inset-x-0 -z-10 hidden text-center leading-[0.72] font-medium tracking-[0.02em] select-none lg:block"
+    style="bottom:-73px;font-size:clamp(300px,32.4vw,518px)"
   >
     Eluu
   </span>
