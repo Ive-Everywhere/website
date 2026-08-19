@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SOL-SALES — The CRM updates itself after the call</title>
+<link href="tokens.css" rel="stylesheet">
+<link href="live-shim.css" rel="stylesheet">
+<link href="art.css" rel="stylesheet">
+<link href="live.css" rel="stylesheet">
+<link href="fonts/remixicon.css" rel="stylesheet">
+<link href="embed.css" rel="stylesheet">
+<style>
+  html,body { margin:0; height:100%; background:var(--bg-soft-200); }
+  .a-frame { position:absolute; inset:0; }
+
+  /* ── SOL-SALES · THE CALL THAT FILES ITSELF ──────────────────────────────
+     Port of art-src/sol-sales.html (the Ona-style descending stack) into ONE
+     live card. The static stack read top-to-bottom as time passing; here the
+     header is the trigger ("Call with Meridian ends · 11:32 AM") and the three
+     outcomes resolve in place, one per beat, under a running status chip.
+
+     The chip is the only status voice: it starts in the neutral maroon
+     "Logging the call…" state and flips to the single green Done tag at the
+     end — same one-crisp-success rule as C1-A. Row ticks share the same
+     success ramp, so there is exactly one green treatment on the card.
+
+     Scale mirrors C1-A (its card is 430-486px wide, 13.5px titles): this card
+     is 536px with a 15px header title, 13.5px row titles, 34px icon chips.  */
+  .a-field { --field: color-mix(in srgb, var(--maroon-100) 60%, var(--bg-white-0)); }
+
+  .card {
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:536px;
+    background:var(--bg-white-0); border:1px solid var(--stroke-soft-200);
+    border-radius:14px; box-shadow:var(--shadow-regular-lg); overflow:hidden;
+  }
+
+  .hd { display:flex; align-items:center; gap:12px; padding:14px 16px;
+        border-bottom:1px solid var(--stroke-soft-200); }
+  .hd-t { font-size:15px; font-weight:500; letter-spacing:-.012em; line-height:1.3;
+          color:var(--text-strong-950); flex:1; min-width:0;
+          white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .hd-time { font-family:var(--font-mono); font-size:11px; color:var(--text-soft-400);
+             font-variant-numeric:tabular-nums; flex:none; }
+
+  /* icon chip — the source's .ic at half scale: white tile, hairline, soft lift */
+  .ic { width:34px; height:34px; border-radius:10px; flex:none;
+        display:grid; place-items:center;
+        background:var(--bg-white-0); border:1px solid var(--stroke-soft-200);
+        box-shadow:var(--shadow-regular-sm); }
+  .ic img { width:20px; height:20px; display:block; }
+  .ic i { font-size:19px; color:var(--primary-base); }
+
+  /* outcome rows — pending rows sit dimmed until their beat lands */
+  .row { display:flex; align-items:center; gap:12px; padding:12px 16px;
+         border-top:1px solid var(--stroke-soft-200);
+         opacity:.38; transition:opacity .4s var(--ease-out-app); }
+  .row:first-of-type { border-top:0; }
+  .row.is-on { opacity:1; }
+
+  .r-body { flex:1; min-width:0; }
+  .r-t { font-size:13.5px; font-weight:500; letter-spacing:-.012em; line-height:1.35;
+         color:var(--text-strong-950);
+         white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .r-s { font-size:11.5px; color:var(--text-sub-600); letter-spacing:-.005em; margin-top:2px;
+         white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  /* tick pop — the reference .l-tool-ok opacity beat plus a small scale pop */
+  .r-ok { color:var(--success-base); font-size:16px; flex:none;
+          opacity:0; transform:scale(.4);
+          transition:opacity .3s var(--ease-out-app), transform .35s var(--ease-out-app); }
+  .row.is-on .r-ok { opacity:1; transform:scale(1); }
+
+  .pulse { width:6px; height:6px; border-radius:50%; background:var(--primary-base);
+           box-shadow:0 0 0 3px var(--primary-alpha-16); animation:l-pulse 1.1s infinite; }
+  @keyframes l-pulse { 50% { opacity:.35 } }
+</style>
+</head>
+<body>
+<div class="a-frame"><div class="a-field"><div class="a-stage">
+
+  <div class="card" id="card">
+
+    <div class="hd">
+      <span class="ic"><i class="ri-phone-line"></i></span>
+      <span class="hd-t">Call with Meridian ends</span>
+      <span class="hd-time">11:32 AM</span>
+      <span class="a-chip" id="status"><span class="pulse"></span>Logging the call&hellip;</span>
+    </div>
+
+    <div class="row" id="r1">
+      <span class="ic"><img src="assets/hubspot.svg" alt=""></span>
+      <div class="r-body">
+        <div class="r-t">Notes logged, deal stage updated</div>
+        <div class="r-s">No CRM homework tonight</div>
+      </div>
+      <i class="ri-check-line r-ok"></i>
+    </div>
+
+    <div class="row" id="r2">
+      <span class="ic"><img src="assets/gmail.svg" alt=""></span>
+      <div class="r-body">
+        <div class="r-t">Follow-up drafted from the call</div>
+        <div class="r-s">Pricing recap + the SOC 2 they asked for</div>
+      </div>
+      <i class="ri-check-line r-ok"></i>
+    </div>
+
+    <div class="row" id="r3">
+      <span class="ic"><i class="ri-calendar-check-line"></i></span>
+      <div class="r-body">
+        <div class="r-t">Sent &middot; next meeting booked</div>
+        <div class="r-s">Thursday 2:00 PM, brief ready before it</div>
+      </div>
+      <i class="ri-check-line r-ok"></i>
+    </div>
+
+  </div>
+
+</div></div></div>
+
+<script src="live.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var ROWS = ['r1','r2','r3'];
+
+  function reset() {
+    // snap, don't unwind — see .l-noanim
+    var card = $('card');
+    card.classList.add('l-noanim');
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { card.classList.remove('l-noanim'); });
+    });
+    $('status').className = 'a-chip';
+    $('status').innerHTML = '<span class="pulse"></span>Logging the call&hellip;';
+    ROWS.forEach(function (id) { $(id).classList.remove('is-on'); });
+  }
+
+  function land(id) { return function () { $(id).classList.add('is-on'); }; }
+
+  var seq = Live.Seq([
+    [700,  land('r1')],
+    [850,  land('r2')],
+    [850,  land('r3')],
+    // the only success signal: one crisp tag in the header
+    [750,  function () {
+      $('status').className = 'a-chip a-chip--ok';
+      $('status').innerHTML = '<i class="ri-check-line" style="font-size:11px"></i>Done';
+    }]
+  ], { reset: reset, hold: 2600 });
+
+  reset();
+  Live.autoplay(seq);
+})();
+</script>
+</body>
+</html>

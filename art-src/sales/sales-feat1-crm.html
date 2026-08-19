@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* structures the kit doesn't cover: struck-done text + an in-flight spinner ring */
+  .row__t.is-struck { color: var(--soft); text-decoration: line-through; text-decoration-thickness: 1.4px; text-decoration-color: var(--soft); }
+  .st--spin { border-radius: 50%; border: 2.5px solid var(--hair); border-top-color: var(--soft); animation: feat4spin 1.1s linear infinite; }
+  @keyframes feat4spin { to { transform: rotate(360deg); } }
+</style>
+</head><body>
+<!-- TEXT-ONLY variant of agents/feat4-finishes.html: the post-call CRM update
+     as the plan checklist. Same structure, marks, weights as the exemplar. -->
+<div class="stage cv-cream">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 5.5l1 1 2-2M4 11.5l1 1 2-2M4 17.5l1 1 2-2"/></svg></span>
+      <span class="hd__t">Acme call ends · 11:32</span>
+      <span class="hd__r"><span class="pill pill--mono">4 / 5</span></span>
+    </div>
+    <div class="list">
+      <div class="row">
+        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>
+        <span class="row__b"><div class="row__t is-struck">Move the stage to Negotiation</div></span>
+        <span class="mk"><img src="live/assets/hubspot.svg" alt=""></span>
+      </div>
+      <div class="row">
+        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>
+        <span class="row__b"><div class="row__t is-struck">Log the notes, 14 bullets</div></span>
+        <span class="mk"><img src="live/assets/hubspot.svg" alt=""></span>
+      </div>
+      <div class="row">
+        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>
+        <span class="row__b"><div class="row__t is-struck">Confirm the amount, $48,000</div></span>
+        <span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.4c0-1 1.1-1.7 2.5-1.7s2.5.7 2.5 1.7c0 2.6-5 1.5-5 4.2 0 1 1.1 1.7 2.5 1.7s2.5-.7 2.5-1.7"/></svg></span>
+      </div>
+      <div class="row">
+        <span class="st st--done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>
+        <span class="row__b"><div class="row__t is-struck">Set the next step, Thu 10:00</div></span>
+        <span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></span>
+      </div>
+      <div class="row">
+        <span class="st st--spin"></span>
+        <span class="row__b"><div class="row__t">Draft the follow-up email</div></span>
+        <span class="mk"><img src="live/assets/gmail.svg" alt=""></span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

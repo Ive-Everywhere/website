@@ -20,7 +20,8 @@ export const primaryNav: NavItem[] = [
     ],
   },
   // { label: 'Apps', href: '/apps' },            // hidden pre-prod (Krishna)
-  /* Solutions dropdown hidden pre-prod (Krishna):
+  /* Solutions dropdown restored (Krishna, 2026-08-19) — the four department
+   * pages now carry their full illustration sets. */
   {
     label: 'Solutions',
     children: [
@@ -30,7 +31,6 @@ export const primaryNav: NavItem[] = [
       { label: 'People', href: '/solutions/people', description: 'Hire without the busywork.', icon: 'ri-team-line' },
     ],
   },
-  */
   { label: 'Cookbook', href: '/cookbook' },
   { label: 'Docs', href: 'https://docs.eluu.ai' },
   { label: 'Pricing', href: '/pricing' },
@@ -47,7 +47,7 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
       { label: 'Pricing', href: '/pricing' },
     ],
   },
-  /* Solutions footer column hidden pre-prod (Krishna):
+  /* Solutions footer column restored (Krishna, 2026-08-19). */
   {
     heading: 'Solutions',
     links: [
@@ -57,7 +57,6 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
       { label: 'People', href: '/solutions/people' },
     ],
   },
-  */
   /* Company column (About / Careers / Contact) removed pre-prod (Krishna,
    * 2026-08-18): the pages do not exist yet. Restore when the Modal-style
    * company page ships (about + careers + contact with #-anchors). */

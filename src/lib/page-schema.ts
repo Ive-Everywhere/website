@@ -50,7 +50,9 @@ export const pitch = z.object({
   linkLabel: z.string().optional(),
   linkHref: z.string().optional(),
   /** Which animated illustration to show, if one fits. */
-  art: z.enum(['c1-a-compose', 'c2-b-plan', 'c3-b-audit']).optional(),
+  art: z
+    .enum(['c1-a-compose', 'c2-b-plan', 'c3-b-audit', 'sol-finance', 'sol-sales', 'sol-ce', 'sol-people'])
+    .optional(),
   /**描述 for the reader when no art exists yet. */
   visualNote: z.string().optional(),
 });
