@@ -23,3 +23,41 @@ export const categoryColor: Record<string, CatColor> = {
 
 export const catColor = (c: string): CatColor =>
   categoryColor[c] ?? { surface: 'bg-bg-weak-50', tile: 'bg-bg-soft-200', ink: 'text-text-sub-600' };
+
+/** Icon per category for the gallery's left rail. Falls back to a book. */
+export const categoryIcon: Record<string, string> = {
+  Finance: 'ri-coins-line',
+  Sales: 'ri-funds-line',
+  Engineering: 'ri-terminal-box-line',
+  People: 'ri-team-line',
+  Apps: 'ri-layout-grid-line',
+  Data: 'ri-database-2-line',
+  Legal: 'ri-scales-3-line',
+  Product: 'ri-compass-3-line',
+  'Customer Engineering': 'ri-customer-service-2-line',
+};
+export const catIcon = (c: string): string => categoryIcon[c] ?? 'ri-book-2-line';
+
+/**
+ * Collection card copy + tint, shared by the gallery and the collection pages
+ * so the two never drift.
+ */
+export const collectionMeta: Record<string, { blurb: string; tint: string }> = {
+  'Month-end pack': { blurb: 'Everything finance runs at close.', tint: 'bg-[#eef1f7]' },
+  'Revenue ops': { blurb: 'Keep the pipeline honest.', tint: 'bg-[#eef4ee]' },
+  'Incident response': { blurb: 'From page to fix to post-mortem.', tint: 'bg-[#f3eef4]' },
+  'Pipeline & prospecting': { blurb: 'Research, map, and fill the pipeline.', tint: 'bg-[#eef2f8]' },
+  'Deal support': { blurb: 'Questionnaires, RFPs, and trials, unblocked.', tint: 'bg-[#e9f2f2]' },
+  'Customer health': { blurb: 'See risk before the customer says it.', tint: 'bg-[#eef4ef]' },
+  'Cash & spend': { blurb: 'Where the money goes, verified.', tint: 'bg-[#eef1f7]' },
+  'Contract review': { blurb: 'First-pass redlines, checked twice.', tint: 'bg-[#f4eef3]' },
+  'Contract lifecycle': { blurb: 'Nothing signed slips through.', tint: 'bg-[#f4eef3]' },
+  'Discovery': { blurb: 'What users actually say and do.', tint: 'bg-[#efeaf6]' },
+  'Ship & tell': { blurb: 'Specs stress-tested, updates honest.', tint: 'bg-[#efeaf6]' },
+  'Hiring': { blurb: 'From JD to debrief, one thread.', tint: 'bg-[#f7f0e6]' },
+  'Employee experience': { blurb: 'Answers, surveys, and clean exits.', tint: 'bg-[#f7f0e6]' },
+};
+
+/** URL slug for a collection name — same kebab rule the recipe file URLs use. */
+export const collectionSlug = (name: string): string =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
