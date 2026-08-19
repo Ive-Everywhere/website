@@ -18,6 +18,10 @@ export const GET: APIRoute = ({ props }) => {
   const md =
     `# ${skill.name}\n\n` +
     `A reusable skill the "${recipe}" recipe pulls in. Add it once and every agent on the team can use it.\n\n` +
-    (skill.description ? `${skill.description}\n` : '');
+    (skill.body
+      ? `${skill.body.trim()}\n`
+      : skill.description
+        ? `${skill.description}\n`
+        : '');
   return new Response(md, { headers: { 'Content-Type': 'text/markdown; charset=utf-8' } });
 };

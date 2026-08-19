@@ -64,7 +64,15 @@ const cookbook = defineCollection({
       .default([]),
     /** Recommended skills the recipe leans on (shown as cards). */
     skills: z
-      .array(z.object({ name: z.string(), description: z.string().optional() }))
+      .array(
+        z.object({
+          name: z.string(),
+          description: z.string().optional(),
+          /** Full skill content served at /cookbook/<slug>/skills/<skill>.md — the
+           * instructions an agent actually imports: method, rules, output format. */
+          body: z.string().optional(),
+        }),
+      )
       .default([]),
     /** One-line goal woven into the short fetch-prompt. */
     goal: z.string().default(''),
