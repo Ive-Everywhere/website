@@ -1,0 +1,68 @@
+---
+title: Never miss an obligation in a signed contract
+description: Extract every obligation from signed contracts with two independent passes, then track deadlines automatically.
+publishedAt: 2026-08-19
+icon: ri-task-line
+category: Legal
+collection: Contract lifecycle
+featured: false
+order: 41
+difficulty: advanced
+skills:
+  - name: Obligation extraction
+    description: Identify deliverables, payment terms, reporting cadences, and deadlines from contract text
+  - name: Document parsing
+    description: Read signed contracts in Word or PDF form with Anthropic's document skill, modified
+  - name: Reconciliation policy
+    description: How to resolve a disagreement between the two extraction passes before publishing
+goal: extract every obligation from a signed contract with two independent passes and track it to deadline
+integrations: [drive, googlesheets, slack, gmail]
+whatItDoes:
+  - Runs two independent sub-agents to extract every obligation from a signed contract
+  - Reconciles both passes and re-reads any obligation they disagree on
+  - Publishes every obligation to the tracker with its owner, deadline, and source clause
+  - Schedules deadline reminders automatically so nothing gets missed after signature
+howToUse:
+  - Connect Drive, the tracker sheet, Slack, and Gmail to the agent
+  - Set the trigger to watch the executed-contracts folder, or a weekly sweep
+  - Paste the prompt; first run it asks your reminder lead time and default owner, then remembers
+  - Review the tracker and confirm obligations satisfied; the agent never closes one itself
+workflow:
+  - kind: trigger
+    title: New signed contract, or weekly sweep
+    body: Added to the executed-contracts folder, or the Monday catch-all.
+  - kind: shell
+    title: Parse the document
+    body: Extract text from the signed docx or PDF with the document skill.
+  - kind: prompt
+    title: Dual-pass extraction
+    body: Two independent sub-agents each extract every obligation, dates, and owner.
+  - kind: prompt
+    title: Reconcile the passes
+    body: Compare both extractions; anything only one pass found gets a third look.
+  - kind: result
+    title: Publish to the tracker
+    body: Obligations land in the tracker view, deadline reminders scheduled per obligation.
+prompt: |
+  Extract every obligation from {{contract_path}} and track it to deadline.
+
+  1. Parse {{contract_path}} with the document skill into full text.
+  2. Run two independent extraction sub-agents over the text — pass A and pass
+     B — each identifying every obligation: what's owed, by whom, and by
+     when. Neither pass sees the other's output.
+  3. Validation: reconcile pass A and pass B. Where both agree, accept the
+     obligation. Where they disagree or only one pass found it, run a third,
+     targeted re-read of that clause before deciding — never publish an
+     obligation neither pass independently found.
+  4. Write each reconciled obligation to the obligation-extraction-tracker
+     view: description, owner, due date, source clause, and a link to the
+     contract.
+  5. Schedule a deadline reminder job for each obligation at
+     {{reminder_lead_days}} days before it's due, and one on the day itself.
+  6. Post a summary to {{delivery_channel}}: obligations added, obligations
+     sent to the third read, and anything that stayed unresolved for
+     {{owner}} to check manually.
+
+  Never mark an obligation satisfied or close a reminder without a human
+  confirming it — the tracker flags, it does not certify compliance.
+---

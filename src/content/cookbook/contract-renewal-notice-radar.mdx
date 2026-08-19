@@ -1,0 +1,66 @@
+---
+title: Never miss a renewal notice window again
+description: Track every contract's notice deadline and auto-renewal terms, and remind the owner before the window closes.
+publishedAt: 2026-08-19
+icon: ri-radar-line
+category: Legal
+collection: Contract lifecycle
+featured: false
+order: 43
+difficulty: starter
+skills:
+  - name: Renewal-clause extraction
+    description: Identify notice windows, auto-renewal triggers, and term length
+  - name: Document parsing
+    description: Read contracts in Word or PDF form (Anthropic docx/pdf skill)
+  - name: Deadline-diff policy
+    description: What counts as newly inside the window vs already flagged
+goal: track every contract's notice deadline and remind the owner before the window closes
+integrations: [drive, googlesheets, slack]
+whatItDoes:
+  - Sweeps the contract repository weekly and flags any newly opened notice window
+  - Extracts notice deadlines, auto-renewal triggers, and term end dates per contract
+  - Re-confirms the notice-window length against the clause text before alerting
+  - Updates the renewal tracker and reminds the owner before the deadline closes
+howToUse:
+  - Connect Drive, your tracker sheet, and Slack to the agent
+  - Set the weekly sweep, or trigger it from Slack on demand
+  - Paste the prompt and set your default notice-lead reminder window
+  - Review the contracts flagged inside the window; the tracker updates itself
+workflow:
+  - kind: trigger
+    title: Weekly sweep
+    body: Every Monday, across the contract repository.
+  - kind: shell
+    title: Parse each contract
+    body: Extract term, renewal, and notice-window language with Anthropic's document skill.
+  - kind: prompt
+    title: Extract the dates
+    body: Notice deadline, auto-renewal trigger, and current contract end date per agreement.
+  - kind: prompt
+    title: Diff against last run
+    body: Flag any contract newly inside its notice window, or with a changed date.
+  - kind: result
+    title: Update the tracker and remind
+    body: Renewal tracker refreshed, reminder posted for anything inside the lead window.
+prompt: |
+  Track renewal notice windows across the contract repository for this week's sweep.
+
+  1. Sweep {{contract_repo_path}} for every contract not yet in the renewal tracker,
+     and parse each with the document skill.
+  2. Extract term length, auto-renewal trigger, notice-window length, and current
+     end date for every contract.
+  3. Diff today's extracted dates against last week's tracker snapshot. Flag any
+     contract that entered its notice window since the last run, or whose
+     extracted dates changed.
+  4. For every contract flagged as newly inside its window, re-read the actual
+     clause text and re-confirm the notice-window length before alerting. Do not
+     alert off a stale or previously-corrected date.
+  5. Update the renewal tracker with the current state of every contract in the
+     repository.
+  6. Post to {{delivery_channel}} every contract inside {{notice_lead_days}} days
+     of its notice deadline, with the deadline date and the owner, {{owner}}.
+
+  Never send a non-renewal or termination notice to a counterparty. Flag the
+  deadline for {{owner}} to act on instead.
+---

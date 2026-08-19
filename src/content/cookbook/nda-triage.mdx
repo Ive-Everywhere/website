@@ -1,0 +1,68 @@
+---
+title: Clear routine NDAs without waiting on counsel
+description: Check every incoming NDA against your standard terms and recommend approval with a clause-by-clause checklist.
+publishedAt: 2026-08-19
+icon: ri-shield-check-line
+category: Legal
+collection: Contract review
+featured: false
+order: 42
+difficulty: intermediate
+skills:
+  - name: NDA policy
+    description: The organization's standard terms and acceptable variance per clause
+  - name: Document parsing
+    description: Read the incoming NDA in Word form with Anthropic's docx skill
+  - name: Checklist formatting
+    description: Clause-by-clause pass/deviation record attached to every recommendation
+goal: check an incoming NDA against standard terms and recommend approval with a clause-by-clause checklist
+integrations: [drive, gmail, slack]
+whatItDoes:
+  - Parses every incoming NDA and checks each clause against your standard terms
+  - Re-reads any within-policy clause a second time before calling it a pass
+  - Builds a clause-by-clause checklist with the policy line behind every call
+  - Recommends approval or escalates the specific deviations, never signs on its own
+howToUse:
+  - Connect Drive, Gmail, and Slack to the agent
+  - Set the trigger to fire on every new NDA in the inbox folder
+  - Paste the prompt; first run it asks your standard terms and reviewer, then remembers
+  - Review the recommend-approval packets and escalations before anyone countersigns
+workflow:
+  - kind: trigger
+    title: New NDA received
+    body: Attached to an email or dropped in the NDA-inbox folder.
+  - kind: shell
+    title: Parse the docx
+    body: Extract clause text with the docx skill.
+  - kind: prompt
+    title: Check against standard terms
+    body: Compare every clause to the NDA policy, term, mutuality, governing law, confidentiality.
+  - kind: prompt
+    title: Build the checklist
+    body: Clause-by-clause pass/deviation record with the reasoning for each.
+  - kind: result
+    title: Recommend or escalate
+    body: Within-policy NDAs get a packet; anything outside policy escalates with the deviation flagged.
+prompt: |
+  Triage the incoming NDA from {{counterparty}} at {{contract_path}}.
+
+  1. Parse {{contract_path}} with the docx skill into a clause-by-clause
+     structure.
+  2. Compare every clause against the NDA policy in memory: term length,
+     mutual vs. one-way, governing law, definition of confidential
+     information, and any other tracked terms.
+  3. Build a checklist: mark each clause within-policy or deviation, with the
+     specific policy line it's checked against.
+  4. Validation: re-read every clause marked within-policy a second time
+     against the exact policy wording before finalizing. A near-miss, a term
+     length one month over, for example, is a deviation, not a pass.
+  5. If every clause is within policy, package the checklist as a
+     recommend-approval packet. If any clause deviates, mark the NDA
+     escalated and list the specific deviations first.
+  6. Post the result to {{delivery_channel}}: recommend-approval packets and
+     escalations, each with the full checklist attached.
+
+  Recommend approval never means send or sign. Every NDA, in or out of
+  policy, waits for {{reviewer}} to countersign — the agent never executes
+  on the org's behalf.
+---

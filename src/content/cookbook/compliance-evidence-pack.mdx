@@ -1,0 +1,66 @@
+---
+title: Answer the audit request without the scramble
+description: Map an audit or security-questionnaire request to your actual evidence, cited, in one pack.
+publishedAt: 2026-08-19
+icon: ri-file-lock-2-line
+category: Legal
+collection: Contract lifecycle
+featured: false
+order: 44
+difficulty: intermediate
+skills:
+  - name: Control-to-evidence mapping
+    description: The org's controls and where the evidence for each lives
+  - name: Citation verification
+    description: Confirm every cited document exists, is current, and supports the claim
+  - name: Evidence pack formatting
+    description: One request item, one answer, one citation, consistently
+goal: map an audit or questionnaire request to evidence, with every claim cited, in one pack
+integrations: [drive, notion, googlesheets, slack]
+whatItDoes:
+  - Maps every request item to the internal control it corresponds to
+  - Locates the specific document or clause that satisfies each item
+  - Re-opens every citation to confirm it exists, is current, and supports the answer
+  - Assembles the pack and routes it to the reviewer for sign-off
+howToUse:
+  - Connect Drive, Notion, and Slack to the agent
+  - Set the trigger, or paste a request in to fire it now
+  - Paste the prompt and point it at the control library
+  - Review the pack and flagged citations before it leaves the team
+workflow:
+  - kind: trigger
+    title: Audit or questionnaire request
+    body: Pasted request or a new item in the evidence-request queue.
+  - kind: prompt
+    title: Map items to a control
+    body: Match every requested item to the internal policy or control it corresponds to.
+  - kind: prompt
+    title: Locate the evidence
+    body: Find the specific document, policy section, or contract clause that satisfies each item.
+  - kind: prompt
+    title: Assemble the pack
+    body: One evidence entry per request item, with a citation to the source document.
+  - kind: result
+    title: Validate and deliver
+    body: Every citation confirmed live and current; pack saved to reports and posted to Slack.
+prompt: |
+  Assemble the evidence pack for {{requester}}'s request.
+
+  1. Read the request at {{request_source}} and list every item it asks for.
+  2. For each item, identify the internal control it maps to using the control
+     library in memory. If an item maps to no known control, flag it rather
+     than guess.
+  3. Locate the specific evidence for each mapped item, a policy doc, contract
+     clause, or prior answer, and record its exact source path or URL.
+  4. Draft one evidence entry per request item: the ask, the answer, and the
+     citation.
+  5. Re-open every cited source and confirm it still exists, is the current
+     version, and actually supports the answer given. Drop or flag any
+     citation that doesn't hold up rather than ship it.
+  6. Save the pack to `reports/compliance/{{requester}}-{{date}}.md` and post a
+     summary to {{delivery_channel}}: items answered, items flagged as unmapped
+     or uncited.
+
+  The pack goes to {{reviewer}} for sign-off before it leaves the team. Never
+  submit it to the requester directly.
+---

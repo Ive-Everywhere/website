@@ -1,0 +1,68 @@
+---
+title: Find out what's actually signed, verified
+description: Sweep the whole contract drive, index every key term, and verify a random sample with a second pass.
+publishedAt: 2026-08-19
+icon: ri-archive-drawer-line
+category: Legal
+collection: Contract lifecycle
+featured: false
+order: 45
+difficulty: advanced
+skills:
+  - name: Key-term extraction
+    description: Parties, dates, value, governing law, and renewal terms
+  - name: Document parsing
+    description: Bulk read Word and PDF contracts across a drive (Anthropic docx/pdf skill)
+  - name: Sample verification
+    description: Re-extract a random subset and compare to certify accuracy
+goal: index every contract in the repository and verify a random sample before publishing
+integrations: [drive, googlesheets, slack]
+whatItDoes:
+  - Sweeps the whole drive and parses every contract on file
+  - Extracts parties, dates, value, governing law, and renewal terms
+  - Independently re-extracts a random sample and flags any disagreement, unverified
+  - Publishes a searchable index with a confidence state per contract
+howToUse:
+  - Connect Drive, your tracker sheet, and Slack to the agent
+  - Kick it off manually; it's a one-off, not a daily job
+  - Paste the prompt and set your sample percentage and drive scope
+  - Review the flagged and disagreement contracts before anyone treats them as certified
+workflow:
+  - kind: trigger
+    title: One-off audit
+    body: Manual kickoff, long cloud run.
+  - kind: shell
+    title: Bulk parse every contract
+    body: Extract text from every docx/PDF in the drive with Anthropic's document skill.
+  - kind: prompt
+    title: Extract key terms
+    body: Parties, effective date, term, value, governing law, and renewal terms per contract.
+  - kind: prompt
+    title: Verify a random sample
+    body: A second, independent pass re-extracts terms for the sample percentage and compares against the first pass.
+  - kind: result
+    title: Publish the index
+    body: Searchable index view goes live; any contract that failed verification is flagged, not published silently.
+prompt: |
+  Audit the contract repository. This is a one-off run and may take hours in
+  the cloud if the repository is large.
+
+  1. Sweep {{drive_root}} for every contract file and parse each with the
+     document skill into full text.
+  2. Extract key terms per contract: parties, effective date, term length,
+     contract value, governing law, and renewal/notice terms.
+  3. Build the full index: one row per contract, all extracted fields, with a
+     link to the source file.
+  4. Randomly select {{sample_pct}}% of contracts and re-extract their terms
+     independently, with no access to the first pass's output. Compare the two
+     extractions; mark any contract where the passes disagree as unverified
+     rather than silently correcting it.
+  5. Publish the index view with every contract's status: verified-by-sample,
+     unverified (not sampled), or disagreement-flagged.
+  6. Post a summary to {{delivery_channel}}: total contracts indexed, sample
+     size, agreement rate, and the list of flagged contracts for manual review.
+
+  Never treat an unsampled contract's index entry as certified. The index
+  states its own confidence level per contract; only human review upgrades a
+  flagged entry.
+---
