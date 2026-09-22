@@ -16,8 +16,18 @@
  */
 export const WAITLIST_HREF = '#waitlist';
 
-/** Krishna's cal.com link. `/demo` is a 302 to it, so both stay in step. */
-export const DEMO_HREF = '/demo';
+/**
+ * Krishna's cal.com link, used directly.
+ *
+ * It does NOT go via `/demo`. The site builds with `output: 'static'`, so
+ * `Astro.redirect()` has no server to issue a 302 and Astro compiles it to an
+ * HTML page carrying `<meta http-equiv="refresh" content="2;...">`. That is a
+ * visible two second "Redirecting from /demo/ to ..." interstitial on every
+ * demo click. Linking the real URL skips it.
+ *
+ * `/demo` still exists as a short URL to hand out, and now redirects instantly.
+ */
+export const DEMO_HREF = 'https://cal.com/krishna-kaipa-wh7ao3/30min';
 
 /** Labels, so a copy change lands everywhere at once. */
 export const WAITLIST_LABEL = 'Join waitlist';
