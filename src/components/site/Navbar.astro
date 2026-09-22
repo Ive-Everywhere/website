@@ -1,6 +1,12 @@
 ---
 import { primaryNav } from '../../lib/navigation';
 import Button from '../ui/Button.astro';
+import {
+  WAITLIST_HREF,
+  WAITLIST_LABEL,
+  DEMO_HREF,
+  DEMO_LABEL,
+} from '../../lib/waitlist';
 
 /**
  * Nav, Figma 147:3071 draws an 840px centred card holding everything.
@@ -138,24 +144,24 @@ const menuId = 'site-nav-panel';
       </ul>
 
       <div class="ml-auto flex items-center gap-2">
+        {/*
+          Sign in is deliberately absent (Krishna, 2026-09-21): during the
+          private beta the site has one door, and showing a sign-in puts us on
+          the hook for a polished self-serve onboarding we are not ready to
+          promise. Existing users go straight to app.eluu.ai.
+        */}
         <div class="hidden items-center gap-2 lg:flex">
           <Button
             variant="neutral-soft"
             size="xs"
-            label="Sign in"
-            href="https://app.eluu.ai"
-          />
-          <Button
-            variant="neutral-soft"
-            size="xs"
-            label="Request a demo"
-            href="/demo"
+            label={DEMO_LABEL}
+            href={DEMO_HREF}
           />
           <Button
             variant="primary-fancy"
             size="xs"
-            label="Start for free"
-            href="https://app.eluu.ai"
+            label={WAITLIST_LABEL}
+            href={WAITLIST_HREF}
           />
         </div>
 
@@ -249,13 +255,19 @@ const menuId = 'site-nav-panel';
           }
         </ul>
 
-        {/* The two actions the pill drops below `lg`. `min-h-11` because the
-            drawn button padding gives 40px, under the 44px tap-target floor. */}
+        {/* The actions the pill drops below `lg`. `min-h-11` because the drawn
+            button padding gives 40px, under the 44px tap-target floor. */}
         <div class="flex flex-col gap-2 px-1 pt-3 pb-1">
           <Button
+            variant="primary-fancy"
+            label={WAITLIST_LABEL}
+            href={WAITLIST_HREF}
+            class="min-h-11 w-full justify-center"
+          />
+          <Button
             variant="primary-stroke"
-            label="Request a demo"
-            href="/demo"
+            label={DEMO_LABEL}
+            href={DEMO_HREF}
             class="min-h-11 w-full justify-center"
           />
         </div>

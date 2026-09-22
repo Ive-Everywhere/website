@@ -4,6 +4,8 @@ import Navbar from '../components/site/Navbar.astro';
 import Footer from '../components/site/Footer.astro';
 import CtaBand from '../components/site/CtaBand.astro';
 import ThemeScript from '../components/site/ThemeScript.astro';
+import BetaBanner from '../components/site/BetaBanner.astro';
+import WaitlistModal from '../components/site/WaitlistModal.astro';
 
 interface Props {
   title: string;
@@ -91,9 +93,19 @@ const robots = indexable
       within its own parent's box, and `<header>` is exactly as tall as the
       nav, so a sticky child of it can never move and silently does nothing.
     */}
+    {/*
+      The banner sits ABOVE the sticky header rather than inside it. A sticky
+      element only travels within its own parent, so wrapping both in one
+      sticky box would pin the banner to the viewport for the whole page.
+      Outside it, the banner scrolls away and the nav still sticks.
+    */}
+    <BetaBanner />
     <header class="sticky top-0 z-40"><Navbar /></header>
     <main id="main"><slot /></main>
     {cta && <CtaBand />}
     <Footer showThemeSwitch={theme === null} />
+
+    {/* One dialog per page; every `href="#waitlist"` on the page opens it. */}
+    <WaitlistModal />
   </body>
 </html>

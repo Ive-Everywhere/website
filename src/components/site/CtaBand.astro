@@ -1,5 +1,6 @@
 ---
 import Button from '../ui/Button.astro';
+import { WAITLIST_HREF, WAITLIST_LABEL } from '../../lib/waitlist';
 
 /**
  * CTA band, Figma component `Custom CTA Sections [Landing]` (131:36,
@@ -25,8 +26,9 @@ interface Props {
 const {
   heading = 'The best human teams have agentic teams.',
   eyebrow = 'Your AI team is ready, are you?',
-  ctaLabel = 'Build yours today',
-  ctaHref = 'https://app.eluu.ai',
+  /* Private beta (2026-09): the closing CTA is the waitlist, not a signup. */
+  ctaLabel = WAITLIST_LABEL,
+  ctaHref = WAITLIST_HREF,
   secondaryLabel,
   secondaryHref,
 } = Astro.props;

@@ -1,5 +1,11 @@
 ---
 import Button from '../ui/Button.astro';
+import {
+  WAITLIST_HREF,
+  WAITLIST_LABEL,
+  DEMO_HREF,
+  DEMO_LABEL,
+} from '../../lib/waitlist';
 
 /**
  * Hero, Figma `147:3084` (§1b of home-spec.md).
@@ -46,15 +52,15 @@ import Button from '../ui/Button.astro';
       <div class="flex flex-wrap items-center justify-center gap-4">
         <Button
           variant="primary-fancy"
-          label="Start for free"
+          label={WAITLIST_LABEL}
           rightIcon="ri-arrow-right-up-long-line"
-          href="https://app.eluu.ai"
+          href={WAITLIST_HREF}
         />
         <Button
           variant="neutral-lighter"
-          label="Book a demo"
+          label={DEMO_LABEL}
           leftIcon="ri-calendar-line"
-          href="https://cal.com/krishna-kaipa-wh7ao3/30min"
+          href={DEMO_HREF}
         />
       </div>
     </div>

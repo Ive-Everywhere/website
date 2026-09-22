@@ -28,27 +28,38 @@ import Button from '../components/ui/Button.astro';
 const SIGNUP = 'https://app.eluu.ai';
 const DEMO = 'https://cal.com/krishna-kaipa-wh7ao3/30min';
 
-/* 1 ECU = $0.25 (Krishna, 2026-08-18), so 4 ECUs per dollar; top tier +10%. */
-const plans = [
-  { price: 20, ecus: '80', note: '' },
-  { price: 50, ecus: '200', note: '' },
-  { price: 100, ecus: '400', note: '' },
-  { price: 200, ecus: '800', note: '' },
-  { price: 500, ecus: '2,200', note: '10% more monthly ECUs' },
-];
-
-const aiCredits = [
-  { price: 20, label: '$20 in AI credits' },
-  { price: 50, label: '$50 in AI credits' },
-  { price: 100, label: '$100 in AI credits' },
-  { price: 200, label: '$200 in AI credits' },
-];
+/* Plans per the pricing sheet's "FINAL - Two Tracks" tab (decided 2026-08-28).
+ * 1 ECU = one machine-hour at $0.25; tiers are capped by parallel machines
+ * (Lite 1 / Pro 2 / Max 5 / Ultra 10).
+ *
+ * The two tracks carry DIFFERENT tier lists, so the plan dropdown is keyed by
+ * the segmented control rather than being one shared ladder:
+ *   bring your own model -> Free · $19 · $49 · $149
+ *   Eluu supplies the AI -> $8 trial · $39 · $99 · $199 · $349
+ *
+ * NOTE ON THE TOTAL: it is no longer plan + credits. The agreed prices are not
+ * additive, Max with credits is $199 rather than $149 + $100, and Ultra has no
+ * bring-your-own equivalent at all. So the credit is BUNDLED into each Track B
+ * tier and the total reads that tier's price. */
+const plans = {
+  byo: [
+    { price: 19, label: 'Lite · $19 / 80 ECUs', note: '80 agent hours a month, 2 machines at a time' },
+    { price: 49, label: 'Pro · $49 / 200 ECUs', note: '200 agent hours a month, 5 machines at a time' },
+    { price: 149, label: 'Max · $149 / 600 ECUs', note: '600 agent hours a month, 15 machines at a time' },
+  ],
+  credits: [
+    { price: 39, label: 'Lite · $39 / 80 ECUs', note: 'Includes $20 of AI credit a month, 2 machines' },
+    { price: 99, label: 'Pro · $99 / 200 ECUs', note: 'Includes $50 of AI credit a month, 5 machines' },
+    { price: 199, label: 'Max · $199 / 600 ECUs', note: 'Includes $100 of AI credit a month, 15 machines' },
+    { price: 349, label: 'Ultra · $349 / 700 ECUs', note: 'Includes $175 of AI credit a month, 30 machines' },
+  ],
+};
 
 /* Every row is a check. The one exception: Slack carries its real multicolour
  * mark (Krishna, 2026-08-18 — "only add colored logo for slack for now"). */
 const cloudFeatures = [
   { text: 'Unlimited agents' },
-  { text: 'Up to 20 parallel sessions' },
+  { text: 'Up to 30 parallel machines' },
   { text: 'A full cloud computer per agent' },
   { text: 'Connect your Claude Code or Codex subscription' },
   { text: 'Any harness, any model, your own keys' },
@@ -81,8 +92,8 @@ const compareGroups = [
   {
     name: 'Eluu compute units (ECUs)',
     rows: [
-      { label: 'Included ECUs', cloud: '80 – 2,200 / month', ent: 'Custom' },
-      { label: 'AI credits (model tokens)', cloud: 'Optional add-on', ent: 'Custom' },
+      { label: 'Parallel machines', cloud: '2 – 30', ent: 'Hundreds' },
+      { label: 'Included AI credit', cloud: '$20 – $175 / month', ent: 'Custom' },
       { label: 'Pooled across your team', cloud: true, ent: true },
       { label: 'Spend caps and per-agent budgets', cloud: true, ent: true },
       { label: 'Agent-hour cost reporting', cloud: true, ent: true },
@@ -110,7 +121,7 @@ const compareGroups = [
     name: 'Agents & workforce',
     rows: [
       { label: 'Agents', cloud: 'Unlimited', ent: 'Unlimited' },
-      { label: 'Parallel sessions', cloud: 'Up to 20', ent: 'Hundreds' },
+      { label: 'Parallel sessions', cloud: '2 – 30', ent: 'Hundreds' },
       { label: 'Full cloud computer per agent', cloud: true, ent: true },
       { label: 'Machine tiers', cloud: 'S / M / L', ent: 'Custom' },
       { label: 'Team memory and shared skills', cloud: true, ent: true },
@@ -177,7 +188,7 @@ const faqs = [
 
 <Base
   title="Pricing, Eluu"
-  description="Pay for compute, not seats. Choose a compute plan, add AI credits only if you need them, and see what an hour of every agent's work costs. Or run the whole platform in your own environment."
+  description="Pay for compute, not seats. Choose a plan, then bring your own Claude or Codex subscription or let Eluu supply the models. Or run the whole platform in your own environment."
 >
   {/* ————— Hero ————— */}
   <section class="bg-bg-white-0">
@@ -187,7 +198,7 @@ const faqs = [
         Pay for compute, not seats.
       </h1>
       <p class="t-paragraph-md text-text-sub-600 max-w-[660px] text-pretty">
-        Choose a compute plan. Add AI credits only if you need them. Invite your whole team
+        Choose a plan, then bring your own model or let us supply it. Invite your whole team
         at no extra cost.
       </p>
     </div>
@@ -202,7 +213,6 @@ const faqs = [
           <div class="flex flex-col gap-3">
             <div class="flex items-baseline justify-between gap-4">
               <p class="t-h4 text-band-ink">Cloud</p>
-              <p class="t-h6 text-band-ink">from <span class="t-h5">$20</span> / month</p>
             </div>
             <p class="t-paragraph-md text-band-muted">Ideal for individuals and teams</p>
           </div>
@@ -224,19 +234,23 @@ const faqs = [
                 role="listbox"
                 data-dd-panel
               >
-                {plans.map((p) => (
-                  <button
-                    type="button"
-                    role="option"
-                    data-dd-option
-                    data-price={p.price}
-                    data-label={`$${p.price} / ${p.ecus} ECUs per month`}
-                    class="text-band-card-ink t-label-md border-stroke-soft-200 hover:bg-bg-soft-200 flex w-full flex-col items-start gap-0.5 border-b px-5 py-4 text-left last:border-b-0"
-                  >
-                    <span>${p.price} / {p.ecus} ECUs per month</span>
-                    {p.note && <span class="t-paragraph-xs text-band-card-body">{p.note}</span>}
-                  </button>
-                ))}
+                {Object.entries(plans).flatMap(([mode, list]) =>
+                  list.map((p) => (
+                    <button
+                      type="button"
+                      role="option"
+                      data-dd-option
+                      data-plan-mode={mode}
+                      data-price={p.price}
+                      data-label={p.label}
+                      hidden={mode !== 'byo'}
+                      class="text-band-card-ink t-label-md border-stroke-soft-200 hover:bg-bg-soft-200 flex w-full flex-col items-start gap-0.5 border-b px-5 py-4 text-left last:border-b-0"
+                    >
+                      <span>{p.label}</span>
+                      {p.note && <span class="t-paragraph-xs text-band-card-body">{p.note}</span>}
+                    </button>
+                  )),
+                )}
               </div>
             </div>
 
@@ -270,38 +284,9 @@ const faqs = [
               <p class="t-paragraph-xs text-band-muted" id="mode-caption">
                 Claude Code, Codex, or your own keys. Tokens stay on your bill.
               </p>
-              <div class="relative hidden" id="credits-dd">
-                <button
-                  type="button"
-                  class="bg-band-card text-band-card-ink t-label-md flex w-full items-center justify-between rounded-2xl px-5 py-4"
-                  aria-haspopup="listbox"
-                  aria-expanded="false"
-                >
-                  <span data-dd-label>Select AI credits</span>
-                  <i class="ri-arrow-down-s-line text-[20px] transition-transform" data-dd-chevron aria-hidden="true"></i>
-                </button>
-                <div
-                  class="bg-band-card absolute inset-x-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl shadow-lg"
-                  role="listbox"
-                  data-dd-panel
-                >
-                  {aiCredits.map((c) => (
-                    <button
-                      type="button"
-                      role="option"
-                      data-dd-option
-                      data-price={c.price}
-                      data-label={`${c.label} per month`}
-                      class="text-band-card-ink t-label-md border-stroke-soft-200 hover:bg-bg-soft-200 flex w-full items-center border-b px-5 py-4 text-left last:border-b-0"
-                    >
-                      {c.label} per month
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
 
-            <p class="t-label-md text-band-muted">Total <span class="t-h6 text-band-ink" id="total">$20</span> / month</p>
+            <p class="t-label-md text-band-muted">Total <span class="t-h6 text-band-ink" id="total">$19</span> / month</p>
           </div>
 
           <ul class="flex flex-col gap-3.5">
@@ -373,7 +358,7 @@ const faqs = [
               <th class="w-1/2 py-4 pr-4"></th>
               <th class="w-1/4 px-4 py-4 text-center">
                 <span class="t-h6 text-text-strong-950 block">Cloud</span>
-                <span class="t-paragraph-xs text-text-soft-400">from $20 / month</span>
+                <span class="t-paragraph-xs text-text-soft-400">$19 to $349 / month</span>
               </th>
               <th class="w-1/4 px-4 py-4 text-center">
                 <span class="t-h6 text-text-strong-950 block">Enterprise</span>
@@ -433,73 +418,82 @@ const faqs = [
 </Base>
 
 <script>
-  // Plan + AI-credit dropdowns, the AI-credits toggle, and the running total.
+  // Plan dropdown, the track toggle, and the running total.
   // Plain DOM, no island: this is select-a-value UI, not app state.
-  let planPrice = 20;
-  let creditsOn = false;
-  let creditsPrice = 0;
+  //
+  // The total is NOT plan + credits any more. The agreed Track B prices are
+  // not additive (Max with credits is $199, not $149 + $100, and Ultra has no
+  // bring-your-own base), so the credit is bundled into each Track B tier and
+  // the total simply reads the selected tier's price.
+  let planPrice = 19;
 
   const totalEl = document.getElementById('total');
   const renderTotal = () => {
-    if (totalEl) totalEl.textContent = `$${planPrice + (creditsOn ? creditsPrice : 0)}`;
+    if (totalEl) totalEl.textContent = `$${planPrice}`;
   };
 
-  const wireDropdown = (rootId: string, onPick: (price: number) => void) => {
-    const root = document.getElementById(rootId);
-    if (!root) return;
-    const trigger = root.querySelector('button[aria-haspopup]') as HTMLButtonElement;
-    const label = trigger.querySelector('[data-dd-label]') as HTMLElement;
-    const chevron = trigger.querySelector('[data-dd-chevron]') as HTMLElement;
-    const panel = root.querySelector('[data-dd-panel]') as HTMLElement;
+  const root = document.getElementById('plan-dd');
+  const trigger = root?.querySelector('button[aria-haspopup]') as HTMLButtonElement;
+  const triggerLabel = trigger?.querySelector('[data-dd-label]') as HTMLElement;
+  const chevron = trigger?.querySelector('[data-dd-chevron]') as HTMLElement;
+  const panel = root?.querySelector('[data-dd-panel]') as HTMLElement;
 
-    const setOpen = (open: boolean) => {
-      panel.classList.toggle('hidden', !open);
-      chevron.classList.toggle('rotate-180', open);
-      trigger.setAttribute('aria-expanded', String(open));
-    };
+  const setOpen = (open: boolean) => {
+    panel.classList.toggle('hidden', !open);
+    chevron.classList.toggle('rotate-180', open);
+    trigger.setAttribute('aria-expanded', String(open));
+  };
 
+  if (root && trigger && panel) {
     trigger.addEventListener('click', () => setOpen(panel.classList.contains('hidden')));
     document.addEventListener('click', (e) => {
       if (!root.contains(e.target as Node)) setOpen(false);
     });
 
-    root.querySelectorAll<HTMLButtonElement>('[data-dd-option]').forEach((opt) => {
+    for (const opt of root.querySelectorAll<HTMLButtonElement>('[data-dd-option]')) {
       opt.addEventListener('click', () => {
-        label.textContent = opt.dataset.label ?? '';
+        triggerLabel.textContent = opt.dataset.label ?? '';
         setOpen(false);
-        onPick(Number(opt.dataset.price));
+        planPrice = Number(opt.dataset.price);
+        renderTotal();
       });
-    });
-  };
+    }
+  }
 
-  wireDropdown('plan-dd', (price) => {
-    planPrice = price;
-    renderTotal();
-  });
-  wireDropdown('credits-dd', (price) => {
-    creditsPrice = price;
-    renderTotal();
-  });
-
-  const creditsDd = document.getElementById('credits-dd');
   const caption = document.getElementById('mode-caption');
   const segments = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-mode]'));
+
   const setMode = (mode: string) => {
-    creditsOn = mode === 'credits';
-    creditsDd?.classList.toggle('hidden', !creditsOn);
+    // Swap which track's tiers the dropdown offers, and reset the selection so
+    // a price from the other track can never be left showing.
+    let first: HTMLButtonElement | null = null;
+    for (const opt of document.querySelectorAll<HTMLButtonElement>('[data-dd-option]')) {
+      const on = opt.dataset.planMode === mode;
+      opt.hidden = !on;
+      if (on && !first) first = opt;
+    }
+    if (first && triggerLabel) {
+      triggerLabel.textContent = first.dataset.label ?? '';
+      planPrice = Number(first.dataset.price);
+    }
+    if (panel) setOpen(false);
+
     if (caption)
-      caption.textContent = creditsOn
-        ? 'No subscription or keys needed. Eluu covers the model tokens.'
-        : 'Claude Code, Codex, or your own keys. Tokens stay on your bill.';
-    segments.forEach((s) => {
+      caption.textContent =
+        mode === 'credits'
+          ? 'No subscription or keys needed. Every plan bundles a monthly AI credit.'
+          : 'Claude Code, Codex, or your own keys. Tokens stay on your bill.';
+
+    for (const s of segments) {
       const on = s.dataset.mode === mode;
       s.setAttribute('aria-checked', String(on));
       s.classList.toggle('bg-band-card', on);
       s.classList.toggle('text-band-card-ink', on);
       s.classList.toggle('text-band-muted', !on);
-    });
+    }
     renderTotal();
   };
+
   segments.forEach((s) => s.addEventListener('click', () => setMode(s.dataset.mode!)));
 
   setMode('byo');

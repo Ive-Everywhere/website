@@ -21,8 +21,11 @@ import CtaBand from '../components/site/CtaBand.astro';
  * is moot; the value is giving an external agent a place to ship what it builds.
  */
 
-const SIGNUP = 'https://app.eluu.ai';
-const DEMO = 'https://cal.com/krishna-kaipa-wh7ao3/30min';
+import { WAITLIST_HREF, WAITLIST_LABEL, DEMO_HREF } from '../lib/waitlist';
+
+/* Private beta (2026-09): the primary CTA is the waitlist modal. */
+const SIGNUP = WAITLIST_HREF;
+const DEMO = DEMO_HREF;
 
 const tiles = [
   {
@@ -102,7 +105,7 @@ const details = [
     eyebrow="Apps"
     headline="Any agent can build an app. Eluu gives it a URL."
     subhead="Your agents build the dashboard, the tracker, the internal tool, and ship it to a real link in one step. Static page or full server app, database and storage included."
-    primaryCta={{ label: 'Start for free', href: SIGNUP }}
+    primaryCta={{ label: WAITLIST_LABEL, href: SIGNUP }}
     secondaryCta={{ label: 'Book a demo', href: DEMO }}
   />
 
@@ -131,7 +134,7 @@ const details = [
   <CtaBand
     heading="Ship your first app today."
     eyebrow=""
-    ctaLabel="Start for free"
+    ctaLabel={WAITLIST_LABEL}
     ctaHref={SIGNUP}
     secondaryLabel="Book a demo"
     secondaryHref={DEMO}
