@@ -35,11 +35,11 @@ export const DEMO_HREF = 'https://cal.com/krishna-kaipa-wh7ao3/30min';
  * The offer line lives here too: it is a monetary claim and it appears on the
  * banner and in the modal, so it must not drift between them.
  *
- * KEEP THE "Select teams" QUALIFIER. Without it the page promises $10,000 of
- * free usage to anyone who asks, which is a commitment we have not made. The
- * qualifier keeps the anchor and makes the claim one we can actually hold.
+ * "Up to" is doing the qualifying, and it is the same construction Warp uses
+ * on its own homepage CTA. Krishna, 2026-09-22: a "Select teams" prefix was
+ * tried and rejected as hedging. Do not re-add it.
  */
-export const EARLY_ACCESS_OFFER = 'Select teams get up to $10,000 in free usage';
+export const EARLY_ACCESS_OFFER = 'Get up to $10,000 in free usage';
 export const WAITLIST_LABEL = 'Request early access';
 export const DEMO_LABEL = 'Book a demo';
 
