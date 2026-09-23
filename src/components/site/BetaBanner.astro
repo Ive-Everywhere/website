@@ -1,0 +1,44 @@
+---
+import { WAITLIST_HREF, WAITLIST_LABEL, EARLY_ACCESS_OFFER } from '../../lib/waitlist';
+
+/**
+ * Private-beta announcement strip, above the nav on every page.
+ *
+ * Krishna, 2026-09-22: the offer is a capped dollar figure rather than
+ * "unlimited", because unlimited signals that the thing being given away is
+ * cheap, while a ceiling most people never reach reads as generous. One line, one action.
+ *
+ * Not sticky and not dismissible. It sits above the sticky header so it
+ * scrolls away naturally on the way down the page, and it is the only beta
+ * message on the site, so hiding it from returning visitors would retire the
+ * offer for exactly the people most likely to take it.
+ *
+ * The whole strip is the anchor. A one-line bar with a separate small link
+ * gives a ~100px target on a phone; making the bar itself clickable gives the
+ * full width.
+ */
+---
+
+<a
+  href={WAITLIST_HREF}
+  class="bg-band-surface focus-visible:outline-band-ink group block focus-visible:outline-2 focus-visible:-outline-offset-2"
+>
+  <div
+    class="page-shell gutter-188 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 py-2.5 text-center"
+  >
+    <span
+      class="bg-band-well text-band-ink t-mono-sm shrink-0 rounded-full px-2.5 py-0.5"
+    >
+      Private beta
+    </span>
+    <span class="t-label-sm text-band-ink">
+      {EARLY_ACCESS_OFFER}
+    </span>
+    {/* Underline on the text span only. On the flex container it draws once
+        per child and leaves the gaps blank, which reads as a broken rule. */}
+    <span class="t-label-sm text-band-ink inline-flex items-center gap-1 opacity-72 group-hover:opacity-100">
+      <span class="underline underline-offset-4">{WAITLIST_LABEL}</span>
+      <i class="ri-arrow-right-line text-[16px]" aria-hidden="true"></i>
+    </span>
+  </div>
+</a>

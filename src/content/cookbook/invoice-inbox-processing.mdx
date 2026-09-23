@@ -1,0 +1,179 @@
+---
+title: Turn invoice PDFs into ledger entries
+description: Extract every invoice field twice, reconcile the two passes, and queue only the mismatches.
+publishedAt: 2026-08-19
+icon: ri-scan-2-line
+category: Finance
+collection: Cash & spend
+featured: false
+order: 31
+difficulty: advanced
+skills:
+  - name: Invoice field schema
+    description: The exact fields every invoice must yield, vendor, amount, date, PO, line items
+    body: |
+      Define the exact fields every invoice extraction must produce, so both
+      passes and the ledger post agree on structure.
+
+      ## Method
+      1. List the required fields: vendor name, invoice amount, invoice
+         date, PO number, line items (description, quantity, unit price).
+      2. Specify the expected type and format for each field (currency, ISO
+         date, string).
+      3. Mark which fields are required versus optional per invoice type.
+      4. Reject any extraction pass missing a required field — do not fill
+         it with a guess.
+      5. Version the schema so a schema change doesn't silently break past
+         comparisons.
+
+      ## Rules
+      - Every field a downstream step depends on (amount, PO number) is
+        required, not optional.
+      - Never invent a value for a missing required field — flag the
+        invoice as incomplete instead.
+      - Field list and formats (set on first run, then stored in memory).
+      - Normalize currency and date formats before any comparison; never
+        compare raw, unformatted text.
+
+      ## Output
+      A field spec — `{vendor, amount, date, po_number, line_items[]}` —
+      that every extraction pass and the ledger post conform to.
+  - name: Dual-pass reconciliation
+    description: Compare two independent extractions and isolate disagreeing fields
+    body: |
+      Accept a value only when two independent extraction passes agree on
+      it, field by field.
+
+      ## Method
+      1. Run two extraction sub-agents against the same parsed invoice text,
+         each without seeing the other's output.
+      2. Compare the two passes field by field against the invoice field
+         schema.
+      3. Where both passes agree exactly, after normalizing format, accept
+         the value.
+      4. Where the passes disagree on any field, do not guess or average —
+         flag that field as a mismatch.
+      5. Roll mismatched fields up to an invoice-level status; a clean
+         invoice has zero mismatched fields.
+      6. Build the mismatch queue entry: field name, pass-1 value, pass-2
+         value, side by side.
+
+      ## Rules
+      - Never accept a value when the two passes disagree — hold it, do not
+        pick one arbitrarily.
+      - Never post an invoice to the ledger on a single unreconciled pass.
+      - Run the two passes independently; one must not see the other's
+        extraction before finishing.
+      - Field-normalization rules for the comparison, currency and date
+        format (set on first run, then stored in memory).
+
+      ## Output
+      A result per invoice: accepted `{field: value}` pairs, plus a
+      mismatch list `{field, pass_1_value, pass_2_value}`, queued to
+      `{{review_channel}}` when non-empty.
+  - name: PO matching
+    description: Match a reconciled invoice to its purchase order and flag quantity or price gaps
+    body: |
+      Match a fully-reconciled invoice against its open purchase order and
+      flag any quantity or price gap.
+
+      ## Method
+      1. Take only invoices with zero mismatches from the reconciliation
+         step.
+      2. Look up the PO number in `{{ledger_sheet}}` and pull its quantity,
+         price, and vendor.
+      3. Recompute the invoice total from its line items independently,
+         rather than trusting the invoice's stated total.
+      4. Compare quantity and price against the PO's figures.
+      5. Flag any variance outside `{{tolerance_pct}}` as a PO gap.
+      6. Confirm the vendor name matches exactly, not fuzzily.
+
+      ## Rules
+      - Never post an invoice whose recomputed total doesn't tie to the
+        invoice's stated total — hold it instead.
+      - Never approve a PO variance yourself — queue every gap for
+        sign-off.
+      - PO-match tolerance (set on first run, then stored in memory).
+      - A vendor-name mismatch always fails the match, even when amount and
+        quantity agree.
+
+      ## Output
+      A match result per invoice: `{matched: true/false, variance_pct,
+      gap_reason}`, feeding the post-or-queue decision.
+jobs:
+  - name: AP inbox sweep
+    cadence: Every 30 minutes on weekdays
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the invoice-inbox-processing skill from your skills folder; its
+      first-run answers are in memory.
+      1. Check the AP inbox and drive drop folder for any invoice received
+         since the last run.
+      2. Run the dual-pass reconciliation skill on each new invoice, then
+         match reconciled invoices against the open PO.
+      3. Post fully-reconciled, PO-matched invoices to the ledger; queue
+         mismatches and PO gaps for review.
+      If a required input is missing or a check fails, post what you found
+      and hold — never post an invoice on a single unreconciled pass.
+goal: extract every invoice with two independent passes and post only what reconciles clean
+integrations: [gmail, drive, googlesheets, slack]
+whatItDoes:
+  - Parses every invoice PDF and runs two independent extraction sub-agents on each
+  - Reconciles both passes field by field and never guesses on a disagreement
+  - Matches clean invoices against the open PO before anything posts
+  - Logs every processed invoice so a re-sent PDF is never double-posted
+howToUse:
+  - Connect Gmail, the drive drop folder, the ledger sheet, and Slack
+  - Set the trigger to watch the AP inbox for new invoices in real time
+  - Paste the prompt; first run it asks your PO tolerance and review channel, then remembers them
+  - Review only the mismatch queue in Slack, clean matches post themselves
+workflow:
+  - kind: trigger
+    title: New invoice in the inbox
+    body: Watches the AP inbox and the drive drop folder, running in the cloud as long as the backlog takes.
+  - kind: shell
+    title: Parse the PDF
+    body: Extract raw text and line items from each invoice file.
+  - kind: prompt
+    title: Run two independent passes
+    body: Two sub-agents extract vendor, amount, PO, and line items separately.
+  - kind: prompt
+    title: Reconcile the passes
+    body: Compare field by field; anything that disagrees is a mismatch.
+  - kind: prompt
+    title: Match the PO
+    body: Check the reconciled invoice against the open PO in the ledger sheet.
+  - kind: result
+    title: Post or queue
+    body: Clean matches post to the ledger; mismatches queue for review.
+prompt: |
+  Process the invoice inbox for {{invoice_inbox}} and {{drive_folder}}.
+
+  1. List every invoice file received since the last run. Check each against
+     the processed-invoice log first, and skip anything already posted or
+     queued, so a re-sent PDF is never double-posted.
+  2. For each new invoice, parse the PDF to raw text and line items with a
+     shell step.
+  3. Run two independent extraction sub-agents against the invoice field
+     schema in memory: vendor, amount, date, PO number, line items. The two
+     sub-agents work from the parsed text only, without seeing each other's
+     output.
+  4. Validation: reconcile the two passes field by field. Where both agree,
+     accept the value; where they disagree, do not guess — flag the field as
+     a mismatch instead.
+  5. For every invoice with zero mismatches, match it against the open PO in
+     {{ledger_sheet}}: quantity, price, and vendor must all agree within
+     {{tolerance_pct}}.
+  6. Post only fully-reconciled, PO-matched invoices to the ledger sheet, and
+     log each processed invoice, posted or queued, to the processed-invoice
+     log.
+  7. Queue every invoice with a mismatch or PO gap to {{review_channel}} with
+     both extracted values side by side, so the reviewer sees exactly where
+     the passes disagreed.
+
+  This can run as long as the inbox backlog takes — let it work the full
+  queue in the cloud rather than stopping partway.
+
+  Never post an invoice to the ledger on a single unreconciled pass, and
+  never approve a PO variance yourself — queue it for sign-off instead.
+---

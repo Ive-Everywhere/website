@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* structures the kit doesn't cover: a right-lane overflow avatar stack,
+     and a quiet maroon text-link affordance on one row only. */
+  .row__v2 { margin-left: auto; flex: none; display: flex; flex-direction: column;
+             align-items: flex-end; gap: 7px; }
+  .avstack { display: flex; align-items: center; }
+  .avstack img { width: 28px; height: 28px; border-radius: 50%; flex: none;
+                 display: block; background: #fff; border: 2px solid #fff;
+                 box-shadow: 0 0 0 1px var(--hair); margin-left: -10px; }
+  .avstack img:first-child { margin-left: 0; }
+  .revoke { font-size: 15px; font-weight: 480; color: var(--maroon); letter-spacing: -.002em; }
+</style>
+</head><body>
+<!-- RULE 1: header carries a bare eye glyph, never reused as a row mark.
+     RULE 2: every row carries a bare brand logo (feat1's treatment).
+     RULE 4: one lane on the right — the avatar stack; the "revoke" link
+     rides inside that same lane on its one row, not a second lane.
+     RULE 7: one maroon accent = the "revoke" link. -->
+<div class="stage cv-cream">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3.2"/></svg></span>
+      <span class="hd__t">Tool access</span>
+      <span class="hd__r"><span class="pill">6 tools</span></span>
+    </div>
+    <div class="list">
+      <div class="row">
+        <span class="mk"><img src="live/assets/slack.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Slack</div><div class="row__s row__s--mono">used by 18 agents</div></span>
+        <span class="row__v2"><span class="avstack">
+          <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ledger&backgroundColor=c5f2e0" alt="">
+          <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Sana&backgroundColor=b6e3f4" alt="">
+          <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Cass&backgroundColor=ffd5dc" alt="">
+        </span></span>
+      </div>
+      <div class="row">
+        <span class="mk"><img src="live/assets/salesforce.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Salesforce</div><div class="row__s row__s--mono">used by 9 agents</div></span>
+        <span class="row__v2"><span class="avstack">
+          <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Sana&backgroundColor=b6e3f4" alt="">
+          <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Hana&backgroundColor=ffdfbf" alt="">
+        </span></span>
+      </div>
+      <div class="row">
+        <span class="mk"><img src="live/assets/stripe.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Stripe</div><div class="row__s row__s--mono">used by 6 agents</div></span>
+        <span class="row__v2">
+          <span class="avstack">
+            <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ledger&backgroundColor=c5f2e0" alt="">
+            <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Sol&backgroundColor=d1e8d4" alt="">
+          </span>
+          <span class="revoke">revoke</span>
+        </span>
+      </div>
+      <div class="row">
+        <span class="mk"><img src="live/assets/googlesheets.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Google Sheets</div><div class="row__s row__s--mono">used by 12 agents</div></span>
+        <span class="row__v2"><span class="avstack">
+          <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Cass&backgroundColor=ffd5dc" alt="">
+          <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ivy&backgroundColor=e5d4f0" alt="">
+          <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Rhea&backgroundColor=ffe0c7" alt="">
+        </span></span>
+      </div>
+      <div class="row">
+        <span class="mk"><img src="live/assets/github.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">GitHub</div><div class="row__s row__s--mono">used by 4 agents</div></span>
+        <span class="row__v2"><span class="avstack">
+          <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Hana&backgroundColor=ffdfbf" alt="">
+          <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Sol&backgroundColor=d1e8d4" alt="">
+        </span></span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

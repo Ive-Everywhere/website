@@ -1,0 +1,7 @@
+---
+import { getEntry } from 'astro:content';
+import PillarPage from '../../components/platform/PillarPage.astro';
+const entry = await getEntry('platform', 'sales');
+if (!entry) throw new Error('Missing content entry: src/content/platform/sales.mdx');
+---
+<PillarPage entry={entry} />

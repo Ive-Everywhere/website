@@ -1,0 +1,143 @@
+---
+title: Know who actually signs before you call
+description: Mine closed-won deals for buying-committee roles, then map them onto every target account.
+publishedAt: 2026-08-19
+icon: ri-team-line
+category: Sales
+collection: Pipeline & prospecting
+featured: false
+order: 11
+difficulty: intermediate
+skills:
+  - name: Closed-won pattern mining
+    description: Extract buying-committee roles from won deals in the CRM.
+    body: |
+      Extract the buying-committee roles that recur across past closed-won deals in the CRM.
+
+      ## Method
+      1. Pull the last N closed-won deals from the CRM (N is the lookback window).
+      2. For each deal, list every contact who touched it and the role they played: economic buyer, champion, technical evaluator, legal, etc.
+      3. Match each contact's role against the org's stored role definitions in memory.
+      4. Count how often each role appears across the pulled deals to find the recurring pattern.
+      5. Write the resulting pattern — which roles show up in most wins — back to memory as the standing buying-committee pattern.
+      6. Refresh the pattern each time new deals close, rather than mining from scratch every run.
+
+      ## Rules
+      - The lookback window (number of deals to mine) is set on first run, then stored in memory.
+      - The org's buying-committee role definitions are set on first run, then stored in memory — ask before guessing a role.
+      - A role with no match in the CRM data stays out of the pattern; do not invent a role to fill a gap.
+
+      ## Output
+      A standing "buying-committee pattern" note in memory: role name, how many closed-won deals included it, refreshed after each new close.
+  - name: Role confidence scoring
+    description: Score each mapped stakeholder's fit and cite the evidence.
+    body: |
+      Score how confidently each person mapped to a target account fills a buying-committee role.
+
+      ## Method
+      1. Take the proposed role-to-person match for the target account from Org research.
+      2. Score title match: does the person's current title align with the role definition.
+      3. Score seniority: does their level match what the role typically requires.
+      4. Score evidence strength: how many independent sources back the title (one source is weak, two or more is strong).
+      5. Combine the three factors into one confidence label per stakeholder: confirmed, likely, or open.
+      6. Mark any role with no confident candidate as open rather than forcing a low-confidence guess.
+
+      ## Rules
+      - A role only earns "confirmed" when title, seniority, and at least one public source all align.
+      - Never assign a person to a role on title match alone — seniority and evidence must also support it.
+      - An "open" role is a valid, expected output — it is not a failure to fix by guessing.
+
+      ## Output
+      Per stakeholder: name, mapped role, confidence label (confirmed / likely / open), and the evidence cited — written into the account's row in the decision-maker-map tracker view.
+  - name: Org research
+    description: Confirm every title from a public source before it's mapped.
+    body: |
+      Confirm every mapped stakeholder's title from a public source before it enters the map.
+
+      ## Method
+      1. Research the target account's current org: names, titles, and reporting signals.
+      2. For each person, check at least one public source: the company site, LinkedIn, or press coverage.
+      3. Record the source URL alongside the name and title.
+      4. If a title can't be confirmed by any public source, exclude that person from the map instead of listing an unconfirmed title.
+      5. Note the research date, since titles change and a stale org chart misleads the rep.
+
+      ## Rules
+      - Every person entering the map needs at least one dated, public source URL attached to their title.
+      - Never carry forward a title from a stale internal note without re-confirming it against a current public source.
+      - If sources disagree on a title, use the most recent one and note the conflict.
+
+      ## Output
+      A list of account employees, each with name, title, source URL, and research date — feeding into Role confidence scoring before the map publishes.
+jobs:
+  - name: Weekly buying-committee refresh
+    cadence: Every Monday at 8:00 AM
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the decision-maker-map skill from your skills folder; its
+      first-run answers are in memory.
+      1. Re-run the pattern mining and mapping method for every target account.
+      2. Confirm each mapped title against a current public source before updating.
+      3. Patch each account's row in the tracker view and post new open roles to #sales.
+      If a required input is missing or a check fails, post what you found
+      and hold — never contact any mapped stakeholder directly without sign-off.
+  - name: New target account mapping sweep
+    cadence: Every 30 minutes on weekdays
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the decision-maker-map skill from your skills folder; its
+      first-run answers are in memory.
+      1. Check the target account list for accounts added since the last run.
+      2. Run the skill's method: mine the closed-won pattern, research the org, and score confidence.
+      3. Write the map to the tracker view and ping the account owner in #sales.
+      If a required input is missing or a check fails, post what you found
+      and hold — never contact any mapped stakeholder directly without sign-off.
+goal: map the buying committee for each target account from closed-won patterns
+integrations: [hubspot, googlesheets, slack]
+whatItDoes:
+  - Mines closed-won deals for the roles that show up in every win
+  - Maps current employees at the target account onto those buying-committee roles
+  - Scores each match on title fit, seniority, and evidence strength
+  - Publishes the map to a tracker and flags any role still open
+howToUse:
+  - Connect HubSpot, Google Sheets, and Slack to the agent
+  - Set it to run on a new target account, or the weekly Monday sweep
+  - Paste the prompt and answer its first-run questions once — role definitions, lookback window — it remembers them
+  - Review any open roles it couldn't confidently fill; the rest publishes on its own
+workflow:
+  - kind: trigger
+    title: New account or weekly refresh
+    body: Added to the target list, or the Monday sweep.
+  - kind: prompt
+    title: Mine the closed-won pattern
+    body: Roles that showed up in past won deals.
+  - kind: prompt
+    title: Map the target account
+    body: Match current employees to those roles, with sources.
+  - kind: prompt
+    title: Score the confidence
+    body: Per stakeholder - title match, seniority, evidence strength.
+  - kind: result
+    title: Publish the map
+    body: Tracker view updated, Slack ping to the account owner.
+prompt: |
+  Map the buying committee for {{account}}.
+
+  1. Pull the last {{lookback_deals}} closed-won deals from {{crm}} and list
+     every contact role that touched each one — economic buyer, champion,
+     technical evaluator, legal — per the role definitions stored in memory.
+  2. If this is the first run, ask for this org's buying-committee role
+     definitions and save them to memory before continuing.
+  3. Research {{account}}'s current org: names, titles, and a source (company
+     site, LinkedIn, press) for each person.
+  4. Match {{account}} employees to the closed-won role pattern and propose
+     one person per buying-committee role.
+  5. Confirm every mapped person's title is backed by at least one public
+     source; if a role has no confident match, mark it open instead of
+     guessing a name.
+  6. Write the map to the decision-maker-map tracker view, patching this
+     account's row rather than rebuilding the view.
+  7. Post the account name and any open roles to #sales.
+
+  Do not contact any mapped stakeholder directly — the map is for the account
+  owner to act on, outreach needs their sign-off.
+---

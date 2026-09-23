@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* No outer card/header (feat5/feat6 cleanliness): one small skill card floats
+     at top, a thin maroon fan (SVG, RULE 7's one accent) connects it DOWN to a
+     centered row of 6 bare avatars, caption below. The fan is the one flourish. */
+  .wrap { display: flex; flex-direction: column; align-items: center; width: 660px; }
+  .skillcard {
+    width: 560px; display: flex; align-items: center; gap: 18px;
+    background: var(--panel); border-radius: 18px; padding: 22px 26px;
+    box-shadow: 0 20px 44px -22px rgba(30,28,30,.16), 0 4px 12px -6px rgba(30,28,30,.06);
+  }
+  .skillcard__g { width: 28px; height: 28px; flex: none; color: var(--ink); }
+  .skillcard__g svg { width: 100%; height: 100%; display: block; }
+  .skillcard__t { flex: 1; font-size: 27px; font-weight: 480; letter-spacing: -.01em; color: var(--ink); }
+  .skillcard__v { font-family: var(--mono); font-weight: 450; font-size: 19px; color: var(--soft); flex: none; }
+  .fan { display: block; width: 660px; height: 72px; overflow: visible; }
+  .fan path { fill: none; stroke: var(--maroon); stroke-width: 1.6; stroke-linecap: round; opacity: .5; }
+  .fan circle { fill: var(--maroon); }
+  .avatars { display: flex; justify-content: space-between; align-items: center; width: 660px; }
+  .av {
+    width: 64px; height: 64px; border-radius: 50%; overflow: hidden; flex: none;
+    border: 3px solid #fff; box-shadow: 0 10px 22px -12px rgba(30,28,30,.28);
+  }
+  .av img { width: 100%; height: 100%; display: block; }
+  .caption { margin-top: 32px; text-align: center; font-size: 22px; color: var(--sub); }
+  .caption .accent { color: var(--maroon); font-weight: 530; }
+</style>
+</head><body>
+<!-- wf3-sharedskill. RULE 1: header-style glyph on the skill card is bare, never
+     reused as a row/avatar mark. RULE 7: one maroon accent = the fan lines + the
+     "18" in the caption. No green, no second accent. -->
+<div class="stage cv-cream">
+  <div class="wrap">
+    <div class="skillcard">
+      <span class="skillcard__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.6L20 10.5l-5.8 2L12 18l-2.2-5.5L4 10.5l5.8-1.9z"/></svg></span>
+      <span class="skillcard__t">Month-end close</span>
+      <span class="skillcard__v">skill · v4</span>
+    </div>
+
+    <svg class="fan" viewBox="0 0 660 72" preserveAspectRatio="none">
+      <path d="M330,0 Q330,46 32,72"/>
+      <path d="M330,0 Q330,46 151.2,72"/>
+      <path d="M330,0 Q330,46 270.4,72"/>
+      <path d="M330,0 Q330,46 389.6,72"/>
+      <path d="M330,0 Q330,46 508.8,72"/>
+      <path d="M330,0 Q330,46 628,72"/>
+      <circle cx="330" cy="2" r="3.2"></circle>
+    </svg>
+
+    <div class="avatars">
+      <span class="av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ledger&backgroundColor=c5f2e0" alt=""></span>
+      <span class="av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Sana&backgroundColor=b6e3f4" alt=""></span>
+      <span class="av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Cass&backgroundColor=ffd5dc" alt=""></span>
+      <span class="av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Hana&backgroundColor=ffdfbf" alt=""></span>
+      <span class="av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Sol&backgroundColor=d1e8d4" alt=""></span>
+      <span class="av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ivy&backgroundColor=e5d4f0" alt=""></span>
+    </div>
+
+    <div class="caption">Learned once · used by <span class="accent">18</span> agents</div>
+  </div>
+</div></body></html>

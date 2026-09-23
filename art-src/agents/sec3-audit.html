@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* structures the kit doesn't cover: a dense mono log line, timestamp lane
+     fixed-width so text stays column-aligned whether or not a logo is
+     present, and the two scoped status words (green/amber) local to this
+     card only — RULE 5/7 exception the spec grants explicitly for sec3. */
+  .log { display: flex; align-items: center; gap: 16px; height: 54px; flex: none;
+         padding: 0 30px; font-family: var(--mono); font-size: 18px; line-height: 1.4;
+         border-bottom: 1px solid var(--hair); }
+  .log:last-child { border-bottom: 0; }
+  .log__t { width: 78px; flex: none; color: var(--maroon); font-weight: 450; letter-spacing: -.01em; }
+  .log__m { width: 20px; height: 20px; flex: none; }
+  .log__m img { width: 100%; height: 100%; display: block; }
+  .log__x { color: var(--sub); min-width: 0; }
+  .log__x .ok { color: var(--ok); font-weight: 480; }
+  .log__x .warn { color: #a8631f; font-weight: 480; }
+</style>
+</head><body>
+<!-- RULE 1: header carries a bare lock glyph, never reused as a row mark.
+     The spec explicitly grants sec3 an "optional tool logo" per row (some
+     lines are system events with no actor) and the green/amber status
+     words — the one card in the set allowed a second/third colour, scoped
+     to those words only. One maroon accent = the timestamp lane. -->
+<div class="stage cv-sand">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+      <span class="hd__t">Audit trail</span>
+      <span class="hd__r"><span class="pill"><span class="pill__dot"></span>live</span></span>
+    </div>
+    <div class="list list--fade">
+      <div class="log">
+        <span class="log__t">09:41:02</span>
+        <span class="log__m"><img src="live/assets/stripe.svg" alt=""></span>
+        <span class="log__x">scope checked — payouts, read only</span>
+      </div>
+      <div class="log">
+        <span class="log__t">09:41:09</span>
+        <span class="log__m"><img src="live/assets/googlesheets.svg" alt=""></span>
+        <span class="log__x">matched 139 rows</span>
+      </div>
+      <div class="log">
+        <span class="log__t">09:41:30</span>
+        <span class="log__m"><img src="live/assets/gmail.svg" alt=""></span>
+        <span class="log__x">sent 3 exceptions · <span class="ok">logged</span></span>
+      </div>
+      <div class="log">
+        <span class="log__t">09:53:41</span>
+        <span class="log__m"></span>
+        <span class="log__x">approved by David · recorded</span>
+      </div>
+      <div class="log">
+        <span class="log__t">09:53:42</span>
+        <span class="log__m"><img src="live/assets/hubspot.svg" alt=""></span>
+        <span class="log__x">30 deals archived · <span class="ok">logged</span></span>
+      </div>
+      <div class="log row--g1">
+        <span class="log__t">10:16:02</span>
+        <span class="log__m"></span>
+        <span class="log__x">scope denied — contacts, write · <span class="warn">not granted</span></span>
+      </div>
+      <div class="log row--g2">
+        <span class="log__t">10:16:20</span>
+        <span class="log__m"></span>
+        <span class="log__x">audit snapshot exported · SOC 2</span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

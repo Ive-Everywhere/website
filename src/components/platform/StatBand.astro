@@ -1,0 +1,39 @@
+---
+/**
+ * The three product numbers.
+ *
+ * `use-case/StatCards.astro` draws the same row of three cards, but it renders
+ * the figure at `.t-landing-h2` (48/56) and has no way to mark an unverified
+ * figure. Both matter here: the Security page's three "numbers" are word
+ * statements ("BYOK or self-host"), which do not fit a 48px slot, and every
+ * page carries at least one `[VERIFY]` figure that must render inside
+ * `.copy-needed`.
+ *
+ * So the card is the home page's stat card instead (`home/Proof.astro`,
+ * Figma `178:2969`): radius 28, padding 40, `.t-h4` figure over a
+ * `.t-h6 text-text-soft-400` caption. The home page is the exemplar and it
+ * already sets both of those.
+ */
+interface Props {
+  stats: { value: string; label: string; needsVerify: boolean }[];
+}
+
+const { stats } = Astro.props;
+---
+
+<section class="bg-bg-white-0">
+  <div class="page-shell gutter-188 py-14">
+    <ul class="grid gap-6 sm:grid-cols-3 lg:gap-9">
+      {
+        stats.map((stat) => (
+          <li class="bg-card-surface flex flex-col gap-5 rounded-[28px] p-6 sm:p-8 lg:p-10">
+            <p class="t-h4 text-text-strong-950 text-balance">
+              {stat.needsVerify ? <span class="copy-needed">{stat.value}</span> : stat.value}
+            </p>
+            <p class="t-h6 text-text-soft-400 text-pretty">{stat.label}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

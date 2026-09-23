@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pillar · Agents — the colleague profile card, four specialists</title>
+<link href="tokens.css" rel="stylesheet">
+<link href="live-shim.css" rel="stylesheet">
+<link href="embed.css" rel="stylesheet">
+<link href="mv.css" rel="stylesheet">
+<style>
+  html,body { margin:0; height:100%; background:#ddd; }
+  .a-frame { position:absolute; inset:0; }
+  .a-field { position:absolute; inset:0; }
+  /* live.js contain-scales the fixed stage; 3:2 matches the slot so the paper fills it */
+  .a-stage { position:absolute; left:50%; top:50%; width:1600px; height:1067px;
+             transform:translate(-50%,-50%) scale(var(--s,1));
+             font-family:var(--font); color:var(--ink-strong); font-weight:400;
+             letter-spacing:.005em; -webkit-font-smoothing:antialiased; }
+
+  /* ── P1 · AGENTS — the T7 colleague profile card IS the picture ──────────
+     Mercury's recurring brand object, ours: a colleague is a profile. One
+     hero card commanding the frame on cream paper; its identity crossfades
+     through the four specialists. Channel chips cycle quietly below the
+     integrations row. Weight ceiling 480 — never bold, never thin.         */
+  .hero { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2; }
+  .mv-colleague-card { width:600px; }
+  .mv-cc__avatar { background:#fff; padding:0; overflow:hidden; }
+  .mv-cc__avatar img { width:100%; height:100%; display:block; }
+  .id { transition:opacity .5s ease; }
+  .id.is-out { opacity:0; }
+  .mv-cc__conns img.intg { width:20px; height:20px; }
+  .mv-cc__av { background:#fff; border-color:var(--hair); }
+  /* channel row — quiet, one lit at a time */
+  .chans { display:flex; align-items:center; gap:10px; margin-top:20px; padding-top:18px;
+           border-top:1px solid var(--hair); }
+  .chans__l { font-size:16px; color:var(--ink-soft); margin-right:4px; }
+  .chan { display:inline-flex; align-items:center; gap:7px; padding:7px 14px; border-radius:var(--r-pill);
+          font-size:16px; font-weight:480; color:var(--ink-soft); background:#f6f4f6;
+          transition:background .5s, color .5s; }
+  .chan.on { background:var(--accent-tint); color:var(--accent); }
+</style>
+</head>
+<body>
+<div class="a-frame"><div class="a-field"><div class="a-stage" data-w="1600" data-h="1067">
+  <div class="mv-canvas mv-canvas--cream"></div>
+
+  <div class="hero">
+    <div class="mv-colleague-card">
+      <div class="mv-cc__cover"><div class="mv-cc__cover-topo"></div>
+        <div class="mv-cc__status"><span class="mv-cc__dot"></span><span>Working</span></div>
+      </div>
+      <div class="mv-cc__avatar"><img id="avatar" src="" alt=""></div>
+      <div class="mv-cc__body">
+        <div class="id" id="identity">
+          <div class="mv-cc__name" id="nm"></div>
+          <div class="mv-cc__role" id="rl"></div>
+          <div class="mv-cc__bio" id="bio"></div>
+          <div class="mv-cc__skills" id="skills"></div>
+          <div class="mv-cc__conns">
+            <div class="mv-cc__avatars" id="ints"></div>
+            <span class="mv-cc__conns-label" id="intlabel"></span>
+          </div>
+        </div>
+        <div class="chans">
+          <span class="chans__l">Available in</span>
+          <span class="chan on">Slack</span><span class="chan">Chat</span><span class="chan">API</span><span class="chan">Phone</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></div></div>
+<script src="live.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var AV = function (seed, bg) { return 'https://api.dicebear.com/9.x/adventurer/svg?seed=' + seed + '&backgroundColor=' + bg; };
+  var A = [
+    { n:'Ledger', r:'Finance Ops', seed:'Ledger', bg:'c5f2e0', total:6,
+      bio:'Reconciles the books, chases the exceptions, and has the close ready before you sit down.',
+      sk:['Month-end close','Payouts','Reporting'], ints:['stripe','googlesheets','gmail'] },
+    { n:'Sana', r:'Sales Lead', seed:'Sana', bg:'b6e3f4', total:5,
+      bio:'Scores the pipeline nightly and drafts a follow-up for every deal that has gone quiet.',
+      sk:['Pipeline','Follow-ups','Forecast'], ints:['hubspot','gmail','slack'] },
+    { n:'Cass', r:'Customer Engineer', seed:'Cass', bg:'ffd5dc', total:7,
+      bio:'Triages the page, finds the root cause, and ships the fix with a test — before standup.',
+      sk:['Incidents','Root cause','Post-mortems'], ints:['github','linear','zendesk'] },
+    { n:'Hana', r:'People Ops', seed:'Hana', bg:'ffdfbf', total:4,
+      bio:'Screens every applicant against the scorecard overnight and books the interviews.',
+      sk:['Screening','Scheduling','Onboarding'], ints:['notion','gmail','linear'] },
+  ];
+  var chans = document.querySelectorAll('.chan');
+
+  function fill(a) {
+    $('avatar').src = AV(a.seed, a.bg);
+    $('nm').textContent = a.n; $('rl').textContent = a.r; $('bio').textContent = a.bio;
+    $('skills').innerHTML = a.sk.map(function (s) { return '<span class="mv-chip">' + s + '</span>'; }).join('');
+    $('ints').innerHTML = a.ints.map(function (i) { return '<span class="mv-cc__av"><img class="intg" src="assets/' + i + '.svg" alt="' + i + '"></span>'; }).join('') +
+      '<span class="mv-cc__av" style="background:#eee7ec;color:#755a68;font-size:13px;font-weight:480;">+' + (a.total - a.ints.length) + '</span>';
+    $('intlabel').textContent = a.total + ' integrations connected';
+  }
+
+  function swapTo(i) {
+    return function () {
+      $('identity').classList.add('is-out');
+      Live.soon(function () {
+        fill(A[i]);
+        $('identity').classList.remove('is-out');
+        for (var c = 0; c < chans.length; c++) chans[c].classList.toggle('on', c === i % chans.length);
+      }, 500);
+    };
+  }
+
+  function reset() {
+    fill(A[0]); $('identity').classList.remove('is-out');
+    for (var c = 0; c < chans.length; c++) chans[c].classList.toggle('on', c === 0);
+  }
+
+  var seq = Live.Seq([
+    [3400, swapTo(1)],
+    [3400, swapTo(2)],
+    [3400, swapTo(3)]
+  ], { reset: reset, hold: 3400 });
+
+  reset();
+  Live.autoplay(seq);
+})();
+</script>
+</body>
+</html>

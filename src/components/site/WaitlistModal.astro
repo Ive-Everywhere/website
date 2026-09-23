@@ -1,0 +1,390 @@
+---
+import {
+  POSTHOG_KEY,
+  POSTHOG_INGEST_PATH,
+  SURVEY_ID,
+  SURVEY_QUESTION_ID,
+  TYPEFORM_ID,
+  DEMO_HREF,
+  WAITLIST_LABEL,
+  EARLY_ACCESS_OFFER,
+} from '../../lib/waitlist';
+
+/**
+ * Early-access waitlist modal (private beta, 2026-09).
+ *
+ * Rendered ONCE per page by Base.astro. Every waitlist CTA on the site is an
+ * ordinary `<a href="#waitlist">`; the delegated handler below intercepts the
+ * click and opens this dialog. Nothing else on the site needs to know the
+ * modal exists, which is why an MDX frontmatter CTA can opt in by href alone.
+ *
+ * Two steps, per Krishna (2026-09-21):
+ *   1. Email only. The bar to join must be one field.
+ *   2. Optional Typeform for the use case, which buys a faster onboarding.
+ *
+ * `<dialog>` rather than a div: focus trapping, Escape, inertness of the page
+ * behind, and the top layer all come from the platform instead of from us.
+ */
+const hasTypeform = TYPEFORM_ID.length > 0;
+---
+
+<dialog
+  id="waitlist"
+  data-waitlist-dialog
+  class="waitlist-dialog bg-bg-white-0 ring-stroke-soft-200 shadow-card-large w-[calc(100vw-2rem)] max-w-[520px] rounded-[28px] p-0 ring-1 backdrop:bg-static-black/40"
+  aria-labelledby="waitlist-title"
+>
+  <div class="relative flex flex-col gap-6 p-6 sm:p-8">
+    <button
+      type="button"
+      data-waitlist-close
+      class="text-icon-sub-600 hover:bg-bg-weak-50 focus-visible:outline-primary-base absolute top-4 right-4 flex size-9 items-center justify-center rounded-xl transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+    >
+      <i class="ri-close-line text-[22px]" aria-hidden="true"></i>
+      <span class="sr-only">Close</span>
+    </button>
+
+    {/* ————— Step 1: email ————— */}
+    <div data-waitlist-step="form" class="flex flex-col gap-6">
+      <div class="flex flex-col gap-2 pr-10">
+        <p class="t-mono-sm text-primary-dark">Private beta</p>
+        <h2 id="waitlist-title" class="t-h4 text-text-strong-950">
+          {WAITLIST_LABEL}.
+        </h2>
+        <p class="t-paragraph-md text-text-sub-600 text-pretty">
+          {EARLY_ACCESS_OFFER}.
+        </p>
+      </div>
+
+      <form data-waitlist-form class="flex flex-col gap-3" novalidate>
+        <label class="sr-only" for="waitlist-email">Work email</label>
+        <input
+          id="waitlist-email"
+          name="email"
+          type="email"
+          required
+          autocomplete="email"
+          inputmode="email"
+          placeholder="you@company.com"
+          class="bg-bg-weak-50 ring-stroke-soft-200 text-text-strong-950 placeholder:text-text-soft-400 focus:ring-primary-base t-paragraph-md min-h-12 w-full rounded-2xl px-4 py-3 ring-1 outline-none focus:ring-2"
+        />
+
+        <button
+          type="submit"
+          data-waitlist-submit
+          class="bg-primary-dark text-static-white shadow-button-primary hover:bg-primary-darker focus-visible:outline-primary-base t-label-md flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl px-4 py-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-64"
+        >
+          <span data-waitlist-submit-label>{WAITLIST_LABEL}</span>
+          <i class="ri-arrow-right-up-long-line text-[20px] opacity-64" aria-hidden="true"></i>
+        </button>
+
+        {/* One slot, two states. The reassurance line holds the space at
+            rest and the error replaces it, so the dialog never jumps. */}
+        <p data-waitlist-note class="t-paragraph-xs text-text-soft-400">
+          No card required. We email you when your seat is ready.
+        </p>
+        <p data-waitlist-error role="alert" class="t-paragraph-xs text-primary-dark" hidden></p>
+      </form>
+
+      <div class="border-stroke-soft-200 flex items-center justify-between gap-3 border-t pt-4">
+        <p class="t-paragraph-sm text-text-sub-600">Rather talk first?</p>
+        {/* The underline sits on the TEXT span, not on the flex container.
+            An `inline-flex` with `gap` underlines each child separately, so
+            the gaps between the icon, the words and the arrow came out blank
+            and the rule looked broken between letters. */}
+        <a
+          href={DEMO_HREF}
+          class="t-label-sm text-text-strong-950 focus-visible:outline-primary-base group/demo inline-flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          <i class="ri-calendar-line text-[18px]" aria-hidden="true"></i>
+          <span class="underline-offset-4 group-hover/demo:underline">Book a demo</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    {/* ————— Step 2: confirmation, and the queue-jump ————— */}
+    <div data-waitlist-step="done" hidden class="flex flex-col gap-6">
+      <div class="flex flex-col gap-3 pr-10">
+        <span
+          class="bg-maroon-50 text-primary-dark flex size-10 items-center justify-center rounded-xl"
+        >
+          <i class="ri-check-line text-[22px]" aria-hidden="true"></i>
+        </span>
+        <div class="flex flex-col gap-1.5">
+          <h2 class="t-h4 text-text-strong-950">Request received.</h2>
+          <p class="t-paragraph-md text-text-sub-600 text-pretty">
+            We email <span data-waitlist-email class="text-text-strong-950"></span> when
+            your access is ready.
+          </p>
+        </div>
+      </div>
+
+      {
+        hasTypeform ? (
+          <div class="border-stroke-soft-200 flex flex-col gap-4 border-t pt-5">
+            <div class="flex flex-col gap-1.5">
+              <p class="t-mono-sm text-primary-dark">Skip the queue</p>
+              <p class="t-paragraph-sm text-text-sub-600 text-pretty">
+                Tell us what you want an agent to run. We onboard those people first.
+              </p>
+            </div>
+
+            {/* Typeform mounts here once the visitor asks for it, not on page
+                load: an iframe per pageview costs every visitor a third-party
+                request for a form almost none of them will reach. */}
+            <button
+              type="button"
+              data-typeform-open
+              class="bg-bg-soft-200 text-text-strong-950 hover:bg-bg-sub-300 focus-visible:outline-primary-base t-label-md flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl px-4 py-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              Tell us your use case
+              <i class="ri-arrow-right-line text-[20px] opacity-64" aria-hidden="true" />
+            </button>
+
+            <div data-typeform-mount hidden class="overflow-hidden rounded-2xl">
+              <div
+                data-tf-live={TYPEFORM_ID}
+                data-tf-inline-on-mobile
+                data-tf-medium="eluu-waitlist"
+                style="width:100%;height:420px;"
+              />
+            </div>
+          </div>
+        ) : (
+          /* A stacked label-then-action pair, so both are centred and the
+             action is a full-width button matching the one on step 1 rather
+             than a text link orphaned under a ragged second line. */
+          <div class="border-stroke-soft-200 flex flex-col items-center gap-3 border-t pt-5 text-center">
+            <p class="t-paragraph-sm text-text-sub-600 text-balance">
+              Want to move faster? We will set up your first agent with you.
+            </p>
+            <a
+              href={DEMO_HREF}
+              class="ring-stroke-sub-300 text-text-strong-950 hover:bg-bg-weak-50 t-label-sm focus-visible:outline-primary-base flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl px-4 ring-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              <i class="ri-calendar-line text-[18px]" aria-hidden="true" />
+              Book a demo
+            </a>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</dialog>
+
+<script
+  is:inline
+  define:vars={{
+    WAITLIST_LABEL,
+    POSTHOG_KEY,
+    POSTHOG_INGEST_PATH,
+    SURVEY_ID,
+    SURVEY_QUESTION_ID,
+    TYPEFORM_ID,
+  }}
+>
+  (() => {
+    const dialog = document.querySelector('[data-waitlist-dialog]');
+    if (!dialog) return;
+
+    const form = dialog.querySelector('[data-waitlist-form]');
+    const input = dialog.querySelector('#waitlist-email');
+    const submit = dialog.querySelector('[data-waitlist-submit]');
+    const submitLabel = dialog.querySelector('[data-waitlist-submit-label]');
+    const errorEl = dialog.querySelector('[data-waitlist-error]');
+    const noteEl = dialog.querySelector('[data-waitlist-note]');
+
+    function showError(message) {
+      if (errorEl) { errorEl.textContent = message; errorEl.hidden = false; }
+      if (noteEl) noteEl.hidden = true;
+    }
+    function clearError() {
+      if (errorEl) { errorEl.textContent = ''; errorEl.hidden = true; }
+      if (noteEl) noteEl.hidden = false;
+    }
+    const stepForm = dialog.querySelector('[data-waitlist-step="form"]');
+    const stepDone = dialog.querySelector('[data-waitlist-step="done"]');
+    const emailEcho = dialog.querySelector('[data-waitlist-email]');
+
+    /* Opening */
+
+    // Any anchor to #waitlist opens the dialog. Delegated, so CTAs rendered
+    // from MDX frontmatter work without importing anything.
+    document.addEventListener('click', (event) => {
+      const trigger = event.target.closest?.('a[href="#waitlist"], [data-waitlist-open]');
+      if (!trigger) return;
+      event.preventDefault();
+      open();
+    });
+
+    // Deep link: /pricing#waitlist from an email or an ad lands open.
+    if (location.hash === '#waitlist') requestAnimationFrame(open);
+
+    function open() {
+      if (dialog.open) return;
+      dialog.showModal();
+      // Defer, or iOS Safari scrolls the page behind the dialog to the input.
+      requestAnimationFrame(() => input?.focus());
+    }
+
+    // For the few places that open the modal from their own script rather than
+    // from a link, the cookbook's "Use this recipe" button, for one.
+    window.eluuWaitlist = { open };
+
+    /* Closing */
+
+    dialog.querySelector('[data-waitlist-close]')?.addEventListener('click', () => dialog.close());
+
+    // Click on the backdrop. `<dialog>` reports the dialog itself as the
+    // target there, so a hit outside the content box is a backdrop hit.
+    dialog.addEventListener('click', (event) => {
+      if (event.target !== dialog) return;
+      const box = dialog.getBoundingClientRect();
+      const outside =
+        event.clientX < box.left ||
+        event.clientX > box.right ||
+        event.clientY < box.top ||
+        event.clientY > box.bottom;
+      if (outside) dialog.close();
+    });
+
+    // Leaves no #waitlist in the URL, so a refresh does not reopen it.
+    dialog.addEventListener('close', () => {
+      if (location.hash === '#waitlist') {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    });
+
+    /* Identity */
+
+    // PostHog groups events by distinct_id. We are not loading posthog-js, so
+    // we mint and keep our own, and the same visitor stays one person across
+    // pages and visits.
+    function distinctId() {
+      const KEY = 'eluu_waitlist_did';
+      try {
+        let id = localStorage.getItem(KEY);
+        if (!id) {
+          id = crypto.randomUUID();
+          localStorage.setItem(KEY, id);
+        }
+        return id;
+      } catch {
+        // Safari private mode throws on localStorage. A per-visit id still
+        // records the signup; only cross-visit stitching is lost.
+        return crypto.randomUUID();
+      }
+    }
+
+    /* Submission */
+
+    // Deliberately permissive. Server-side truth is the follow-up email that
+    // either lands or bounces; a strict regex here only rejects real addresses.
+    const looksLikeEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+
+    function utm() {
+      const params = new URLSearchParams(location.search);
+      const out = {};
+      for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']) {
+        const value = params.get(key);
+        if (value) out[key] = value;
+      }
+      return out;
+    }
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = (input?.value ?? '').trim();
+
+      if (!looksLikeEmail(email)) {
+        showError('Enter a valid email address.');
+        input?.focus();
+        return;
+      }
+
+      clearError();
+      if (submit) submit.disabled = true;
+      if (submitLabel) submitLabel.textContent = 'Joining…';
+
+      const payload = {
+        api_key: POSTHOG_KEY,
+        event: 'survey sent',
+        distinct_id: distinctId(),
+        timestamp: new Date().toISOString(),
+        properties: {
+          $survey_id: SURVEY_ID,
+          // Modern PostHog keys a response by question id; the bare
+          // `$survey_response` is the legacy first-question key. Sending both
+          // means the response shows up whichever the UI reads.
+          [`$survey_response_${SURVEY_QUESTION_ID}`]: email,
+          $survey_response: email,
+          $survey_questions: [
+            { id: SURVEY_QUESTION_ID, question: 'What is your work email?' },
+          ],
+          email,
+          $current_url: location.href,
+          source: 'marketing-site-waitlist-modal',
+          ...utm(),
+          // Promotes the anonymous visitor to a named person, so the waitlist
+          // is readable as a person list rather than only as an event feed.
+          $set: { email, waitlist: true, waitlist_source: 'marketing-site' },
+        },
+      };
+
+      try {
+        const response = await fetch(`${POSTHOG_INGEST_PATH}/i/v0/e/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true,
+        });
+        if (!response.ok) throw new Error(`ingest ${response.status}`);
+        succeed(email);
+      } catch {
+        // A blocked or failing beacon must not look like a successful signup.
+        showError('That did not go through. Try again, or email hello@eluu.ai.');
+        if (submit) submit.disabled = false;
+        if (submitLabel) submitLabel.textContent = WAITLIST_LABEL;
+      }
+    });
+
+    function succeed(email) {
+      if (emailEcho) emailEcho.textContent = email;
+      if (stepForm) stepForm.hidden = true;
+      if (stepDone) stepDone.hidden = false;
+    }
+
+    /* Typeform, loaded on demand */
+
+    const typeformButton = dialog.querySelector('[data-typeform-open]');
+    const typeformMount = dialog.querySelector('[data-typeform-mount]');
+
+    typeformButton?.addEventListener('click', () => {
+      if (!typeformMount || !TYPEFORM_ID) return;
+      typeformButton.hidden = true;
+      typeformMount.hidden = false;
+      if (document.querySelector('script[data-typeform-embed]')) return;
+      const script = document.createElement('script');
+      script.src = 'https://embed.typeform.com/next/embed.js';
+      script.async = true;
+      script.dataset.typeformEmbed = 'true';
+      document.head.appendChild(script);
+    });
+  })();
+</script>
+
+<style>
+  /* `<dialog>` defaults to `margin: auto` only when the UA sheet applies, and
+     Safari needs the centring stated. Also keeps a tall dialog scrollable
+     rather than clipped at the viewport edge. */
+  .waitlist-dialog {
+    margin: auto;
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+  }
+
+  .waitlist-dialog::backdrop {
+    backdrop-filter: blur(2px);
+  }
+</style>

@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* sec2's stacked label/value fields, verbatim bones. RULE 7: the one maroon
+     accent is the answer total, nothing else. */
+  .fields { padding: 6px 30px 30px; }
+  .field__l { font-size: 20px; color: var(--soft); }
+  .field__v { font-size: 26px; font-weight: 450; margin-top: 5px; letter-spacing: -.008em; }
+  .field__v--mono { font-family: var(--mono); font-weight: 450; font-size: 24px; }
+  .field__v--maroon { color: var(--maroon-deep); }
+</style>
+</head><body>
+<!-- TEXT-ONLY variant of agents/sec2-keys.html: the pipeline Q&A as the
+     label/value pane. Short header title so it never wraps. -->
+<div class="stage cv-blue">
+  <div class="card">
+    <div class="hd hd--rule">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg></span>
+      <span class="hd__t">Ask the pipeline</span>
+      <span class="hd__r"><span class="pill">answered in 4s</span></span>
+    </div>
+    <div class="fields">
+      <div class="field"><div class="field__l">"What closes this month?"</div><div class="field__v field__v--mono field__v--maroon">$186,000 · 3 deals</div></div>
+      <div class="sep"></div>
+      <div class="field"><div class="field__l">Northwind renewal</div><div class="field__v">$92,000 · Aug 22 · signature out</div></div>
+      <div class="sep"></div>
+      <div class="field"><div class="field__l">Sierra Labs expansion</div><div class="field__v">$58,000 · Aug 27 · verbal yes, in legal</div></div>
+      <div class="sep"></div>
+      <div class="field"><div class="field__l">Brightline pilot</div><div class="field__v">$36,000 · Aug 29 · pricing agreed</div></div>
+    </div>
+  </div>
+</div></body></html>

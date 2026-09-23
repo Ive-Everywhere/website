@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>C2-B — Work arriving from everywhere, with nobody at a laptop</title>
+<link href="tokens.css" rel="stylesheet">
+<link href="live-shim.css" rel="stylesheet">
+<link href="art.css" rel="stylesheet">
+<link href="live.css" rel="stylesheet">
+<link href="fonts/remixicon.css" rel="stylesheet">
+<link href="embed.css" rel="stylesheet">
+<style>
+  html,body { margin:0; height:100%; background:var(--bg-soft-200); }
+  .a-frame { position:absolute; inset:0; }
+
+  /* ── C2-B · RING CAROUSEL OF INCOMING WORK ───────────────────────────────
+     The morph pattern was wrong for this card — it showed ONE job, and Card 2
+     is not about one job, it's about work happening without you at all.
+
+     Krishna's carousel: biggest card centred, neighbours smaller and blurred,
+     drifting circularly. What makes it argue rather than decorate is the
+     TRIGGER on every card — called from the API, asked in Slack, fired by a
+     schedule, arrived in an inbox. Five cards, four different origins, and a
+     person starting the work is not one of them. Same badge vocabulary as the
+     hero fold ("CALLED FROM API" / "ASKED ON SLACK"), so the page rhymes.
+
+     Nothing here "completes" — that is the point. It is a stream, not a run.  */
+  .a-field { --field: color-mix(in srgb, var(--away-light) 40%, #fff); }
+
+  /* soften the top and bottom edges so cards enter and leave rather than pop */
+  .a-field::after {
+    content:""; position:absolute; inset:0; z-index:6; pointer-events:none;
+    background:linear-gradient(var(--field) 1%, transparent 19%, transparent 81%, var(--field) 99%);
+  }
+
+  .card {
+    background:var(--bg-white-0); border:1px solid var(--stroke-soft-200);
+    border-radius:13px; box-shadow:var(--shadow-regular-lg); overflow:hidden;
+  }
+  .c-head { display:flex; align-items:center; gap:9px; padding:11px 14px 0; }
+  .c-body { padding:8px 14px 13px; }
+  .c-title { font-size:13px; font-weight:500; letter-spacing:-.012em; line-height:1.35; }
+  .c-foot { display:flex; align-items:center; gap:8px; margin-top:9px; }
+</style>
+</head>
+<body>
+<div class="a-frame"><div class="a-field"><div class="a-stage">
+
+  <div class="l-ring" id="ring">
+
+    <!-- 1 · a schedule fired it -->
+    <div class="l-ring-slot">
+      <div class="card">
+        <div class="c-head">
+          <img class="a-av" src="assets/avatar-rivera.webp" alt="">
+          <span class="a-who"><span class="a-who-name">Rivera</span><span class="a-who-role">Sales</span></span>
+          <span style="flex:1"></span>
+          <span class="l-trigger"><i class="ri-calendar-schedule-line"></i>Triggered by schedule</span>
+        </div>
+        <div class="c-body">
+          <div class="c-title">Write the daily revenue brief</div>
+          <div class="c-foot">
+            <span class="a-chip a-chip--ok"><i class="ri-check-line" style="font-size:11px"></i>Delivered 06:02</span>
+            <span style="flex:1"></span>
+            <span class="a-p-sub">Daily &middot; 06:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 · your own software called it -->
+    <div class="l-ring-slot">
+      <div class="card">
+        <div class="c-head">
+          <img class="a-av" src="assets/avatar-iris.webp" alt="">
+          <span class="a-who"><span class="a-who-name">Iris</span><span class="a-who-role">Finance</span></span>
+          <span style="flex:1"></span>
+          <span class="l-trigger"><i class="ri-code-s-slash-line"></i>Called from API</span>
+        </div>
+        <div class="c-body">
+          <div class="c-title">Reconcile June payouts against Salesforce</div>
+          <div class="c-foot">
+            <span class="a-chip a-chip--live"><span class="a-dot"></span>Running</span>
+            <span style="flex:1"></span>
+            <span class="a-p-sub"><span class="a-mono">POST /tasks</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 · someone asked in a channel -->
+    <div class="l-ring-slot">
+      <div class="card">
+        <div class="c-head">
+          <img class="a-av" src="assets/avatar-lewis.webp" alt="">
+          <span class="a-who"><span class="a-who-name">Lewis</span><span class="a-who-role">Support</span></span>
+          <span style="flex:1"></span>
+          <span class="l-trigger"><img src="assets/slack.svg" alt="">Asked in Slack</span>
+        </div>
+        <div class="c-body">
+          <div class="c-title">Triage overnight tickets and route by owner</div>
+          <div class="c-foot">
+            <span class="a-chip a-chip--ok"><i class="ri-check-line" style="font-size:11px"></i>34 routed</span>
+            <span style="flex:1"></span>
+            <span class="a-p-sub"><span class="a-mono">#support</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 · it landed in an inbox -->
+    <div class="l-ring-slot">
+      <div class="card">
+        <div class="c-head">
+          <img class="a-av" src="assets/avatar-james.webp" alt="">
+          <span class="a-who"><span class="a-who-name">Nia</span><span class="a-who-role">Legal</span></span>
+          <span style="flex:1"></span>
+          <span class="l-trigger"><img src="assets/gmail.svg" alt="">Arrived by email</span>
+        </div>
+        <div class="c-body">
+          <div class="c-title">Redline the Acme MSA against our playbook</div>
+          <div class="c-foot">
+            <span class="a-chip a-chip--ok"><i class="ri-check-line" style="font-size:11px"></i>6 clauses flagged</span>
+            <span style="flex:1"></span>
+            <span class="a-p-sub">Inbox &rarr; Drive</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 · another schedule, a different cadence -->
+    <div class="l-ring-slot">
+      <div class="card">
+        <div class="c-head">
+          <img class="a-av" src="assets/avatar-priya.webp" alt="">
+          <span class="a-who"><span class="a-who-name">Priya</span><span class="a-who-role">Operations</span></span>
+          <span style="flex:1"></span>
+          <span class="l-trigger"><i class="ri-calendar-schedule-line"></i>Triggered by schedule</span>
+        </div>
+        <div class="c-body">
+          <div class="c-title">Run the month-end close pack</div>
+          <div class="c-foot">
+            <span class="a-chip a-chip--live"><span class="a-dot"></span>Running</span>
+            <span style="flex:1"></span>
+            <span class="a-p-sub">1st &middot; 07:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div></div></div>
+
+<script src="live.js"></script>
+<script>
+(function () {
+  var slots = [].slice.call(document.querySelectorAll('.l-ring-slot'));
+  var n = slots.length, centre = 0;
+
+  function place() {
+    slots.forEach(function (el, i) {
+      // shortest signed distance around the ring — gives true circular motion
+      // instead of a list that jumps back to the top after the last card
+      var d = ((i - centre + n + Math.floor(n / 2)) % n) - Math.floor(n / 2);
+      el.setAttribute('data-slot', Math.abs(d) > 2 ? (d > 0 ? 2 : -2) : d);
+    });
+  }
+
+  var seq = Live.Seq(
+    slots.map(function () {
+      return [2400, function () { centre = (centre + 1) % n; place(); }];
+    }),
+    { reset: function () { centre = 0; place(); }, hold: 0 }
+  );
+
+  place();
+  Live.autoplay(seq);
+})();
+</script>
+</body>
+</html>
