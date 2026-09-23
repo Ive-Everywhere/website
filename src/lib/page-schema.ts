@@ -43,7 +43,7 @@ export const hero = z.object({
   eyebrow: z.string(),
   headline: z.string(),
   subhead: z.string(),
-  primaryCta: cta.default({ label: 'Join waitlist', href: WAITLIST }),
+  primaryCta: cta.default({ label: 'Request early access', href: WAITLIST }),
   secondaryCta: cta.default({ label: 'Book a demo', href: DEMO }),
 });
 
@@ -109,7 +109,7 @@ export const linkCard = z.object({
 
 export const finalCta = z.object({
   headline: z.string(),
-  primaryCta: cta.default({ label: 'Join waitlist', href: WAITLIST }),
+  primaryCta: cta.default({ label: 'Request early access', href: WAITLIST }),
   secondaryCta: cta.default({ label: 'Book a demo', href: DEMO }),
 });
 

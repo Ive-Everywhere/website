@@ -6,6 +6,8 @@ import {
   SURVEY_QUESTION_ID,
   TYPEFORM_ID,
   DEMO_HREF,
+  WAITLIST_LABEL,
+  EARLY_ACCESS_OFFER,
 } from '../../lib/waitlist';
 
 /**
@@ -47,10 +49,10 @@ const hasTypeform = TYPEFORM_ID.length > 0;
       <div class="flex flex-col gap-2 pr-10">
         <p class="t-mono-sm text-primary-dark">Private beta</p>
         <h2 id="waitlist-title" class="t-h4 text-text-strong-950">
-          Join the waitlist.
+          {WAITLIST_LABEL}.
         </h2>
         <p class="t-paragraph-md text-text-sub-600 text-pretty">
-          Early access users get unlimited cloud usage.
+          {EARLY_ACCESS_OFFER}.
         </p>
       </div>
 
@@ -72,7 +74,7 @@ const hasTypeform = TYPEFORM_ID.length > 0;
           data-waitlist-submit
           class="bg-primary-dark text-static-white shadow-button-primary hover:bg-primary-darker focus-visible:outline-primary-base t-label-md flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl px-4 py-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-64"
         >
-          <span data-waitlist-submit-label>Join waitlist</span>
+          <span data-waitlist-submit-label>{WAITLIST_LABEL}</span>
           <i class="ri-arrow-right-up-long-line text-[20px] opacity-64" aria-hidden="true"></i>
         </button>
 
@@ -110,10 +112,10 @@ const hasTypeform = TYPEFORM_ID.length > 0;
           <i class="ri-check-line text-[22px]" aria-hidden="true"></i>
         </span>
         <div class="flex flex-col gap-1.5">
-          <h2 class="t-h4 text-text-strong-950">You are on the list.</h2>
+          <h2 class="t-h4 text-text-strong-950">Request received.</h2>
           <p class="t-paragraph-md text-text-sub-600 text-pretty">
             We email <span data-waitlist-email class="text-text-strong-950"></span> when
-            your seat opens.
+            your access is ready.
           </p>
         </div>
       </div>
@@ -174,6 +176,7 @@ const hasTypeform = TYPEFORM_ID.length > 0;
 <script
   is:inline
   define:vars={{
+    WAITLIST_LABEL,
     POSTHOG_KEY,
     POSTHOG_INGEST_PATH,
     SURVEY_ID,
@@ -342,7 +345,7 @@ const hasTypeform = TYPEFORM_ID.length > 0;
         // A blocked or failing beacon must not look like a successful signup.
         showError('That did not go through. Try again, or email hello@eluu.ai.');
         if (submit) submit.disabled = false;
-        if (submitLabel) submitLabel.textContent = 'Join waitlist';
+        if (submitLabel) submitLabel.textContent = WAITLIST_LABEL;
       }
     });
 
