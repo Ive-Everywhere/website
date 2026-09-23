@@ -1,0 +1,116 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Hero from './Hero.astro';
+import SplitIntro from './SplitIntro.astro';
+import StatCards from './StatCards.astro';
+import RailFeatures from './RailFeatures.astro';
+import Testimonial from './Testimonial.astro';
+import LinkCards from './LinkCards.astro';
+import DetailSplit from './DetailSplit.astro';
+import AggregateProof from './AggregateProof.astro';
+import Security from '../home/Security.astro';
+import FinalCta from './FinalCta.astro';
+
+/**
+ * The one template every use-case page renders through.
+ *
+ * Section order is fixed by the content pack's INDEX.md:
+ *   hero → value prop → 3 numbers → 5 feature cards → testimonial →
+ *   powered-by → aggregate proof → compliance → resources → final CTA
+ * followed by the site-wide peach CTA band and the footer, both from
+ * `Base.astro`.
+ *
+ * COMPLIANCE reuses `home/Security.astro` outright rather than restating it.
+ * That component owns the claim that SOC 2 and ISO 27001 are `comingSoon` and
+ * GDPR is held; saying it twice in two files is how the two pages would drift
+ * apart. The content pack marks the section `[VERIFY certification status]`,
+ * which is exactly the state that component already renders.
+ *
+ * `Powered by` and `Resources` are the content pack's own section names, used
+ * as the headings because no written heading exists for either row.
+ */
+
+interface Props {
+  entry: CollectionEntry<'useCases'>;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+---
+
+<Base title={data.title} description={data.description} ogImage={data.ogImage}>
+  <Hero
+    eyebrow={data.hero.eyebrow}
+    headline={data.hero.headline}
+    subhead={data.hero.subhead}
+    primaryCta={data.hero.primaryCta}
+    secondaryCta={data.hero.secondaryCta}
+  />
+
+  <SplitIntro
+    heading={data.pitch.heading}
+    body={data.pitch.body}
+    linkLabel={data.pitch.linkLabel}
+    linkHref={data.pitch.linkHref}
+    art={data.pitch.art}
+    visualNote={data.pitch.visualNote}
+  />
+
+  {data.stats.length > 0 && <StatCards stats={data.stats} />}
+
+  {data.features.length > 0 && <RailFeatures features={data.features} />}
+
+  {
+    data.testimonial && (
+      <Testimonial
+        quote={data.testimonial.quote}
+        attribution={data.testimonial.attribution}
+        needsVerify={data.testimonial.needsVerify}
+      />
+    )
+  }
+
+  {
+    data.poweredBy.length > 0 && (
+      <DetailSplit
+        id="powered-by"
+        heading="Powered by automations"
+        body={data.pitch.body}
+        details={data.poweredBy.map((card) => ({
+          title: card.title,
+          body: card.body,
+          href: card.href,
+          linkLabel: card.linkLabel,
+          icon: card.icon,
+        }))}
+      />
+    )
+  }
+
+  {
+    data.aggregateProof && (
+      <AggregateProof
+        heading="Proof"
+        value={data.aggregateProof.value}
+        label={data.aggregateProof.label}
+        needsVerify={data.aggregateProof.needsVerify}
+      />
+    )
+  }
+
+  <Security />
+
+  {data.resources.length > 0 && <LinkCards heading="Resources" cards={data.resources} />}
+
+  <FinalCta
+    headline={data.finalCta.headline}
+    primaryCta={data.finalCta.primaryCta}
+    secondaryCta={data.finalCta.secondaryCta}
+  />
+
+  {/* Optional long-form body. The finalized copy draws none for these pages. */}
+  <Content />
+</Base>

@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"></head><body>
+<!-- wf2 — schedule card. Pure kit reuse: RULE 1 header carries a bare calendar
+     glyph, never repeated as a row mark. RULE 2: every row's one mark is a
+     bare clock glyph. RULE 3: kit's .row is already fixed-height/uniform.
+     RULE 4: one right-hand lane, the kit's .row__v mono value, holds the
+     next-run time — no second lane. No green anywhere (spec: "No green").
+     RULE 6: depth = the last row (New-deal brief, event-triggered rather than
+     scheduled) faded via row--g1. No maroon accent needed here. -->
+<div class="stage cv-sand">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></span>
+      <span class="hd__t">Scheduled work</span>
+      <span class="hd__r"><span class="pill">auto</span></span>
+    </div>
+    <div class="list">
+      <div class="row">
+        <span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+        <span class="row__b"><div class="row__t">Daily standup digest</div></span>
+        <span class="row__v">7:00 AM</span>
+      </div>
+      <div class="row">
+        <span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+        <span class="row__b"><div class="row__t">Month-end close</div></span>
+        <span class="row__v">1st, 6:00 AM</span>
+      </div>
+      <div class="row">
+        <span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+        <span class="row__b"><div class="row__t">Pipeline refresh</div></span>
+        <span class="row__v">Mon 8:00 AM</span>
+      </div>
+      <div class="row">
+        <span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+        <span class="row__b"><div class="row__t">Weekly board update</div></span>
+        <span class="row__v">Fri 3:00 PM</span>
+      </div>
+      <div class="row row--g1">
+        <span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+        <span class="row__b"><div class="row__t">New-deal brief</div></span>
+        <span class="row__v">on event</span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

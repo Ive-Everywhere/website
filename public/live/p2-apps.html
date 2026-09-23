@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pillar · Apps — one card morphs: prompt → building → deployed</title>
+<link href="tokens.css" rel="stylesheet">
+<link href="live-shim.css" rel="stylesheet">
+<link href="embed.css" rel="stylesheet">
+<link href="mv.css" rel="stylesheet">
+<style>
+  html,body { margin:0; height:100%; background:#ddd; }
+  .a-frame { position:absolute; inset:0; }
+  .a-field { position:absolute; inset:0; }
+  .a-stage { position:absolute; left:50%; top:50%; width:1600px; height:1067px;
+             transform:translate(-50%,-50%) scale(var(--s,1));
+             font-family:var(--font); color:var(--ink-strong); font-weight:400;
+             letter-spacing:.005em; -webkit-font-smoothing:antialiased; }
+
+  /* ── P2 · APPS — ONE MORPHING OBJECT ─────────────────────────────────────
+     A prompt box. It expands into "Building your app" and the services
+     arrive one by one — the card growing to hold each — ends on
+     "Deploying · sharing the link", then settles into the deployed state:
+     the URL, live, shared with the team. One object, three lives.          */
+  .morph { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+           width:660px; height:190px; background:#fff; border-radius:var(--r-lg); overflow:hidden;
+           box-shadow:0 34px 64px -22px rgba(28,27,31,.24), 0 10px 24px -10px rgba(28,27,31,.12);
+           transition:width .55s ease, height .55s ease; }
+  .morph.is-build { width:700px; }
+  .morph.is-done  { width:680px; }
+
+  .layer { position:absolute; inset:0; opacity:0; transition:opacity .3s ease; pointer-events:none; }
+  .layer.is-on { opacity:1; }
+
+  /* 1 · the prompt box */
+  .lay-prompt { display:flex; flex-direction:column; justify-content:center; padding:0 30px; }
+  .prompt__t { font-size:23px; line-height:1.45; color:var(--ink-strong); min-height:66px; }
+  .caret { display:inline-block; width:2px; height:24px; background:var(--accent);
+           vertical-align:-4px; margin-left:2px; animation:p2caret 1s steps(1) infinite; }
+  @keyframes p2caret { 50% { opacity:0 } }
+  .prompt__bar { display:flex; align-items:center; margin-top:16px; }
+  .send { margin-left:auto; width:44px; height:44px; border-radius:50%; background:var(--accent);
+          color:#fff; display:flex; align-items:center; justify-content:center;
+          transition:filter .15s; }
+  .send.is-hit { filter:brightness(.8); }
+  .send svg { width:20px; height:20px; }
+
+  /* 2 · building */
+  .lay-build { display:flex; flex-direction:column; }
+  .bhead { display:flex; align-items:center; gap:14px; padding:22px 30px 18px;
+           border-bottom:1px solid var(--hair); flex:none; }
+  .bspin { width:20px; height:20px; border-radius:50%; border:2.5px solid var(--hair);
+           border-top-color:var(--accent); animation:p2spin .8s linear infinite; }
+  @keyframes p2spin { to { transform:rotate(360deg) } }
+  .bhead__t { font-size:22px; font-weight:480; }
+  .bhead__s { font-size:18px; color:var(--ink-soft); margin-left:auto; }
+  .svcs { padding:8px 30px 20px; }
+  .svc { display:flex; align-items:center; gap:16px; padding:12px 0;
+         opacity:0; transform:translateY(6px);
+         transition:opacity .4s ease, transform .4s ease; }
+  .svc.is-on { opacity:1; transform:none; }
+  .svc__ic { width:42px; height:42px; border-radius:12px; background:var(--accent-tint);
+             color:var(--accent); display:flex; align-items:center; justify-content:center; flex:none; }
+  .svc__ic svg { width:20px; height:20px; }
+  .svc__n { font-size:20px; font-weight:480; }
+  .svc__m { font-size:17px; color:var(--ink-sub); margin-top:1px; }
+  .svc__st { margin-left:auto; }
+  .spin { width:15px; height:15px; border-radius:50%; border:2px solid var(--hair);
+          border-top-color:var(--accent); animation:p2spin .7s linear infinite; display:none; }
+  .svc.is-run .spin { display:block; }
+  .ck { width:22px; height:22px; border-radius:50%; background:#e4f6ee; color:#1f8a5b;
+        display:none; align-items:center; justify-content:center; }
+  .ck svg { width:11px; height:11px; }
+  .svc.is-done .ck { display:flex; }
+
+  /* 3 · deployed */
+  .lay-done { display:flex; flex-direction:column; justify-content:center; padding:0 30px; }
+  .done__cap { display:flex; align-items:center; gap:10px; font-size:15px; color:var(--ink-soft);
+               text-transform:uppercase; letter-spacing:.06em; }
+  .done__cap .okc { width:20px; height:20px; border-radius:50%; background:#e4f6ee; color:#1f8a5b;
+                    display:flex; align-items:center; justify-content:center; }
+  .done__cap .okc svg { width:10px; height:10px; }
+  .urlchip { display:flex; align-items:center; gap:11px; height:56px; padding:0 20px;
+             border-radius:14px; background:#f6f4f6; margin-top:14px; }
+  .urlchip svg.lk { width:17px; height:17px; color:var(--ink-soft); flex:none; }
+  .urlchip .u { font-size:22px; color:var(--ink-sub); }
+  .urlchip .u em { font-style:normal; font-weight:480; color:var(--accent); }
+  .urlchip .mv-pill { margin-left:auto; }
+  .pip { width:9px; height:9px; border-radius:50%; background:#2eb67d; }
+  .team { display:flex; align-items:center; gap:11px; margin-top:15px; }
+  .team__avs { display:flex; }
+  .team__av { width:33px; height:33px; border-radius:50%; border:2px solid #fff; margin-left:-9px;
+              overflow:hidden; background:#eee7ec; }
+  .team__av:first-child { margin-left:0; }
+  .team__av img { width:100%; height:100%; display:block; }
+  .team__l { font-size:17px; color:var(--ink-soft); }
+</style>
+</head>
+<body>
+<div class="a-frame"><div class="a-field"><div class="a-stage" data-w="1600" data-h="1067">
+  <div class="mv-canvas mv-canvas--lav"></div>
+
+  <div class="morph" id="box">
+
+    <div class="layer lay-prompt is-on" id="layPrompt">
+      <div class="prompt__t" id="typed"></div>
+      <div class="prompt__bar"><span class="send" id="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div>
+    </div>
+
+    <div class="layer lay-build" id="layBuild">
+      <div class="bhead" id="bhead">
+        <span class="bspin" id="bspin"></span>
+        <span class="bhead__t" id="btitle">Building your app</span>
+        <span class="bhead__s">acme-finance</span>
+      </div>
+      <div class="svcs" id="svcs">
+        <div class="svc" id="s1">
+          <span class="svc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.66 3.58 3 8 3s8-1.34 8-3v-13"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg></span>
+          <div><div class="svc__n">Postgres database</div><div class="svc__m">Schemas created · seeded from Sheets</div></div>
+          <span class="svc__st"><span class="spin"></span><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></span>
+        </div>
+        <div class="svc" id="s2">
+          <span class="svc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="M8.2 7.4l7.6 3.4M8.4 6h7.2M8.2 16.6l7.6-3.4M6 8.4v7.2"/></svg></span>
+          <div><div class="svc__n">Vector store</div><div class="svc__m">1,204 documents indexed</div></div>
+          <span class="svc__st"><span class="spin"></span><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></span>
+        </div>
+        <div class="svc" id="s3">
+          <span class="svc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8H3l1.5-4.2A1.5 1.5 0 0 1 5.9 3h12.2a1.5 1.5 0 0 1 1.4.8L21 8z"/><rect x="3" y="8" width="18" height="13" rx="1.8"/><path d="M9 12h6"/></svg></span>
+          <div><div class="svc__n">Object storage</div><div class="svc__m">Exports bucket · reports and PDFs</div></div>
+          <span class="svc__st"><span class="spin"></span><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></span>
+        </div>
+        <div class="svc" id="s4">
+          <span class="svc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.4"/><path d="M12 7.5V12l3 2"/></svg></span>
+          <div><div class="svc__n">Scheduled refresh</div><div class="svc__m">Daily at 7:02 AM · by Ledger</div></div>
+          <span class="svc__st"><span class="spin"></span><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></span>
+        </div>
+        <div class="svc" id="s5">
+          <span class="svc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.5-2 5-2 5s3.5-.5 5-2c.84-.84 1-2 .5-3l-.5-.5c-1-.5-2.16-.34-3 .5z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span>
+          <div><div class="svc__n">Deploying · sharing the link</div><div class="svc__m">TLS, domain, team access</div></div>
+          <span class="svc__st"><span class="spin"></span><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="layer lay-done" id="layDone">
+      <div class="done__cap"><span class="okc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span>Deployed</div>
+      <div class="urlchip">
+        <svg class="lk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        <span class="u"><em>acme-finance</em>.eluu.site</span>
+        <span class="mv-pill mv-pill--live"><span class="pip"></span>Live</span>
+      </div>
+      <div class="team">
+        <span class="team__avs">
+          <span class="team__av"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt=""></span>
+          <span class="team__av"><img src="https://randomuser.me/api/portraits/women/65.jpg" alt=""></span>
+          <span class="team__av"><img src="https://randomuser.me/api/portraits/men/71.jpg" alt=""></span>
+        </span>
+        <span class="team__l">Shared with your team · anyone can open it</span>
+      </div>
+    </div>
+
+  </div>
+
+</div></div></div>
+<script src="live.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var box = $('box');
+  var Q = '“A dashboard for the July close — refreshed daily, for the whole team.”';
+
+  function show(id) {
+    ['layPrompt','layBuild','layDone'].forEach(function (l) { $(l).classList.toggle('is-on', l === id); });
+  }
+
+  /* the card grows to hold exactly the head + the revealed rows — measured,
+     never hard-coded, so a wrap can't break it */
+  function buildHeight(n) {
+    var h = $('bhead').offsetHeight + 10 + 20; // svcs padding
+    var rows = ['s1','s2','s3','s4','s5'];
+    for (var i = 0; i < n; i++) h += $(rows[i]).offsetHeight;
+    return h;
+  }
+
+  function reset() {
+    // instant, transition-free reset — the loop seam must never crossfade
+    box.style.transition = 'none';
+    ['layPrompt','layBuild','layDone'].forEach(function (l) { $(l).style.transition = 'none'; });
+    show('layPrompt');
+    box.className = 'morph';
+    box.style.height = '190px';
+    void box.offsetWidth;
+    box.style.transition = '';
+    ['layPrompt','layBuild','layDone'].forEach(function (l) { $(l).style.transition = ''; });
+    ['s1','s2','s3','s4','s5'].forEach(function (id) { $(id).className = 'svc'; });
+    $('typed').textContent = '';
+    $('send').classList.remove('is-hit');
+  }
+
+  function step(id, ms) {
+    return function () {
+      $(id).classList.add('is-on','is-run');
+      box.style.height = buildHeight(['s1','s2','s3','s4','s5'].indexOf(id) + 1) + 'px';
+      Live.soon(function () { $(id).classList.remove('is-run'); $(id).classList.add('is-done'); }, ms);
+    };
+  }
+
+  var seq = Live.Seq([
+    [400,  function () { Live.type($('typed'), Q, function () { $('typed').innerHTML += '<span class="caret"></span>'; }); }],
+    [2600, function () { $('send').classList.add('is-hit'); }],
+    [250,  function () {
+      box.classList.add('is-build');
+      box.style.height = buildHeight(0) + 'px';
+      show('layBuild');
+    }],
+    [600,  step('s1', 850)],
+    [700,  step('s2', 1150)],
+    [650,  step('s3', 700)],
+    [700,  step('s4', 900)],
+    [800,  step('s5', 1400)],
+    [2000, function () {
+      box.classList.remove('is-build'); box.classList.add('is-done');
+      box.style.height = '230px';
+      show('layDone');
+    }]
+  ], { reset: reset, hold: 4200 });
+
+  reset();
+  Live.autoplay(seq);
+})();
+</script>
+</body>
+</html>

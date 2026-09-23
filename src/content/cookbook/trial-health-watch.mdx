@@ -1,0 +1,134 @@
+---
+title: Catch a stalling POC before it goes dark
+description: Watch active trial usage daily and flag the ones going quiet, with a suggested save play.
+publishedAt: 2026-08-19
+icon: ri-pulse-line
+category: Customer Engineering
+collection: Deal support
+featured: false
+order: 22
+difficulty: starter
+skills:
+  - name: Trial health baseline
+    description: Define what "healthy" usage looks like per trial stage
+    body: |
+      Define what healthy usage looks like at each trial stage so a stall reads against a real bar.
+
+      ## Method
+      1. Define baselines separately for kickoff, mid-POC, and final-week stages.
+      2. Pull the metrics from PostHog: login frequency, key feature adoption, active user count.
+      3. Set a minimum expected value for each metric at each stage.
+      4. Refine the baseline as more trials close won or lost — widen or tighten thresholds based on outcomes.
+      5. Store the current baseline in memory so every daily run compares against the same bar.
+
+      ## Rules
+      - Healthy-usage thresholds per trial stage: (set on first run, then stored in memory).
+      - Which PostHog events count as meaningful activity: (set on first run, then stored in memory).
+      - Update the baseline only after a trial's outcome is known, never mid-trial.
+      - Keep separate baselines per stage — a mid-POC trial is not judged against kickoff activity.
+
+      ## Output
+      A stored baseline in memory: minimum usage values per metric, per trial stage, with the last-updated date.
+  - name: Stall detection
+    description: Flag drop-offs against the baseline, not just raw inactivity
+    body: |
+      Flag a real drop-off against the baseline, not raw inactivity that could be noise.
+
+      ## Method
+      1. Pull each open trial's usage trend for the last {{lookback_days}} days.
+      2. Compare the trend against the healthy baseline for that trial's current stage.
+      3. Check for two independent signals of a drop, for example logins and feature events, before counting it as a stall.
+      4. Confirm the stall has lasted {{stall_days}}+ days, or is a sharp drop from the trial's own prior week.
+      5. Discard single-signal or short-lived dips; do not flag them.
+
+      ## Rules
+      - Require two independent signals before flagging a stall — a single noisy metric never triggers an alert.
+      - Stall threshold in days: (set on first run, then stored in memory).
+      - Compare against the trial's own stage baseline, not one company-wide number.
+      - Log every checked trial's score daily, flagged or not, for the trend history.
+
+      ## Output
+      A list of confirmed stalls, each with the two signals that support it and days since last meaningful activity.
+  - name: Save-play suggestion
+    description: Recommend a next step matched to what stalled
+    body: |
+      Recommend one next step matched to the exact signal that stalled, not a generic check-in.
+
+      ## Method
+      1. Read the specific signal behind each confirmed stall: login drop, feature abandonment, or champion silence.
+      2. Match the signal to a save play: re-engage the champion, offer a working session, send a feature-specific nudge.
+      3. Keep the suggestion to one clear next action, not a list of options.
+      4. Name the account owner responsible for acting on it.
+      5. Include the suggestion alongside the flagged trial in the Slack alert.
+
+      ## Rules
+      - One save play per flagged trial, matched to its specific stalled signal.
+      - Never suggest contacting the prospect directly — the suggestion goes to the account owner only.
+      - Track which save plays led to recovered trials, to improve future suggestions.
+      - Default save plays per signal type: (set on first run, then stored in memory).
+
+      ## Output
+      A one-line save-play recommendation per flagged trial, tagged to the account owner.
+jobs:
+  - name: Daily trial health check
+    cadence: Daily
+    prompt: |
+      You are a scheduled job in a fresh session. No live user is present.
+      Use the trial-health-watch skill from your skills folder; its
+      first-run answers are in memory.
+      1. Pull PostHog usage for every open trial for the lookback window.
+      2. Score each trial against its stage baseline; confirm any stall
+         with two independent signals.
+      3. Post flagged trials with a save-play suggestion to the delivery
+         channel and log today's scores.
+      If a required input is missing or a check fails, post what you found
+      and hold — never contact the prospect directly without approval.
+goal: watch active trial usage daily and flag the ones going quiet before they go dark
+integrations: [posthog, salesforce, slack]
+whatItDoes:
+  - Pulls daily usage for every open trial from PostHog and the CRM
+  - Compares each trial's trend against the healthy-usage baseline in memory
+  - Flags a stall only when two independent signals confirm it
+  - Suggests one save play matched to the exact signal that stalled
+howToUse:
+  - Connect PostHog, Salesforce, and Slack to the agent
+  - Set the trigger to run daily against every open trial or POC
+  - Paste the prompt and adjust the healthy-usage baseline per trial stage
+  - It answers its first-run questions once and remembers; you review only the flagged trials
+workflow:
+  - kind: trigger
+    title: Daily, during any active trial
+    body: Runs against every open POC/trial account.
+  - kind: prompt
+    title: Pull the usage signal
+    body: Login frequency, feature adoption, and activity trend from PostHog.
+  - kind: prompt
+    title: Score against the threshold
+    body: Compare to the healthy-trial baseline stored in memory.
+  - kind: prompt
+    title: Flag the stalled ones
+    body: Any trial below threshold for {{stall_days}} days.
+  - kind: result
+    title: Alert the owner
+    body: Slack DM to the SE/CSM with the specific signal that stalled.
+prompt: |
+  Run the daily trial health check.
+
+  1. Pull the list of open trials/POCs from {{crm}} and their PostHog usage
+     for the last {{lookback_days}} days.
+  2. Compare each trial's usage trend (logins, key feature adoption, active
+     users) against the healthy-trial baseline stored in memory.
+  3. Flag any trial with no meaningful activity for {{stall_days}}+ days, or
+     a sharp drop from its own prior week.
+  4. Confirm every flagged drop against two independent signals, for example
+     logins and feature events, before it counts as a stall. A single noisy
+     metric does not trigger an alert.
+  5. For each confirmed stall, suggest one save-play next step, re-engage
+     the champion or offer a working session, based on what specifically
+     stalled.
+  6. Post the flagged list to {{delivery_channel}} with the owner tagged,
+     and log today's scores to reports/trial-health/{{date}}.md.
+
+  Never contact the prospect directly — every flag and save-play suggestion
+  goes to the account owner to act on.
+---

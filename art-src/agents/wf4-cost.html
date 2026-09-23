@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* Spend panel: uniform rows (RULE 3), one row-mark treatment = the avatar
+     (RULE 2), one status lane on the right = the mono $ value (RULE 4). The
+     cap bar is the one visual system. RULE 7: maroon is the only accent, with
+     ONE amber warning row allowed per the wf4 spec (the near-cap proof beat). */
+  :root { --amber: #b8792e; }
+  .cost-row { display: flex; align-items: center; gap: 20px; height: 104px; flex: none; padding: 0 30px; border-bottom: 1px solid var(--hair); }
+  .cost-row:last-child { border-bottom: 0; }
+  .cost-av { width: 46px; height: 46px; border-radius: 50%; overflow: hidden; flex: none; }
+  .cost-av img { width: 100%; height: 100%; display: block; }
+  .cost-name { width: 92px; flex: none; font-size: 25px; font-weight: 450; letter-spacing: -.008em; color: var(--ink); }
+  .cost-bar { position: relative; flex: 1; height: 10px; border-radius: 999px; background: var(--tint); }
+  .cost-bar__fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--maroon); }
+  .cost-bar__fill--warn { background: var(--amber); }
+  .cost-bar__tick { position: absolute; top: -5px; bottom: -5px; width: 2px; border-radius: 1px; background: #cfccc4; }
+  .cost-val { width: 96px; flex: none; text-align: right; font-family: var(--mono); font-weight: 450; font-size: 23px; color: var(--ink); }
+  .cost-val--warn { color: var(--amber); }
+</style>
+</head><body>
+<!-- wf4-cost. Bars are the one visual system, kept uniform in track/height/tick
+     across all four rows. Only Cass's row breaks maroon, per spec — the single
+     amber warning signal (fill + $ value), never repeated elsewhere in the card. -->
+<div class="stage cv-warm">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h11a1 1 0 0 1 1 1v2"/><rect x="3" y="7" width="18" height="13" rx="2.2"/><path d="M15.3 13.2h3.4"/></svg></span>
+      <span class="hd__t">Spend this month</span>
+      <span class="hd__r"><span class="pill pill--mono">$4,280 / $6,000</span></span>
+    </div>
+    <div class="list">
+      <div class="cost-row">
+        <span class="cost-av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Ledger&backgroundColor=c5f2e0" alt=""></span>
+        <span class="cost-name">Ledger</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill" style="width:61%"></span>
+          <span class="cost-bar__tick" style="left:89%"></span>
+        </span>
+        <span class="cost-val">$1,840</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Sana&backgroundColor=b6e3f4" alt=""></span>
+        <span class="cost-name">Sana</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill" style="width:47%"></span>
+          <span class="cost-bar__tick" style="left:83%"></span>
+        </span>
+        <span class="cost-val">$1,120</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Cass&backgroundColor=ffd5dc" alt=""></span>
+        <span class="cost-name">Cass</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill cost-bar__fill--warn" style="width:91%"></span>
+          <span class="cost-bar__tick" style="left:96%"></span>
+        </span>
+        <span class="cost-val cost-val--warn">$980</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-av"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Hana&backgroundColor=ffdfbf" alt=""></span>
+        <span class="cost-name">Hana</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill" style="width:23%"></span>
+          <span class="cost-bar__tick" style="left:78%"></span>
+        </span>
+        <span class="cost-val">$340</span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

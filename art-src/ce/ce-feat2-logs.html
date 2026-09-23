@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* sec3's dense mono log line, verbatim bones: fixed timestamp lane (maroon),
+     optional logo, green/amber status words scoped to this card only. */
+  .log { display: flex; align-items: center; gap: 16px; height: 54px; flex: none;
+         padding: 0 30px; font-family: var(--mono); font-size: 18px; line-height: 1.4;
+         border-bottom: 1px solid var(--hair); }
+  .log:last-child { border-bottom: 0; }
+  .log__t { width: 78px; flex: none; color: var(--maroon); font-weight: 450; letter-spacing: -.01em; }
+  .log__m { width: 20px; height: 20px; flex: none; }
+  .log__m img { width: 100%; height: 100%; display: block; }
+  .log__x { color: var(--sub); min-width: 0; }
+  .log__x .ok { color: var(--ok); font-weight: 480; }
+  .log__x .warn { color: #a8631f; font-weight: 480; }
+</style>
+</head><body>
+<!-- TEXT-ONLY variant of agents/sec3-audit.html: the small-hours log dig as
+     the flowing mono trail. Amber = the culprit line; green = root cause. -->
+<div class="stage cv-cream">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg></span>
+      <span class="hd__t">Log search</span>
+      <span class="hd__r"><span class="pill pill--mono">api-checkout · 6h</span></span>
+    </div>
+    <div class="list list--fade">
+      <div class="log">
+        <span class="log__t">03:04:12</span>
+        <span class="log__m"></span>
+        <span class="log__x">504 POST /v1/checkout · upstream timeout</span>
+      </div>
+      <div class="log">
+        <span class="log__t">03:04:41</span>
+        <span class="log__m"></span>
+        <span class="log__x">client retry storm · 3x backoff exceeded</span>
+      </div>
+      <div class="log">
+        <span class="log__t">03:05:02</span>
+        <span class="log__m"></span>
+        <span class="log__x">ECONNRESET pg-pool exhausted · <span class="warn">max=10 hit</span></span>
+      </div>
+      <div class="log">
+        <span class="log__t">03:05:19</span>
+        <span class="log__m"></span>
+        <span class="log__x">queue depth 412 · db-primary saturated</span>
+      </div>
+      <div class="log">
+        <span class="log__t">03:08:31</span>
+        <span class="log__m"></span>
+        <span class="log__x">trace f7c2a joined · same pool wait</span>
+      </div>
+      <div class="log row--g1">
+        <span class="log__t">03:09:05</span>
+        <span class="log__m"></span>
+        <span class="log__x">metric checkout_5xx correlated · r=0.97</span>
+      </div>
+      <div class="log row--g2">
+        <span class="log__t">03:09:12</span>
+        <span class="log__m"></span>
+        <span class="log__x">1,948 lines scanned · <span class="ok">root cause found</span></span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

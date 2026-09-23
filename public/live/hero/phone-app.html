@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eluu — phone loop</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devices.css@0.2.0/dist/devices.min.css">
+<style>
+  :root{
+    --tint:#5d374b; --tint-soft:#755a68;
+    --grp:#f2f2f7; --card:#fff; --label:#111114; --sec:#6d6d72; --ter:#aeaeb2;
+    --sep:rgba(60,60,67,.12); --green:#34a853; --green-bg:#e8f6ec;
+    --font:-apple-system,'SF Pro Text','Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box} html,body{margin:0;height:100%;background:transparent;}
+  body{font-family:var(--font);display:flex;align-items:center;justify-content:center;-webkit-font-smoothing:antialiased;}
+  .device-iphone-14-pro .device-screen{overflow:hidden;}
+  .scr b{display:inline;} /* devices.css sets b{display:block} */
+  .scr{position:absolute;inset:0;overflow:hidden;background:#000;}
+  .scene{position:absolute;inset:0;display:flex;flex-direction:column;}
+
+  /* ───────────── status bar (shared) ───────────── */
+  .status{display:flex;align-items:center;justify-content:space-between;padding:14px 34px 2px;font-size:15px;font-weight:600;flex-shrink:0;z-index:5;}
+  .status .sr{display:flex;align-items:center;gap:7px;}
+  .bars{display:inline-flex;align-items:flex-end;gap:2px;height:10px;} .bars i{width:3px;background:currentColor;border-radius:1px;}
+  .bat{width:24px;height:12px;border:1.5px solid currentColor;border-radius:3.5px;position:relative;padding:1.5px;opacity:.9;}
+  .bat::after{content:"";position:absolute;right:-3.5px;top:3px;width:2px;height:5px;background:currentColor;border-radius:0 1px 1px 0;}
+  .bat i{display:block;height:100%;width:82%;background:currentColor;border-radius:1px;}
+  .wifi{width:16px;height:12px;}
+
+  /* ───────────── scene 1 · lock ───────────── */
+  .lock{color:#fff;
+    background:
+      radial-gradient(90% 60% at 18% 8%, rgba(255,214,224,.45), transparent 60%),
+      radial-gradient(120% 80% at 85% 96%, rgba(255,183,148,.5), transparent 62%),
+      radial-gradient(100% 90% at 80% 12%, rgba(140,94,120,.65), transparent 70%),
+      linear-gradient(168deg,#3c2b36 0%,#5d374b 42%,#8a5f74 78%,#b98d94 100%);}
+  .lock .clock{margin-top:34px;text-align:center;}
+  .lock .clock .d{font-size:15px;font-weight:500;opacity:.92;letter-spacing:.01em;}
+  .lock .clock .t{font-size:68px;font-weight:250;letter-spacing:-.01em;line-height:1.05;margin-top:2px;}
+  .notif{margin:26px 14px 0;border-radius:20px;padding:12px 13px;display:flex;gap:11px;align-items:flex-start;
+    background:rgba(250,248,250,.82);backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);
+    color:var(--label);box-shadow:0 8px 26px -8px rgba(30,18,26,.4);
+    opacity:0;transform:translateY(-24px) scale(.96);transition:opacity .5s ease,transform .5s cubic-bezier(.3,1.4,.5,1);}
+  .notif.in{opacity:1;transform:none;}
+  .notif.press{transform:scale(.965);transition:transform .18s ease;}
+  .notif .ic{width:38px;height:38px;border-radius:9.5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(150deg,#8d7581,#5d374b);}
+  .notif .ic svg{width:17px;height:17px;color:#fff;}
+  .notif .nb{min-width:0;flex:1;}
+  .notif .nt{display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
+  .notif .nt .a{font-size:13.5px;font-weight:600;}
+  .notif .nt .w{font-size:12px;color:var(--sec);flex-shrink:0;}
+  .notif .nx{font-size:13.5px;line-height:1.35;margin-top:1px;color:rgba(17,17,20,.82);}
+  .lock .foot{margin-top:auto;display:flex;justify-content:space-between;padding:0 52px 30px;}
+  .lock .foot .c{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.16);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;}
+  .lock .foot svg{width:20px;height:20px;color:#fff;}
+  .lock .hb{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:999px;background:rgba(255,255,255,.9);}
+
+  /* ───────────── app chrome (scenes 2-4) ───────────── */
+  .app{background:var(--grp);color:var(--label);}
+  .navbar{display:flex;align-items:center;justify-content:center;position:relative;padding:8px 18px 10px;flex-shrink:0;}
+  .navbar .tt{font-size:16.5px;font-weight:600;letter-spacing:-.01em;}
+  .navbar .live{position:absolute;right:18px;display:flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--green);}
+  .navbar .live i{width:6px;height:6px;border-radius:50%;background:var(--green);}
+  .content{flex:1;overflow:hidden;position:relative;}
+  .pane{position:absolute;inset:0;padding:2px 16px 0;transition:transform .45s cubic-bezier(.3,.9,.3,1),opacity .45s ease;}
+  .pane.off-r{transform:translateX(100%);opacity:0;}
+  .pane.off-l{transform:translateX(-26%);opacity:0;}
+
+  .sect{font-size:12.5px;font-weight:400;text-transform:uppercase;letter-spacing:.05em;color:var(--sec);margin:14px 4px 7px;}
+  .card{background:var(--card);border-radius:14px;padding:13px 14px;margin-bottom:9px;}
+  .row1{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+  .row1 .n{font-size:16px;font-weight:400;}
+  .row1 .v{font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .meta{font-size:12.5px;color:var(--sec);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .btns{display:flex;gap:8px;margin-top:11px;overflow:hidden;max-height:40px;transition:max-height .4s ease,margin .4s ease,opacity .3s ease;}
+  .btn{flex:1;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:14.5px;font-weight:500;transition:filter .15s;}
+  .btn--p{background:var(--tint);color:#fff;}
+  .btn--g{background:rgba(118,118,128,.12);color:var(--label);}
+  .btn.press{filter:brightness(.8);}
+  .okrow{display:flex;align-items:center;gap:7px;max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .4s ease,margin .4s ease;}
+  .card.ok .btns{max-height:0;margin-top:0;opacity:0;}
+  .card.ok .okrow{max-height:30px;opacity:1;margin-top:9px;}
+  .ck{width:20px;height:20px;border-radius:50%;background:var(--green-bg);color:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .ck svg{width:11px;height:11px;}
+  .oktx{font-size:13px;font-weight:500;color:var(--green);}
+  .done .card{display:flex;align-items:center;gap:9px;padding:11px 14px;background:rgba(255,255,255,.66);}
+  .done .n{font-size:14.5px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .done .dm{font-size:12.5px;color:var(--sec);white-space:nowrap;}
+  .upnext{display:flex;gap:10px;align-items:flex-start;background:rgba(93,55,75,.06);border-radius:14px;padding:12px 14px;margin-top:12px;}
+  .upnext img{width:26px;height:26px;border-radius:50%;flex-shrink:0;}
+  .upnext .t{font-size:12px;color:var(--sec);text-transform:uppercase;letter-spacing:.05em;}
+  .upnext .x{font-size:13.5px;line-height:1.4;color:var(--label);margin-top:2px;}
+  .acty{background:var(--card);border-radius:14px;margin-top:9px;padding:4px 14px;}
+  .arow{display:flex;align-items:center;gap:10px;padding:9.5px 0;border-bottom:.5px solid var(--sep);}
+  .arow:last-child{border-bottom:0;}
+  .arow .tm{font-size:12px;color:var(--ter);width:66px;flex-shrink:0;font-variant-numeric:tabular-nums;}
+  .arow .tx{font-size:13.5px;color:var(--label);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  /* summary pane */
+  .sumwrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:0 26px 40px;text-align:center;}
+  .bigck{width:64px;height:64px;border-radius:50%;background:var(--green-bg);color:var(--green);display:flex;align-items:center;justify-content:center;
+    transform:scale(.4);opacity:0;transition:transform .5s cubic-bezier(.3,1.6,.5,1),opacity .4s ease;}
+  .pane.live .bigck{transform:none;opacity:1;}
+  .bigck svg{width:30px;height:30px;}
+  .sumt{font-size:21px;font-weight:600;letter-spacing:-.02em;margin-top:18px;}
+  .sums{font-size:14px;line-height:1.5;color:var(--sec);margin-top:7px;max-width:30ch;}
+  .sumby{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--sec);margin-top:20px;white-space:nowrap;}
+  .sumby img{width:20px;height:20px;border-radius:50%;}
+  .sumby b{font-weight:500;color:var(--label);}
+
+  /* dashboard pane */
+  .updated{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--sec);margin:12px 4px 9px;}
+  .updated i{width:6px;height:6px;border-radius:50%;background:var(--green);}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+  .tile{background:var(--card);border-radius:14px;padding:12px 14px;}
+  .tile .l{font-size:12px;color:var(--sec);}
+  .tile .v{font-size:21px;font-weight:600;letter-spacing:-.02em;margin-top:2px;font-variant-numeric:tabular-nums;}
+  .chartcard{background:var(--card);border-radius:14px;padding:13px 14px 9px;margin-top:9px;}
+  .chartcard .l{font-size:12px;color:var(--sec);margin-bottom:7px;}
+  .chartcard svg{display:block;width:100%;height:78px;}
+  .runson{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:var(--ter);margin-top:14px;white-space:nowrap;}
+  .runson svg{width:10px;height:10px;color:var(--tint-soft);}
+  .runson b{font-weight:500;color:var(--sec);}
+
+  /* Safari compact bottom bar (scenes 2-4) */
+  .safbar{flex-shrink:0;background:rgba(249,249,249,.94);backdrop-filter:blur(14px);border-top:.5px solid var(--sep);padding:8px 14px 6px;}
+  .safpill{height:38px;border-radius:13px;background:rgba(118,118,128,.1);display:flex;align-items:center;padding:0 12px;}
+  .safpill .aa{font-size:13.5px;color:var(--label);font-weight:400;}
+  .safpill .u{flex:1;text-align:center;font-size:13.5px;color:var(--label);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 6px;}
+  .safpill .u b{font-weight:500;color:var(--tint);}
+  .safpill svg{width:14px;height:14px;color:var(--label);flex-shrink:0;}
+  .apphb{height:18px;display:flex;align-items:flex-start;justify-content:center;background:rgba(249,249,249,.94);}
+  .apphb i{width:130px;height:5px;border-radius:999px;background:#111;margin-top:6px;}
+
+  /* scene transitions */
+  #s-lock{transition:opacity .5s ease,transform .5s ease;z-index:3;}
+  #s-lock.gone{opacity:0;transform:scale(1.08);pointer-events:none;}
+  #s-app{opacity:0;transform:scale(.92);transition:opacity .45s ease,transform .45s cubic-bezier(.3,1.2,.4,1);z-index:2;}
+  #s-app.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+<div class="device device-iphone-14-pro">
+  <div class="device-frame">
+    <div class="device-screen">
+      <div class="scr">
+
+        <!-- scene 2-4: the app (behind the lock) -->
+        <div class="scene app" id="s-app">
+          <div class="status" style="color:var(--label)"><span>9:41</span><span class="sr">
+            <span class="bars"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i></span>
+            <svg class="wifi" viewBox="0 0 17 12" fill="none"><path d="M8.5 11a1.4 1.4 0 100-2.8 1.4 1.4 0 000 2.8z" fill="currentColor"/><path d="M3.6 6.4a7 7 0 019.8 0M1.3 4.1a10.3 10.3 0 0114.4 0M5.9 8.9a3.7 3.7 0 015.2 0" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg>
+            <span class="bat"><i></i></span></span></div>
+          <div class="navbar"><span class="tt" id="navtt">Approvals</span><span class="live"><i></i>Live</span></div>
+          <div class="content">
+            <!-- pane 1: decisions -->
+            <div class="pane" id="p-list">
+              <div class="sect" id="sect1">Needs you</div>
+              <div class="card" id="card1">
+                <div class="row1"><span class="n" id="c1n"></span><span class="v" id="c1v"></span></div>
+                <div class="meta" id="c1m"></div>
+                <div class="btns"><div class="btn btn--p" id="c1btn"></div><div class="btn btn--g" id="c1g"></div></div>
+                <div class="okrow"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span><span class="oktx" id="c1ok"></span></div>
+              </div>
+              <div class="card">
+                <div class="row1"><span class="n" id="c2n"></span><span class="v" id="c2v"></span></div>
+                <div class="meta" id="c2m"></div>
+                <div class="btns"><div class="btn btn--p" id="c2btn"></div><div class="btn btn--g" id="c2g"></div></div>
+              </div>
+              <div class="sect">Done today</div>
+              <div class="done"><div class="card"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span><span class="n" id="d1n"></span><span class="dm" id="d1m"></span></div></div>
+              <div class="done"><div class="card"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></span><span class="n" id="d2n"></span><span class="dm" id="d2m"></span></div></div>
+              <div class="upnext"><img id="upav" alt=""><div><div class="t">Up next</div><div class="x" id="upx"></div></div></div>
+            </div>
+            <!-- pane 2: summary -->
+            <div class="pane off-r" id="p-sum">
+              <div class="sumwrap">
+                <div class="bigck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l4.6 4.6L19.5 6.6"/></svg></div>
+                <div class="sumt" id="sumt"></div>
+                <div class="sums" id="sums"></div>
+                <div class="sumby"><img id="sumav" alt=""><span>by <b id="sumby"></b> · <span id="sumtime"></span></span></div>
+              </div>
+            </div>
+            <!-- pane 3: dashboard -->
+            <div class="pane off-r" id="p-dash">
+              <div class="updated"><i></i><span id="updated">Live · updated just now</span></div>
+              <div class="tiles" id="tiles"></div>
+              <div class="chartcard"><div class="l" id="chartl"></div><div id="chartsvg"></div></div>
+              <div class="acty" id="acty"></div>
+              <div class="runson"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="5" height="16" rx="2.2" fill="currentColor"/><rect x="14" y="4" width="5" height="16" rx="2.2" fill="currentColor"/></svg><span>Built by <b id="builtby"></b> · runs on Eluu</span></div>
+            </div>
+          </div>
+          <div class="safbar"><div class="safpill">
+            <span class="aa">AA</span>
+            <span class="u"><b id="urlteam"></b>.eluu.site</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-2.6-6.4"/><path d="M21 3v6h-6"/></svg>
+          </div></div>
+          <div class="apphb"><i></i></div>
+        </div>
+
+        <!-- scene 1: lock screen (on top) -->
+        <div class="scene lock" id="s-lock">
+          <div class="status" style="color:#fff"><span></span><span class="sr">
+            <span class="bars"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i></span>
+            <svg class="wifi" viewBox="0 0 17 12" fill="none"><path d="M8.5 11a1.4 1.4 0 100-2.8 1.4 1.4 0 000 2.8z" fill="currentColor"/><path d="M3.6 6.4a7 7 0 019.8 0M1.3 4.1a10.3 10.3 0 0114.4 0M5.9 8.9a3.7 3.7 0 015.2 0" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg>
+            <span class="bat"><i></i></span></span></div>
+          <div class="clock"><div class="d">Monday, August 17</div><div class="t">9:41</div></div>
+          <div class="notif" id="notif">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="5" height="16" rx="2.2" fill="currentColor"/><rect x="14" y="4" width="5" height="16" rx="2.2" fill="currentColor"/></svg></div>
+            <div class="nb">
+              <div class="nt"><span class="a" id="nta"></span><span class="w">now</span></div>
+              <div class="nx" id="ntx"></div>
+            </div>
+          </div>
+          <div class="foot">
+            <div class="c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3l-1.5 2h-3A1.5 1.5 0 003 6.5v12A1.5 1.5 0 004.5 20h15a1.5 1.5 0 001.5-1.5v-12A1.5 1.5 0 0019.5 5h-3L15 3H9z"/><circle cx="12" cy="12.5" r="3.8"/></svg></div>
+            <div class="c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6v5.5l2 3V22H7V10.5l2-3V2z"/><path d="M9 6h6"/></svg></div>
+          </div>
+          <div class="hb"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const AV=(seed,bg)=>`https://api.dicebear.com/9.x/adventurer/svg?seed=${seed}&backgroundColor=${bg}`;
+  const AREA='M0,64 L43,58 L86,52 L129,42 L172,38 L215,27 L258,18 L300,8';
+  const SPIKE='M0,62 L45,60 L85,56 L110,20 L150,10 L185,16 L215,44 L250,62 L300,64';
+  const svgOf=(p,color)=>`<svg viewBox="0 0 300 70" preserveAspectRatio="none"><path d="${p} L300,70 L0,70 Z" fill="${color}" fill-opacity=".12"/><path d="${p}" fill="none" stroke="${color}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  const TEAMS={
+    finance:{ url:'acme-finance', nav:'Approvals', colleague:'Ledger', seed:'Ledger', bg:'c5f2e0', time:'7:02 AM',
+      notifA:'Approvals · Acme Finance', notifX:'2 payouts need your sign-off — Ledger reconciled July overnight.',
+      c1:['Acme Corp','$18,400','Over the $1,000 policy · INV-2201 matched','Approve','Hold','Approved · just now'],
+      c2:['Northwind','$960','INV-2231 missing · vendor emailed 8:10 AM','Approve','Hold'],
+      d1:['Vertex — $2,110','Approved · 9:12 AM'], d2:['Payroll run — $212K','Posted · 6:00 AM'],
+      up:'Chasing INV-2231 with Northwind — I post here when it lands.',
+      acty:[['7:02 AM','July close reconciled · 142 of 142'],['6:00 AM','Payroll posted · $212K'],['Yesterday','Board pack refreshed']],
+      sumt:'July close complete', sums:'142 of 142 payouts reconciled — $486.2K posted to QuickBooks.',
+      tiles:[['Cash','$2.1M'],['Runway','18 mo'],['Burn','$118K'],['Exceptions','0']],
+      chartl:'Net revenue · FY26', chart:svgOf(AREA,'#755a68') },
+    sales:{ url:'acme-sales', nav:'Deal Room', colleague:'Sana', seed:'Sana', bg:'b6e3f4', time:'8:00 AM',
+      notifA:'Deal Room · Acme Sales', notifX:'2 follow-up drafts ready — Sana scored the pipeline this morning.',
+      c1:['Meridian Health','$86K','Stalled 12 days · SOC 2 + DPA attached','Send draft','Edit','Sent · just now'],
+      c2:['Brightline','$54K','Stalled 9 days · pricing follow-up','Send draft','Edit'],
+      d1:['Coastal Freight — $32K','Sent · 8:14 AM'], d2:['Forecast refresh','Done · 7:30 AM'],
+      up:'Nudging silent deals Thursday — drafts ready for one-tap send.',
+      acty:[['8:14 AM','Follow-up sent to Coastal Freight'],['8:00 AM','Pipeline rescored · 214 deals'],['Yesterday','3 replies logged to HubSpot']],
+      sumt:'Follow-ups on their way', sums:'6 drafts queued — $720K of stalled pipeline back in motion.',
+      tiles:[['Pipeline','$3.4M'],['Won MTD','$540K'],['Win rate','34%'],['Stalled','5']],
+      chartl:'Open pipeline · weekly', chart:svgOf(AREA,'#755a68') },
+    ce:{ url:'acme-eng', nav:'On-call', colleague:'Cass', seed:'Cass', bg:'ffd5dc', time:'12:41 PM',
+      notifA:'On-call · Acme Engineering', notifX:'P1: checkout-service 500s — rollback PR ready for your approval.',
+      c1:['checkout-service · 500s','INC-1043','Cause found: divide-by-zero · PR #4471 ready','Approve rollback','View diff','Rollback approved · just now'],
+      c2:['orders-db latency','P3','Slow queries flagged · tuning plan drafted','Apply plan','Later'],
+      d1:['TLS renewal — api.acme.com','Auto-fixed · 11:20 AM'], d2:['orders-db slow queries','Tuned · 9:05 AM'],
+      up:'Watching checkout-service after the 14:00 rollback deploy.',
+      acty:[['12:41 PM','Rollback approved · PR #4471'],['11:20 AM','TLS renewed · api.acme.com'],['9:05 AM','orders-db tuned · −38% p95']],
+      sumt:'Rollback shipping', sums:'PR #4471 goes out in the 14:00 deploy — Cass confirms once syncs run clean.',
+      tiles:[['MTTR','22 min'],['Uptime','99.98%'],['Open P1','0'],['Events','142']],
+      chartl:'500s per minute · today', chart:svgOf(SPIKE,'#d9544f') },
+    hr:{ url:'acme-hiring', nav:'Pipeline', colleague:'Hana', seed:'Hana', bg:'ffdfbf', time:'10:04 AM',
+      notifA:'Pipeline · Acme People', notifX:'5 AE candidates shortlisted — scorecards ready for review.',
+      c1:['Maya Patel','92 / 100','6 yrs SaaS AE · strong scorecard','Advance','Pass','Advanced · invite sent'],
+      c2:['Jordan Lee','88 / 100','4 yrs fintech AE · 118% avg quota','Advance','Pass'],
+      d1:['Priya Nair — 86 / 100','Interview · Thu 2:00 PM'], d2:['Weekly hiring digest','Sent · 9:00 AM'],
+      up:'Booking Maya\u2019s panel — holds out for Thu and Fri.',
+      acty:[['10:04 AM','62 applicants screened'],['9:00 AM','Hiring digest sent'],['Yesterday','2 interviews completed']],
+      sumt:'Maya advanced to interview', sums:'Invite sent — Thursday 2:00 PM held with the panel.',
+      tiles:[['Applied','62'],['Shortlist','5'],['Avg time','18 d'],['Offers','3']],
+      chartl:'Screening funnel · this week', chart:svgOf(SPIKE,'#755a68') },
+  };
+
+  const team=new URLSearchParams(location.search).get('t')||'finance';
+  const T=TEAMS[team]||TEAMS.finance; const $=id=>document.getElementById(id);
+  $('nta').textContent=T.notifA; $('ntx').textContent=T.notifX;
+  $('navtt').textContent=T.nav; $('urlteam').textContent=T.url;
+  $('c1n').textContent=T.c1[0]; $('c1v').textContent=T.c1[1]; $('c1m').textContent=T.c1[2];
+  $('c1btn').textContent=T.c1[3]; $('c1g').textContent=T.c1[4]; $('c1ok').textContent=T.c1[5];
+  $('c2n').textContent=T.c2[0]; $('c2v').textContent=T.c2[1]; $('c2m').textContent=T.c2[2];
+  $('c2btn').textContent=T.c2[3]; $('c2g').textContent=T.c2[4];
+  $('d1n').textContent=T.d1[0]; $('d1m').textContent=T.d1[1];
+  $('d2n').textContent=T.d2[0]; $('d2m').textContent=T.d2[1];
+  $('upav').src=AV(T.seed,T.bg); $('upx').textContent=T.up;
+  $('acty').innerHTML=T.acty.map(a=>`<div class="arow"><span class="tm">${a[0]}</span><span class="tx">${a[1]}</span></div>`).join('');
+  $('sumt').textContent=T.sumt; $('sums').textContent=T.sums;
+  $('sumav').src=AV(T.seed,T.bg); $('sumby').textContent=T.colleague; $('sumtime').textContent=T.time;
+  $('tiles').innerHTML=T.tiles.map(t=>`<div class="tile"><div class="l">${t[0]}</div><div class="v">${t[1]}</div></div>`).join('');
+  $('chartl').textContent=T.chartl; $('chartsvg').innerHTML=T.chart;
+  $('builtby').textContent=T.colleague;
+
+  // ── the loop: lock → notif → tap → decisions → approve → summary → dashboard → lock ──
+  const lock=$('s-lock'), app=$('s-app'), notif=$('notif');
+  const pList=$('p-list'), pSum=$('p-sum'), pDash=$('p-dash');
+  const card1=$('card1'), c1btn=$('c1btn');
+  const at=(ms,fn)=>setTimeout(fn,ms);
+  function play(){
+    // reset
+    lock.classList.remove('gone'); app.classList.remove('in');
+    notif.classList.remove('in','press');
+    pList.classList.remove('off-l'); pSum.classList.add('off-r'); pSum.classList.remove('live','off-l');
+    pDash.classList.add('off-r'); card1.classList.remove('ok'); c1btn.classList.remove('press');
+    at(900,()=>notif.classList.add('in'));                 // notification lands
+    at(3000,()=>notif.classList.add('press'));             // user taps it
+    at(3300,()=>{ lock.classList.add('gone'); app.classList.add('in'); }); // app opens
+    at(5600,()=>c1btn.classList.add('press'));             // taps Approve
+    at(5850,()=>card1.classList.add('ok'));                // row confirms
+    at(7300,()=>{ pList.classList.add('off-l'); pSum.classList.remove('off-r'); pSum.classList.add('live'); }); // push summary
+    at(10000,()=>{ pSum.classList.remove('live'); pSum.classList.add('off-l'); pDash.classList.remove('off-r'); }); // push dashboard
+    at(13400,()=>{ lock.classList.remove('gone'); app.classList.remove('in'); }); // back to lock
+    at(14300,play);                                        // loop
+  }
+  play();
+</script>
+</body>
+</html>

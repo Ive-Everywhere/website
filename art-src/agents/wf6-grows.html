@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* RULE 1/2: the three data tiles carry the same bare-glyph treatment, ink
+     colour, no tile behind them. RULE 7: the 4th tile is the ONE maroon accent —
+     a solid maroon-deep button-card (feat7's import-button pattern), not an icon
+     tile. All four tiles stay the same size so the grid reads as one system. */
+  .tiles-pane { padding: 34px; }
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .tile {
+    background: var(--panel); border: 1px solid var(--hair); border-radius: 18px;
+    padding: 28px 26px; display: flex; flex-direction: column; justify-content: space-between;
+    gap: 30px; min-height: 172px;
+  }
+  .tile__g { width: 30px; height: 30px; color: var(--ink); flex: none; }
+  .tile__g svg { width: 100%; height: 100%; display: block; }
+  .tile__label { font-size: 27px; font-weight: 450; letter-spacing: -.01em; color: var(--ink); }
+  .tile__count { font-family: var(--mono); font-size: 22px; color: var(--soft); margin-top: 4px; }
+  .tile--btn {
+    background: var(--maroon-deep); border: none; color: #fff;
+    align-items: center; justify-content: center; text-align: center;
+    font-size: 25px; font-weight: 530;
+    box-shadow: 0 14px 30px -14px rgba(93, 55, 75, .55);
+  }
+</style>
+</head><body>
+<div class="stage cv-sand">
+  <div class="card">
+    <div class="tiles-pane">
+      <div class="tiles">
+        <div class="tile">
+          <span class="tile__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.2" r="3.4"/><path d="M5 20c0-4.2 3.1-6.8 7-6.8s7 2.6 7 6.8"/></svg></span>
+          <div><div class="tile__label">Agents</div><div class="tile__count">24</div></div>
+        </div>
+        <div class="tile">
+          <span class="tile__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></span>
+          <div><div class="tile__label">Automations</div><div class="tile__count">12</div></div>
+        </div>
+        <div class="tile">
+          <span class="tile__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><rect x="13" y="13" width="7" height="7" rx="1.6"/></svg></span>
+          <div><div class="tile__label">Apps</div><div class="tile__count">6</div></div>
+        </div>
+        <div class="tile tile--btn">＋ Add to the workforce</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>

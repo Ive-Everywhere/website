@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* Spend panel: uniform rows (RULE 3), one row-mark treatment = the bare
+     gmail mark (every chase goes by email), one status lane on the right =
+     the mono $ value (RULE 4). The aging bar is the one visual system; the
+     tick is the due threshold. RULE 7: maroon the only accent, with ONE amber
+     warning row (the most overdue invoice) per the wf4 spec. */
+  :root { --amber: #b8792e; }
+  .cost-row { display: flex; align-items: center; gap: 20px; height: 104px; flex: none; padding: 0 30px; border-bottom: 1px solid var(--hair); }
+  .cost-row:last-child { border-bottom: 0; }
+  .cost-av { width: 40px; height: 40px; flex: none; }
+  .cost-av img { width: 100%; height: 100%; display: block; }
+  .cost-name { width: 150px; flex: none; font-size: 25px; font-weight: 450; letter-spacing: -.008em; color: var(--ink); }
+  .cost-bar { position: relative; flex: 1; height: 10px; border-radius: 999px; background: var(--tint); }
+  .cost-bar__fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--maroon); }
+  .cost-bar__fill--warn { background: var(--amber); }
+  .cost-bar__tick { position: absolute; top: -5px; bottom: -5px; width: 2px; border-radius: 1px; background: #cfccc4; }
+  .cost-val { width: 110px; flex: none; text-align: right; font-family: var(--mono); font-weight: 450; font-size: 23px; color: var(--ink); }
+  .cost-val--warn { color: var(--amber); }
+</style>
+</head><body>
+<!-- TEXT-ONLY variant of agents/wf4-cost.html (Krishna, 2026-08-19: reuse a
+     shipped format, change the words). Bars = days outstanding toward the due
+     tick; the one amber row is the 42-day invoice, the proof beat. -->
+<div class="stage cv-warm">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+      <span class="hd__t">Receivables</span>
+      <span class="hd__r"><span class="pill pill--mono">$55,600 open</span></span>
+    </div>
+    <div class="list">
+      <div class="cost-row">
+        <span class="cost-av"><img src="live/assets/gmail.svg" alt=""></span>
+        <span class="cost-name">Halcyon</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill cost-bar__fill--warn" style="width:91%"></span>
+          <span class="cost-bar__tick" style="left:64%"></span>
+        </span>
+        <span class="cost-val cost-val--warn">$9,200</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-av"><img src="live/assets/gmail.svg" alt=""></span>
+        <span class="cost-name">Bluepeak</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill" style="width:66%"></span>
+          <span class="cost-bar__tick" style="left:64%"></span>
+        </span>
+        <span class="cost-val">$21,000</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-av"><img src="live/assets/gmail.svg" alt=""></span>
+        <span class="cost-name">Corveta</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill" style="width:26%"></span>
+          <span class="cost-bar__tick" style="left:64%"></span>
+        </span>
+        <span class="cost-val">$25,400</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-av"><img src="live/assets/gmail.svg" alt=""></span>
+        <span class="cost-name">Meridian</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill" style="width:12%"></span>
+          <span class="cost-bar__tick" style="left:64%"></span>
+        </span>
+        <span class="cost-val">paid</span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

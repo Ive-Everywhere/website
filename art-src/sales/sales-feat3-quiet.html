@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* Spend panel bones from wf4-cost: uniform rows, one mark treatment (the
+     bare hubspot logo), one right lane (mono days-quiet). The bar is days of
+     silence toward the nudge threshold tick; ONE amber row = the deal past it. */
+  :root { --amber: #b8792e; }
+  .cost-row { display: flex; align-items: center; gap: 20px; height: 104px; flex: none; padding: 0 30px; border-bottom: 1px solid var(--hair); }
+  .cost-row:last-child { border-bottom: 0; }
+  .cost-av { width: 40px; height: 40px; flex: none; }
+  .cost-av img { width: 100%; height: 100%; display: block; }
+  .cost-name { width: 150px; flex: none; font-size: 25px; font-weight: 450; letter-spacing: -.008em; color: var(--ink); }
+  .cost-bar { position: relative; flex: 1; height: 10px; border-radius: 999px; background: var(--tint); }
+  .cost-bar__fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--maroon); }
+  .cost-bar__fill--warn { background: var(--amber); }
+  .cost-bar__tick { position: absolute; top: -5px; bottom: -5px; width: 2px; border-radius: 1px; background: #cfccc4; }
+  .cost-val { width: 110px; flex: none; text-align: right; font-family: var(--mono); font-weight: 450; font-size: 23px; color: var(--ink); }
+  .cost-val--warn { color: var(--amber); }
+</style>
+</head><body>
+<!-- TEXT-ONLY variant of agents/wf4-cost.html: days-quiet per deal, the nudge
+     threshold as the tick, one amber row past it with the drafted nudge. -->
+<div class="stage cv-warm">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+      <span class="hd__t">Quiet deals</span>
+      <span class="hd__r"><span class="pill">nudge drafted</span></span>
+    </div>
+    <div class="list">
+      <div class="cost-row">
+        <span class="cost-av"><img src="live/assets/hubspot.svg" alt=""></span>
+        <span class="cost-name">Sierra Labs</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill cost-bar__fill--warn" style="width:92%"></span>
+          <span class="cost-bar__tick" style="left:66%"></span>
+        </span>
+        <span class="cost-val cost-val--warn">14 days</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-av"><img src="live/assets/hubspot.svg" alt=""></span>
+        <span class="cost-name">Koda Health</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill" style="width:24%"></span>
+          <span class="cost-bar__tick" style="left:66%"></span>
+        </span>
+        <span class="cost-val">3 days</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-av"><img src="live/assets/hubspot.svg" alt=""></span>
+        <span class="cost-name">Northwind</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill" style="width:16%"></span>
+          <span class="cost-bar__tick" style="left:66%"></span>
+        </span>
+        <span class="cost-val">2 days</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-av"><img src="live/assets/hubspot.svg" alt=""></span>
+        <span class="cost-name">Brightline</span>
+        <span class="cost-bar">
+          <span class="cost-bar__fill" style="width:8%"></span>
+          <span class="cost-bar__tick" style="left:66%"></span>
+        </span>
+        <span class="cost-val">1 day</span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

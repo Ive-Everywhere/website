@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HERO — a continuously scrolling deck of agent tasks</title>
+<link href="tokens.css" rel="stylesheet">
+<link href="live-shim.css" rel="stylesheet">
+<link href="art.css" rel="stylesheet">
+<link href="live.css" rel="stylesheet">
+<link href="fonts/remixicon.css" rel="stylesheet">
+<link href="embed.css" rel="stylesheet">
+<style>
+  html,body { margin:0; height:100%; background:var(--bg-weak-50); }
+  .a-frame { position:absolute; inset:0; }
+
+  /* ── HERO · SCROLLING TASK DECK ──────────────────────────────────────────
+     The hero still, made live. A deck of agent tasks: the front card is fully
+     open and WORKING — its plan starts all-grey, then items cross off one at a
+     time with the current one pulsing amber. Then the deck advances: that card
+     recedes and the next rises into the front slot with a fresh grey plan.
+
+     TRANSFORM-ONLY transitions. The first build animated `width`, which reflows
+     the text on every frame and reads as mush. Every card is the same width and
+     recedes by scale() instead — one composited property, no layout, and the
+     transition reads clean.
+
+     Cards behind stay SOLID and fade only their CONTENT; fading the whole card
+     made it translucent and the card behind bled through its header band.
+
+     Stage is 900×440 — the runtime reads data-w/data-h off .a-stage.          */
+  .a-field { --field: var(--bg-weak-50); }
+
+  .deck { position:absolute; left:50%; bottom:0; width:840px; transform:translateX(-50%); height:100%; }
+
+  .tcard {
+    position:absolute; left:50%; bottom:0; width:840px;
+    background:var(--bg-white-0);
+    border:1px solid var(--stroke-soft-200); border-radius:16px;
+    box-shadow:var(--shadow-regular-lg);
+    /* snappier than the app's default ease — a deck should land, not drift */
+    transition:transform .68s cubic-bezier(.22,1,.36,1),
+               opacity .68s cubic-bezier(.22,1,.36,1),
+               box-shadow .68s cubic-bezier(.22,1,.36,1);
+    overflow:hidden;
+  }
+
+  /* Bands ≈86px so a receding card shows header AND title, as in the still.
+     Three cards visible; the fourth is the one leaving. */
+  /* DIRECTION OF TRAVEL: a card is dealt at the BACK (top, small, faded), moves
+     FORWARD through the stack as the ones ahead of it finish, becomes the front
+     card, completes its plan, then DROPS AWAY out of the bottom. The first
+     build had this inverted — the front card receded upward, which reads as the
+     work retreating instead of being finished and cleared. */
+  /* FLUSH: the front card meets the bottom edge of the well it sits in, and
+     only its top corners are rounded — a card rising out of the surface,
+     not a card floating above it. Matches the Figma still. */
+  .tcard[data-slot="0"]  { transform:translate(-50%,0)    scale(1);    z-index:5;
+                           border-radius:16px 16px 0 0; border-bottom:0; }
+  .tcard[data-slot="-1"] { transform:translate(-50%,-88px) scale(.945); z-index:4; box-shadow:var(--shadow-regular-md); }
+  .tcard[data-slot="-2"] { transform:translate(-50%,-174px) scale(.89);  z-index:3; box-shadow:var(--shadow-regular-sm); }
+  /* dealt in at the back — fades up from behind the third card */
+  .tcard[data-slot="-3"] { transform:translate(-50%,-258px) scale(.845); z-index:2; opacity:0; }
+  /* finished — falls out of the bottom, growing slightly as it passes the camera */
+  .tcard[data-slot="1"]  { transform:translate(-50%,168px)  scale(1.02); z-index:6; opacity:0; }
+
+  .tcard[data-slot="0"]  .t-inner { opacity:1; }
+  .tcard[data-slot="-1"] .t-inner { opacity:.5; }
+  .tcard[data-slot="-2"] .t-inner { opacity:.26; }
+  .tcard[data-slot="-3"] .t-inner { opacity:.1; }
+  .t-inner { transition:opacity .68s cubic-bezier(.22,1,.36,1); }
+
+  .t-head { display:flex; align-items:center; gap:11px; padding:15px 20px 0; }
+  .t-av { width:30px; height:30px; border-radius:50%; object-fit:cover; flex:none; }
+  .t-name { font-size:14px; color:var(--text-sub-600); letter-spacing:-.01em; }
+  .t-title { font-size:17px; font-weight:500; letter-spacing:-.018em; color:var(--text-strong-950);
+             padding:11px 20px 0; line-height:1.35; }
+
+  /* ─ plan items ─────────────────────────────────────────────────────────
+     Three states, and every card starts entirely in the first one:
+       wait  grey dot, grey text          — not started
+       run   amber dot PULSING, dark text — happening now
+       done  green check, struck through  — finished                        */
+  .t-phases { padding:14px 20px 18px; }
+  .ph { display:flex; align-items:center; gap:10px; padding:5px 0; font-size:14px; letter-spacing:-.01em; }
+
+  .ph-mark {
+    width:15px; height:15px; border-radius:50%; flex:none;
+    display:grid; place-items:center;
+    background:var(--bg-soft-200); color:transparent;
+    transition:background .3s var(--ease-out-app), color .3s var(--ease-out-app);
+  }
+  .ph-mark i { font-size:10px; }
+  .ph-t {
+    color:var(--text-soft-400);
+    transition:color .3s var(--ease-out-app);
+    /* the strike is drawn, not toggled, so it can sweep across on completion */
+    background-image:linear-gradient(currentColor, currentColor);
+    background-repeat:no-repeat;
+    background-position:0 58%;
+    background-size:0% 1px;
+    transition:color .3s var(--ease-out-app), background-size .42s var(--ease-out-app);
+  }
+  .ph img { width:16px; height:16px; opacity:.45; transition:opacity .3s var(--ease-out-app); }
+
+  .ph.is-run .ph-mark { background:var(--away-base); animation:ph-blink 1s ease-in-out infinite; }
+  .ph.is-run .ph-t    { color:var(--text-strong-950); }
+  .ph.is-run img      { opacity:1; }
+  @keyframes ph-blink {
+    0%,100% { box-shadow:0 0 0 0 rgba(246,181,30,.55); }
+    50%     { box-shadow:0 0 0 5px rgba(246,181,30,0); }
+  }
+
+  .ph.is-done .ph-mark { background:var(--success-base); color:#fff; animation:none; }
+  .ph.is-done .ph-t    { color:var(--text-soft-400); background-size:100% 1px; }
+  .ph.is-done img      { opacity:.45; }
+
+  .t-trigger {
+    display:inline-flex; align-items:center; gap:7px; margin-left:auto;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--text-sub-600); white-space:nowrap;
+  }
+  .t-trigger img { width:16px; height:16px; }
+  .t-trigger i { font-size:15px; color:var(--text-soft-400); }
+
+  .a-field::after {
+    content:""; position:absolute; inset:0; z-index:8; pointer-events:none;
+    background:linear-gradient(var(--field) 2%, rgba(255,255,255,0) 26%);
+  }
+</style>
+</head>
+<body>
+<div class="a-frame"><div class="a-field"><div class="a-stage" data-w="900" data-h="440">
+
+  <div class="deck" id="deck"></div>
+
+  <div id="src" hidden>
+    <img data-k="slack" src="assets/slack.svg" alt="">
+    <img data-k="gmail" src="assets/gmail.svg" alt="">
+    <img data-k="salesforce" src="assets/salesforce.svg" alt="">
+    <img data-k="stripe" src="assets/stripe.svg" alt="">
+    <img data-k="googlesheets" src="assets/googlesheets.svg" alt="">
+    <img data-k="zendesk" src="assets/zendesk.svg" alt="">
+    <img data-k="linear" src="assets/linear.svg" alt="">
+    <img data-k="notion" src="assets/notion.svg" alt="">
+    <img data-k="hubspot" src="assets/hubspot.svg" alt="">
+    <img data-a="iris" src="assets/avatar-iris.webp" alt="">
+    <img data-a="rivera" src="assets/avatar-rivera.webp" alt="">
+    <img data-a="james" src="assets/avatar-james.webp" alt="">
+    <img data-a="lewis" src="assets/avatar-lewis.webp" alt="">
+    <img data-a="priya" src="assets/avatar-priya.webp" alt="">
+  </div>
+
+</div></div></div>
+
+<script src="live.js"></script>
+<script>
+(function () {
+  function clone(sel) {
+    var n = document.querySelector('#src ' + sel);
+    return n ? n.cloneNode(true) : null;
+  }
+
+  var TASKS = [
+    { av:'james', name:'Legal Redlining Agent', trig:'gmail', trigT:'Triggered from Gmail',
+      title:'Acme Inc. MSA redline and negotiation brief',
+      phases:[['Pull the executed MSA and our playbook','gmail'],
+              ['Compare every clause against standard terms','notion'],
+              ['Draft the negotiation brief','googlesheets'],
+              ['Send to the deal desk','slack']] },
+
+    { av:'iris', name:'Vendor Manager Agent', trig:'api', trigT:'Called from API',
+      title:'Conduct budget audit of OpenRouter',
+      phases:[['Pull last 12 months of invoices','stripe'],
+              ['Match spend against committed contract','googlesheets'],
+              ['Flag overage and unused seats','googlesheets'],
+              ['File the renewal recommendation','notion']] },
+
+    { av:'lewis', name:'Customer Engineer Agent', trig:'slack', trigT:'Asked on Slack',
+      title:'Triage IN-134 and route to the engineering team',
+      phases:[['Read the thread and the linked trace','slack'],
+              ['Reproduce against the staging build','linear'],
+              ['Write the repro steps into the issue','linear'],
+              ['Notify the on-call engineer','slack']] },
+
+    { av:'rivera', name:'Revenue Ops Agent', trig:'schedule', trigT:'Triggered by schedule',
+      title:'Score this week’s inbound against our ICP',
+      phases:[['Pull new leads from the CRM','hubspot'],
+              ['Enrich with firmographics','salesforce'],
+              ['Score against the ICP rubric','googlesheets'],
+              ['Post the shortlist to #revenue','slack']] },
+
+    { av:'priya', name:'Support Operations Agent', trig:'slack', trigT:'Asked on Slack',
+      title:'Summarise overnight escalations for standup',
+      phases:[['Collect tickets raised after 18:00','zendesk'],
+              ['Group by product area','zendesk'],
+              ['Write the standup summary','notion'],
+              ['Post to #support-leads','slack']] }
+  ];
+
+  var TRIG_ICON = { api:'ri-code-s-slash-line', schedule:'ri-calendar-schedule-line' };
+  var deck = document.getElementById('deck');
+
+  var cards = TASKS.map(function (t) {
+    var el = document.createElement('div');
+    el.className = 'tcard';
+    var inner = document.createElement('div');
+    inner.className = 't-inner';
+    el.appendChild(inner);
+
+    var head = document.createElement('div');
+    head.className = 't-head';
+    var av = clone('img[data-a="' + t.av + '"]');
+    if (av) { av.className = 't-av'; head.appendChild(av); }
+    var nm = document.createElement('span');
+    nm.className = 't-name'; nm.textContent = t.name;
+    head.appendChild(nm);
+
+    var trig = document.createElement('span');
+    trig.className = 't-trigger';
+    if (TRIG_ICON[t.trig]) {
+      var ic = document.createElement('i'); ic.className = TRIG_ICON[t.trig]; trig.appendChild(ic);
+    } else {
+      var lg = clone('img[data-k="' + t.trig + '"]'); if (lg) trig.appendChild(lg);
+    }
+    trig.appendChild(document.createTextNode(t.trigT));
+    head.appendChild(trig);
+    inner.appendChild(head);
+
+    var title = document.createElement('div');
+    title.className = 't-title'; title.textContent = t.title;
+    inner.appendChild(title);
+
+    var ph = document.createElement('div');
+    ph.className = 't-phases';
+    t.phases.forEach(function (p) {
+      var row = document.createElement('div');
+      row.className = 'ph';
+      row.innerHTML = '<span class="ph-mark"><i class="ri-check-line"></i></span>' +
+                      '<span class="ph-t">' + p[0] + '</span>';
+      var lg2 = clone('img[data-k="' + p[1] + '"]');
+      if (lg2) row.appendChild(lg2);
+      ph.appendChild(row);
+    });
+    inner.appendChild(ph);
+
+    deck.appendChild(el);
+    return el;
+  });
+
+  var n = cards.length, front = 0;
+
+  /* Five cards, five slots: -3 (dealt at the back) → -2 → -1 → 0 (front) → +1
+     (dropping out the bottom). The card at +1 becomes -3 on the next tick, but
+     both states are opacity 0, so it re-enters at the back without ever being
+     seen to jump. */
+  function place() {
+    cards.forEach(function (el, i) {
+      var m = (((front - i) % n) + n) % n;      // 0 = front, 1 = just finished
+      var slot = m === 0 ? 0 : (m === 1 ? 1 : m - n);
+      el.setAttribute('data-slot', slot);
+    });
+  }
+
+  function phases(i) { return cards[i].querySelectorAll('.ph'); }
+
+  /* Every card resets to an all-grey plan the moment it takes the front slot —
+     the point of the animation is that the work starts from nothing. */
+  function resetPhases(i) {
+    phases(i).forEach(function (p) { p.className = 'ph'; });
+  }
+  function setPhase(i, k, state) {
+    var ps = phases(i);
+    if (ps[k]) ps[k].className = 'ph' + (state ? ' is-' + state : '');
+  }
+
+  function advance(i) {
+    return function () {
+      front = i;
+      place();
+      resetPhases(i);
+    };
+  }
+
+  // Per card: it lands, works through EVERY item, and only then drops away.
+  // The previous build stopped at item 3 so the task never completed — for a
+  // hero that reads as unfinished, not as ongoing. The whole point is watching
+  // a job get done.
+  var STEP_MS = 820;
+  var steps = [];
+  for (var i = 0; i < n; i++) {
+    (function (idx) {
+      steps.push([idx === 0 ? 320 : 760, advance(idx)]);   // card lands
+      steps.push([560, function () { setPhase(idx, 0, 'run'); }]);
+      steps.push([STEP_MS, function () { setPhase(idx, 0, 'done'); setPhase(idx, 1, 'run'); }]);
+      steps.push([STEP_MS, function () { setPhase(idx, 1, 'done'); setPhase(idx, 2, 'run'); }]);
+      steps.push([STEP_MS, function () { setPhase(idx, 2, 'done'); setPhase(idx, 3, 'run'); }]);
+      steps.push([STEP_MS, function () { setPhase(idx, 3, 'done'); }]);   // finished
+    })(i);
+  }
+
+  var seq = Live.Seq(steps, {
+    reset: function () {
+      front = 0;
+      place();
+      cards.forEach(function (_, i) { resetPhases(i); });
+    },
+    hold: 900
+  });
+
+  place();
+  Live.autoplay(seq);
+})();
+</script>
+</body>
+</html>

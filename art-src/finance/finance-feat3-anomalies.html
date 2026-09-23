@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* structures the kit doesn't cover: a dense mono log line, timestamp lane
+     fixed-width so text stays column-aligned whether or not a logo is
+     present, and the two scoped status words (green/amber) local to this
+     card only — RULE 5/7 exception the spec grants explicitly for sec3. */
+  .log { display: flex; align-items: center; gap: 16px; height: 54px; flex: none;
+         padding: 0 30px; font-family: var(--mono); font-size: 18px; line-height: 1.4;
+         border-bottom: 1px solid var(--hair); }
+  .log:last-child { border-bottom: 0; }
+  .log__t { width: 78px; flex: none; color: var(--maroon); font-weight: 450; letter-spacing: -.01em; }
+  .log__m { width: 20px; height: 20px; flex: none; }
+  .log__m img { width: 100%; height: 100%; display: block; }
+  .log__x { color: var(--sub); min-width: 0; }
+  .log__x .ok { color: var(--ok); font-weight: 480; }
+  .log__x .warn { color: #a8631f; font-weight: 480; }
+</style>
+</head><body>
+<!-- TEXT-ONLY variant of agents/sec3-audit.html (Krishna, 2026-08-19: reuse a
+     shipped format, change the words, nothing else). The audit stream becomes
+     the overnight entry-check stream; the amber word marks the one flag. -->
+<div class="stage cv-sand">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 17H3z"/><path d="M12 10v4M12 17.6v.4"/></svg></span>
+      <span class="hd__t">Entry checks</span>
+      <span class="hd__r"><span class="pill"><span class="pill__dot"></span>live</span></span>
+    </div>
+    <div class="list list--fade">
+      <div class="log">
+        <span class="log__t">02:04:11</span>
+        <span class="log__m"><img src="live/assets/stripe.svg" alt=""></span>
+        <span class="log__x">142 payouts checked · <span class="ok">clean</span></span>
+      </div>
+      <div class="log">
+        <span class="log__t">02:04:19</span>
+        <span class="log__m"><img src="live/assets/googlesheets.svg" alt=""></span>
+        <span class="log__x">3,214 entries scanned for outliers</span>
+      </div>
+      <div class="log">
+        <span class="log__t">02:04:52</span>
+        <span class="log__m"></span>
+        <span class="log__x">INV-8817 duplicate of INV-8802 · <span class="warn">flagged</span></span>
+      </div>
+      <div class="log">
+        <span class="log__t">02:04:53</span>
+        <span class="log__m"></span>
+        <span class="log__x">txn attached — $12,400 · Northwind Ltd</span>
+      </div>
+      <div class="log">
+        <span class="log__t">02:05:08</span>
+        <span class="log__m"><img src="live/assets/gmail.svg" alt=""></span>
+        <span class="log__x">flag sent for review · <span class="ok">logged</span></span>
+      </div>
+      <div class="log row--g1">
+        <span class="log__t">02:05:40</span>
+        <span class="log__m"></span>
+        <span class="log__x">payroll journal tied out · JRNL-2208</span>
+      </div>
+      <div class="log row--g2">
+        <span class="log__t">02:06:02</span>
+        <span class="log__m"></span>
+        <span class="log__x">checks complete · 1 flag of 3,214</span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"></head><body>
+<!-- TEXT-ONLY variant of agents/feat6-learns.html: the account brief as the
+     blur-stacked cards. Front card = the meeting, each fact recedes behind. -->
+<style>
+  .mem-stack { position: relative; width: 640px; height: 560px; }
+  .mem-card {
+    position: absolute; left: 50%; width: 620px;
+    background: var(--panel); border-radius: 18px; padding: 20px 26px;
+    transform-origin: top center;
+    box-shadow: 0 16px 34px -16px rgba(30, 28, 30, .17), 0 4px 11px -5px rgba(30, 28, 30, .06);
+  }
+  .mem-c1 { transform: translateX(-50%) translateY(0px)   scale(1);    z-index: 6; }
+  .mem-c2 { transform: translateX(-50%) translateY(120px) scale(.99);  z-index: 5; }
+  .mem-c3 { transform: translateX(-50%) translateY(240px) scale(.98);  z-index: 4; }
+  .mem-c4 { transform: translateX(-50%) translateY(356px) scale(.965); z-index: 3; opacity: .6;  filter: blur(.7px); }
+  .mem-c5 { transform: translateX(-50%) translateY(464px) scale(.95);  z-index: 2; opacity: .28; filter: blur(1.8px); }
+  .mem-t { font-size: 26px; font-weight: 450; letter-spacing: -.008em; line-height: 1.2; color: var(--ink); display: flex; align-items: center; gap: 11px; }
+  .mem-s { font-size: 19px; color: var(--soft); margin-top: 5px; line-height: 1.3; }
+  .mem-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--maroon); flex: none; }
+  .mem-more {
+    position: absolute; left: 50%; transform: translateX(-50%); bottom: 40px;
+    font-family: var(--mono); font-size: 16px; color: var(--soft);
+    background: var(--panel); border: 1px solid var(--hair); border-radius: 999px; padding: 8px 16px;
+    box-shadow: 0 4px 12px -5px rgba(30,28,30,.1); z-index: 7;
+  }
+</style>
+<div class="stage cv-lav">
+  <div class="mem-stack">
+    <div class="mem-card mem-c1">
+      <div class="mem-t"><span class="mem-dot"></span>Meridian Health · 10:00 today</div>
+      <div class="mem-s">renewal · $120,000 · closes Nov 1</div>
+    </div>
+    <div class="mem-card mem-c2">
+      <div class="mem-t">Raised a $40M Series B in June</div>
+      <div class="mem-s">led by Insight · new budget for ops tooling</div>
+    </div>
+    <div class="mem-card mem-c3">
+      <div class="mem-t">Your champion: Dana Okafor, VP Ops</div>
+      <div class="mem-s">pushed for the pilot · promoted in May</div>
+    </div>
+    <div class="mem-card mem-c4">
+      <div class="mem-t">Open thread: security questionnaire</div>
+      <div class="mem-s">with their legal since Aug 13 · answer drafted</div>
+    </div>
+    <div class="mem-card mem-c5">
+      <div class="mem-t">Last meeting's ask: SSO timeline</div>
+      <div class="mem-s">answered in the follow-up</div>
+    </div>
+    <div class="mem-more">ready 9:41 · before the 10:00</div>
+  </div>
+</div></body></html>

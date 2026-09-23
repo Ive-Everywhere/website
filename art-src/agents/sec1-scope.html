@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css">
+<style>
+  /* RULE 2: every row carries a BARE brand logo (left), the kit default lane.
+     RULE 4: one control lane on the right, but the control itself takes one of
+     three shapes (toggle-on / toggle-off+label / approval chip) — still one
+     lane, one right edge, per the spec's explicit "on/off/approval" scoping.
+     RULE 7: maroon lives only in the toggle-on fill and the approval chip. */
+  .ctrl { margin-left: auto; flex: none; display: flex; align-items: center; gap: 12px; }
+  .ctrl__lbl { font-size: 19px; color: var(--soft); }
+  .tog--off { background: #dedbd6; }
+  .tog--off::after { left: 4px; right: auto; }
+  .chip--appr {
+    background: var(--maroon-soft); border: none; color: var(--maroon-deep);
+    font-weight: 480; height: 44px; padding: 0 16px; border-radius: 12px; font-size: 19px;
+  }
+</style>
+</head><body>
+<div class="stage cv-cream">
+  <div class="card">
+    <div class="hd hd--band">
+      <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6z"/></svg></span>
+      <span class="hd__t">Ledger · permissions</span>
+      <span class="hd__r"><span class="pill">scoped</span></span>
+    </div>
+    <div class="list">
+      <div class="row">
+        <span class="mk"><img src="live/assets/stripe.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Stripe</div><div class="row__s row__s--mono">Read payouts</div></span>
+        <span class="ctrl"><span class="tog"></span></span>
+      </div>
+      <div class="row">
+        <span class="mk"><img src="live/assets/googlesheets.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Google Sheets</div><div class="row__s row__s--mono">Write ledger</div></span>
+        <span class="ctrl"><span class="tog"></span></span>
+      </div>
+      <div class="row">
+        <span class="mk"><img src="live/assets/gmail.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Gmail</div><div class="row__s row__s--mono">Send email</div></span>
+        <span class="ctrl"><span class="tog"></span></span>
+      </div>
+      <div class="row">
+        <span class="mk"><img src="live/assets/hubspot.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">HubSpot</div><div class="row__s row__s--mono">Delete records</div></span>
+        <span class="ctrl"><span class="chip chip--appr">Approval required</span></span>
+      </div>
+      <div class="row">
+        <span class="mk"><img src="live/assets/zendesk.svg" alt=""></span>
+        <span class="row__b"><div class="row__t">Zendesk</div><div class="row__s row__s--mono">Export tickets</div></span>
+        <span class="ctrl"><span class="ctrl__lbl">Off</span><span class="tog tog--off"></span></span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

@@ -1,0 +1,21 @@
+---
+/**
+ * The eight use-case pages, `/use-cases/<slug>`.
+ *
+ * Every page is the same template with different front-matter, so this route
+ * only maps the collection onto `UseCasePage.astro`. A ninth use case is a
+ * content file and no new code.
+ */
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import UseCasePage from '../../components/use-case/UseCasePage.astro';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const entries = await getCollection('useCases', ({ data }) => !data.draft);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+};
+
+const { entry } = Astro.props;
+---
+
+<UseCasePage entry={entry} />

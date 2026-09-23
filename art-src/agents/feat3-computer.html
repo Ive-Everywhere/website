@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="_kit.css"></head><body>
+<!-- feat3 — a front "Agent computer" card (kit .hd header reused) running a real
+     business task for hours, with a receding blurred queue of finished subtasks
+     behind it (Ona CVE-remediation cascade pattern). NO terminal. Receding cards
+     show only their real title copy; the second line is a decorative bar, not
+     invented text, since the spec gives no literal sub copy for them. -->
+<style>
+.cstack{ position:relative; width:640px; }
+.acard{ position:relative; z-index:5; width:640px; background:var(--panel); border-radius:22px;
+  box-shadow: 0 26px 60px -24px rgba(30,28,30,.20), 0 6px 16px -6px rgba(30,28,30,.07); overflow:hidden; }
+.acard__task{ padding:26px 32px 30px; }
+.acard__title{ font-size:30px; font-weight:480; letter-spacing:-.01em; line-height:1.25; color:var(--ink); }
+.acard__meta{ font-size:20px; color:var(--soft); margin-top:8px; }
+.pill__dot--maroon{ background:var(--maroon); }
+
+.dcard{ position:absolute; left:50%; transform:translateX(-50%); background:var(--panel);
+  border-radius:22px; padding:22px 28px; box-shadow:0 18px 40px -20px rgba(30,28,30,.16); }
+.dcard__title{ font-size:24px; font-weight:450; letter-spacing:-.006em; color:var(--ink); }
+.dcard__bar{ width:58%; height:8px; border-radius:4px; background:var(--hair); margin-top:12px; }
+.dcard--d1{ top:146px; width:592px; opacity:.60; filter:blur(.5px); z-index:4; }
+.dcard--d2{ top:160px; width:544px; opacity:.34; filter:blur(1.6px); z-index:3; }
+.dcard--d3{ top:174px; width:496px; opacity:.16; filter:blur(3px);  z-index:2; }
+.dcard--d4{ top:188px; width:448px; opacity:.07; filter:blur(4.5px); z-index:1; }
+</style>
+<div class="stage cv-blue">
+  <div class="cstack">
+
+    <div class="dcard dcard--d4"><div class="dcard__title">Packaging the exports</div><div class="dcard__bar"></div></div>
+    <div class="dcard dcard--d3"><div class="dcard__title">Rendered the board deck</div><div class="dcard__bar"></div></div>
+    <div class="dcard dcard--d2"><div class="dcard__title">Built 6 scenario models</div><div class="dcard__bar"></div></div>
+    <div class="dcard dcard--d1"><div class="dcard__title">Reconciled 3 years of ledgers</div><div class="dcard__bar"></div></div>
+
+    <div class="acard">
+      <div class="hd hd--rule">
+        <span class="hd__g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+        <span class="hd__t">Agent computer</span>
+        <span class="hd__r"><span class="pill"><span class="pill__dot pill__dot--maroon"></span>Running · 4h 12m</span></span>
+      </div>
+      <div class="acard__task">
+        <div class="acard__title">Rebuilding the Q3 revenue model</div>
+        <div class="acard__meta">18,400 ledger rows · 6 scenarios · board deck</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body></html>
