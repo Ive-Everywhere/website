@@ -33,10 +33,13 @@ export const DEMO_HREF = 'https://cal.com/krishna-kaipa-wh7ao3/30min';
  * Labels, so a copy change lands everywhere at once.
  *
  * The offer line lives here too: it is a monetary claim and it appears on the
- * banner, in the modal and on the pricing page, so it must not drift between
- * them.
+ * banner and in the modal, so it must not drift between them.
+ *
+ * KEEP THE "Select teams" QUALIFIER. Without it the page promises $10,000 of
+ * free usage to anyone who asks, which is a commitment we have not made. The
+ * qualifier keeps the anchor and makes the claim one we can actually hold.
  */
-export const EARLY_ACCESS_OFFER = 'Get up to $10,000 in free usage';
+export const EARLY_ACCESS_OFFER = 'Select teams get up to $10,000 in free usage';
 export const WAITLIST_LABEL = 'Request early access';
 export const DEMO_LABEL = 'Book a demo';
 
