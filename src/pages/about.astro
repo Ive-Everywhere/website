@@ -21,7 +21,9 @@ import Decal from '../components/site/Decal.astro';
  * shows the honest "no open reqs" row instead of invented jobs.
  */
 
-const DEMO = 'https://cal.com/krishna-kaipa-wh7ao3/30min';
+import { WAITLIST_HREF, WAITLIST_LABEL, DEMO_HREF } from '../lib/waitlist';
+
+const DEMO = DEMO_HREF;
 
 /** Real reqs only — add {title, team, location, href} entries as they open. */
 const OPEN_ROLES: { title: string; meta: string; body: string; href: string }[] = [
@@ -222,8 +224,8 @@ const contactCards = [
   <CtaBand
     heading="The best human teams have agentic teams."
     eyebrow="Yours could start today."
-    ctaLabel="Start for free"
-    ctaHref="https://app.eluu.ai"
+    ctaLabel={WAITLIST_LABEL}
+    ctaHref={WAITLIST_HREF}
     secondaryLabel="Book a demo"
     secondaryHref={DEMO}
   />

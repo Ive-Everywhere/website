@@ -22,9 +22,17 @@ import { z } from 'astro:content';
  * grounding rule.
  */
 
-/** Both CTAs are fixed site-wide, so pages only override them if they differ. */
-export const SIGNUP_HREF = 'https://app.eluu.ai';
-export const DEMO_HREF = '/demo';
+/**
+ * Both CTAs are fixed site-wide, so pages only override them if they differ.
+ *
+ * PRIVATE BETA (2026-09): the primary CTA is the waitlist modal, not a signup.
+ * `SIGNUP_HREF` is kept as an alias rather than deleted so the pages and MDX
+ * that import it keep working and all move together when the beta opens up.
+ */
+export { WAITLIST_HREF, DEMO_HREF } from './waitlist';
+import { WAITLIST_HREF as WAITLIST, DEMO_HREF as DEMO } from './waitlist';
+
+export const SIGNUP_HREF = WAITLIST;
 
 export const cta = z.object({
   label: z.string(),
@@ -35,8 +43,8 @@ export const hero = z.object({
   eyebrow: z.string(),
   headline: z.string(),
   subhead: z.string(),
-  primaryCta: cta.default({ label: 'Start for free', href: SIGNUP_HREF }),
-  secondaryCta: cta.default({ label: 'Book a demo', href: DEMO_HREF }),
+  primaryCta: cta.default({ label: 'Join waitlist', href: WAITLIST }),
+  secondaryCta: cta.default({ label: 'Book a demo', href: DEMO }),
 });
 
 /**
@@ -101,8 +109,8 @@ export const linkCard = z.object({
 
 export const finalCta = z.object({
   headline: z.string(),
-  primaryCta: cta.default({ label: 'Start for free', href: SIGNUP_HREF }),
-  secondaryCta: cta.default({ label: 'Book a demo', href: DEMO_HREF }),
+  primaryCta: cta.default({ label: 'Join waitlist', href: WAITLIST }),
+  secondaryCta: cta.default({ label: 'Book a demo', href: DEMO }),
 });
 
 /** The five sections both page types share, in order. */
