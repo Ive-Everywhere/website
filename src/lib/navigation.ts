@@ -75,12 +75,16 @@ export const footerColumns: { heading: string; links: NavChild[] }[] = [
       { label: 'Pricing', href: '/pricing' },
     ],
   },
+  /* Trust Center is the external Sprinto subdomain, same pattern as Docs in
+   * Resources. It carries the live certification status, so it belongs with the
+   * other compliance surfaces rather than under Resources. */
   {
     heading: 'Legal',
     links: [
       { label: 'Terms', href: '/terms' },
       { label: 'Privacy', href: '/privacy' },
       { label: 'Security Statement', href: '/security-statement' },
+      { label: 'Trust Center', href: 'https://trust.eluu.ai' },
     ],
   },
 ];
