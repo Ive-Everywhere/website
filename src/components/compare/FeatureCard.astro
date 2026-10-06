@@ -12,6 +12,12 @@ import Copy from './Copy.astro';
  *  - stacked, icon above the heading (section 2, the pillars)
  *  - inline, icon beside the heading in an 8px row (sections 4 and 5)
  * `body2` adds the hairline divider and the second paragraph (section 4 only).
+ *
+ * CONTRAST: Figma draws the body in `text-soft-400` (#AAA89E), which measures
+ * 2.03:1 on the #EDEDE9 card and fails WCAG AA for body text by a wide margin.
+ * It is rendered in `text-sub-600` (#58564D, 6.27:1) instead. This is our
+ * decision, not Figma's, and it matches the body colour the rest of the site
+ * already uses on light surfaces.
  */
 interface Props {
   card: {
@@ -45,7 +51,7 @@ const { card, layout = 'inline', note } = Astro.props;
     )
   }
 
-  <Copy value={card.body} class="t-paragraph-md text-text-soft-400" />
+  <Copy value={card.body} class="t-paragraph-md text-text-sub-600" />
 
   {
     card.body2 && (
@@ -54,7 +60,7 @@ const { card, layout = 'inline', note } = Astro.props;
         <hr class="border-stroke-sub-300 border-t-2" />
         <Copy
           value={card.body2}
-          class="t-paragraph-md text-text-soft-400"
+          class="t-paragraph-md text-text-sub-600"
           note="repeats this card's own first paragraph verbatim"
         />
       </Fragment>

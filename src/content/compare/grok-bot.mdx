@@ -1,0 +1,165 @@
+---
+title: 'Eluu vs Grok Bot'
+description: 'Grok Bot lives in its own desktop and iOS app and waits for your prompt. Eluu agents start work from Slack, a schedule, an inbox or your API, with 100+ first party integrations and no per seat fees.'
+publishedAt: 2026-10-06
+competitor: 'Grok Bot'
+
+# ---------------------------------------------------------------------------
+# Every claim about Grok Bot on this page was read off x.ai/bot on 2026-10-06.
+# Published coverage of the launch reported "$200 a month, $120 a seat"; their
+# own pricing panel says otherwise, so coverage is not used as a source here.
+#
+# What their page claims, kept here so nobody argues against it by mistake:
+#   - Bots have their own computer, "run in parallel, 24/7, even when your
+#     laptop is closed". Parallelism is THEIR claim too, do not contest it.
+#   - "Work with many Bots at once": the unit that scales is the Bot.
+#   - Memory, approvals, connectors, routines on a schedule, and a skills and
+#     plugins marketplace on Teams Premium.
+#   - Enterprise admins set DLP, certs, proxies and network controls at boot.
+#
+# What is absent from their page (checked across 139k characters):
+#   - The word "Slack" does not appear once. The FAQ says you work with a Bot
+#     "from your desktop (macOS or Windows) or your phone with the iOS app".
+#   - No API trigger for Bots. Their API nav links are the separate developer
+#     API and Grok Build products.
+#
+# Eluu numbers are taken from our own /pricing page, not from ambition:
+# 2 to 30 parallel machines on Cloud, hundreds on Enterprise. Do not write
+# "hundreds of sessions" as a flat claim, it contradicts our own pricing page.
+# ---------------------------------------------------------------------------
+
+hero:
+  eyebrow:
+    text: 'Eluu vs Grok Bot'
+  # Two short lines of display type. Explicit breaks, so the line endings are a
+  # decision rather than whatever the 620px column happens to wrap to. The
+  # contrast with Grok Bot belongs in the subheading, not in the H1: a headline
+  # carrying two full sentences wraps four times and reads as overflow.
+  headingLines:
+    - 'Work starts'
+    - 'without you.'
+  sub:
+    text: 'Grok Bot is a teammate you open. An Eluu agent is already in Slack, on a schedule, in your inbox and behind your API, so the work is moving before anyone types the first message.'
+  stats:
+    - value: '4'
+      caption:
+        text: 'ways work starts: Slack, schedules, email, API'
+    - value: '100+'
+      caption:
+        text: 'first party integrations, plus any MCP server'
+    - value: '$0'
+      caption:
+        text: 'per seat. Invite the team, pay for compute'
+
+pillars:
+  heading:
+    # Short enough to hold one line. The longer version wrapped to leave "app."
+    # orphaned on a line of its own, and it repeated the H1 almost word for word.
+    title:
+      text: 'Three places work begins.'
+    sub:
+      text: 'Grok Bot is a place you go to. An Eluu agent is reachable by the things that generate the work.'
+  cards:
+    - icon: 'ri-slack-line'
+      heading:
+        text: 'In Slack, where the ask happens'
+      body:
+        text: 'Message the agent in the channel where the question came up and it answers in thread. The whole team sees the same work, instead of one person relaying it out of a private app.'
+    - icon: 'ri-time-line'
+      heading:
+        text: 'On a schedule, before you ask'
+      body:
+        text: 'Jobs run on a cadence you set: the Monday report, the overnight reconciliation, the morning triage. The output is waiting when you open your laptop.'
+    - icon: 'ri-code-s-slash-line'
+      heading:
+        text: 'From your API and your inbox'
+      body:
+        text: 'A webhook, an API call or an email starts a session. Your own systems hand work to the agent with no human in the middle.'
+
+table:
+  heading:
+    title:
+      text: 'Six differences that matter.'
+    sub:
+      text: 'Grok Bot optimises for one person directing Bots. Eluu optimises for a team putting work into a system.'
+
+rows:
+  - label: 'Where work starts'
+    eluu: 'A Slack message, a scheduled job, an inbound email or an API call opens a session.'
+    them: 'You open the app and prompt a Bot. Routines repeat what you set up inside it.'
+  - label: 'Where the team talks to it'
+    eluu: 'In Slack, in thread, beside the people doing the work. Also the web app and the API.'
+    them: 'Their own app on macOS, Windows and iOS. Not in Slack.'
+  - label: 'How it scales'
+    eluu: 'One agent opens sessions in parallel, each on its own machine: up to 30 on Cloud plans, hundreds on Enterprise.'
+    them: 'You create another Bot, and each Bot has one computer.'
+  - label: 'How it reaches your systems'
+    eluu: '100+ first party integrations and any MCP server, scoped by auth, plus a full computer when the job needs one.'
+    them: 'It signs in to your apps and websites and drives them the way a person would.'
+  - label: 'Model and harness'
+    eluu: 'Bring your own keys, or connect the Claude Code or Codex subscription you already pay for. Any harness, any model.'
+    them: 'Grok models, on xAI infrastructure.'
+  - label: 'What grows the bill'
+    eluu: 'Compute from $19 a month, pooled across the team, with everyone invited at no extra cost.'
+    them: '$40 a seat a month on Teams, or bundled into a $20 to $30 personal plan.'
+
+proof:
+  heading:
+    title:
+      text: 'What that changes.'
+    sub:
+      text: 'The difference is not how clever the agent is. It is whether the work waits for a person to begin it.'
+  cards:
+    - icon: 'ri-inbox-unarchive-line'
+      heading:
+        text: 'The queue clears overnight'
+      body:
+        text: 'A schedule or a webhook opens the session, so a backlog moves while nobody is at a keyboard.'
+      body2:
+        text: 'Sessions run in parallel, each on its own machine, up to 30 on Cloud plans and hundreds on Enterprise.'
+    - icon: 'ri-chat-3-line'
+      heading:
+        text: 'The answer lands where the question was asked'
+      body:
+        text: 'Ask in the channel, get the answer in thread, with the file attached. No app to open and no context to repeat.'
+      body2:
+        text: 'Everyone in the channel sees the same session and the same output.'
+    - icon: 'ri-key-2-line'
+      heading:
+        text: 'Your models, your keys'
+      body:
+        text: 'Bring your own API keys, or connect the Claude Code or Codex subscription you already pay for. Tokens stay on your bill.'
+      body2:
+        text: 'Any harness, so a change of model is a setting rather than a migration.'
+    - icon: 'ri-shield-check-line'
+      heading:
+        text: 'Scale you can govern'
+      body:
+        text: 'Approvals on sensitive actions, spend caps and per agent budgets, and audit logs on every action.'
+      body2:
+        text: 'On Enterprise the whole platform runs in your VPC, inference included, so nothing leaves your perimeter.'
+
+closing:
+  # Two clauses of near-equal length, so the 502px column breaks between the
+  # sentences instead of stranding an article at the end of the first line.
+  title:
+    text: 'Tools wait. Teammates work.'
+  sub:
+    text: 'If the work only starts when someone remembers to ask, the person is still the bottleneck. Put the agent where the work appears.'
+  cards:
+    - icon: 'ri-plug-line'
+      heading:
+        text: 'Connect your stack'
+      body:
+        text: 'Pick the integrations the job needs, or point the agent at any MCP server you already run.'
+    - icon: 'ri-slack-line'
+      heading:
+        text: 'Invite it to the channel'
+      body:
+        text: 'The agent answers in Slack, in thread, with the whole team watching the same work.'
+    - icon: 'ri-calendar-check-line'
+      heading:
+        text: 'Give it a cadence'
+      body:
+        text: 'Jobs, schedules and API triggers mean the work is done before anyone asks for it.'
+---
