@@ -188,22 +188,29 @@ const compare = defineCollection({
         headingLines: z.array(z.string()).default([]),
         sub: copy,
         stats: z.array(z.object({ value: z.string(), caption: copy })).default([]),
-        form: z.object({
-          heading: z.string(),
-          subheading: copy,
-          fields: z
-            .array(
-              z.object({
-                label: z.string(),
-                icon: z.string().default('ri-user-6-line'),
-                placeholder: copy,
-                type: z.string().default('text'),
-              }),
-            )
-            .default([]),
-          submit: z.string(),
-          finePrint: copy,
-        }),
+        /**
+         * The drawn demo form. Optional: Figma pins every field to
+         * `State=Placeholder` and the form posts nowhere, so a page that omits
+         * it gets the site's real early-access CTA instead (see SplitHero).
+         */
+        form: z
+          .object({
+            heading: z.string(),
+            subheading: copy,
+            fields: z
+              .array(
+                z.object({
+                  label: z.string(),
+                  icon: z.string().default('ri-user-6-line'),
+                  placeholder: copy,
+                  type: z.string().default('text'),
+                }),
+              )
+              .default([]),
+            submit: z.string(),
+            finePrint: copy,
+          })
+          .optional(),
       })
       .optional(),
 
