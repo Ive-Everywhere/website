@@ -40,7 +40,7 @@ export const DEMO_HREF = 'https://cal.com/krishna-kaipa-wh7ao3/30min';
  * tried and rejected as hedging. Do not re-add it.
  */
 export const EARLY_ACCESS_OFFER = 'Get up to $10,000 in free usage';
-export const WAITLIST_LABEL = 'Request early access';
+export const WAITLIST_LABEL = 'Get early access';
 export const DEMO_LABEL = 'Book a demo';
 
 /**
