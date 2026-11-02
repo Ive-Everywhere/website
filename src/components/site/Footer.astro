@@ -35,9 +35,7 @@ const year = 2026;
 ---
 
 <footer class="bg-bg-white-0 relative isolate overflow-hidden">
-  {/* The content row is click-through so the watermark under its bottom
-      margin can be clicked (easter egg, see FooterHeadpat). Its children opt back in. */}
-  <div class="page-shell gutter-188 pointer-events-none relative z-10 pt-16 pb-12 lg:pt-24 [&>*]:pointer-events-auto">
+  <div class="page-shell gutter-188 relative z-10 pt-16 pb-12 lg:pt-24">
     {/* Stacks below `lg`: at tablet width the H1 and the 32px link fought for
         the same line and the link wrapped mid-phrase. */}
     <div class="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:gap-12">
@@ -115,7 +113,7 @@ const year = 2026;
   <span
     aria-hidden="true"
     data-egg
-    class="page-shell gutter-188 text-bg-sub-300 absolute inset-x-0 -z-10 block touch-manipulation text-center leading-[0.72] font-medium tracking-[0.02em] select-none bottom-[-0.14em] text-[calc((100vw_-_48px)/2)] sm:text-[calc((100vw_-_80px)/2)] lg:bottom-[-73px] lg:text-[clamp(300px,32.4vw,518px)]"
+    class="page-shell gutter-188 text-bg-sub-300 pointer-events-none absolute inset-x-0 -z-10 block text-center leading-[0.72] font-medium tracking-[0.02em] select-none bottom-[-0.14em] text-[calc((100vw_-_48px)/2)] sm:text-[calc((100vw_-_80px)/2)] lg:bottom-[-73px] lg:text-[clamp(300px,32.4vw,518px)]"
   >
     Eluu
   </span>
