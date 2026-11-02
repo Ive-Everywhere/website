@@ -1,6 +1,7 @@
 ---
 import { footerColumns, socialLinks } from '../../lib/navigation';
 import ThemeSwitch from './ThemeSwitch.astro';
+import FooterHeadpat from './FooterHeadpat.astro';
 
 interface Props {
   /** Hidden on the pinned `/dark` review route, where the theme is forced. */
@@ -33,7 +34,9 @@ const year = 2026;
 ---
 
 <footer class="bg-bg-white-0 relative isolate overflow-hidden">
-  <div class="page-shell gutter-188 relative z-10 pt-16 pb-12 lg:pt-24">
+  {/* The content row is click-through so the watermark under its bottom
+      margin can be clicked (easter egg, see FooterHeadpat). Its children opt back in. */}
+  <div class="page-shell gutter-188 pointer-events-none relative z-10 pt-16 pb-12 lg:pt-24 [&>*]:pointer-events-auto">
     {/* Stacks below `lg`: at tablet width the H1 and the 32px link fought for
         the same line and the link wrapped mid-phrase. */}
     <div class="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:gap-12">
@@ -101,7 +104,7 @@ const year = 2026;
       </div>
     </div>
 
-    <p class="t-label-sm text-text-soft-400 mt-8 lg:mb-[311px]">
+    <p class="t-label-sm text-text-soft-400 mt-8 touch-manipulation select-none lg:mb-[311px]" data-egg-alt>
       {year} Eluu AI Inc. © All rights reserved.
     </p>
   </div>
@@ -110,9 +113,12 @@ const year = 2026;
       footer's `isolate` stops it escaping into the page's stacking context. */}
   <span
     aria-hidden="true"
-    class="page-shell gutter-188 text-bg-sub-300 pointer-events-none absolute inset-x-0 -z-10 hidden text-center leading-[0.72] font-medium tracking-[0.02em] select-none lg:block"
+    data-egg
+    class="page-shell gutter-188 text-bg-sub-300 absolute inset-x-0 -z-10 hidden text-center leading-[0.72] font-medium tracking-[0.02em] select-none lg:block"
     style="bottom:-73px;font-size:clamp(300px,32.4vw,518px)"
   >
     Eluu
   </span>
+
+  <FooterHeadpat />
 </footer>
