@@ -1,36 +1,25 @@
 ---
 /**
- * Footer easter egg. Click the "Eluu" watermark 15 times (each click within
- * 2s of the last) and the logo mark leaves the navbar, flies down into the
- * footer, and gets a headpat. Its two bars are its eyes, so they close into
- * ^ ^ while it is patted. Click the watermark or the mark again and it flies
- * home.
- *
- * It lands on the first "u" of the watermark, smaller on a phone.
- * Decorative: aria-hidden, no focus stops, no layout impact.
+ * Footer headpat toy. The Eluu logo mark sits on the first "u" of the footer
+ * watermark. Click it and its eyes (the two bars) close into ^ ^ and a hand
+ * comes in to pat it. Every click queues another pat, and the more pats are
+ * queued the faster they go, so clicking fast pats fast. When the queue runs
+ * out the hand leaves and the eyes open again.
  *
  * The mark colours are the logo artwork's own (see public/brand/mark-256-*.svg),
  * which has no token: the brand files ship them as flat colour.
  */
 ---
 
-<div class="hp" aria-hidden="true" data-hp hidden>
-  <div class="hp__body" data-hp-body>
-    <svg class="hp__mark" viewBox="0 0 256 256" width="100%" height="100%">
+<button type="button" class="hp" aria-label="Give Eluu a headpat" data-hp hidden>
+  <span class="hp__body" data-hp-body>
+    <svg viewBox="0 0 256 256" width="100%" height="100%" aria-hidden="true">
       <rect width="256" height="256" rx="32" class="hp__ink" />
-      <g class="hp__bars">
-        <line x1="84" y1="92" x2="84" y2="164" />
-        <line x1="172" y1="164" x2="172" y2="116" />
-      </g>
-      <g class="hp__happy">
-        <polyline points="58,142 84,114 110,142" />
-        <polyline points="146,142 172,114 198,142" />
-        <ellipse cx="58" cy="184" rx="22" ry="12" class="hp__blush" />
-        <ellipse cx="198" cy="184" rx="22" ry="12" class="hp__blush" />
-      </g>
+      <polyline class="hp__eye" data-hp-eye="l" points="84,92 84,128 84,164" />
+      <polyline class="hp__eye" data-hp-eye="r" points="172,116 172,140 172,164" />
     </svg>
-  </div>
-  <svg class="hp__hand" viewBox="0 0 170 110" data-hp-hand>
+  </span>
+  <svg class="hp__hand" viewBox="0 0 170 110" aria-hidden="true" data-hp-hand>
     <rect x="148" y="30" width="22" height="46" rx="6" class="hp__cuff" />
     <path
       class="hp__skin"
@@ -41,7 +30,7 @@
     <path class="hp__line" d="M47 75 C47 67 49 61 53 56" />
     <path class="hp__line" d="M61 74 C61 68 63 63 67 60" />
   </svg>
-</div>
+</button>
 
 <style>
   .hp {
@@ -51,7 +40,12 @@
     z-index: 20;
     width: 150px;
     aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    background: none;
     cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
   @media (max-width: 1023px) {
     .hp {
@@ -66,12 +60,13 @@
   .hp[hidden] {
     display: none;
   }
-  .hp.is-flying {
-    position: fixed;
-    transform-origin: 0 0;
-    pointer-events: none;
+  .hp:focus-visible {
+    outline: 2px solid var(--primary-base);
+    outline-offset: 6px;
+    border-radius: 12px;
   }
   .hp__body {
+    display: block;
     width: 100%;
     height: 100%;
     transform-origin: 50% 100%;
@@ -79,44 +74,19 @@
   .hp__ink {
     fill: var(--hp-ink);
   }
-  .hp__bars line,
-  .hp__happy polyline {
+  .hp__eye {
     fill: none;
     stroke: var(--hp-paper);
+    stroke-width: 40;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
-  .hp__bars line {
-    stroke-width: 40;
-  }
-  .hp__happy polyline {
-    stroke-width: 26;
-  }
-  .hp__blush {
-    fill: var(--maroon-400);
-  }
-  .hp__bars,
-  .hp__happy {
-    transition: opacity 160ms ease;
-  }
-  .hp__happy {
-    opacity: 0;
-  }
-  .hp.is-patting .hp__bars {
-    opacity: 0;
-  }
-  .hp.is-patting .hp__happy {
-    opacity: 1;
-  }
-
   .hp__hand {
     position: absolute;
     left: 9%;
     top: -39%;
     width: 120%;
     opacity: 0;
-    transform: translate(60px, -80px) rotate(-14deg);
-    transition: opacity 200ms ease, transform 360ms cubic-bezier(0.34, 1.4, 0.64, 1);
     pointer-events: none;
     overflow: visible;
   }
@@ -137,87 +107,28 @@
     stroke: var(--neutral-950);
     stroke-width: 4;
   }
-  .hp.is-patting .hp__hand {
-    opacity: 1;
-    transform: none;
-    animation: hp-pat 640ms ease-in-out 360ms infinite;
-  }
-  .hp.is-patting .hp__body {
-    animation: hp-squish 640ms ease-in-out 360ms infinite;
-  }
-  @keyframes hp-pat {
-    0%, 100% { transform: translate(18px, -8px) rotate(-6deg); }
-    50% { transform: translate(-14px, 10px) rotate(5deg); }
-  }
-  @keyframes hp-squish {
-    0%, 100% { transform: scale(1, 1); }
-    50% { transform: scale(1.06, 0.9); }
-  }
-  :global(.hp-heart) {
-    position: absolute;
-    pointer-events: none;
-    color: var(--maroon-500);
-    font-size: 22px;
-    animation: hp-heart 1000ms ease-out forwards;
-  }
-  @keyframes hp-heart {
-    from { opacity: 1; transform: translate(-50%, 0) scale(0.6); }
-    to { opacity: 0; transform: translate(-50%, -80px) scale(1.2); }
-  }
-
-  /* While the mark is away, the navbar shows only the "Eluu AI" text. */
-  :global(html.eluu-mark-away header img[src*='/brand/logotext']) {
-    clip-path: inset(0 0 0 36%);
-  }
-  :global(html.eluu-mark-away header img[src*='/brand/mark-256']) {
-    visibility: hidden;
-  }
-
-  :global([data-egg].is-wobble) {
-    animation: egg-wobble 260ms ease-out;
-  }
-  @keyframes egg-wobble {
-    30% { transform: translateY(4px); }
-    100% { transform: none; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hp.is-patting .hp__hand,
-    .hp.is-patting .hp__body,
-    :global([data-egg].is-wobble) {
-      animation: none;
-    }
-    .hp__hand {
-      transition: none;
-    }
-  }
 </style>
 
 <script>
-  const NEEDED = 15;
   const egg = document.querySelector<HTMLElement>('[data-egg]');
-  const actor = document.querySelector<HTMLElement>('[data-hp]');
+  const actor = document.querySelector<HTMLButtonElement>('[data-hp]');
   const body = document.querySelector<HTMLElement>('[data-hp-body]');
-  const hand = document.querySelector<SVGElement>('[data-hp-hand]');
+  const hand = document.querySelector<SVGSVGElement>('[data-hp-hand]');
+  const eyeL = document.querySelector<SVGPolylineElement>('[data-hp-eye="l"]');
+  const eyeR = document.querySelector<SVGPolylineElement>('[data-hp-eye="r"]');
   const footer = actor?.closest('footer');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  type Box = { x: number; y: number; s: number };
+  const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+  const ease = (t: number) => t * t * (3 - 2 * t);
+  const outBack = (t: number) => 1 + 2.4 * (t - 1) ** 3 + 1.4 * (t - 1) ** 2;
 
-  /** The visible navbar mark: the left square of the lockup, or the mark alone on a phone. */
-  function homeBox(): Box | null {
-    const img = [...document.querySelectorAll<HTMLImageElement>(
-      'header img[src*="/brand/logotext"], header img[src*="/brand/mark-256"]',
-    )].find((i) => i.getBoundingClientRect().width > 0);
-    if (!img) return null;
-    const r = img.getBoundingClientRect();
-    return { x: r.left, y: r.top, s: r.height };
-  }
-
-  /** Where it sits in the footer: on the first "u" of the watermark. */
-  function landBox(): Box {
-    const s = actor!.offsetWidth || 150;
+  /** Sit the mark on the first "u" of the watermark. */
+  function place() {
     const e = egg!.getBoundingClientRect();
+    const f = footer!.getBoundingClientRect();
+    const s = actor!.offsetWidth;
     const text = [...egg!.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && n.textContent!.includes('u'));
     let cx = e.left + e.width / 2;
     if (text) {
@@ -230,134 +141,137 @@
     }
     // Inter's x-height top sits about 0.18em below the top of this tight line box.
     const xTop = e.top + parseFloat(getComputedStyle(egg!).fontSize) * 0.18;
-    return { x: cx - s / 2, y: xTop - s, s };
+    actor!.style.left = `${cx - s / 2 - f.left}px`;
+    actor!.style.top = `${xTop - s - f.top}px`;
   }
 
-  async function fly(from: Box, to: Box, spin: number) {
-    actor!.classList.add('is-flying');
-    actor!.style.left = `${to.x}px`;
-    actor!.style.top = `${to.y}px`;
-    const dx = from.x - to.x;
-    const dy = from.y - to.y;
-    const k = from.s / to.s;
-    if (reduced) return;
-    const path = actor!.animate(
-      [
-        { transform: `translate(${dx}px, ${dy}px) scale(${k})` },
-        { transform: `translate(${dx * 0.4}px, ${dy * 0.55 - 140}px) scale(${(k + 1) / 2})`, offset: 0.5 },
-        { transform: 'none' },
-      ],
-      { duration: 1100, easing: 'cubic-bezier(0.45, 0, 0.3, 1)' },
-    );
-    body!.animate([{ transform: 'rotate(0)' }, { transform: `rotate(${spin}deg)` }], {
-      duration: 1100,
-      easing: 'cubic-bezier(0.45, 0, 0.3, 1)',
-    });
-    await path.finished;
+  /** Bars (the logo) to ^ ^, point by point. */
+  function drawEyes(happy: number) {
+    const bar = (x: number, y0: number, y1: number) => [[x, y0], [x, (y0 + y1) / 2], [x, y1]];
+    const caret = (x: number) => [[x - 28, 140], [x, 112], [x + 28, 140]];
+    const mix = (a: number[][], b: number[][]) =>
+      a.map((pt, k) => `${lerp(pt[0], b[k][0], happy)},${lerp(pt[1], b[k][1], happy)}`).join(' ');
+    eyeL!.setAttribute('points', mix(bar(84, 92, 164), caret(84)));
+    eyeR!.setAttribute('points', mix(bar(172, 116, 164), caret(172)));
+    const w = `${lerp(40, 24, happy)}`;
+    eyeL!.style.strokeWidth = w;
+    eyeR!.style.strokeWidth = w;
   }
 
-  let busy = false;
-  let away = false;
+  // ---- the pat loop -----------------------------------------------------------
+  // The hand's own motion: from (18, -8) tilted -6deg to (-14, 10) tilted 5deg
+  // and back, once per pat, while the mark squashes under it. Distances are
+  // drawn for the 150px mark and scale with it.
+  const SLOW = 640; // one pat when a single click is queued
+  const FAST = 200; // the cap, however fast you click
+  const MAX_QUEUE = 10;
+  const ENTER = 360;
+  const EXIT = 300;
 
-  async function goOut() {
-    const from = homeBox();
-    if (!from || !footer) return;
-    busy = true;
-    actor!.hidden = false;
-    const to = landBox();
-    document.documentElement.classList.add('eluu-mark-away');
-    document.body.appendChild(actor!);
-    await fly(from, to, 360);
-    // Settle into the footer at the same spot, so it scrolls with the page.
-    const f = footer.getBoundingClientRect();
-    actor!.classList.remove('is-flying');
-    actor!.style.left = `${to.x - f.left}px`;
-    actor!.style.top = `${to.y - f.top}px`;
-    footer.appendChild(actor!);
-    if (!reduced) {
-      await body!.animate(
-        [{ transform: 'scale(1.15, 0.8)' }, { transform: 'scale(0.95, 1.06)' }, { transform: 'none' }],
-        { duration: 320, easing: 'ease-out' },
-      ).finished;
+  type State = 'idle' | 'enter' | 'pat' | 'exit';
+  let state: State = 'idle';
+  let queue = 0;
+  let p = 0; // phase within the current pat, 0..1
+  let t0 = 0;
+  let last = 0;
+  let happy = 0;
+  let raf = 0;
+
+  function frame(now: number) {
+    const dt = now - last;
+    last = now;
+    const k = actor!.offsetWidth / 150;
+    let x = 18, y = -8, r = -6, alpha = 1, squash = 0;
+
+    if (state === 'enter') {
+      const e = outBack(clamp((now - t0) / ENTER));
+      x = lerp(60, 18, e);
+      y = lerp(-80, -8, e);
+      r = lerp(-14, -6, e);
+      alpha = clamp((now - t0) / 200);
+      if (now - t0 >= ENTER) {
+        state = 'pat';
+        p = 0;
+      }
+    } else if (state === 'pat') {
+      const period = Math.max(FAST, SLOW / (1 + 0.55 * (queue - 1)));
+      p += dt / period;
+      if (p >= 1) {
+        p -= 1;
+        queue -= 1;
+        if (queue <= 0) {
+          queue = 0;
+          p = 0;
+          state = 'exit';
+          t0 = now;
+        }
+      }
+      const s = ease((1 - Math.cos(p * Math.PI * 2)) / 2);
+      x = lerp(18, -14, s);
+      y = lerp(-8, 10, s);
+      r = lerp(-6, 5, s);
+      squash = s;
+    } else if (state === 'exit') {
+      const e = ease(clamp((now - t0) / EXIT));
+      x = lerp(18, 60, e);
+      y = lerp(-8, -80, e);
+      r = lerp(-6, -14, e);
+      alpha = 1 - e;
     }
-    actor!.classList.add('is-patting');
-    away = true;
-    busy = false;
-  }
 
-  async function goHome() {
-    const to = homeBox();
-    busy = true;
-    actor!.classList.remove('is-patting');
-    await new Promise((r) => setTimeout(r, reduced ? 0 : 280));
-    const r = actor!.getBoundingClientRect();
-    const here: Box = { x: r.left, y: r.top, s: r.width };
-    if (to) {
-      // Fly from where it sits back to the navbar: invert the outbound path.
-      document.body.appendChild(actor!);
-      actor!.classList.add('is-flying');
-      actor!.style.left = `${here.x}px`;
-      actor!.style.top = `${here.y}px`;
-      if (!reduced) {
-        const dx = to.x - here.x;
-        const dy = to.y - here.y;
-        const k = to.s / here.s;
-        await actor!.animate(
-          [
-            { transform: 'none' },
-            { transform: `translate(${dx * 0.6}px, ${dy * 0.45 - 140}px) scale(${(k + 1) / 2})`, offset: 0.5 },
-            { transform: `translate(${dx}px, ${dy}px) scale(${k})` },
-          ],
-          { duration: 1000, easing: 'cubic-bezier(0.45, 0, 0.3, 1)' },
-        ).finished;
-      }
+    // Eyes: closed while the hand is here, open again as it leaves.
+    const target = state === 'exit' ? 0 : 1;
+    happy = clamp(happy + (target - happy) * Math.min(1, dt / 70));
+    drawEyes(happy);
+    hand!.style.opacity = `${alpha}`;
+    hand!.style.transform = `translate(${x * k}px, ${y * k}px) rotate(${r}deg)`;
+    body!.style.transform = `scale(${1 + 0.06 * squash}, ${1 - 0.1 * squash})`;
+
+    if (state === 'exit' && now - t0 >= EXIT && happy < 0.01) {
+      state = 'idle';
+      drawEyes(0);
+      body!.style.transform = '';
+      return;
     }
-    actor!.hidden = true;
-    actor!.classList.remove('is-flying');
-    footer!.appendChild(actor!);
-    document.documentElement.classList.remove('eluu-mark-away');
-    away = false;
-    busy = false;
+    raf = requestAnimationFrame(frame);
   }
 
-  if (egg && actor && body && hand && footer) {
-    let count = 0;
-    let last = 0;
-    const onClick = (ev: Event) => {
-      if (busy) return;
-      if (away) {
-        goHome();
-        count = 0;
-        return;
-      }
-      const now = Date.now();
-      count = now - last > 2000 ? 1 : count + 1;
-      last = now;
-      // From the fifth click on, the wordmark flinches, a hint that something is listening.
-      if (count >= 5) {
-        const el = ev.currentTarget as HTMLElement;
-        el.classList.remove('is-wobble');
-        void el.offsetWidth;
-        el.classList.add('is-wobble');
-      }
-      if (count >= NEEDED) {
-        count = 0;
-        goOut();
-      }
+  let stillTimer = 0;
+
+  function pat() {
+    queue = Math.min(MAX_QUEUE, queue + 1);
+    if (reduced) {
+      // No motion: show the pat as a still, and let it go after a moment.
+      drawEyes(1);
+      hand!.style.opacity = '1';
+      clearTimeout(stillTimer);
+      stillTimer = window.setTimeout(() => {
+        queue = 0;
+        drawEyes(0);
+        hand!.style.opacity = '0';
+      }, 900);
+      return;
+    }
+    if (state === 'idle') {
+      state = 'enter';
+      t0 = last = performance.now();
+      raf = requestAnimationFrame(frame);
+    } else if (state === 'exit') {
+      // Clicked again while it was leaving: come straight back.
+      state = 'enter';
+      t0 = performance.now();
+    }
+  }
+
+  if (egg && actor && body && hand && eyeL && eyeR && footer) {
+    const show = () => {
+      // The watermark only has a size once it is laid out with its font.
+      if (egg.getBoundingClientRect().width === 0) return;
+      actor.hidden = false;
+      place();
     };
-    egg.addEventListener('click', onClick);
-    actor.addEventListener('click', onClick);
-
-    // A heart floats up on every other pat.
-    let pats = 0;
-    hand.addEventListener('animationiteration', () => {
-      if (++pats % 2) return;
-      const heart = document.createElement('i');
-      heart.className = 'ri-heart-fill hp-heart';
-      heart.style.left = `${30 + Math.random() * 90}px`;
-      heart.style.top = '-30px';
-      actor.appendChild(heart);
-      heart.addEventListener('animationend', () => heart.remove());
-    });
+    document.fonts.ready.then(show);
+    new ResizeObserver(show).observe(footer);
+    actor.addEventListener('click', pat);
   }
 </script>
