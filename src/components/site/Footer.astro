@@ -24,7 +24,8 @@ const { showThemeSwitch = true } = Astro.props;
  *    188px gutter as the link columns, sized to the viewport so it spans the
  *    footer, CENTRED under the content, and cropped 73px at the bottom edge.
  *
- * The watermark is decorative and desktop-only. It used to sit in the same
+ * The watermark is decorative. Below `lg` it is sized to the content width and
+ * the copyright line reserves its height, so phones get it too. It used to sit in the same
  * stacking context as the content row above it, so the social icons landed on
  * top of the "l"s. It is now `-z-10` inside an explicitly isolated footer, and
  * the bottom row reserves the height the watermark occupies, so the two can
@@ -104,7 +105,7 @@ const year = 2026;
       </div>
     </div>
 
-    <p class="t-label-sm text-text-soft-400 mt-8 touch-manipulation select-none lg:mb-[311px]" data-egg-alt>
+    <p class="t-label-sm text-text-soft-400 mt-8 mb-[calc((100vw_-_48px)*0.29_+_80px)] sm:mb-[calc((100vw_-_80px)*0.29_+_80px)] lg:mb-[311px]">
       {year} Eluu AI Inc. © All rights reserved.
     </p>
   </div>
@@ -114,8 +115,7 @@ const year = 2026;
   <span
     aria-hidden="true"
     data-egg
-    class="page-shell gutter-188 text-bg-sub-300 absolute inset-x-0 -z-10 hidden text-center leading-[0.72] font-medium tracking-[0.02em] select-none lg:block"
-    style="bottom:-73px;font-size:clamp(300px,32.4vw,518px)"
+    class="page-shell gutter-188 text-bg-sub-300 absolute inset-x-0 -z-10 block touch-manipulation text-center leading-[0.72] font-medium tracking-[0.02em] select-none bottom-[-0.14em] text-[calc((100vw_-_48px)/2)] sm:text-[calc((100vw_-_80px)/2)] lg:bottom-[-73px] lg:text-[clamp(300px,32.4vw,518px)]"
   >
     Eluu
   </span>

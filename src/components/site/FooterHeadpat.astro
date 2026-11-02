@@ -1,14 +1,12 @@
 ---
 /**
  * Footer easter egg. Click the "Eluu" watermark 15 times (each click within
- * 2s of the last; on a phone, where the watermark is hidden, tap the copyright
- * line instead) and the logo mark leaves the navbar, flies down into the
+ * 2s of the last) and the logo mark leaves the navbar, flies down into the
  * footer, and gets a headpat. Its two bars are its eyes, so they close into
  * ^ ^ while it is patted. Click the watermark or the mark again and it flies
  * home.
  *
- * On desktop it lands on the watermark; on a phone it lands beside the social
- * icons, at a smaller size.
+ * It lands on the first "u" of the watermark, smaller on a phone.
  * Decorative: aria-hidden, no focus stops, no layout impact.
  *
  * The mark colours are the logo artwork's own (see public/brand/mark-256-*.svg),
@@ -175,8 +173,7 @@
     visibility: hidden;
   }
 
-  :global([data-egg].is-wobble),
-  :global([data-egg-alt].is-wobble) {
+  :global([data-egg].is-wobble) {
     animation: egg-wobble 260ms ease-out;
   }
   @keyframes egg-wobble {
@@ -187,8 +184,7 @@
   @media (prefers-reduced-motion: reduce) {
     .hp.is-patting .hp__hand,
     .hp.is-patting .hp__body,
-    :global([data-egg].is-wobble),
-    :global([data-egg-alt].is-wobble) {
+    :global([data-egg].is-wobble) {
       animation: none;
     }
     .hp__hand {
@@ -200,7 +196,6 @@
 <script>
   const NEEDED = 15;
   const egg = document.querySelector<HTMLElement>('[data-egg]');
-  const alt = document.querySelector<HTMLElement>('[data-egg-alt]');
   const actor = document.querySelector<HTMLElement>('[data-hp]');
   const body = document.querySelector<HTMLElement>('[data-hp-body]');
   const hand = document.querySelector<SVGElement>('[data-hp-hand]');
@@ -219,16 +214,10 @@
     return { x: r.left, y: r.top, s: r.height };
   }
 
-  /** Where it sits in the footer: on the first "u" of the watermark, or beside the social icons on a phone. */
+  /** Where it sits in the footer: on the first "u" of the watermark. */
   function landBox(): Box {
     const s = actor!.offsetWidth || 150;
     const e = egg!.getBoundingClientRect();
-    if (e.width === 0) {
-      const f = footer!.getBoundingClientRect();
-      const c = alt!.getBoundingClientRect();
-      // The hand overhangs the mark's right edge by about 45%, so leave room for it.
-      return { x: f.right - 24 - s * 1.45, y: c.top - 12 - s, s };
-    }
     const text = [...egg!.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && n.textContent!.includes('u'));
     let cx = e.left + e.width / 2;
     if (text) {
@@ -331,7 +320,7 @@
     busy = false;
   }
 
-  if (egg && alt && actor && body && hand && footer) {
+  if (egg && actor && body && hand && footer) {
     let count = 0;
     let last = 0;
     const onClick = (ev: Event) => {
@@ -357,7 +346,6 @@
       }
     };
     egg.addEventListener('click', onClick);
-    alt.addEventListener('click', onClick);
     actor.addEventListener('click', onClick);
 
     // A heart floats up on every other pat.
