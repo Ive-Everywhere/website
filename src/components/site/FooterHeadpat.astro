@@ -1,0 +1,363 @@
+---
+/**
+ * Footer easter egg. Click the "Eluu" watermark 15 times (each click within
+ * 2s of the last) and the logo mark leaves the navbar, flies down into the
+ * footer, and gets a headpat. Its two bars are its eyes, so they close into
+ * ^ ^ while it is patted. Click the watermark or the mark again and it flies
+ * home.
+ *
+ * It lands on the first "u" of the watermark, smaller on a phone.
+ * Decorative: aria-hidden, no focus stops, no layout impact.
+ *
+ * The mark colours are the logo artwork's own (see public/brand/mark-256-*.svg),
+ * which has no token: the brand files ship them as flat colour.
+ */
+---
+
+<div class="hp" aria-hidden="true" data-hp hidden>
+  <div class="hp__body" data-hp-body>
+    <svg class="hp__mark" viewBox="0 0 256 256" width="100%" height="100%">
+      <rect width="256" height="256" rx="32" class="hp__ink" />
+      <g class="hp__bars">
+        <line x1="84" y1="92" x2="84" y2="164" />
+        <line x1="172" y1="164" x2="172" y2="116" />
+      </g>
+      <g class="hp__happy">
+        <polyline points="58,142 84,114 110,142" />
+        <polyline points="146,142 172,114 198,142" />
+        <ellipse cx="58" cy="184" rx="22" ry="12" class="hp__blush" />
+        <ellipse cx="198" cy="184" rx="22" ry="12" class="hp__blush" />
+      </g>
+    </svg>
+  </div>
+  <svg class="hp__hand" viewBox="0 0 170 110" data-hp-hand>
+    <rect x="148" y="30" width="22" height="46" rx="6" class="hp__cuff" />
+    <path
+      class="hp__skin"
+      d="M152 30 C120 18 70 14 44 28 C26 38 18 54 20 70 C21 80 30 82 33 74 C34 82 44 84 47 75 C49 83 59 84 61 74 C64 80 74 80 75 70 C78 64 90 62 104 62 C124 62 140 66 152 70 Z"
+    />
+    <path class="hp__skin" d="M112 62 C106 74 98 82 88 80 C80 78 82 69 92 64" />
+    <path class="hp__line" d="M33 74 C32 66 34 58 39 52" />
+    <path class="hp__line" d="M47 75 C47 67 49 61 53 56" />
+    <path class="hp__line" d="M61 74 C61 68 63 63 67 60" />
+  </svg>
+</div>
+
+<style>
+  .hp {
+    --hp-ink: #3d393e;
+    --hp-paper: #efead9;
+    position: absolute;
+    z-index: 20;
+    width: 150px;
+    aspect-ratio: 1;
+    cursor: pointer;
+  }
+  @media (max-width: 1023px) {
+    .hp {
+      width: 96px;
+    }
+  }
+  :global(.dark) .hp,
+  :global([data-theme='dark']) .hp {
+    --hp-ink: #efead9;
+    --hp-paper: #3d393e;
+  }
+  .hp[hidden] {
+    display: none;
+  }
+  .hp.is-flying {
+    position: fixed;
+    transform-origin: 0 0;
+    pointer-events: none;
+  }
+  .hp__body {
+    width: 100%;
+    height: 100%;
+    transform-origin: 50% 100%;
+  }
+  .hp__ink {
+    fill: var(--hp-ink);
+  }
+  .hp__bars line,
+  .hp__happy polyline {
+    fill: none;
+    stroke: var(--hp-paper);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .hp__bars line {
+    stroke-width: 40;
+  }
+  .hp__happy polyline {
+    stroke-width: 26;
+  }
+  .hp__blush {
+    fill: var(--maroon-400);
+  }
+  .hp__bars,
+  .hp__happy {
+    transition: opacity 160ms ease;
+  }
+  .hp__happy {
+    opacity: 0;
+  }
+  .hp.is-patting .hp__bars {
+    opacity: 0;
+  }
+  .hp.is-patting .hp__happy {
+    opacity: 1;
+  }
+
+  .hp__hand {
+    position: absolute;
+    left: 9%;
+    top: -39%;
+    width: 120%;
+    opacity: 0;
+    transform: translate(60px, -80px) rotate(-14deg);
+    transition: opacity 200ms ease, transform 360ms cubic-bezier(0.34, 1.4, 0.64, 1);
+    pointer-events: none;
+    overflow: visible;
+  }
+  .hp__skin {
+    fill: var(--neutral-100);
+    stroke: var(--neutral-950);
+    stroke-width: 4;
+    stroke-linejoin: round;
+  }
+  .hp__line {
+    fill: none;
+    stroke: var(--neutral-950);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+  .hp__cuff {
+    fill: var(--maroon-500);
+    stroke: var(--neutral-950);
+    stroke-width: 4;
+  }
+  .hp.is-patting .hp__hand {
+    opacity: 1;
+    transform: none;
+    animation: hp-pat 640ms ease-in-out 360ms infinite;
+  }
+  .hp.is-patting .hp__body {
+    animation: hp-squish 640ms ease-in-out 360ms infinite;
+  }
+  @keyframes hp-pat {
+    0%, 100% { transform: translate(18px, -8px) rotate(-6deg); }
+    50% { transform: translate(-14px, 10px) rotate(5deg); }
+  }
+  @keyframes hp-squish {
+    0%, 100% { transform: scale(1, 1); }
+    50% { transform: scale(1.06, 0.9); }
+  }
+  :global(.hp-heart) {
+    position: absolute;
+    pointer-events: none;
+    color: var(--maroon-500);
+    font-size: 22px;
+    animation: hp-heart 1000ms ease-out forwards;
+  }
+  @keyframes hp-heart {
+    from { opacity: 1; transform: translate(-50%, 0) scale(0.6); }
+    to { opacity: 0; transform: translate(-50%, -80px) scale(1.2); }
+  }
+
+  /* While the mark is away, the navbar shows only the "Eluu AI" text. */
+  :global(html.eluu-mark-away header img[src*='/brand/logotext']) {
+    clip-path: inset(0 0 0 36%);
+  }
+  :global(html.eluu-mark-away header img[src*='/brand/mark-256']) {
+    visibility: hidden;
+  }
+
+  :global([data-egg].is-wobble) {
+    animation: egg-wobble 260ms ease-out;
+  }
+  @keyframes egg-wobble {
+    30% { transform: translateY(4px); }
+    100% { transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hp.is-patting .hp__hand,
+    .hp.is-patting .hp__body,
+    :global([data-egg].is-wobble) {
+      animation: none;
+    }
+    .hp__hand {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const NEEDED = 15;
+  const egg = document.querySelector<HTMLElement>('[data-egg]');
+  const actor = document.querySelector<HTMLElement>('[data-hp]');
+  const body = document.querySelector<HTMLElement>('[data-hp-body]');
+  const hand = document.querySelector<SVGElement>('[data-hp-hand]');
+  const footer = actor?.closest('footer');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  type Box = { x: number; y: number; s: number };
+
+  /** The visible navbar mark: the left square of the lockup, or the mark alone on a phone. */
+  function homeBox(): Box | null {
+    const img = [...document.querySelectorAll<HTMLImageElement>(
+      'header img[src*="/brand/logotext"], header img[src*="/brand/mark-256"]',
+    )].find((i) => i.getBoundingClientRect().width > 0);
+    if (!img) return null;
+    const r = img.getBoundingClientRect();
+    return { x: r.left, y: r.top, s: r.height };
+  }
+
+  /** Where it sits in the footer: on the first "u" of the watermark. */
+  function landBox(): Box {
+    const s = actor!.offsetWidth || 150;
+    const e = egg!.getBoundingClientRect();
+    const text = [...egg!.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && n.textContent!.includes('u'));
+    let cx = e.left + e.width / 2;
+    if (text) {
+      const i = text.textContent!.indexOf('u');
+      const range = document.createRange();
+      range.setStart(text, i);
+      range.setEnd(text, i + 1);
+      const u = range.getBoundingClientRect();
+      cx = u.left + u.width / 2;
+    }
+    // Inter's x-height top sits about 0.18em below the top of this tight line box.
+    const xTop = e.top + parseFloat(getComputedStyle(egg!).fontSize) * 0.18;
+    return { x: cx - s / 2, y: xTop - s, s };
+  }
+
+  async function fly(from: Box, to: Box, spin: number) {
+    actor!.classList.add('is-flying');
+    actor!.style.left = `${to.x}px`;
+    actor!.style.top = `${to.y}px`;
+    const dx = from.x - to.x;
+    const dy = from.y - to.y;
+    const k = from.s / to.s;
+    if (reduced) return;
+    const path = actor!.animate(
+      [
+        { transform: `translate(${dx}px, ${dy}px) scale(${k})` },
+        { transform: `translate(${dx * 0.4}px, ${dy * 0.55 - 140}px) scale(${(k + 1) / 2})`, offset: 0.5 },
+        { transform: 'none' },
+      ],
+      { duration: 1100, easing: 'cubic-bezier(0.45, 0, 0.3, 1)' },
+    );
+    body!.animate([{ transform: 'rotate(0)' }, { transform: `rotate(${spin}deg)` }], {
+      duration: 1100,
+      easing: 'cubic-bezier(0.45, 0, 0.3, 1)',
+    });
+    await path.finished;
+  }
+
+  let busy = false;
+  let away = false;
+
+  async function goOut() {
+    const from = homeBox();
+    if (!from || !footer) return;
+    busy = true;
+    actor!.hidden = false;
+    const to = landBox();
+    document.documentElement.classList.add('eluu-mark-away');
+    document.body.appendChild(actor!);
+    await fly(from, to, 360);
+    // Settle into the footer at the same spot, so it scrolls with the page.
+    const f = footer.getBoundingClientRect();
+    actor!.classList.remove('is-flying');
+    actor!.style.left = `${to.x - f.left}px`;
+    actor!.style.top = `${to.y - f.top}px`;
+    footer.appendChild(actor!);
+    if (!reduced) {
+      await body!.animate(
+        [{ transform: 'scale(1.15, 0.8)' }, { transform: 'scale(0.95, 1.06)' }, { transform: 'none' }],
+        { duration: 320, easing: 'ease-out' },
+      ).finished;
+    }
+    actor!.classList.add('is-patting');
+    away = true;
+    busy = false;
+  }
+
+  async function goHome() {
+    const to = homeBox();
+    busy = true;
+    actor!.classList.remove('is-patting');
+    await new Promise((r) => setTimeout(r, reduced ? 0 : 280));
+    const r = actor!.getBoundingClientRect();
+    const here: Box = { x: r.left, y: r.top, s: r.width };
+    if (to) {
+      // Fly from where it sits back to the navbar: invert the outbound path.
+      document.body.appendChild(actor!);
+      actor!.classList.add('is-flying');
+      actor!.style.left = `${here.x}px`;
+      actor!.style.top = `${here.y}px`;
+      if (!reduced) {
+        const dx = to.x - here.x;
+        const dy = to.y - here.y;
+        const k = to.s / here.s;
+        await actor!.animate(
+          [
+            { transform: 'none' },
+            { transform: `translate(${dx * 0.6}px, ${dy * 0.45 - 140}px) scale(${(k + 1) / 2})`, offset: 0.5 },
+            { transform: `translate(${dx}px, ${dy}px) scale(${k})` },
+          ],
+          { duration: 1000, easing: 'cubic-bezier(0.45, 0, 0.3, 1)' },
+        ).finished;
+      }
+    }
+    actor!.hidden = true;
+    actor!.classList.remove('is-flying');
+    footer!.appendChild(actor!);
+    document.documentElement.classList.remove('eluu-mark-away');
+    away = false;
+    busy = false;
+  }
+
+  if (egg && actor && body && hand && footer) {
+    let count = 0;
+    let last = 0;
+    const onClick = (ev: Event) => {
+      if (busy) return;
+      if (away) {
+        goHome();
+        count = 0;
+        return;
+      }
+      const now = Date.now();
+      count = now - last > 2000 ? 1 : count + 1;
+      last = now;
+      // From the fifth click on, the wordmark flinches, a hint that something is listening.
+      if (count >= 5) {
+        const el = ev.currentTarget as HTMLElement;
+        el.classList.remove('is-wobble');
+        void el.offsetWidth;
+        el.classList.add('is-wobble');
+      }
+      if (count >= NEEDED) {
+        count = 0;
+        goOut();
+      }
+    };
+    egg.addEventListener('click', onClick);
+    actor.addEventListener('click', onClick);
+
+    // A heart floats up on every other pat.
+    let pats = 0;
+    hand.addEventListener('animationiteration', () => {
+      if (++pats % 2) return;
+      const heart = document.createElement('i');
+      heart.className = 'ri-heart-fill hp-heart';
+      heart.style.left = `${30 + Math.random() * 90}px`;
+      heart.style.top = '-30px';
+      actor.appendChild(heart);
+      heart.addEventListener('animationend', () => heart.remove());
+    });
+  }
+</script>
