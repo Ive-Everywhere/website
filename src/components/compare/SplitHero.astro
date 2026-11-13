@@ -1,6 +1,13 @@
 ---
 import Copy from './Copy.astro';
 import Button from '../ui/Button.astro';
+import {
+  WAITLIST_HREF,
+  WAITLIST_LABEL,
+  DEMO_HREF,
+  DEMO_LABEL,
+  EARLY_ACCESS_OFFER,
+} from '../../lib/waitlist';
 
 /**
  * Section 1, split hero + inline demo form. Figma `151:2692`.
@@ -21,7 +28,13 @@ interface Props {
     headingLines: string[];
     sub: { text: string; node?: string; needed?: boolean };
     stats: { value: string; caption: { text: string; node?: string; needed?: boolean } }[];
-    form: {
+    /**
+     * Optional. Figma draws a demo form whose fields are all pinned to
+     * `State=Placeholder` and which posts nowhere. A page that omits it gets
+     * the site's real early-access CTA in the same card instead, so the hero
+     * ends in something a visitor can actually click.
+     */
+    form?: {
       heading: string;
       subheading: { text: string; node?: string; needed?: boolean };
       fields: {
@@ -106,6 +119,7 @@ const { form } = hero;
       after submit is undefined (spec gap D.21). The form posts nowhere here.
     */}
     <div class="bg-card-surface w-full min-w-0 shrink-0 rounded-2xl lg:max-w-[508px]">
+      {form ? (
       <form class="flex flex-col gap-6 p-5 sm:p-[30px]" method="post" action="#" novalidate>
         <div class="flex flex-col gap-3 lg:max-w-[372px]">
           <div class="flex flex-col gap-2">
@@ -181,6 +195,36 @@ const { form } = hero;
           note="duplicate of the card subheading 151:5044"
         />
       </form>
+      ) : (
+      /* No drawn form on this page: the same card carries the site's real
+         early-access CTA, so the hero ends in something clickable rather than
+         in a form that posts nowhere. Copy comes from `lib/waitlist`, so it
+         cannot drift from the banner, the modal and the closing band. */
+      <div class="flex flex-col gap-6 p-5 sm:p-[30px]">
+        <div class="flex flex-col gap-2">
+          <p class="t-h4 text-text-strong-950">{EARLY_ACCESS_OFFER}</p>
+          <p class="t-label-md text-text-sub-600">
+            Private beta. Bring your own keys, or connect the Claude Code or Codex subscription you
+            already pay for.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-4">
+          <Button
+            variant="primary-fancy"
+            href={WAITLIST_HREF}
+            label={WAITLIST_LABEL}
+            class="max-w-full"
+          />
+          <a
+            href={DEMO_HREF}
+            class="t-label-sm text-text-sub-600 focus-visible:outline-primary-base inline-flex min-h-11 items-center gap-1 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            {DEMO_LABEL} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+      )}
     </div>
   </div>
 </section>

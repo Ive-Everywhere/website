@@ -36,7 +36,9 @@ const { closing } = Astro.props;
   >
     <div class="flex flex-col gap-6 lg:max-w-[502px] lg:shrink-0">
       <div class="flex flex-col gap-2">
-        <Copy value={closing.title} as="h2" class="t-landing-h3 text-text-strong-950" />
+        {/* `text-balance` so a two-line title splits evenly instead of leaving
+            the last word orphaned on a line of its own. */}
+        <Copy value={closing.title} as="h2" class="t-landing-h3 text-text-strong-950 text-balance" />
         <Copy value={closing.sub} class="t-label-md text-text-sub-600" />
       </div>
     </div>
