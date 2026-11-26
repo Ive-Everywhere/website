@@ -6,15 +6,10 @@
  */
 
 /**
- * The href every waitlist CTA points at.
- *
- * It is an anchor rather than a route on purpose: a global delegated click
- * handler in WaitlistModal.astro intercepts any `<a href="#waitlist">` and
- * opens the dialog instead of navigating. That means an MDX page can opt a CTA
- * into the modal by setting `href: '#waitlist'` in its frontmatter, with no
- * component change and no React island.
+ * The href every primary CTA points at: self-serve signup on the app.
+ * The private beta has ended, so the CTA goes straight to the free plan.
  */
-export const WAITLIST_HREF = '#waitlist';
+export const WAITLIST_HREF = 'https://app.eluu.ai';
 
 /**
  * Krishna's cal.com link, used directly.
@@ -40,7 +35,7 @@ export const DEMO_HREF = 'https://cal.com/krishna-kaipa-wh7ao3/30min';
  * tried and rejected as hedging. Do not re-add it.
  */
 export const EARLY_ACCESS_OFFER = 'Get up to $10,000 in free usage';
-export const WAITLIST_LABEL = 'Get early access';
+export const WAITLIST_LABEL = 'Start for free';
 export const DEMO_LABEL = 'Book a demo';
 
 /**
